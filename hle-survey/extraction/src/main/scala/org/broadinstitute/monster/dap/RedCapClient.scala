@@ -1,15 +1,17 @@
 package org.broadinstitute.monster.dap
 
 import java.io.IOException
-import java.time.OffsetDateTime
+import java.time.{Duration, OffsetDateTime}
 import java.time.format.DateTimeFormatter
 
 import okhttp3.{Call, Callback, FormBody, OkHttpClient, Request, Response}
 import org.broadinstitute.monster.common.msg.JsonParser
+import org.slf4j.LoggerFactory
 import upack.Msg
 
 import scala.concurrent.{Future, Promise}
 
+/** TODO */
 trait RedCapClient extends Serializable {
 
   def getRecords(
@@ -27,19 +29,41 @@ object RedCapClient {
   private val apiRoute = "https://cdsweb07.fhcrc.org/redcap/api/"
   private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
+  /** TODO */
   def apply(): RedCapClient = {
-    val client = new OkHttpClient()
+    val logger = LoggerFactory.getLogger(getClass)
+
+    val client = new OkHttpClient.Builder()
+      .connectTimeout(Duration.ofSeconds(60))
+      .readTimeout(Duration.ofSeconds(60))
+      .build()
 
     (apiToken, ids, fields, forms, start, end, valueFilters) => {
+      val logPieces = List(
+        s"ids: [${ids.mkString(",")}]",
+        s"fields: [${fields.mkString(",")}]",
+        s"forms: [${forms.mkString(",")}]",
+        s"start: [$start]",
+        s"end: [$end]",
+        s"filters: [${valueFilters.map { case (k, v) => s"$k=$v" }.mkString(",")}]"
+      )
+      logger.debug(s"Querying RedCap: ${logPieces.mkString(",")}")
+
       val formBuilder = new FormBody.Builder()
         .add("token", apiToken)
+        // Limit to the initial HLE event.
+        .add("events[0]", "baseline_arm_1")
+        // Export individual survey records as JSON.
         .add("content", "record")
         .add("format", "json")
         .add("returnFormat", "json")
         .add("type", "flat")
+        // Get labeled answers so we can pass through data when possible.
         .add("rawOrLabel", "label")
+        // Keep field keys as raw strings, to make programmatic manipulation easier.
         .add("rawOrLabelHeaders", "raw")
         .add("exportCheckboxLabel", "false")
+        // Honestly not sure what these do, haven't seen the need to make them 'true'.
         .add("exportSurveyFields", "false")
         .add("exportDataAccessGroups", "false")
 
@@ -68,7 +92,6 @@ object RedCapClient {
         .build()
 
       val p = Promise[Msg]()
-
       client
         .newCall(request)
         .enqueue(new Callback {
@@ -77,7 +100,6 @@ object RedCapClient {
           override def onResponse(call: Call, response: Response): Unit =
             p.success(JsonParser.parseEncodedJson(response.body().string()))
         })
-
       p.future
     }
   }
