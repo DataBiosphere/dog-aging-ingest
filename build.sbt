@@ -1,6 +1,7 @@
 import org.broadinstitute.monster.sbt.model.JadeIdentifier
 
 val okhttpVersion = "4.4.0"
+val vaultDriverVersion = "5.1.0"
 
 lazy val `dog-aging-ingest` = project
   .in(file("."))
@@ -10,7 +11,8 @@ lazy val `dog-aging-hle-extraction` = project
   .in(file("hle-survey/extraction"))
   .enablePlugins(MonsterScioPipelinePlugin)
   .settings(
-    libraryDependencies += "com.squareup.okhttp3" % "okhttp" % okhttpVersion
+    libraryDependencies += "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
+    libraryDependencies += "com.bettercloud" % "vault-java-driver" % vaultDriverVersion % IntegrationTest
   )
 
 lazy val `dog-aging-hle-transformation` = project
