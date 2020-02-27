@@ -11,14 +11,34 @@ import upack.Msg
 
 import scala.concurrent.{Future, Promise}
 
-/** TODO */
+/** Interface for clients that can pull records from a RedCap API. */
 trait RedCapClient extends Serializable {
 
+  /**
+    * Download survey responses from the RedCap API backing this client.
+    *
+    * NOTE: Record-level filters are combined with AND-ing logic. Field-level
+    * filters are combined with OR-ing logic.
+    *
+    * @param apiToken auth token to use when querying the API
+    * @param ids IDs of the specific records to download. If not set, all
+    *            records will be downloaded
+    * @param fields subset of fields to download. If not set, all fields
+    *               will be downloaded
+    * @param forms subset of forms to download. If not set, fields from all
+    *              forms will be downloaded
+    * @param start if given, only records created-or-updated at or after this
+    *              time will be downloaded
+    * @param end if given, only records created-or-updated before or at this
+    *            time will be downloaded
+    * @param valueFilters arbitrary field-value pairs to use as an exact-match
+    *                     filter on downloaded records
+    */
   def getRecords(
     apiToken: String,
-    ids: Set[String] = Set.empty,
-    fields: Set[String] = Set.empty,
-    forms: Set[String] = Set.empty,
+    ids: List[String] = Nil,
+    fields: List[String] = Nil,
+    forms: List[String] = Nil,
     start: Option[OffsetDateTime] = None,
     end: Option[OffsetDateTime] = None,
     valueFilters: Map[String, String] = Map.empty
@@ -26,16 +46,23 @@ trait RedCapClient extends Serializable {
 }
 
 object RedCapClient {
+
+  /** URL for the production RedCap API. */
   private val apiRoute = "https://cdsweb07.fhcrc.org/redcap/api/"
+
+  /** Formatter matching the production RedCap's interface. */
   private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-  /** TODO */
+  /** Timeout to use for all requests to production RedCap. */
+  private val timeout = Duration.ofSeconds(60)
+
+  /** Construct a client instance backed by the production RedCap instance. */
   def apply(): RedCapClient = {
     val logger = LoggerFactory.getLogger(getClass)
 
     val client = new OkHttpClient.Builder()
-      .connectTimeout(Duration.ofSeconds(60))
-      .readTimeout(Duration.ofSeconds(60))
+      .connectTimeout(timeout)
+      .readTimeout(timeout)
       .build()
 
     (apiToken, ids, fields, forms, start, end, valueFilters) => {

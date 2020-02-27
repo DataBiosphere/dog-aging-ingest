@@ -15,10 +15,35 @@ import upack.Msg
 import scala.concurrent.Future
 import scala.collection.JavaConverters._
 
-/** TODO */
+object HLESurveyExtractionPipelineBuilder {
+
+  /** Names of all forms we want to extract as part of HLE ingest. */
+  val ExtractedForms = List(
+    "recruitment_fields",
+    "owner_contact",
+    "owner_demographics",
+    "dog_demographics",
+    "environment",
+    "physical_activity",
+    "behavior",
+    "diet",
+    "meds_and_preventives",
+    "health_status"
+  )
+}
+
+/**
+  * Builder for the HLE extraction pipeline.
+  *
+  * Sets up the pipeline to:
+  *   1. Query the study IDs of all dogs, possibly within a fixed
+  *      time frame
+  *   2. Group the returned IDs into batches
+  *   3. Download the values of all HLE forms for each batch of IDs
+  *   4. Write the downloaded forms to storage
+  */
 class HLESurveyExtractionPipelineBuilder(
   idBatchSize: Int,
-  formNames: Set[String],
   getClient: () => RedCapClient
 ) extends PipelineBuilder[Args]
     with Serializable {
@@ -40,13 +65,15 @@ class HLESurveyExtractionPipelineBuilder(
       ): Future[Msg] =
         client.getRecords(
           args.apiToken,
-          fields = Set("study_id"),
+          fields = List("study_id"),
           start = args.startTime,
           end = args.endTime,
           valueFilters = Map("co_consent" -> "1")
         )
     }
 
+    // No meaningful input to start with here, so inject Unit to get us
+    // into the SCollection context.
     val idsToExtract = ctx
       .parallelize(Iterable(()))
       .transform("Get study IDs") {
@@ -55,6 +82,9 @@ class HLESurveyExtractionPipelineBuilder(
         }
       }
 
+    // Group downloaded IDs into batches.
+    // NOTE: This logic is replicated from the encode-ingest pipeline,
+    // we should consider moving it to scio-utils.
     val batchedIds = idsToExtract
       .map(KV.of("", _))
       .setCoder(KvCoder.of(StringUtf8Coder.of(), StringUtf8Coder.of()))
@@ -67,9 +97,14 @@ class HLESurveyExtractionPipelineBuilder(
         client: RedCapClient,
         input: Iterable[String]
       ): Future[Msg] =
-        client.getRecords(args.apiToken, ids = input.toSet, forms = formNames)
+        client.getRecords(
+          args.apiToken,
+          ids = input.toList,
+          forms = HLESurveyExtractionPipelineBuilder.ExtractedForms
+        )
     }
 
+    // Download the form data for each batch of records.
     val extractedRecords = batchedIds.transform("Get HLE records") {
       _.applyKvTransform(ParDo.of(formLookupFn)).flatMap { kv =>
         kv.getValue.fold(throw _, _.arr)
