@@ -46,7 +46,6 @@ trait RedCapClient extends Serializable {
 }
 
 object RedCapClient {
-
   /** URL for the production RedCap API. */
   private val apiRoute = "https://cdsweb07.fhcrc.org/redcap/api/"
 

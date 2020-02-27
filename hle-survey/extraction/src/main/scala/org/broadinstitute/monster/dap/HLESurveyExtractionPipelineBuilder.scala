@@ -41,6 +41,11 @@ object HLESurveyExtractionPipelineBuilder {
   *   2. Group the returned IDs into batches
   *   3. Download the values of all HLE forms for each batch of IDs
   *   4. Write the downloaded forms to storage
+  *
+  * @param idBatchSize max number of IDs to include per batch when
+  *                    downloading record data
+  * @param getClient function that will produce a client which can
+  *                  interact with a RedCap API
   */
 class HLESurveyExtractionPipelineBuilder(
   idBatchSize: Int,
