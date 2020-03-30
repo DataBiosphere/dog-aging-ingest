@@ -3,7 +3,7 @@ package org.broadinstitute.monster.dap
 import java.time.{LocalDate, LocalTime, OffsetDateTime, ZoneOffset}
 
 import better.files.File
-import com.bettercloud.vault.{Vault, VaultConfig}
+import com.bettercloud.vault.{SslConfig, Vault, VaultConfig}
 import org.broadinstitute.monster.common.PipelineBuilderSpec
 
 class HLESurveyExtractionPipelineBuilderIntegrationSpec
@@ -12,7 +12,9 @@ class HLESurveyExtractionPipelineBuilderIntegrationSpec
   override def afterAll(): Unit = outputDir.delete()
 
   val apiToken = {
-    val baseConfig = new VaultConfig().address(sys.env("VAULT_ADDR"))
+    val baseConfig = new VaultConfig()
+      .address(sys.env("VAULT_ADDR"))
+      .sslConfig(new SslConfig().verify(false))
 
     val vaultConfig = baseConfig.token {
       val roleId = sys.env.get("VAULT_ROLE_ID")
