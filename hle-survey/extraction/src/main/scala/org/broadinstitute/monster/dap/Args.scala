@@ -24,12 +24,11 @@ case class Args(
 
 object Args {
 
-  implicit val odtParser: ArgParser[OffsetDateTime] = SimpleArgParser.from("timestamp") {
-    s =>
-      try {
-        Right(OffsetDateTime.parse(s))
-      } catch {
-        case e: DateTimeParseException => Left(MalformedValue("date", e.getMessage))
-      }
+  implicit val odtParser: ArgParser[OffsetDateTime] = SimpleArgParser.from("timestamp") { s =>
+    try {
+      Right(OffsetDateTime.parse(s))
+    } catch {
+      case e: DateTimeParseException => Left(MalformedValue("date", e.getMessage))
+    }
   }
 }

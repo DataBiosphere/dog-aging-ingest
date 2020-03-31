@@ -111,9 +111,7 @@ class HLESurveyExtractionPipelineBuilder(
 
     // Download the form data for each batch of records.
     val extractedRecords = batchedIds.transform("Get HLE records") {
-      _.applyKvTransform(ParDo.of(formLookupFn)).flatMap { kv =>
-        kv.getValue.fold(throw _, _.arr)
-      }
+      _.applyKvTransform(ParDo.of(formLookupFn)).flatMap(kv => kv.getValue.fold(throw _, _.arr))
     }
 
     StorageIO.writeJsonLists(

@@ -6,8 +6,7 @@ import better.files.File
 import com.bettercloud.vault.{SslConfig, Vault, VaultConfig}
 import org.broadinstitute.monster.common.PipelineBuilderSpec
 
-class HLESurveyExtractionPipelineBuilderIntegrationSpec
-    extends PipelineBuilderSpec[Args] {
+class HLESurveyExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
   val outputDir = File.newTemporaryDirectory()
   override def afterAll(): Unit = outputDir.delete()
 
