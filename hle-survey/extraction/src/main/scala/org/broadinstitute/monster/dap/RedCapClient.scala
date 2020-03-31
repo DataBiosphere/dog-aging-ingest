@@ -102,12 +102,8 @@ object RedCapClient {
       forms.zipWithIndex.foreach {
         case (f, i) => formBuilder.add(s"forms[$i]", f)
       }
-      start.foreach { s =>
-        formBuilder.add("dateRangeBegin", s.format(dateFormatter))
-      }
-      end.foreach { e =>
-        formBuilder.add("dateRangeEnd", e.format(dateFormatter))
-      }
+      start.foreach(s => formBuilder.add("dateRangeBegin", s.format(dateFormatter)))
+      end.foreach(e => formBuilder.add("dateRangeEnd", e.format(dateFormatter)))
       valueFilters.foreach {
         case (k, v) => formBuilder.add("filterLogic", s"[$k]=$v")
       }
