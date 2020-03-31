@@ -18,6 +18,7 @@ jobs:
       - name: Test
         run: sbt "set ThisBuild/coverageEnabled := true" test IntegrationTest/test
         env:
+          VAULT_ADDR: ${{ secrets.VaultAddress }}
           VAULT_ROLE_ID: ${{ secrets.VaultRoleId }}
           VAULT_SECRET_ID: ${{ secrets.VaultSecretId }}
       - name: Aggregate coverage reports
