@@ -47,7 +47,7 @@ trait RedCapClient extends Serializable {
 
 object RedCapClient {
   /** URL for the production RedCap API. */
-  private val apiRoute = "https://cdsweb07.fhcrc.org/redcap/api/"
+  private val apiRoute = "http://redcap.fredhutch.org"
 
   /** Formatter matching the production RedCap's interface. */
   private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
