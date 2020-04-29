@@ -84,7 +84,7 @@ object RedCapClient {
         .add("format", "json")
         .add("returnFormat", "json")
         .add("type", "eav")
-        // Get labeled answers so we can pass through data when possible.
+        // Get raw answers so we can pass through data when possible.
         .add("rawOrLabel", "raw")
         // Keep field keys as raw strings, to make programmatic manipulation easier.
         .add("rawOrLabelHeaders", "raw")
