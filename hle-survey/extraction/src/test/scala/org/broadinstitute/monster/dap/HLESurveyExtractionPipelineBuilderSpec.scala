@@ -33,7 +33,7 @@ object HLESurveyExtractionPipelineBuilderSpec {
 
   val expectedOut = fakeIds.map { i =>
     Obj(
-      Str("study_id") -> Str(i.toString),
+      Str("value") -> Str(i.toString),
       Str("some_attribute") -> Str(s"This is the ${i}th attribute"),
       Str("excitement_level") -> Str("a" * i + "!")
     )
@@ -44,7 +44,7 @@ object HLESurveyExtractionPipelineBuilderSpec {
     downloadQueries.zip(expectedOut.map(Arr(_))).toMap + (
       initQuery -> new Arr(
         fakeIds
-          .map(i => Obj(Str("study_id") -> Str(i.toString)): Msg)
+          .map(i => Obj(Str("value") -> Str(i.toString)): Msg)
           .to[mutable.ArrayBuffer]
       )
     )

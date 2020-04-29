@@ -30,6 +30,8 @@ object HLESurveyExtractionPipelineBuilder {
     "meds_and_preventives",
     "health_status"
   )
+
+  val MaxConcurrentRequests = 8
 }
 
 /**
@@ -61,6 +63,7 @@ class HLESurveyExtractionPipelineBuilder(
 
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
     import org.broadinstitute.monster.common.msg.MsgOps
+    import HLESurveyExtractionPipelineBuilder._
 
     val idLookupFn = new ScalaAsyncLookupDoFn[Unit, Msg, RedCapClient]() {
       override def newClient(): RedCapClient = getClient()
@@ -83,7 +86,7 @@ class HLESurveyExtractionPipelineBuilder(
       .parallelize(Iterable(()))
       .transform("Get study IDs") {
         _.applyKvTransform(ParDo.of(idLookupFn)).flatMap { kv =>
-          kv.getValue.fold(throw _, _.arr.map(_.read[String]("study_id")))
+          kv.getValue.fold(throw _, _.arr.map(_.read[String]("value")))
         }
       }
 
@@ -96,18 +99,19 @@ class HLESurveyExtractionPipelineBuilder(
       .applyKvTransform(GroupIntoBatches.ofSize(idBatchSize.toLong))
       .map(_.getValue.asScala)
 
-    val formLookupFn = new ScalaAsyncLookupDoFn[Iterable[String], Msg, RedCapClient]() {
-      override def newClient(): RedCapClient = getClient()
-      override def asyncLookup(
-        client: RedCapClient,
-        input: Iterable[String]
-      ): Future[Msg] =
-        client.getRecords(
-          args.apiToken,
-          ids = input.toList,
-          forms = HLESurveyExtractionPipelineBuilder.ExtractedForms
-        )
-    }
+    val formLookupFn =
+      new ScalaAsyncLookupDoFn[Iterable[String], Msg, RedCapClient](MaxConcurrentRequests) {
+        override def newClient(): RedCapClient = getClient()
+        override def asyncLookup(
+          client: RedCapClient,
+          input: Iterable[String]
+        ): Future[Msg] =
+          client.getRecords(
+            args.apiToken,
+            ids = input.toList,
+            forms = ExtractedForms
+          )
+      }
 
     // Download the form data for each batch of records.
     val extractedRecords = batchedIds.transform("Get HLE records") {
