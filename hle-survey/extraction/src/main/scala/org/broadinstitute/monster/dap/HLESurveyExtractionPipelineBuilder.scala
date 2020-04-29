@@ -86,7 +86,7 @@ class HLESurveyExtractionPipelineBuilder(
       .parallelize(Iterable(()))
       .transform("Get study IDs") {
         _.applyKvTransform(ParDo.of(idLookupFn)).flatMap { kv =>
-          kv.getValue.fold(throw _, _.arr.map(_.read[String]("study_id")))
+          kv.getValue.fold(throw _, _.arr.map(_.read[String]("value")))
         }
       }
 
