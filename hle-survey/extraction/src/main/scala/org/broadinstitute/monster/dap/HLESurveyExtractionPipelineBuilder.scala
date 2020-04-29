@@ -73,10 +73,12 @@ class HLESurveyExtractionPipelineBuilder(
       ): Future[Msg] =
         client.getRecords(
           args.apiToken,
-          fields = List("study_id"),
-          start = args.startTime,
-          end = args.endTime,
-          valueFilters = Map("co_consent" -> "1")
+          request = GetRecords(
+            fields = List("study_id"),
+            start = args.startTime,
+            end = args.endTime,
+            filters = Map("co_consent" -> "1")
+          )
         )
     }
 
@@ -108,8 +110,7 @@ class HLESurveyExtractionPipelineBuilder(
         ): Future[Msg] =
           client.getRecords(
             args.apiToken,
-            ids = input.toList,
-            forms = ExtractedForms
+            request = GetRecords(ids = input.toList, forms = ExtractedForms)
           )
       }
 
@@ -118,11 +119,19 @@ class HLESurveyExtractionPipelineBuilder(
       _.applyKvTransform(ParDo.of(formLookupFn)).flatMap(kv => kv.getValue.fold(throw _, _.arr))
     }
 
+    // Download the data dictionary for every form.
+//    val extractedDataDictionaries = ???
+
     StorageIO.writeJsonLists(
       extractedRecords,
       "HLE Records",
       args.outputPrefix
     )
+//    StorageIO.writeJsonLists(
+//      extractedDataDictionaries,
+//      "HLE Data Dictionaries",
+//      args.outputPrefix
+//    )
     ()
   }
 }

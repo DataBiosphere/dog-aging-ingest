@@ -9,7 +9,6 @@ import upack._
 import scala.collection.mutable
 
 object HLESurveyExtractionPipelineBuilderSpec {
-  import MockRedCapClient.QueryParams
 
   val token = "pls-let-me-in"
   val start = OffsetDateTime.now()
@@ -17,18 +16,18 @@ object HLESurveyExtractionPipelineBuilderSpec {
 
   val fakeIds = 1 to 50
 
-  val initQuery = QueryParams(
+  val initQuery = GetRecords(
     start = Some(start),
     end = Some(end),
     fields = List("study_id"),
     filters = Map("co_consent" -> "1")
-  )
+  ): RedcapRequest
 
   val downloadQueries = fakeIds.map { i =>
-    QueryParams(
+    GetRecords(
       ids = List(i.toString),
       forms = HLESurveyExtractionPipelineBuilder.ExtractedForms
-    )
+    ): RedcapRequest
   }
 
   val expectedOut = fakeIds.map { i =>
