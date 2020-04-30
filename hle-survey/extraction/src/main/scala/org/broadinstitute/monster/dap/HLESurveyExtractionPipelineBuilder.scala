@@ -71,9 +71,9 @@ class HLESurveyExtractionPipelineBuilder(
         client: RedCapClient,
         input: Unit
       ): Future[Msg] =
-        client.getRecords(
+        client.get(
           args.apiToken,
-          request = GetRecords(
+          GetRecords(
             fields = List("study_id"),
             start = args.startTime,
             end = args.endTime,
@@ -99,39 +99,41 @@ class HLESurveyExtractionPipelineBuilder(
       .map(KV.of("", _))
       .setCoder(KvCoder.of(StringUtf8Coder.of(), StringUtf8Coder.of()))
       .applyKvTransform(GroupIntoBatches.ofSize(idBatchSize.toLong))
-      .map(_.getValue.asScala)
+      .map(ids => GetRecords(ids = ids.getValue.asScala.toList, forms = ExtractedForms))
 
-    val formLookupFn =
-      new ScalaAsyncLookupDoFn[Iterable[String], Msg, RedCapClient](MaxConcurrentRequests) {
+    val lookupFn =
+      new ScalaAsyncLookupDoFn[RedcapRequest, Msg, RedCapClient](MaxConcurrentRequests) {
         override def newClient(): RedCapClient = getClient()
         override def asyncLookup(
           client: RedCapClient,
-          input: Iterable[String]
+          input: RedcapRequest
         ): Future[Msg] =
-          client.getRecords(
-            args.apiToken,
-            request = GetRecords(ids = input.toList, forms = ExtractedForms)
-          )
+          client.get(args.apiToken, input)
       }
 
     // Download the form data for each batch of records.
     val extractedRecords = batchedIds.transform("Get HLE records") {
-      _.applyKvTransform(ParDo.of(formLookupFn)).flatMap(kv => kv.getValue.fold(throw _, _.arr))
+      _.applyKvTransform(ParDo.of(lookupFn)).flatMap(kv => kv.getValue.fold(throw _, _.arr))
     }
 
     // Download the data dictionary for every form.
-//    val extractedDataDictionaries = ???
+    val extractedDataDictionaries = ctx
+      .parallelize(ExtractedForms)
+      .map(instrument => GetDataDictionary(instrument))
+      .transform("Get data dictionary") {
+        _.applyKvTransform(ParDo.of(lookupFn)).flatMap(kv => kv.getValue.fold(throw _, _.arr))
+      }
 
     StorageIO.writeJsonLists(
       extractedRecords,
       "HLE Records",
-      args.outputPrefix
+      s"${args.outputPrefix}/records"
     )
-//    StorageIO.writeJsonLists(
-//      extractedDataDictionaries,
-//      "HLE Data Dictionaries",
-//      args.outputPrefix
-//    )
+    StorageIO.writeJsonLists(
+      extractedDataDictionaries,
+      "HLE Data Dictionaries",
+      s"${args.outputPrefix}/data_dictionaries"
+    )
     ()
   }
 }

@@ -12,7 +12,7 @@ class MockRedCapClient(
 ) extends RedCapClient {
   val recordedRequests = mutable.Set[RedcapRequest]()
 
-  override def getRecords(
+  override def get(
     apiToken: String,
     request: RedcapRequest
   ): Future[Msg] = {

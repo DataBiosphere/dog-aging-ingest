@@ -23,7 +23,7 @@ trait RedCapClient extends Serializable {
     * @param apiToken auth token to use when querying the API
     * @param request ADT capturing the various parameters for a request to a particular endpoint
     */
-  def getRecords(
+  def get(
     apiToken: String,
     request: RedcapRequest
   ): Future[Msg]
@@ -60,7 +60,7 @@ object RedCapClient {
             s"end: [$end]",
             s"filters: [${filters.map { case (k, v) => s"$k=$v" }.mkString(",")}]"
           )
-          logger.debug(s"Querying RedCap: ${logPieces.mkString(",")}")
+          logger.debug(s"Querying RedCap for records: ${logPieces.mkString(",")}")
 
           val formBuilder = new FormBody.Builder()
             .add("token", apiToken)
@@ -96,6 +96,11 @@ object RedCapClient {
           }
           formBuilder
         case GetDataDictionary(instrument) =>
+          val logPieces = List(
+            s"forms: [${instrument}]"
+          )
+          logger.debug(s"Querying RedCap for data dictionary: ${logPieces.mkString(",")}")
+
           new FormBody.Builder()
             .add("token", apiToken)
             // Export individual survey records as JSON.
