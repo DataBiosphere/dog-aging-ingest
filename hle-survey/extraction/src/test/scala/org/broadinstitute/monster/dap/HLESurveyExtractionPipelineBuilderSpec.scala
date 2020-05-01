@@ -9,29 +9,29 @@ import upack._
 import scala.collection.mutable
 
 object HLESurveyExtractionPipelineBuilderSpec {
-  import MockRedCapClient.QueryParams
+  import HLESurveyExtractionPipelineBuilder.ExtractedForms
 
   val token = "pls-let-me-in"
   val start = OffsetDateTime.now()
   val end = start.plusDays(3).plusHours(10).minusSeconds(100)
 
-  val fakeIds = 1 to 50
+  val fakeIds = 1 to 7
 
-  val initQuery = QueryParams(
+  val initQuery = GetRecords(
     start = Some(start),
     end = Some(end),
     fields = List("study_id"),
     filters = Map("co_consent" -> "1")
-  )
+  ): RedcapRequest
 
-  val downloadQueries = fakeIds.map { i =>
-    QueryParams(
+  val downloadRecords = fakeIds.map { i =>
+    GetRecords(
       ids = List(i.toString),
-      forms = HLESurveyExtractionPipelineBuilder.ExtractedForms
-    )
+      forms = ExtractedForms
+    ): RedcapRequest
   }
 
-  val expectedOut = fakeIds.map { i =>
+  val expectedRecords = fakeIds.map { i =>
     Obj(
       Str("value") -> Str(i.toString),
       Str("some_attribute") -> Str(s"This is the ${i}th attribute"),
@@ -39,15 +39,20 @@ object HLESurveyExtractionPipelineBuilderSpec {
     )
   }
 
+  val downloadDataDictionary =
+    ExtractedForms.map(instrument => GetDataDictionary(instrument): RedcapRequest)
+
+  val expectedDataDictionary = ExtractedForms.map(i => Obj(Str("value") -> Str(i)): Msg)
+
   val mockClient = new MockRedCapClient(
     token,
-    downloadQueries.zip(expectedOut.map(Arr(_))).toMap + (
+    downloadRecords.zip(expectedRecords.map(Arr(_))).toMap + (
       initQuery -> new Arr(
         fakeIds
           .map(i => Obj(Str("value") -> Str(i.toString)): Msg)
           .to[mutable.ArrayBuffer]
       )
-    )
+    ) ++ downloadDataDictionary.zip(expectedDataDictionary.map(Arr(_))).toMap
   )
 }
 
@@ -69,11 +74,20 @@ class HLESurveyExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
 
   behavior of "HLESurveyExtractionPipelineBuilder"
 
-  it should "query RedCap in the expected way" in {
-    mockClient.recordedRequests.toSet shouldBe Set(initQuery).union(downloadQueries.toSet)
+  it should "query RedCap for records correctly" in {
+    mockClient.recordedRequests.toSet should contain allElementsOf (Set(initQuery)
+      .union(downloadRecords.toSet))
   }
 
-  it should "write downloaded outputs to disk" in {
-    readMsgs(outputDir) shouldBe expectedOut.toSet
+  it should "query RedCap for data dictionaries correctly" in {
+    mockClient.recordedRequests.toSet should contain allElementsOf (downloadDataDictionary.toSet)
+  }
+
+  it should "write downloaded records to disk" in {
+    readMsgs(outputDir, "records/*.json") shouldBe expectedRecords.toSet
+  }
+
+  it should "write downloaded data dictionaries to disk" in {
+    readMsgs(outputDir, "data_dictionaries/*.json") shouldBe expectedDataDictionary.toSet
   }
 }

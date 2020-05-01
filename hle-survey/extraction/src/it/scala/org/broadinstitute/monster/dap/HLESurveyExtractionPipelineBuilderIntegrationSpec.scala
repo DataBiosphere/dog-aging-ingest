@@ -48,7 +48,11 @@ class HLESurveyExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderS
 
   behavior of "HLESurveyExtractionPipelineBuilder"
 
-  it should "successfully download some stuff from RedCap" in {
-    readMsgs(outputDir) shouldNot be(empty)
+  it should "successfully download records from RedCap" in {
+    readMsgs(outputDir, "records/*.json") shouldNot be(empty)
+  }
+
+  it should "successfully download data dictionaries from RedCap" in {
+    readMsgs(outputDir, "data_dictionaries/*.json") shouldNot be(empty)
   }
 }
