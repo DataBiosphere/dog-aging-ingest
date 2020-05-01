@@ -15,7 +15,7 @@ object HLESurveyExtractionPipelineBuilderSpec {
   val start = OffsetDateTime.now()
   val end = start.plusDays(3).plusHours(10).minusSeconds(100)
 
-  val fakeIds = 1 to 7
+  val fakeIds = 1 to 50
 
   val initQuery = GetRecords(
     start = Some(start),
