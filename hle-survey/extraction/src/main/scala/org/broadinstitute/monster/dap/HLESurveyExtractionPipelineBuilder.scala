@@ -28,7 +28,8 @@ object HLESurveyExtractionPipelineBuilder {
     "behavior",
     "diet",
     "meds_and_preventives",
-    "health_status"
+    "health_status",
+    "additional_studies"
   )
 
   val MaxConcurrentRequests = 8
