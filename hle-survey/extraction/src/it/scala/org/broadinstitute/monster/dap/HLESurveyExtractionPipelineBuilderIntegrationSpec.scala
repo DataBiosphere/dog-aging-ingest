@@ -5,6 +5,7 @@ import java.time.{LocalDate, LocalTime, OffsetDateTime, ZoneOffset}
 import better.files.File
 import com.bettercloud.vault.{SslConfig, Vault, VaultConfig}
 import org.broadinstitute.monster.common.PipelineBuilderSpec
+import org.broadinstitute.monster.common.msg.JsonParser
 
 class HLESurveyExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
   val outputDir = File.newTemporaryDirectory()
@@ -53,6 +54,16 @@ class HLESurveyExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderS
   }
 
   it should "successfully download data dictionaries from RedCap" in {
-    readMsgs(outputDir, "data_dictionaries/*.json") shouldNot be(empty)
+    readMsgs(outputDir, "data-dictionaries/*.json") shouldNot be(empty)
+  }
+
+  it should "not download data dictionaries multiple times" in {
+    val lines = outputDir
+      .glob("data-dictionaries/*.json")
+      .flatMap(_.lineIterator)
+      .map(JsonParser.parseEncodedJson)
+      .toList
+
+    lines.length shouldBe lines.toSet.size
   }
 }

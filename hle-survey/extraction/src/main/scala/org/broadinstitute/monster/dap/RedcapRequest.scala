@@ -34,7 +34,7 @@ case class GetRecords(
 /**
   * For hitting the data dictionary / metadata endpoint.
   *
-  * @param instrument name specifying specific data collection instrument
-  *                   for which you wish to pull metadata
+  * @param form name specifying specific data collection instrument
+  *             for which you wish to pull metadata
   */
-case class GetDataDictionary(instrument: String) extends RedcapRequest
+case class GetDataDictionary(form: String) extends RedcapRequest

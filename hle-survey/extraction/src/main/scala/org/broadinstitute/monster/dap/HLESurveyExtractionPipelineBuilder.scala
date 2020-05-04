@@ -133,7 +133,7 @@ class HLESurveyExtractionPipelineBuilder(
     StorageIO.writeJsonLists(
       extractedDataDictionaries,
       "HLE Data Dictionaries",
-      s"${args.outputPrefix}/data_dictionaries"
+      s"${args.outputPrefix}/data-dictionaries"
     )
     ()
   }
