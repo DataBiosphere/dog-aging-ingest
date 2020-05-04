@@ -88,6 +88,6 @@ class HLESurveyExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
   }
 
   it should "write downloaded data dictionaries to disk" in {
-    readMsgs(outputDir, "data-dictionaries/*.json") shouldBe expectedDataDictionary.toSet
+    readMsgs(outputDir, "data_dictionaries/*.json") shouldBe expectedDataDictionary.toSet
   }
 }
