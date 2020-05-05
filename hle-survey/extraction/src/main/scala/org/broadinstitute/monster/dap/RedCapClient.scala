@@ -107,7 +107,7 @@ object RedCapClient {
             .add("content", "metadata")
             .add("format", "json")
             .add("returnFormat", "json")
-            .add("form[0]", instrument)
+            .add("forms[0]", instrument)
       }
 
       val request = new Request.Builder()
