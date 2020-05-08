@@ -1,24 +1,47 @@
-package org.broadinstitute.monster.dap.transformation
+package org.broadinstitute.monster.dap
 
 import com.spotify.scio.ScioContext
+import com.spotify.scio.values.SCollection
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.common.msg._
 
 object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
+
+  /**
+    * Schedule all the steps for the Dog Aging transformation in the given pipeline context.
+    *
+    * Scheduled steps are launched against the context's runner when the `run()` method
+    * is called on it.
+    */
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
 
-    // Read records in
-    val recordsDirectoryName = "records"
-    val rawValueRecords = StorageIO
-      .readJsonLists(ctx, recordsDirectoryName, s"${args.inputPrefix}/$recordsDirectoryName/*.json")
+    /**
+      * Read in records and group by study Id, with field name subgroups.
+      * Output the format: (studyId, Iterable[(fieldName, Iterable[value])])
+      */
+    def readRecords(): SCollection[(String, Iterable[(String, Iterable[String])])] = {
+      // Read records in
+      val recordsDirectoryName = "records"
+      val rawRecords = StorageIO
+        .readJsonLists(
+          ctx,
+          recordsDirectoryName,
+          s"${args.inputPrefix}/$recordsDirectoryName/*.json"
+        )
 
-    // Group by study ID (record number)
-    val valuesByStudyId = rawValueRecords
-      .groupBy(_.read[String]("record"))
-
-    // Group by field name
-    // Transform the double-grouped collections of EAV records into upack Msgs with:
-      // A key per field-name group, and
-      // The raw value(s) of the field-name-key as the object value
+      // Group by study ID (record number) and field name
+      // to get the format: (studyId, Iterable((fieldName, Iterable(value))))
+      rawRecords
+        .groupBy(_.read[String]("record"))
+        .map {
+          case (studyId, rawRecordValues) =>
+            val rawRecordsByFieldName =
+              rawRecordValues.groupBy(_.read[String]("field_name")).map {
+                case (fieldName, rawValues) =>
+                  (fieldName, rawValues.map(_.read[String]("value")))
+              }
+            (studyId, rawRecordsByFieldName)
+        }
+    }
   }
 }
