@@ -1,0 +1,87 @@
+{
+  "name": "hles_owner",
+  "columns": [
+    {
+      "name": "owner_id",
+      "datatype": "integer",
+      "type": "primary_key"
+    },
+    {
+      "name": "od_age_range_years",
+      "datatype": "string"
+    },
+    {
+      "name": "od_max_education",
+      "datatype": "string"
+    },
+    {
+      "name": "od_max_education_other",
+      "datatype": "string"
+    },
+    {
+      "name": "od_race",
+      "datatype": "string",
+      "type": "repeated"
+    },
+    {
+      "name": "od_race_other",
+      "datatype": "string"
+    },
+    {
+      "name": "od_hispanic",
+      "datatype": "boolean"
+    },
+    {
+      "name": "od_annual_income_range_usd",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_household_adult_count",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_household_child_count",
+      "datatype": "string"
+    },
+    {
+      "name": "ss_household_dog_count",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_primary_residence_state",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_primary_residence_census_division",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_primary_residence_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_primary_residence_ownership",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_primary_residence_ownership_other",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_secondary_residence_state",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_secondary_residence_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_secondary_residence_ownership",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_secondary_residence_ownership_other",
+      "datatype": "string"
+    }
+  ]
+}
