@@ -109,7 +109,7 @@
     },
     {
       "name": "dd_weight_lbs",
-      "datatype": "integer"
+      "datatype": "float"
     },
     {
       "name": "dd_weight_range_expected_adult",
@@ -149,7 +149,7 @@
     },
     {
       "name": "dd_acquired_zip",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "dd_primary_role",
@@ -199,7 +199,7 @@
     },
     {
       "name": "oc_primary_residence_zip",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "oc_primary_residence_ownership",
@@ -219,7 +219,7 @@
     },
     {
       "name": "oc_secondary_residence_zip",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "oc_secondary_residence_ownership",

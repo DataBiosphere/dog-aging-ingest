@@ -294,7 +294,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
 
     val withWeight = withSpayNeuter.copy(
       ddWeightRange = rawRecord.getOptional("dd_dog_weight"),
-      ddWeightLbs = rawRecord.getOptional("dd_dog_weight_lbs").map(_.toLong),
+      ddWeightLbs = rawRecord.getOptional("dd_dog_weight_lbs").map(_.toDouble),
       ddWeightRangeExpectedAdult = rawRecord.getOptional("dd_weight_range_expected_adult")
     )
 
@@ -327,8 +327,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
           if (source.contains("98")) rawRecord.getOptional("dd_acquire_source_other") else None,
         ddAcquiredCountry = country,
         ddAcquiredState = if (locationKnown) rawRecord.getOptional("dd_acquired_st") else None,
-        ddAcquiredZip =
-          if (locationKnown) rawRecord.getOptional("dd_acquired_zip").map(_.toLong) else None
+        ddAcquiredZip = if (locationKnown) rawRecord.getOptional("dd_acquired_zip") else None
       )
     }
 
@@ -413,7 +412,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
       withRoles.copy(
         ocPrimaryResidenceState = rawRecord.getOptional("oc_address1_state"),
         ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division"),
-        ocPrimaryResidenceZip = rawRecord.getOptional("oc_address1_zip").map(_.toLong),
+        ocPrimaryResidenceZip = rawRecord.getOptional("oc_address1_zip"),
         ocPrimaryResidenceOwnership = primaryOwned,
         ocPrimaryResidenceOwnershipOther =
           if (primaryOwned.contains("98")) rawRecord.getOptional("oc_address1_own_other") else None,
@@ -422,7 +421,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
         ocSecondaryResidenceState =
           if (hasSecondaryResidence) rawRecord.getOptional("oc_address2_state") else None,
         ocSecondaryResidenceZip = if (hasSecondaryResidence) {
-          rawRecord.getOptional("oc_address2_zip").map(_.toLong)
+          rawRecord.getOptional("oc_address2_zip")
         } else {
           None
         },
