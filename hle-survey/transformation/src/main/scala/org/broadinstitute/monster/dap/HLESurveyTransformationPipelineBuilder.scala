@@ -12,7 +12,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
 
   implicit val msgCoder: Coder[Msg] = Coder.beam(new UpackMsgCoder)
 
-  type RawRecord = Map[String, Array[String]]
+  case class RawRecord(id: Long, fields: Map[String, Array[String]])
 
   /**
     * Schedule all the steps for the Dog Aging transformation in the given pipeline context.
@@ -48,97 +48,97 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
       .groupBy(_.read[String]("record"))
       .map {
         case (id, rawRecordValues) =>
-          rawRecordValues
+          val fields = rawRecordValues
             .groupBy(_.read[String]("field_name"))
             .map {
               case (fieldName, rawValues) =>
                 (fieldName, rawValues.map(_.read[String]("value")).toArray)
-            } + ("study_id" -> Array(id))
+            }
+          RawRecord(id.toLong, fields)
       }
   }
 
   def mapOwner(rawRecord: RawRecord): HlesOwner = HlesOwner(
-    ownerId = ???,
-    odAgeRangeYears = ???,
-    odMaxEducation = ???,
-    odMaxEducationOther = ???,
-    odRace = ???,
-    odRaceOther = ???,
-    odHispanic = ???,
-    odAnnualIncomeRangeUsd = ???,
-    ocHouseholdAdultCount = ???,
-    ocHouseholdChildCount = ???,
-    ssHouseholdDogCount = ???,
-    ocPrimaryResidenceState = ???,
-    ocPrimaryResidenceCensusDivision = ???,
-    ocPrimaryResidenceZip = ???,
-    ocPrimaryResidenceOwnership = ???,
-    ocPrimaryResidenceOwnershipOther = ???,
-    ocSecondaryResidenceState = ???,
-    ocSecondaryResidenceZip = ???,
-    ocSecondaryResidenceOwnership = ???,
-    ocSecondaryResidenceOwnershipOther = ???
+    // FIXME: Once DAP figures out a name for a dedicated owner ID, use that.
+    ownerId = rawRecord.id,
+    odAgeRangeYears = None,
+    odMaxEducation = None,
+    odMaxEducationOther = None,
+    odRace = Array.empty,
+    odRaceOther = None,
+    odHispanic = None,
+    odAnnualIncomeRangeUsd = None,
+    ocHouseholdAdultCount = None,
+    ocHouseholdChildCount = None,
+    ssHouseholdDogCount = None,
+    ocPrimaryResidenceState = None,
+    ocPrimaryResidenceCensusDivision = None,
+    ocPrimaryResidenceZip = None,
+    ocPrimaryResidenceOwnership = None,
+    ocPrimaryResidenceOwnershipOther = None,
+    ocSecondaryResidenceState = None,
+    ocSecondaryResidenceZip = None,
+    ocSecondaryResidenceOwnership = None,
+    ocSecondaryResidenceOwnershipOther = None
   )
 
-  def mapDog(rawRecord: RawRecord): HlesDog = {
-    val id = rawRecord("study_id")
-
+  def mapDog(rawRecord: RawRecord): HlesDog =
     HlesDog(
-      dogId = ???,
-      ownerId = ???,
-      ddBreedPure = ???,
-      ddBreedPureNonAkc = ???,
-      ddBreedMixedPrimary = ???,
-      ddBreedMixedSecondary = ???,
-      ddAgeYears = ???,
-      ddAgeBasis = ???,
-      ddAgeExactSource = ???,
-      ddAgeExactSourceOther = ???,
-      ddAgeEstimateSource = ???,
-      ddAgeEstimateSourceOther = ???,
-      ddBirthYear = ???,
-      ddBirthMonth = ???,
-      ddSex = ???,
-      ddSpayedOrNeutered = ???,
-      ddSpayOrNeuterAge = ???,
-      ddSpayMethod = ???,
-      ddEstrousCycleExperiencedBeforeSpayed = ???,
-      ddEstrousCycleCount = ???,
-      ddHasBeenPregnant = ???,
-      ddHasSiredLitters = ???,
-      ddLitterCount = ???,
-      ddWeightRange = ???,
-      ddWeightLbs = ???,
-      ddWeightRangeExpectedAdult = ???,
-      ddInsuranceProvider = ???,
-      ddInsuranceProviderOther = ???,
-      ddAcquiredYear = ???,
-      ddAcquiredMonth = ???,
-      ddAcquiredSource = ???,
-      ddAcquiredSourceOther = ???,
-      ddAcquiredCountry = ???,
-      ddAcquiredState = ???,
-      ddAcquiredZip = ???,
-      ddPrimaryRole = ???,
-      ddPrimaryRoleOther = ???,
-      ddSecondaryRole = ???,
-      ddSecondaryRoleOther = ???,
-      ddOtherRoles = ???,
-      ddServiceTypes = ???,
-      ddServiceTypesOtherMedical = ???,
-      ddServiceTypesOtherHealth = ???,
-      ddServiceTypesOther = ???,
-      ocPrimaryResidenceState = ???,
-      ocPrimaryResidenceCensusDivision = ???,
-      ocPrimaryResidenceZip = ???,
-      ocPrimaryResidenceOwnership = ???,
-      ocPrimaryResidenceOwnershipOther = ???,
-      ocPrimaryResidenceTimePercentage = ???,
-      ocSecondaryResidenceState = ???,
-      ocSecondaryResidenceZip = ???,
-      ocSecondaryResidenceOwnership = ???,
-      ocSecondaryResidenceOwnershipOther = ???,
-      ocSecondaryResidenceTimePercentage = ???
+      dogId = rawRecord.id,
+      // FIXME: Once DAP figures out a name for a dedicated owner ID, use that.
+      ownerId = rawRecord.id,
+      ddBreedPure = None,
+      ddBreedPureNonAkc = None,
+      ddBreedMixedPrimary = None,
+      ddBreedMixedSecondary = None,
+      ddAgeYears = None,
+      ddAgeBasis = None,
+      ddAgeExactSource = None,
+      ddAgeExactSourceOther = None,
+      ddAgeEstimateSource = None,
+      ddAgeEstimateSourceOther = None,
+      ddBirthYear = None,
+      ddBirthMonth = None,
+      ddSex = None,
+      ddSpayedOrNeutered = None,
+      ddSpayOrNeuterAge = None,
+      ddSpayMethod = None,
+      ddEstrousCycleExperiencedBeforeSpayed = None,
+      ddEstrousCycleCount = None,
+      ddHasBeenPregnant = None,
+      ddHasSiredLitters = None,
+      ddLitterCount = None,
+      ddWeightRange = None,
+      ddWeightLbs = None,
+      ddWeightRangeExpectedAdult = None,
+      ddInsuranceProvider = None,
+      ddInsuranceProviderOther = None,
+      ddAcquiredYear = None,
+      ddAcquiredMonth = None,
+      ddAcquiredSource = None,
+      ddAcquiredSourceOther = None,
+      ddAcquiredCountry = None,
+      ddAcquiredState = None,
+      ddAcquiredZip = None,
+      ddPrimaryRole = None,
+      ddPrimaryRoleOther = None,
+      ddSecondaryRole = None,
+      ddSecondaryRoleOther = None,
+      ddOtherRoles = Array.empty,
+      ddServiceTypes = Array.empty,
+      ddServiceTypesOtherMedical = None,
+      ddServiceTypesOtherHealth = None,
+      ddServiceTypesOther = None,
+      ocPrimaryResidenceState = None,
+      ocPrimaryResidenceCensusDivision = None,
+      ocPrimaryResidenceZip = None,
+      ocPrimaryResidenceOwnership = None,
+      ocPrimaryResidenceOwnershipOther = None,
+      ocPrimaryResidenceTimePercentage = None,
+      ocSecondaryResidenceState = None,
+      ocSecondaryResidenceZip = None,
+      ocSecondaryResidenceOwnership = None,
+      ocSecondaryResidenceOwnershipOther = None,
+      ocSecondaryResidenceTimePercentage = None
     )
-  }
 }
