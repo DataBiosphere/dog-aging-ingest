@@ -27,6 +27,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
 
     StorageIO.writeJsonLists(dogs, "Dogs", s"${args.outputPrefix}/hles_dog")
     StorageIO.writeJsonLists(owners, "Owners", s"${args.outputPrefix}/hles_owner")
+    ()
   }
 
   /**
@@ -56,7 +57,84 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
       }
   }
 
-  def mapOwner(rawRecord: RawRecord): HlesOwner = ???
+  def mapOwner(rawRecord: RawRecord): HlesOwner = HlesOwner(
+    ownerId = ???,
+    odAgeRangeYears = ???,
+    odMaxEducation = ???,
+    odMaxEducationOther = ???,
+    odRace = ???,
+    odRaceOther = ???,
+    odHispanic = ???,
+    odAnnualIncomeRangeUsd = ???,
+    ocHouseholdAdultCount = ???,
+    ocHouseholdChildCount = ???,
+    ssHouseholdDogCount = ???,
+    ocPrimaryResidenceState = ???,
+    ocPrimaryResidenceCensusDivision = ???,
+    ocPrimaryResidenceZip = ???,
+    ocPrimaryResidenceOwnership = ???,
+    ocPrimaryResidenceOwnershipOther = ???,
+    ocSecondaryResidenceState = ???,
+    ocSecondaryResidenceZip = ???,
+    ocSecondaryResidenceOwnership = ???,
+    ocSecondaryResidenceOwnershipOther = ???
+  )
 
-  def mapDog(rawRecord: RawRecord): HlesDog = ???
+  def mapDog(rawRecord: RawRecord): HlesDog = HlesDog(
+    dogId = ???,
+    ownerId = ???,
+    ddBreedPure = ???,
+    ddBreedPureNonAkc = ???,
+    ddBreedMixedPrimary = ???,
+    ddBreedMixedSecondary = ???,
+    ddAgeYears = ???,
+    ddAgeBasis = ???,
+    ddAgeExactSource = ???,
+    ddAgeExactSourceOther = ???,
+    ddAgeEstimateSource = ???,
+    ddAgeEstimateSourceOther = ???,
+    ddBirthYear = ???,
+    ddBirthMonth = ???,
+    ddSex = ???,
+    ddSpayedOrNeutered = ???,
+    ddSpayOrNeuterAge = ???,
+    ddSpayMethod = ???,
+    ddEstrousCycleExperiencedBeforeSpayed = ???,
+    ddEstrousCycleCount = ???,
+    ddHasBeenPregnant = ???,
+    ddHasSiredLitters = ???,
+    ddLitterCount = ???,
+    ddWeightRange = ???,
+    ddWeightLbs = ???,
+    ddWeightRangeExpectedAdult = ???,
+    ddInsuranceProvider = ???,
+    ddInsuranceProviderOther = ???,
+    ddAcquiredYear = ???,
+    ddAcquiredMonth = ???,
+    ddAcquiredSource = ???,
+    ddAcquiredSourceOther = ???,
+    ddAcquiredCountry = ???,
+    ddAcquiredState = ???,
+    ddAcquiredZip = ???,
+    ddPrimaryRole = ???,
+    ddPrimaryRoleOther = ???,
+    ddSecondaryRole = ???,
+    ddSecondaryRoleOther = ???,
+    ddOtherRoles = ???,
+    ddServiceTypes = ???,
+    ddServiceTypesOtherMedical = ???,
+    ddServiceTypesOtherHealth = ???,
+    ddServiceTypesOther = ???,
+    ocPrimaryResidenceState = ???,
+    ocPrimaryResidenceCensusDivision = ???,
+    ocPrimaryResidenceZip = ???,
+    ocPrimaryResidenceOwnership = ???,
+    ocPrimaryResidenceOwnershipOther = ???,
+    ocPrimaryResidenceTimePercentage = ???,
+    ocSecondaryResidenceState = ???,
+    ocSecondaryResidenceZip = ???,
+    ocSecondaryResidenceOwnership = ???,
+    ocSecondaryResidenceOwnershipOther = ???,
+    ocSecondaryResidenceTimePercentage = ???
+  )
 }

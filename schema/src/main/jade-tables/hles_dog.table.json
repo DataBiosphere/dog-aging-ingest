@@ -62,7 +62,7 @@
       "datatype": "string"
     },
     {
-      "name": "bb_birth_month",
+      "name": "dd_birth_month",
       "datatype": "string"
     },
     {
@@ -82,7 +82,7 @@
       "datatype": "string"
     },
     {
-      "name": "dd_estrous_cycle_experience_before_spayed",
+      "name": "dd_estrous_cycle_experienced_before_spayed",
       "datatype": "string"
     },
     {
@@ -225,6 +225,10 @@
     },
     {
       "name": "oc_secondary_residence_ownership_other",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_secondary_residence_time_percentage",
       "datatype": "string"
     }
   ],
