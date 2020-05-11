@@ -23,8 +23,8 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     def getBooleanOption(field: String): Option[Boolean] = {
       val rawFieldValue = this.getOptional(field)
       if (rawFieldValue.isEmpty) None
-      else if (rawFieldValue.head == "Yes") Some(true)
-      else if (rawFieldValue.head == "No") Some(false)
+      else if (rawFieldValue.head == "1") Some(true)
+      else if (rawFieldValue.head == "0") Some(false)
       else {
         logger.warn(s"Invalid yes/no value in field $field on record $id: '$rawFieldValue'")
         None
