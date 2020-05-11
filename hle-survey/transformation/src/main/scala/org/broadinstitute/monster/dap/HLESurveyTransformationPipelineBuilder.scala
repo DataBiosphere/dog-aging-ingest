@@ -46,14 +46,14 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     // to get the format: (studyId, Iterable((fieldName, Iterable(value))))
     rawRecords
       .groupBy(_.read[String]("record"))
-      .values
-      .map { rawRecordValues =>
-        rawRecordValues
-          .groupBy(_.read[String]("field_name"))
-          .map {
-            case (fieldName, rawValues) =>
-              (fieldName, rawValues.map(_.read[String]("value")).toArray)
-          }
+      .map {
+        case (id, rawRecordValues) =>
+          rawRecordValues
+            .groupBy(_.read[String]("field_name"))
+            .map {
+              case (fieldName, rawValues) =>
+                (fieldName, rawValues.map(_.read[String]("value")).toArray)
+            } + ("study_id" -> Array(id))
       }
   }
 
@@ -80,61 +80,65 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     ocSecondaryResidenceOwnershipOther = ???
   )
 
-  def mapDog(rawRecord: RawRecord): HlesDog = HlesDog(
-    dogId = ???,
-    ownerId = ???,
-    ddBreedPure = ???,
-    ddBreedPureNonAkc = ???,
-    ddBreedMixedPrimary = ???,
-    ddBreedMixedSecondary = ???,
-    ddAgeYears = ???,
-    ddAgeBasis = ???,
-    ddAgeExactSource = ???,
-    ddAgeExactSourceOther = ???,
-    ddAgeEstimateSource = ???,
-    ddAgeEstimateSourceOther = ???,
-    ddBirthYear = ???,
-    ddBirthMonth = ???,
-    ddSex = ???,
-    ddSpayedOrNeutered = ???,
-    ddSpayOrNeuterAge = ???,
-    ddSpayMethod = ???,
-    ddEstrousCycleExperiencedBeforeSpayed = ???,
-    ddEstrousCycleCount = ???,
-    ddHasBeenPregnant = ???,
-    ddHasSiredLitters = ???,
-    ddLitterCount = ???,
-    ddWeightRange = ???,
-    ddWeightLbs = ???,
-    ddWeightRangeExpectedAdult = ???,
-    ddInsuranceProvider = ???,
-    ddInsuranceProviderOther = ???,
-    ddAcquiredYear = ???,
-    ddAcquiredMonth = ???,
-    ddAcquiredSource = ???,
-    ddAcquiredSourceOther = ???,
-    ddAcquiredCountry = ???,
-    ddAcquiredState = ???,
-    ddAcquiredZip = ???,
-    ddPrimaryRole = ???,
-    ddPrimaryRoleOther = ???,
-    ddSecondaryRole = ???,
-    ddSecondaryRoleOther = ???,
-    ddOtherRoles = ???,
-    ddServiceTypes = ???,
-    ddServiceTypesOtherMedical = ???,
-    ddServiceTypesOtherHealth = ???,
-    ddServiceTypesOther = ???,
-    ocPrimaryResidenceState = ???,
-    ocPrimaryResidenceCensusDivision = ???,
-    ocPrimaryResidenceZip = ???,
-    ocPrimaryResidenceOwnership = ???,
-    ocPrimaryResidenceOwnershipOther = ???,
-    ocPrimaryResidenceTimePercentage = ???,
-    ocSecondaryResidenceState = ???,
-    ocSecondaryResidenceZip = ???,
-    ocSecondaryResidenceOwnership = ???,
-    ocSecondaryResidenceOwnershipOther = ???,
-    ocSecondaryResidenceTimePercentage = ???
-  )
+  def mapDog(rawRecord: RawRecord): HlesDog = {
+    val id = rawRecord("study_id")
+
+    HlesDog(
+      dogId = ???,
+      ownerId = ???,
+      ddBreedPure = ???,
+      ddBreedPureNonAkc = ???,
+      ddBreedMixedPrimary = ???,
+      ddBreedMixedSecondary = ???,
+      ddAgeYears = ???,
+      ddAgeBasis = ???,
+      ddAgeExactSource = ???,
+      ddAgeExactSourceOther = ???,
+      ddAgeEstimateSource = ???,
+      ddAgeEstimateSourceOther = ???,
+      ddBirthYear = ???,
+      ddBirthMonth = ???,
+      ddSex = ???,
+      ddSpayedOrNeutered = ???,
+      ddSpayOrNeuterAge = ???,
+      ddSpayMethod = ???,
+      ddEstrousCycleExperiencedBeforeSpayed = ???,
+      ddEstrousCycleCount = ???,
+      ddHasBeenPregnant = ???,
+      ddHasSiredLitters = ???,
+      ddLitterCount = ???,
+      ddWeightRange = ???,
+      ddWeightLbs = ???,
+      ddWeightRangeExpectedAdult = ???,
+      ddInsuranceProvider = ???,
+      ddInsuranceProviderOther = ???,
+      ddAcquiredYear = ???,
+      ddAcquiredMonth = ???,
+      ddAcquiredSource = ???,
+      ddAcquiredSourceOther = ???,
+      ddAcquiredCountry = ???,
+      ddAcquiredState = ???,
+      ddAcquiredZip = ???,
+      ddPrimaryRole = ???,
+      ddPrimaryRoleOther = ???,
+      ddSecondaryRole = ???,
+      ddSecondaryRoleOther = ???,
+      ddOtherRoles = ???,
+      ddServiceTypes = ???,
+      ddServiceTypesOtherMedical = ???,
+      ddServiceTypesOtherHealth = ???,
+      ddServiceTypesOther = ???,
+      ocPrimaryResidenceState = ???,
+      ocPrimaryResidenceCensusDivision = ???,
+      ocPrimaryResidenceZip = ???,
+      ocPrimaryResidenceOwnership = ???,
+      ocPrimaryResidenceOwnershipOther = ???,
+      ocPrimaryResidenceTimePercentage = ???,
+      ocSecondaryResidenceState = ???,
+      ocSecondaryResidenceZip = ???,
+      ocSecondaryResidenceOwnership = ???,
+      ocSecondaryResidenceOwnershipOther = ???,
+      ocSecondaryResidenceTimePercentage = ???
+    )
+  }
 }
