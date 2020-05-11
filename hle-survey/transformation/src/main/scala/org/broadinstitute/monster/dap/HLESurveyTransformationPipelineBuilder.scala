@@ -9,6 +9,7 @@ import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.common.msg._
 import org.broadinstitute.monster.dogaging.jadeschema.struct.HlesDogResidence
 import org.broadinstitute.monster.dogaging.jadeschema.table.{HlesDog, HlesOwner}
+import org.slf4j.LoggerFactory
 import upack.Msg
 
 object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
@@ -16,6 +17,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
   implicit val msgCoder: Coder[Msg] = Coder.beam(new UpackMsgCoder)
 
   case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
+    val logger = LoggerFactory.getLogger(getClass)
 
     def getRequired(field: String): String = {
       val values = fields.getOrElse(field, Array.empty)
@@ -32,6 +34,17 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
         throw new IllegalStateException(s"Record $id has multiple values for field $field")
       } else {
         values.headOption
+      }
+    }
+
+    def getBooleanOption(field: String): Option[Boolean] = {
+      val rawFieldValue = this.getOptional(field)
+      if (rawFieldValue.isEmpty) None
+      else if (rawFieldValue.head == "1") Some(true)
+      else if (rawFieldValue.head == "0") Some(false)
+      else {
+        logger.warn(s"Invalid yes/no value in field $field on record $id: '$rawFieldValue'")
+        None
       }
     }
 
@@ -82,29 +95,37 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
       }
   }
 
-  def mapOwner(rawRecord: RawRecord): HlesOwner = HlesOwner(
-    // FIXME: Once DAP figures out a name for a dedicated owner ID, use that.
-    ownerId = rawRecord.id,
-    odAgeRangeYears = None,
-    odMaxEducation = None,
-    odMaxEducationOther = None,
-    odRace = Array.empty,
-    odRaceOther = None,
-    odHispanic = None,
-    odAnnualIncomeRangeUsd = None,
-    ocHouseholdAdultCount = None,
-    ocHouseholdChildCount = None,
-    ssHouseholdDogCount = None,
-    ocPrimaryResidenceState = None,
-    ocPrimaryResidenceCensusDivision = None,
-    ocPrimaryResidenceZip = None,
-    ocPrimaryResidenceOwnership = None,
-    ocPrimaryResidenceOwnershipOther = None,
-    ocSecondaryResidenceState = None,
-    ocSecondaryResidenceZip = None,
-    ocSecondaryResidenceOwnership = None,
-    ocSecondaryResidenceOwnershipOther = None
-  )
+  def mapOwner(rawRecord: RawRecord): HlesOwner = {
+    val secondaryAddress = rawRecord.getBooleanOption("oc_address2_yn").getOrElse(false)
+    HlesOwner(
+      // FIXME: Once DAP figures out a name for a dedicated owner ID, use that.
+      ownerId = rawRecord.id,
+      odAgeRangeYears = rawRecord.getOptional("od_age"),
+      odMaxEducation = rawRecord.getOptional("od_education"),
+      odMaxEducationOther = rawRecord.getOptional("od_education_other"),
+      odRace = rawRecord.getArray("od_race"),
+      odRaceOther = rawRecord.getOptional("od_race_other"),
+      odHispanic = rawRecord.getBooleanOption("od_hispanic_yn"),
+      odAnnualIncomeRangeUsd = rawRecord.getOptional("od_income"),
+      ocHouseholdPersonCount = rawRecord.getOptional("oc_people_household"),
+      ocHouseholdAdultCount = rawRecord.getOptional("oc_adults_household"),
+      ocHouseholdChildCount = rawRecord.getOptional("oc_children_household"),
+      ssHouseholdDogCount = rawRecord.getOptional("ss_num_dogs_hh"),
+      ocPrimaryResidenceState = rawRecord.getOptional("oc_address1_state"),
+      ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division"),
+      ocPrimaryResidenceZip = rawRecord.getOptional("oc_address1_zip"),
+      ocPrimaryResidenceOwnership = rawRecord.getOptional("oc_address1_own"),
+      ocPrimaryResidenceOwnershipOther = rawRecord.getOptional("oc_address1_own_other"),
+      ocSecondaryResidenceState =
+        if (secondaryAddress) rawRecord.getOptional("oc_address2_state") else None,
+      ocSecondaryResidenceZip =
+        if (secondaryAddress) rawRecord.getOptional("oc_address2_zip") else None,
+      ocSecondaryResidenceOwnership =
+        if (secondaryAddress) rawRecord.getOptional("oc_address2_own") else None,
+      ocSecondaryResidenceOwnershipOther =
+        if (secondaryAddress) rawRecord.getOptional("oc_address2_own_other") else None
+    )
+  }
 
   def mapDog(rawRecord: RawRecord): HlesDog = {
     val dogBase = HlesDog(
