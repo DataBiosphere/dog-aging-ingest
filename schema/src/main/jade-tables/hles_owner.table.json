@@ -29,7 +29,7 @@
     },
     {
       "name": "od_hispanic",
-      "datatype": "string"
+      "datatype": "boolean"
     },
     {
       "name": "od_annual_income_range_usd",
