@@ -12,7 +12,14 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
 
   implicit val msgCoder: Coder[Msg] = Coder.beam(new UpackMsgCoder)
 
-  case class RawRecord(id: Long, fields: Map[String, Array[String]])
+  case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
+
+    def getRequired(field: String): String = fields(field).head
+
+    def getOptional(field: String): Option[String] = fields.get(field).flatMap(_.headOption)
+
+    def getArray(field: String): Array[String] = fields.get(field).getOrElse(Array.empty)
+  }
 
   /**
     * Schedule all the steps for the Dog Aging transformation in the given pipeline context.
