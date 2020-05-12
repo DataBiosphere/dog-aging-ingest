@@ -20,16 +20,9 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
 
     def getOptional(field: String): Option[String] = fields.get(field).flatMap(_.headOption)
 
-    def getBooleanOption(field: String): Option[Boolean] = {
-      val rawFieldValue = this.getOptional(field)
-      if (rawFieldValue.isEmpty) None
-      else if (rawFieldValue.head == "1") Some(true)
-      else if (rawFieldValue.head == "0") Some(false)
-      else {
-        logger.warn(s"Invalid yes/no value in field $field on record $id: '$rawFieldValue'")
-        None
-      }
-    }
+    def getBooleanOption(field: String): Option[Boolean] = getOptional(field).map(_ == "1")
+
+    def getBoolean(field: String): Boolean = getBooleanOption(field).getOrElse(false)
 
     def getArray(field: String): Array[String] = fields.getOrElse(field, Array.empty)
   }
@@ -79,7 +72,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
   }
 
   def mapOwner(rawRecord: RawRecord): HlesOwner = {
-    val secondaryAddress = rawRecord.getBooleanOption("oc_address2_yn").getOrElse(false)
+    val secondaryAddress = rawRecord.getBoolean("oc_address2_yn")
     HlesOwner(
       // FIXME: Once DAP figures out a name for a dedicated owner ID, use that.
       ownerId = rawRecord.id,
