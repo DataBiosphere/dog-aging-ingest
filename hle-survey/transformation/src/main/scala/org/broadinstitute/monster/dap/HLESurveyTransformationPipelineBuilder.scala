@@ -6,7 +6,6 @@ import com.spotify.scio.values.SCollection
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.common.msg._
 import org.broadinstitute.monster.dogaging.jadeschema.table.{HlesDog, HlesOwner}
-import org.slf4j.LoggerFactory
 import upack.Msg
 
 object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
@@ -14,7 +13,6 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
   implicit val msgCoder: Coder[Msg] = Coder.beam(new UpackMsgCoder)
 
   case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
-    val logger = LoggerFactory.getLogger(getClass)
 
     def getRequired(field: String): String = fields(field).head
 
