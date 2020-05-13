@@ -29,7 +29,8 @@ object HLESurveyExtractionPipelineBuilder {
     "diet",
     "meds_and_preventives",
     "health_status",
-    "additional_studies"
+    "additional_studies",
+    "study_status"
   )
 
   val MaxConcurrentRequests = 8
@@ -66,29 +67,30 @@ class HLESurveyExtractionPipelineBuilder(
     import org.broadinstitute.monster.common.msg.MsgOps
     import HLESurveyExtractionPipelineBuilder._
 
-    val idLookupFn = new ScalaAsyncLookupDoFn[Unit, Msg, RedCapClient]() {
-      override def newClient(): RedCapClient = getClient()
-      override def asyncLookup(
-        client: RedCapClient,
-        input: Unit
-      ): Future[Msg] =
-        client.get(
-          args.apiToken,
-          GetRecords(
-            fields = List("study_id"),
-            start = args.startTime,
-            end = args.endTime,
-            filters = Map("co_consent" -> "1")
-          )
-        )
-    }
+    val lookupFn =
+      new ScalaAsyncLookupDoFn[RedcapRequest, Msg, RedCapClient](MaxConcurrentRequests) {
+        override def newClient(): RedCapClient = getClient()
+        override def asyncLookup(
+          client: RedCapClient,
+          input: RedcapRequest
+        ): Future[Msg] =
+          client.get(args.apiToken, input)
+      }
 
-    // No meaningful input to start with here, so inject Unit to get us
-    // into the SCollection context.
+    // Start by pulling the IDs of all records that:
+    //  1. Have consented to participate in HLES
+    //  2. Have completed all the HLES forms we care about
+    val initRequest = GetRecords(
+      fields = List("study_id"),
+      start = args.startTime,
+      end = args.endTime,
+      filters =
+        ExtractedForms.map(formName => s"${formName}_complete" -> "2").toMap + ("co_consent" -> "1")
+    )
     val idsToExtract = ctx
-      .parallelize(Iterable(()))
+      .parallelize(Iterable(initRequest))
       .transform("Get study IDs") {
-        _.applyKvTransform(ParDo.of(idLookupFn)).flatMap { kv =>
+        _.applyKvTransform(ParDo.of(lookupFn)).flatMap { kv =>
           kv.getValue.fold(throw _, _.arr.map(_.read[String]("value")))
         }
       }
@@ -101,16 +103,6 @@ class HLESurveyExtractionPipelineBuilder(
       .setCoder(KvCoder.of(StringUtf8Coder.of(), StringUtf8Coder.of()))
       .applyKvTransform(GroupIntoBatches.ofSize(idBatchSize.toLong))
       .map(ids => GetRecords(ids = ids.getValue.asScala.toList, forms = ExtractedForms))
-
-    val lookupFn =
-      new ScalaAsyncLookupDoFn[RedcapRequest, Msg, RedCapClient](MaxConcurrentRequests) {
-        override def newClient(): RedCapClient = getClient()
-        override def asyncLookup(
-          client: RedCapClient,
-          input: RedcapRequest
-        ): Future[Msg] =
-          client.get(args.apiToken, input)
-      }
 
     // Download the form data for each batch of records.
     val extractedRecords = batchedIds.transform("Get HLE records") {

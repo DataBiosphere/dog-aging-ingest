@@ -21,7 +21,8 @@ object HLESurveyExtractionPipelineBuilderSpec {
     start = Some(start),
     end = Some(end),
     fields = List("study_id"),
-    filters = Map("co_consent" -> "1")
+    filters =
+      ExtractedForms.map(formName => s"${formName}_complete" -> "2").toMap + ("co_consent" -> "1")
   ): RedcapRequest
 
   val downloadRecords = fakeIds.map { i =>
