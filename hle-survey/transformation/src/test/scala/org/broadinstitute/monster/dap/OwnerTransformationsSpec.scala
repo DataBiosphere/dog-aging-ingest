@@ -9,11 +9,11 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
   private val exampleOwnerFields = Map[String, Array[String]](
     "od_age" -> Array("5"),
     "od_education" -> Array("3"),
-    "od_education_other" -> Array("10"),
-    "od_race" -> Array("1"),
-    "od_race_other" -> Array("1"),
-    "od_hispanic_yn" -> Array("0"),
-    "od_income" -> Array("10"),
+    "od_education_other" -> Array("other education"),
+    "od_race" -> Array("1", "4", "98"),
+    "od_race_other" -> Array("some description"),
+    "od_hispanic_yn" -> Array("1"),
+    "od_income" -> Array("2"),
     "oc_people_household" -> Array("2"),
     "oc_adults_household" -> Array("2"),
     "oc_children_household" -> Array("2"),
@@ -30,36 +30,52 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     "oc_address2_own_other" -> Array("1")
   )
 
-  it should "map all owner column values" in {
-    val exampleOwnerRecord = RawRecord(id = 1, fields = exampleOwnerFields)
-    val actual = OwnerTransformations.mapOwner(exampleOwnerRecord)
+  it should "correctly map owner values when all values are defined" in {
+    val exampleOwnerRecord = RawRecord(id = 1, exampleOwnerFields)
+    val output = OwnerTransformations.mapOwner(exampleOwnerRecord)
 
-    actual.ownerId shouldBe 1
-    actual.odAgeRangeYears shouldBe Some("5")
-    actual.odMaxEducation shouldBe Some("3")
-    actual.odMaxEducationOther shouldBe Some("10")
-    actual.odRace.sameElements(Array("1")) shouldBe true
-    //actual.odRace shouldBe Array("1")
-    actual.odRaceOther shouldBe Some("1")
-    actual.odHispanic shouldBe Some(false)
-    actual.odAnnualIncomeRangeUsd shouldBe Some("10")
-    actual.ocHouseholdPersonCount shouldBe Some("2")
-    actual.ocHouseholdAdultCount shouldBe Some("2")
-    actual.ocHouseholdChildCount shouldBe Some("2")
-    actual.ssHouseholdDogCount shouldBe Some("2")
-    actual.ocPrimaryResidenceState shouldBe Some("OH")
-    actual.ocPrimaryResidenceCensusDivision shouldBe Some("3")
-    actual.ocPrimaryResidenceZip shouldBe Some("01111")
-    actual.ocPrimaryResidenceOwnership shouldBe Some("1")
-    actual.ocPrimaryResidenceOwnershipOther shouldBe Some("1")
-    actual.ocSecondaryResidenceState shouldBe Some("MA")
-    actual.ocSecondaryResidenceZip shouldBe Some("02222")
-    actual.ocSecondaryResidenceOwnership shouldBe Some("2")
-    actual.ocSecondaryResidenceOwnershipOther shouldBe Some("1")
+    output.ownerId shouldBe 1
+    // owner demographic info
+    output.odAgeRangeYears shouldBe Some(5)
+    output.odMaxEducation shouldBe Some(3)
+    output.odMaxEducationOther shouldBe Some("other education")
+    output.odRaceWhite shouldBe Some(true)
+    output.odRaceBlackOrAfricanAmerican shouldBe Some(false)
+    output.odRaceAsian shouldBe Some(false)
+    output.odRaceAmericanIndian shouldBe Some(true)
+    output.odRaceAlaskaNative shouldBe Some(false)
+    output.odRaceNativeHawaiian shouldBe Some(false)
+    output.odRaceOtherPacificIslander shouldBe Some(false)
+    output.odRaceOther shouldBe Some(true)
+    output.odRaceOtherDescription shouldBe Some("some description")
+    output.odHispanic shouldBe Some(true)
+    // household info fields
+    output.odAnnualIncomeRangeUsd shouldBe Some(2)
+    output.ocHouseholdPersonCount shouldBe Some(2)
+    output.ocHouseholdAdultCount shouldBe Some(2)
+    output.ocHouseholdChildCount shouldBe Some(2)
+    output.ssHouseholdDogCount shouldBe Some(2)
+    // residence fields
+    output.ocPrimaryResidenceState shouldBe Some("OH")
+    output.ocPrimaryResidenceCensusDivision shouldBe Some(3)
+    output.ocPrimaryResidenceZip shouldBe Some(1111)
+    output.ocPrimaryResidenceOwnership shouldBe Some("1")
+    output.ocPrimaryResidenceOwnershipOther shouldBe Some("1")
+    output.ocSecondaryResidenceState shouldBe Some("MA")
+    output.ocSecondaryResidenceZip shouldBe Some(2222)
+    output.ocSecondaryResidenceOwnership shouldBe Some("2")
+    output.ocSecondaryResidenceOwnershipOther shouldBe Some("1")
 
   }
 
-//  it should "return none for secondary address fields" in {
-//  }
+  it should "correctly map residence fields when there is no secondary residence" in {
+    val exampleOwnerRecord =
+      RawRecord(id = 1, exampleOwnerFields + ("oc_address2_yn" -> Array("0")))
+    val output = OwnerTransformations.mapOwner(exampleOwnerRecord)
 
+    output.ocSecondaryResidenceState shouldBe None
+    output.ocSecondaryResidenceZip shouldBe None
+    output.ocSecondaryResidenceOwnership shouldBe None
+    output.ocSecondaryResidenceOwnershipOther shouldBe None
+  }
 }

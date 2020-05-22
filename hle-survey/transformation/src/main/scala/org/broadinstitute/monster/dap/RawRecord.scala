@@ -51,5 +51,5 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
 
   /** If the field exists, check whether it contains the value, otherwise return None. */
   def containsValue(field: String, value: String): Option[Boolean] =
-    if (fields.contains(field)) Some(fields.get(field).contains(value)) else None
+    if (fields.contains(field)) Some(fields.getOrElse(field, Array.empty).contains(value)) else None
 }
