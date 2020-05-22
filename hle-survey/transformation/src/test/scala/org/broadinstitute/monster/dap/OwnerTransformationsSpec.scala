@@ -22,12 +22,12 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     "oc_address1_division" -> Array("3"),
     "oc_address1_zip" -> Array("01111"),
     "oc_address1_own" -> Array("1"),
-    "oc_address1_own_other" -> Array("1"),
+    "oc_address1_own_other" -> Array("some text"),
     "oc_address2_yn" -> Array("1"),
     "oc_address2_state" -> Array("MA"),
     "oc_address2_zip" -> Array("02222"),
     "oc_address2_own" -> Array("2"),
-    "oc_address2_own_other" -> Array("1")
+    "oc_address2_own_other" -> Array("some text")
   )
 
   it should "correctly map owner values when all values are defined" in {
@@ -59,12 +59,12 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     output.ocPrimaryResidenceState shouldBe Some("OH")
     output.ocPrimaryResidenceCensusDivision shouldBe Some(3)
     output.ocPrimaryResidenceZip shouldBe Some(1111)
-    output.ocPrimaryResidenceOwnership shouldBe Some("1")
-    output.ocPrimaryResidenceOwnershipOther shouldBe Some("1")
+    output.ocPrimaryResidenceOwnership shouldBe Some(1)
+    output.ocPrimaryResidenceOwnershipOther shouldBe Some("some text")
     output.ocSecondaryResidenceState shouldBe Some("MA")
     output.ocSecondaryResidenceZip shouldBe Some(2222)
-    output.ocSecondaryResidenceOwnership shouldBe Some("2")
-    output.ocSecondaryResidenceOwnershipOther shouldBe Some("1")
+    output.ocSecondaryResidenceOwnership shouldBe Some(2)
+    output.ocSecondaryResidenceOwnershipOther shouldBe Some("some text")
 
   }
 

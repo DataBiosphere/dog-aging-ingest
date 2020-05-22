@@ -33,14 +33,14 @@ object OwnerTransformations {
       ocPrimaryResidenceState = rawRecord.getOptional("oc_address1_state"),
       ocPrimaryResidenceCensusDivision = rawRecord.getOptionalNumber("oc_address1_division"),
       ocPrimaryResidenceZip = rawRecord.getOptionalNumber("oc_address1_zip"),
-      ocPrimaryResidenceOwnership = rawRecord.getOptional("oc_address1_own"),
+      ocPrimaryResidenceOwnership = rawRecord.getOptionalNumber("oc_address1_own"),
       ocPrimaryResidenceOwnershipOther = rawRecord.getOptional("oc_address1_own_other"),
       ocSecondaryResidenceState =
         if (secondaryAddress) rawRecord.getOptional("oc_address2_state") else None,
       ocSecondaryResidenceZip =
         if (secondaryAddress) rawRecord.getOptionalNumber("oc_address2_zip") else None,
       ocSecondaryResidenceOwnership =
-        if (secondaryAddress) rawRecord.getOptional("oc_address2_own") else None,
+        if (secondaryAddress) rawRecord.getOptionalNumber("oc_address2_own") else None,
       ocSecondaryResidenceOwnershipOther =
         if (secondaryAddress) rawRecord.getOptional("oc_address2_own_other") else None
     )

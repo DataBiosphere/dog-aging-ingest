@@ -92,7 +92,7 @@
     },
     {
       "name": "oc_primary_residence_ownership",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "oc_primary_residence_ownership_other",
@@ -108,7 +108,7 @@
     },
     {
       "name": "oc_secondary_residence_ownership",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "oc_secondary_residence_ownership_other",
