@@ -8,23 +8,50 @@
     },
     {
       "name": "od_age_range_years",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "od_max_education",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "od_max_education_other",
       "datatype": "string"
     },
     {
-      "name": "od_race",
-      "datatype": "string",
-      "type": "repeated"
+      "name": "od_race_white",
+      "datatype": "boolean"
+    },
+    {
+      "name": "od_race_black_or_african_american",
+      "datatype": "boolean"
+    },
+    {
+      "name": "od_race_asian",
+      "datatype": "boolean"
+    },
+    {
+      "name": "od_race_american_indian",
+      "datatype": "boolean"
+    },
+    {
+      "name": "od_race_alaska_native",
+      "datatype": "boolean"
+    },
+    {
+      "name": "od_race_native_hawaiian",
+      "datatype": "boolean"
+    },
+    {
+      "name": "od_race_other_pacific_islander",
+      "datatype": "boolean"
     },
     {
       "name": "od_race_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "od_race_other_description",
       "datatype": "string"
     },
     {
@@ -33,23 +60,23 @@
     },
     {
       "name": "od_annual_income_range_usd",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "oc_household_person_count",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "oc_household_adult_count",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "oc_household_child_count",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "ss_household_dog_count",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "oc_primary_residence_state",
@@ -57,11 +84,11 @@
     },
     {
       "name": "oc_primary_residence_census_division",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "oc_primary_residence_zip",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "oc_primary_residence_ownership",
@@ -77,7 +104,7 @@
     },
     {
       "name": "oc_secondary_residence_zip",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "oc_secondary_residence_ownership",
