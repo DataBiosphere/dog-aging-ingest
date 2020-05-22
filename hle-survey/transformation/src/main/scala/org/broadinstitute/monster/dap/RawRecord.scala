@@ -1,5 +1,7 @@
 package org.broadinstitute.monster.dap
 
+import java.time.LocalDate
+
 /**
   * Container for the raw properties pulled from RedCap for a single dog.
   *
@@ -42,6 +44,10 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
 
   /** Get the singleton value for an attribute in this record if one exists, parsed as a boolean. */
   def getOptionalBoolean(field: String): Option[Boolean] = getOptional(field).map(_ == "1")
+
+  /** Get the singleton value for an attribute in this record if one exists, parsed as a date. */
+  def getOptionalDate(field: String): Option[LocalDate] =
+    getOptional(field).map(LocalDate.parse(_, DateTimeFormatter.ofPattern("MM-dd-yyyy")))
 
   /** Get every value for an attribute in this record. */
   def getArray(field: String): Array[String] = fields.getOrElse(field, Array.empty)
