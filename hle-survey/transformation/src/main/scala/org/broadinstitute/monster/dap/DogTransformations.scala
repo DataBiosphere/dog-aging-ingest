@@ -31,7 +31,8 @@ object DogTransformations {
   }
 
   /**
-    *
+    * Parse all study-status-related fields out of a raw RedCap record,
+    * injecting them into a partially-modeled dog record.
     */
   def mapStudyStatus(rawRecord: RawRecord, dog: HlesDog): HlesDog =
     dog.copy(

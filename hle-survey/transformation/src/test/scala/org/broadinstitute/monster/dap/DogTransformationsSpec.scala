@@ -11,16 +11,14 @@ class DogTransformationsSpec extends AnyFlatSpec with Matchers {
 
   it should "correctly map study status fields" in {
     val exampleDogFields = Map[String, Array[String]](
-      "dd_us_born" -> Array("1"),
+      "dd_us_born" -> Array("1"), // a required field
       "st_vip_or_staff" -> Array("2"),
       "st_batch_label" -> Array("this is my label"),
       "st_invite_to_portal" -> Array("05-22-2020"),
       "st_portal_account_date" -> Array("01-01-2000"),
       "st_dap_pack_date" -> Array("12-31-1999")
     )
-    val exampleDogRecord =
-      RawRecord(id = 1, exampleDogFields)
-    val output = DogTransformations.mapDog(exampleDogRecord)
+    val output = DogTransformations.mapDog(RawRecord(id = 1, exampleDogFields))
 
     output.stVipOrStaff shouldBe Some("2")
     output.stBatchLabel shouldBe Some("this is my label")
