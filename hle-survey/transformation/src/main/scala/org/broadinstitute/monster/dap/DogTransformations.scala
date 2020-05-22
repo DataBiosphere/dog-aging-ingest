@@ -16,6 +16,7 @@ object DogTransformations {
     )
 
     val transformations = List(
+      mapStudyStatus _,
       mapBreed _,
       mapAge _,
       mapSexSpayNeuter _,
@@ -32,15 +33,14 @@ object DogTransformations {
   /**
     *
     */
-  def mapStudyStatus(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
+  def mapStudyStatus(rawRecord: RawRecord, dog: HlesDog): HlesDog =
     dog.copy(
       stVipOrStaff = rawRecord.getOptional("st_vip_or_staff"),
       stBatchLabel = rawRecord.getOptional("st_batch_label"),
-      stPortalInvitationDate = "st_invite_to_portal",
-      stPortalAccountCreationDate = "st_portal_account_date",
-      stHlesCompletionDate = "st_dap_pack_date"
+      stPortalInvitationDate = rawRecord.getOptionalDate("st_invite_to_portal"),
+      stPortalAccountCreationDate = rawRecord.getOptionalDate("st_portal_account_date"),
+      stHlesCompletionDate = rawRecord.getOptionalDate("st_dap_pack_date")
     )
-  }
 
   /**
     * Parse all breed-related fields out of a raw RedCap record,

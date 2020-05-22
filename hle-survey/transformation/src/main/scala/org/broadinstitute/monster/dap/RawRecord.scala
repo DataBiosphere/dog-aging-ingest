@@ -1,6 +1,7 @@
 package org.broadinstitute.monster.dap
 
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /**
   * Container for the raw properties pulled from RedCap for a single dog.
