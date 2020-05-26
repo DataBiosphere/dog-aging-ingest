@@ -9,76 +9,14 @@ object DogTransformations {
 
   /** Parse all dog-related fields out of a raw RedCap record. */
   def mapDog(rawRecord: RawRecord): HlesDog = {
-    val dogBase = HlesDog(
+    val dogBase = HlesDog.init(
       dogId = rawRecord.id,
       // FIXME: Once DAP figures out a name for a dedicated owner ID, use that.
-      ownerId = rawRecord.id,
-      // withBreed
-      ddBreedPure = None,
-      ddBreedPureNonAkc = None,
-      ddBreedMixedPrimary = None,
-      ddBreedMixedSecondary = None,
-      // withAge
-      ddAgeYears = None,
-      ddAgeBasis = None,
-      ddAgeExactSource = Array.empty,
-      ddAgeExactSourceOther = None,
-      ddAgeEstimateSource = Array.empty,
-      ddAgeEstimateSourceOther = None,
-      ddBirthYear = None,
-      ddBirthMonth = None,
-      // withSex
-      ddSex = None,
-      // withSpayNeuter
-      ddSpayedOrNeutered = None,
-      ddSpayOrNeuterAge = None,
-      ddSpayMethod = None,
-      ddEstrousCycleExperiencedBeforeSpayed = None,
-      ddEstrousCycleCount = None,
-      ddHasBeenPregnant = None,
-      ddHasSiredLitters = None,
-      ddLitterCount = None,
-      // withWeight
-      ddWeightRange = None,
-      ddWeightLbs = None,
-      ddWeightRangeExpectedAdult = None,
-      // withInsurance
-      ddInsuranceProvider = None,
-      ddInsuranceProviderOther = None,
-      // withAcquired
-      ddAcquiredYear = None,
-      ddAcquiredMonth = None,
-      ddAcquiredSource = None,
-      ddAcquiredSourceOther = None,
-      ddAcquiredCountry = None,
-      ddAcquiredState = None,
-      ddAcquiredZip = None,
-      // withRoles
-      ddPrimaryRole = None,
-      ddPrimaryRoleOther = None,
-      ddSecondaryRole = None,
-      ddSecondaryRoleOther = None,
-      ddOtherRoles = Array.empty,
-      ddServiceTypes = Array.empty,
-      ddServiceTypesOtherMedical = None,
-      ddServiceTypesOtherHealth = None,
-      ddServiceTypesOther = None,
-      // withResidences
-      ocPrimaryResidenceState = None,
-      ocPrimaryResidenceCensusDivision = None,
-      ocPrimaryResidenceZip = None,
-      ocPrimaryResidenceOwnership = None,
-      ocPrimaryResidenceOwnershipOther = None,
-      ocPrimaryResidenceTimePercentage = None,
-      ocSecondaryResidenceState = None,
-      ocSecondaryResidenceZip = None,
-      ocSecondaryResidenceOwnership = None,
-      ocSecondaryResidenceOwnershipOther = None,
-      ocSecondaryResidenceTimePercentage = None,
-      ddOtherRecentShortTermResidences = Array.empty
+      ownerId = rawRecord.id
     )
 
     val transformations = List(
+      mapStudyStatus _,
       mapBreed _,
       mapAge _,
       mapSexSpayNeuter _,
@@ -91,6 +29,19 @@ object DogTransformations {
 
     transformations.foldLeft(dogBase)((acc, f) => f(rawRecord, acc))
   }
+
+  /**
+    * Parse all study-status-related fields out of a raw RedCap record,
+    * injecting them into a partially-modeled dog record.
+    */
+  def mapStudyStatus(rawRecord: RawRecord, dog: HlesDog): HlesDog =
+    dog.copy(
+      stVipOrStaff = rawRecord.getOptionalNumber("st_vip_or_staff"),
+      stBatchLabel = rawRecord.getOptional("st_batch_label"),
+      stPortalInvitationDate = rawRecord.getOptionalDate("st_invite_to_portal"),
+      stPortalAccountCreationDate = rawRecord.getOptionalDate("st_portal_account_date"),
+      stHlesCompletionDate = rawRecord.getOptionalDate("st_dap_pack_date")
+    )
 
   /**
     * Parse all breed-related fields out of a raw RedCap record,
