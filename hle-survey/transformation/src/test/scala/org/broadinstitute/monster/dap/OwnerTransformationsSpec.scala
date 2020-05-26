@@ -39,7 +39,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     // owner demographic info
     output.odAgeRangeYears shouldBe Some(5)
     output.odMaxEducation shouldBe Some(3)
-    output.odMaxEducationOther shouldBe Some("other education")
+    output.odMaxEducationOtherDescription shouldBe Some("other education")
     output.odRaceWhite shouldBe Some(true)
     output.odRaceBlackOrAfricanAmerican shouldBe Some(false)
     output.odRaceAsian shouldBe Some(false)
@@ -61,11 +61,11 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     output.ocPrimaryResidenceCensusDivision shouldBe Some(3)
     output.ocPrimaryResidenceZip shouldBe Some(1111)
     output.ocPrimaryResidenceOwnership shouldBe Some(1)
-    output.ocPrimaryResidenceOwnershipOther shouldBe Some("some text")
+    output.ocPrimaryResidenceOwnershipOtherDescription shouldBe Some("some text")
     output.ocSecondaryResidenceState shouldBe Some("MA")
     output.ocSecondaryResidenceZip shouldBe Some(2222)
     output.ocSecondaryResidenceOwnership shouldBe Some(2)
-    output.ocSecondaryResidenceOwnershipOther shouldBe Some("some text")
+    output.ocSecondaryResidenceOwnershipOtherDescription shouldBe Some("some text")
 
   }
 

@@ -14,7 +14,7 @@ object OwnerTransformations {
       ownerId = rawRecord.id,
       odAgeRangeYears = rawRecord.getOptionalNumber("od_age"),
       odMaxEducation = rawRecord.getOptionalNumber("od_education"),
-      odMaxEducationOther = rawRecord.getOptional("od_education_other"),
+      odMaxEducationOtherDescription = rawRecord.getOptional("od_education_other"),
       odRaceWhite = raceValues.map(_.contains("1")),
       odRaceBlackOrAfricanAmerican = raceValues.map(_.contains("2")),
       odRaceAsian = raceValues.map(_.contains("3")),
@@ -34,14 +34,14 @@ object OwnerTransformations {
       ocPrimaryResidenceCensusDivision = rawRecord.getOptionalNumber("oc_address1_division"),
       ocPrimaryResidenceZip = rawRecord.getOptionalNumber("oc_address1_zip"),
       ocPrimaryResidenceOwnership = rawRecord.getOptionalNumber("oc_address1_own"),
-      ocPrimaryResidenceOwnershipOther = rawRecord.getOptional("oc_address1_own_other"),
+      ocPrimaryResidenceOwnershipOtherDescription = rawRecord.getOptional("oc_address1_own_other"),
       ocSecondaryResidenceState =
         if (secondaryAddress) rawRecord.getOptional("oc_address2_state") else None,
       ocSecondaryResidenceZip =
         if (secondaryAddress) rawRecord.getOptionalNumber("oc_address2_zip") else None,
       ocSecondaryResidenceOwnership =
         if (secondaryAddress) rawRecord.getOptionalNumber("oc_address2_own") else None,
-      ocSecondaryResidenceOwnershipOther =
+      ocSecondaryResidenceOwnershipOtherDescription =
         if (secondaryAddress) rawRecord.getOptional("oc_address2_own_other") else None
     )
   }

@@ -15,7 +15,7 @@
       "datatype": "integer"
     },
     {
-      "name": "od_max_education_other",
+      "name": "od_max_education_other_description",
       "datatype": "string"
     },
     {
@@ -95,7 +95,7 @@
       "datatype": "integer"
     },
     {
-      "name": "oc_primary_residence_ownership_other",
+      "name": "oc_primary_residence_ownership_other_description",
       "datatype": "string"
     },
     {
@@ -111,7 +111,7 @@
       "datatype": "integer"
     },
     {
-      "name": "oc_secondary_residence_ownership_other",
+      "name": "oc_secondary_residence_ownership_other_description",
       "datatype": "string"
     }
   ]
