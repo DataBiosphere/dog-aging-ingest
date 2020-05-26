@@ -77,7 +77,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     output.ocSecondaryResidenceState shouldBe None
     output.ocSecondaryResidenceZip shouldBe None
     output.ocSecondaryResidenceOwnership shouldBe None
-    output.ocSecondaryResidenceOwnershipOther shouldBe None
+    output.ocSecondaryResidenceOwnershipOtherDescription shouldBe None
   }
 
   it should "correctly map owner data when optional fields are null" in {
