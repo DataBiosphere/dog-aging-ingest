@@ -36,7 +36,7 @@ object DogTransformations {
     */
   def mapStudyStatus(rawRecord: RawRecord, dog: HlesDog): HlesDog =
     dog.copy(
-      stVipOrStaff = rawRecord.getOptional("st_vip_or_staff"),
+      stVipOrStaff = rawRecord.getOptionalNumber("st_vip_or_staff"),
       stBatchLabel = rawRecord.getOptional("st_batch_label"),
       stPortalInvitationDate = rawRecord.getOptionalDate("st_invite_to_portal"),
       stPortalAccountCreationDate = rawRecord.getOptionalDate("st_portal_account_date"),

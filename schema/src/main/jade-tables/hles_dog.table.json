@@ -19,7 +19,7 @@
     },
     {
       "name": "st_vip_or_staff",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "st_batch_label",
