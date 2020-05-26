@@ -55,8 +55,4 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
 
   /** Get every value for an attribute in this record. */
   def getArray(field: String): Array[String] = fields.getOrElse(field, Array.empty)
-
-  /** If the field exists, check whether it contains the value, otherwise return None. */
-  def containsValue(field: String, value: String): Option[Boolean] =
-    if (fields.contains(field)) Some(fields.getOrElse(field, Array.empty).contains(value)) else None
 }

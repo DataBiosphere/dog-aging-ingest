@@ -1,5 +1,6 @@
 package org.broadinstitute.monster.dap
 
+import org.broadinstitute.monster.dogaging.jadeschema.table.HlesOwner
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -77,5 +78,11 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     output.ocSecondaryResidenceZip shouldBe None
     output.ocSecondaryResidenceOwnership shouldBe None
     output.ocSecondaryResidenceOwnershipOther shouldBe None
+  }
+
+  it should "correctly map owner data when optional fields are null" in {
+    val emptyRecord = RawRecord(id = 1, Map[String, Array[String]]())
+
+    OwnerTransformations.mapOwner(emptyRecord) shouldBe HlesOwner.init(ownerId = 1)
   }
 }

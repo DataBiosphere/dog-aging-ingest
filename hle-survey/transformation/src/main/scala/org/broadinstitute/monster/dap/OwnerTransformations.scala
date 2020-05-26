@@ -7,7 +7,7 @@ object OwnerTransformations {
   /** Parse all owner-related fields out of a raw RedCap record. */
   def mapOwner(rawRecord: RawRecord): HlesOwner = {
     val secondaryAddress = rawRecord.getBoolean("oc_address2_yn")
-    val raceField = "od_race"
+    val raceValues = rawRecord.fields.get("od_race")
 
     HlesOwner(
       // FIXME: Once DAP figures out a name for a dedicated owner ID, use that.
@@ -15,14 +15,14 @@ object OwnerTransformations {
       odAgeRangeYears = rawRecord.getOptionalNumber("od_age"),
       odMaxEducation = rawRecord.getOptionalNumber("od_education"),
       odMaxEducationOther = rawRecord.getOptional("od_education_other"),
-      odRaceWhite = rawRecord.containsValue(raceField, "1"),
-      odRaceBlackOrAfricanAmerican = rawRecord.containsValue(raceField, "2"),
-      odRaceAsian = rawRecord.containsValue(raceField, "3"),
-      odRaceAmericanIndian = rawRecord.containsValue(raceField, "4"),
-      odRaceAlaskaNative = rawRecord.containsValue(raceField, "5"),
-      odRaceNativeHawaiian = rawRecord.containsValue(raceField, "6"),
-      odRaceOtherPacificIslander = rawRecord.containsValue(raceField, "7"),
-      odRaceOther = rawRecord.containsValue(raceField, "98"),
+      odRaceWhite = raceValues.map(_.contains("1")),
+      odRaceBlackOrAfricanAmerican = raceValues.map(_.contains("2")),
+      odRaceAsian = raceValues.map(_.contains("3")),
+      odRaceAmericanIndian = raceValues.map(_.contains("4")),
+      odRaceAlaskaNative = raceValues.map(_.contains("5")),
+      odRaceNativeHawaiian = raceValues.map(_.contains("6")),
+      odRaceOtherPacificIslander = raceValues.map(_.contains("7")),
+      odRaceOther = raceValues.map(_.contains("98")),
       odRaceOtherDescription = rawRecord.getOptional("od_race_other"),
       odHispanic = rawRecord.getOptionalBoolean("od_hispanic_yn"),
       odAnnualIncomeRangeUsd = rawRecord.getOptionalNumber("od_income"),
