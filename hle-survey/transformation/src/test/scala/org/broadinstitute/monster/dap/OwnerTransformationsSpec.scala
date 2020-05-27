@@ -21,7 +21,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     "ss_num_dogs_hh" -> Array("2"),
     "oc_address1_state" -> Array("OH"),
     "oc_address1_division" -> Array("3"),
-    "oc_address1_zip" -> Array("01111"),
+    "oc_address1_zip" -> Array("32837-4949"),
     "oc_address1_own" -> Array("1"),
     "oc_address1_own_other" -> Array("some text"),
     "oc_address2_yn" -> Array("1"),
@@ -59,11 +59,11 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     // residence fields
     output.ocPrimaryResidenceState shouldBe Some("OH")
     output.ocPrimaryResidenceCensusDivision shouldBe Some(3)
-    output.ocPrimaryResidenceZip shouldBe Some(1111)
+    output.ocPrimaryResidenceZip shouldBe Some("32837-4949")
     output.ocPrimaryResidenceOwnership shouldBe Some(1)
     output.ocPrimaryResidenceOwnershipOtherDescription shouldBe Some("some text")
     output.ocSecondaryResidenceState shouldBe Some("MA")
-    output.ocSecondaryResidenceZip shouldBe Some(2222)
+    output.ocSecondaryResidenceZip shouldBe Some("02222")
     output.ocSecondaryResidenceOwnership shouldBe Some(2)
     output.ocSecondaryResidenceOwnershipOtherDescription shouldBe Some("some text")
 
