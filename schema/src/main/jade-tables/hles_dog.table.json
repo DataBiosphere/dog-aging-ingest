@@ -302,7 +302,7 @@
     },
     {
       "name": "oc_primary_residence_census_division",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "oc_primary_residence_zip",

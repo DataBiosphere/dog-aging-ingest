@@ -30,7 +30,7 @@ object OwnerTransformations {
       ocHouseholdChildCount = rawRecord.getOptionalNumber("oc_children_household"),
       ssHouseholdDogCount = rawRecord.getOptionalNumber("ss_num_dogs_hh"),
       ocPrimaryResidenceState = rawRecord.getOptional("oc_address1_state"),
-      ocPrimaryResidenceCensusDivision = rawRecord.getOptionalNumber("oc_address1_division"),
+      ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division"),
       ocPrimaryResidenceZip = rawRecord.getOptional("oc_address1_zip"),
       ocPrimaryResidenceOwnership = rawRecord.getOptionalNumber("oc_address1_own"),
       ocPrimaryResidenceOwnershipOtherDescription = rawRecord.getOptional("oc_address1_own_other"),

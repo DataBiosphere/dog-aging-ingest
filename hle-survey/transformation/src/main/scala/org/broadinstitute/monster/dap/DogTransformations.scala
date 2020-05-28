@@ -349,7 +349,7 @@ object DogTransformations {
 
     dog.copy(
       ocPrimaryResidenceState = rawRecord.getOptional("oc_address1_state"),
-      ocPrimaryResidenceCensusDivision = rawRecord.getOptionalNumber("oc_address1_division"),
+      ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division"),
       ocPrimaryResidenceZip = rawRecord.getOptional("oc_address1_zip"),
       ocPrimaryResidenceOwnership = primaryOwned,
       ocPrimaryResidenceOwnershipOtherDescription =
