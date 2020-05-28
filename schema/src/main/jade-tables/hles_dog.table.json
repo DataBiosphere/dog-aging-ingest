@@ -34,7 +34,7 @@
       "datatype": "date"
     },
     {
-      "name": "st_hles_completion_date",
+      "name": "st_hles_completion_time",
       "datatype": "timestamp"
     },
     {

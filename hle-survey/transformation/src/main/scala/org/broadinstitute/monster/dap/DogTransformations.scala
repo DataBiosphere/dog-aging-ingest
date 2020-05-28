@@ -44,7 +44,7 @@ object DogTransformations {
       stBatchLabel = rawRecord.getOptional("st_batch_label"),
       stPortalInvitationDate = rawRecord.getOptionalDate("st_invite_to_portal"),
       stPortalAccountCreationDate = rawRecord.getOptionalDate("st_portal_account_date"),
-      stHlesCompletionDate = rawRecord.getOptional("st_dap_pack_date").map { timeString =>
+      stHlesCompletionTime = rawRecord.getOptional("st_dap_pack_date").map { timeString =>
         val localDt = LocalDateTime.parse(timeString, DapPackDateForamt)
         ZonedDateTime.of(localDt, TimezoneId).toOffsetDateTime
       }

@@ -27,7 +27,7 @@ class DogTransformationsSpec extends AnyFlatSpec with Matchers {
     output.stBatchLabel shouldBe Some("this is my label")
     output.stPortalInvitationDate shouldBe Some(LocalDate.of(2020, 5, 22))
     output.stPortalAccountCreationDate shouldBe Some(LocalDate.of(2000, 1, 1))
-    output.stHlesCompletionDate shouldBe Some(
+    output.stHlesCompletionTime shouldBe Some(
       ZonedDateTime
         .of(LocalDateTime.of(2020, 1, 15, 10, 21), DogTransformations.TimezoneId)
         .toOffsetDateTime
