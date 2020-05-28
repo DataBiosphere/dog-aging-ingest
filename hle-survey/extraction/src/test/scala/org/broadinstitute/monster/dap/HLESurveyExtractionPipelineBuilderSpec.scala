@@ -9,7 +9,7 @@ import upack._
 import scala.collection.mutable
 
 object HLESurveyExtractionPipelineBuilderSpec {
-  import HLESurveyExtractionPipelineBuilder.ExtractedForms
+  import HLESurveyExtractionPipelineBuilder._
 
   val token = "pls-let-me-in"
   val start = OffsetDateTime.now()
@@ -21,14 +21,14 @@ object HLESurveyExtractionPipelineBuilderSpec {
     start = Some(start),
     end = Some(end),
     fields = List("study_id"),
-    filters =
-      ExtractedForms.map(formName => s"${formName}_complete" -> "2").toMap + ("co_consent" -> "1")
+    filters = ExtractionFilters
   ): RedcapRequest
 
   val downloadRecords = fakeIds.map { i =>
     GetRecords(
       ids = List(i.toString),
-      forms = ExtractedForms
+      forms = ExtractedForms,
+      fields = List("co_consent")
     ): RedcapRequest
   }
 

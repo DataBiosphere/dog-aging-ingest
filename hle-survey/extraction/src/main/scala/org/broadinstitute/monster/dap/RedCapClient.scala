@@ -91,8 +91,11 @@ object RedCapClient {
           }
           start.foreach(s => formBuilder.add("dateRangeBegin", s.format(dateFormatter)))
           end.foreach(e => formBuilder.add("dateRangeEnd", e.format(dateFormatter)))
-          filters.foreach {
-            case (k, v) => formBuilder.add("filterLogic", s"[$k]=$v")
+          if (filters.nonEmpty) {
+            formBuilder.add(
+              "filterLogic",
+              filters.map { case (k, v) => s"[$k]=$v" }.mkString(" and ")
+            )
           }
           formBuilder
         case GetDataDictionary(instrument) =>

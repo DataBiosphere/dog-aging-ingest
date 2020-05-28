@@ -14,8 +14,8 @@ class DogTransformationsSpec extends AnyFlatSpec with Matchers {
     val exampleDogFields = Map[String, Array[String]](
       "st_vip_or_staff" -> Array("2"),
       "st_batch_label" -> Array("this is my label"),
-      "st_invite_to_portal" -> Array("05-22-2020"),
-      "st_portal_account_date" -> Array("01-01-2000"),
+      "st_invite_to_portal" -> Array("2020-05-22"),
+      "st_portal_account_date" -> Array("2000-01-01"),
       "st_dap_pack_date" -> Array("2020-01-15 10:21")
     )
     val output = DogTransformations.mapStudyStatus(

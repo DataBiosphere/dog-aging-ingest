@@ -33,6 +33,11 @@ object HLESurveyExtractionPipelineBuilder {
     "study_status"
   )
 
+  val ExtractionFilters: Map[String, String] = ExtractedForms
+    .filterNot(_ == "study_status") // For some reason, study_status is never marked as completed.
+    .map(form => s"${form}_complete" -> "2") // Magic marker for "completed".
+    .toMap + ("co_consent" -> "1")
+
   val MaxConcurrentRequests = 8
 }
 
@@ -84,8 +89,7 @@ class HLESurveyExtractionPipelineBuilder(
       fields = List("study_id"),
       start = args.startTime,
       end = args.endTime,
-      filters =
-        ExtractedForms.map(formName => s"${formName}_complete" -> "2").toMap + ("co_consent" -> "1")
+      filters = ExtractionFilters
     )
     val idsToExtract = ctx
       .parallelize(Iterable(initRequest))
@@ -102,7 +106,14 @@ class HLESurveyExtractionPipelineBuilder(
       .map(KV.of("", _))
       .setCoder(KvCoder.of(StringUtf8Coder.of(), StringUtf8Coder.of()))
       .applyKvTransform(GroupIntoBatches.ofSize(idBatchSize.toLong))
-      .map(ids => GetRecords(ids = ids.getValue.asScala.toList, forms = ExtractedForms))
+      .map { ids =>
+        GetRecords(
+          ids = ids.getValue.asScala.toList,
+          forms = ExtractedForms,
+          // Pull the consent field so we can QC that the filter is working properly.
+          fields = List("co_consent")
+        )
+      }
 
     // Download the form data for each batch of records.
     val extractedRecords = batchedIds.transform("Get HLE records") {
