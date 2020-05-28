@@ -3,7 +3,7 @@ package org.broadinstitute.monster.dap
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import java.time.{LocalDate, LocalDateTime, ZonedDateTime}
+import java.time.LocalDate
 
 class DogTransformationsSpec extends AnyFlatSpec with Matchers {
   behavior of "DogTransformations"
@@ -27,11 +27,7 @@ class DogTransformationsSpec extends AnyFlatSpec with Matchers {
     output.stBatchLabel shouldBe Some("this is my label")
     output.stPortalInvitationDate shouldBe Some(LocalDate.of(2020, 5, 22))
     output.stPortalAccountCreationDate shouldBe Some(LocalDate.of(2000, 1, 1))
-    output.stHlesCompletionTime shouldBe Some(
-      ZonedDateTime
-        .of(LocalDateTime.of(2020, 1, 15, 10, 21), DogTransformations.TimezoneId)
-        .toOffsetDateTime
-    )
+    output.stHlesCompletionDate shouldBe Some(LocalDate.of(2020, 1, 15))
   }
 
   it should "map pure-breed demographics fields" in {
