@@ -1,6 +1,7 @@
 package org.broadinstitute.monster.dap
 
-import java.time.{LocalDate, Period}
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, LocalDateTime, Period, ZoneId, ZonedDateTime}
 
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
 
@@ -10,8 +11,7 @@ object DogTransformations {
   def mapDog(rawRecord: RawRecord): HlesDog = {
     val dogBase = HlesDog.init(
       dogId = rawRecord.id,
-      // FIXME: Once DAP figures out a name for a dedicated owner ID, use that.
-      ownerId = rawRecord.id
+      ownerId = rawRecord.getRequired("st_owner_id").toLong
     )
 
     val transformations = List(
@@ -29,6 +29,11 @@ object DogTransformations {
     transformations.foldLeft(dogBase)((acc, f) => f(rawRecord, acc))
   }
 
+  val DapPackDateForamt: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+
+  val TimezoneId: ZoneId = ZoneId.of(ZoneId.SHORT_IDS.get("PST"))
+
   /**
     * Parse all study-status-related fields out of a raw RedCap record,
     * injecting them into a partially-modeled dog record.
@@ -39,7 +44,10 @@ object DogTransformations {
       stBatchLabel = rawRecord.getOptional("st_batch_label"),
       stPortalInvitationDate = rawRecord.getOptionalDate("st_invite_to_portal"),
       stPortalAccountCreationDate = rawRecord.getOptionalDate("st_portal_account_date"),
-      stHlesCompletionDate = rawRecord.getOptionalDate("st_dap_pack_date")
+      stHlesCompletionDate = rawRecord.getOptional("st_dap_pack_date").map { timeString =>
+        val localDt = LocalDateTime.parse(timeString, DapPackDateForamt)
+        ZonedDateTime.of(localDt, TimezoneId).toOffsetDateTime
+      }
     )
 
   /**

@@ -35,7 +35,7 @@
     },
     {
       "name": "st_hles_completion_date",
-      "datatype": "date"
+      "datatype": "timestamp"
     },
     {
       "name": "dd_breed_pure",

@@ -10,8 +10,7 @@ object OwnerTransformations {
     val raceValues = rawRecord.fields.get("od_race")
 
     HlesOwner(
-      // FIXME: Once DAP figures out a name for a dedicated owner ID, use that.
-      ownerId = rawRecord.id,
+      ownerId = rawRecord.getRequired("st_owner_id").toLong,
       odAgeRangeYears = rawRecord.getOptionalNumber("od_age"),
       odMaxEducation = rawRecord.getOptionalNumber("od_education"),
       odMaxEducationOtherDescription = rawRecord.getOptional("od_education_other"),

@@ -8,6 +8,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
   behavior of "OwnerTransformations"
 
   private val exampleOwnerFields = Map[String, Array[String]](
+    "st_owner_id" -> Array("10"),
     "od_age" -> Array("5"),
     "od_education" -> Array("3"),
     "od_education_other" -> Array("other education"),
@@ -35,7 +36,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     val exampleOwnerRecord = RawRecord(id = 1, exampleOwnerFields)
     val output = OwnerTransformations.mapOwner(exampleOwnerRecord)
 
-    output.ownerId shouldBe 1
+    output.ownerId shouldBe 10
     // owner demographic info
     output.odAgeRangeYears shouldBe Some(5)
     output.odMaxEducation shouldBe Some(3)
@@ -81,8 +82,8 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "correctly map owner data when optional fields are null" in {
-    val emptyRecord = RawRecord(id = 1, Map[String, Array[String]]())
+    val emptyRecord = RawRecord(id = 1, Map[String, Array[String]]("st_owner_id" -> Array("5")))
 
-    OwnerTransformations.mapOwner(emptyRecord) shouldBe HlesOwner.init(ownerId = 1)
+    OwnerTransformations.mapOwner(emptyRecord) shouldBe HlesOwner.init(ownerId = 5)
   }
 }
