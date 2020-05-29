@@ -8,6 +8,8 @@ import org.broadinstitute.monster.common.PipelineBuilderSpec
 import org.broadinstitute.monster.common.msg.JsonParser
 
 class HLESurveyExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
+  import org.broadinstitute.monster.common.msg.MsgOps
+
   val outputDir = File.newTemporaryDirectory()
   override def afterAll(): Unit = outputDir.delete()
 
@@ -51,6 +53,14 @@ class HLESurveyExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderS
 
   it should "successfully download records from RedCap" in {
     readMsgs(outputDir, "records/*.json") shouldNot be(empty)
+  }
+
+  it should "only download records that have completed all HLES instruments" in {
+    readMsgs(outputDir, "records/*.json").foreach { record =>
+      HLESurveyExtractionPipelineBuilder.ExtractionFilters
+        .get(record.read[String]("field_name"))
+        .foreach(expected => record.read[String]("value") shouldBe expected)
+    }
   }
 
   it should "successfully download data dictionaries from RedCap" in {
