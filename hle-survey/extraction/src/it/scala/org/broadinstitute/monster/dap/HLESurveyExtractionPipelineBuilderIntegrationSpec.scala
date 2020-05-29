@@ -55,12 +55,6 @@ class HLESurveyExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderS
     readMsgs(outputDir, "records/*.json") shouldNot be(empty)
   }
 
-  it should "only download consented records" in {
-    readMsgs(outputDir, "records/*.json")
-      .filter(_.read[String]("field_name") == "co_consent")
-      .foreach(record => record.read[String]("value") shouldBe "1")
-  }
-
   it should "only download records that have completed all HLES instruments" in {
     readMsgs(outputDir, "records/*.json").foreach { record =>
       HLESurveyExtractionPipelineBuilder.ExtractionFilters
