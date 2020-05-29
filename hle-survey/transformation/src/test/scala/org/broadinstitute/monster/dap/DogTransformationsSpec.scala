@@ -5,28 +5,601 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import java.time.LocalDate
 
-class DogTransformationsSpec extends AnyFlatSpec with Matchers {
+import org.scalatest.OptionValues
+
+class DogTransformationsSpec extends AnyFlatSpec with Matchers with OptionValues {
   behavior of "DogTransformations"
 
-  // TODO add tests for dog demographics transformation
+  it should "map required fields" in {
+    val mapped = DogTransformations.mapDog(RawRecord(1, Map("st_owner_id" -> Array("2"))))
+    mapped shouldBe HlesDog.init(1L, 2L)
+  }
 
-  it should "correctly map study status fields" in {
+  it should "map study status fields" in {
     val exampleDogFields = Map[String, Array[String]](
       "st_vip_or_staff" -> Array("2"),
       "st_batch_label" -> Array("this is my label"),
-      "st_invite_to_portal" -> Array("05-22-2020"),
-      "st_portal_account_date" -> Array("01-01-2000"),
-      "st_dap_pack_date" -> Array("12-31-1999")
+      "st_invite_to_portal" -> Array("2020-05-22"),
+      "st_portal_account_date" -> Array("2000-01-01"),
+      "st_dap_pack_date" -> Array("2020-01-15 10:21")
     )
     val output = DogTransformations.mapStudyStatus(
       RawRecord(id = 1, exampleDogFields),
       HlesDog.init(dogId = 1, ownerId = 1)
     )
 
-    output.stVipOrStaff shouldBe Some(2)
-    output.stBatchLabel shouldBe Some("this is my label")
-    output.stPortalInvitationDate shouldBe Some(LocalDate.of(2020, 5, 22))
-    output.stPortalAccountCreationDate shouldBe Some(LocalDate.of(2000, 1, 1))
-    output.stHlesCompletionDate shouldBe Some(LocalDate.of(1999, 12, 31))
+    output.stVipOrStaff.value shouldBe 2
+    output.stBatchLabel.value shouldBe "this is my label"
+    output.stPortalInvitationDate.value shouldBe LocalDate.of(2020, 5, 22)
+    output.stPortalAccountCreationDate.value shouldBe LocalDate.of(2000, 1, 1)
+    output.stHlesCompletionDate.value shouldBe LocalDate.of(2020, 1, 15)
+  }
+
+  it should "map pure-breed demographics fields" in {
+    val akcExample = Map[String, Array[String]](
+      "dd_dog_pure_or_mixed" -> Array("1"),
+      "dd_dog_breed" -> Array("10"),
+      "dd_dog_breed_non_akc" -> Array("This should not pass through"),
+      "dd_dog_breed_mix_1" -> Array("Uh oh, this shouldn't be here!")
+    )
+    val nonAkcExample = Map[String, Array[String]](
+      "dd_dog_pure_or_mixed" -> Array("1"),
+      "dd_dog_breed" -> Array("277"),
+      "dd_dog_breed_non_akc" -> Array("This should pass through")
+    )
+
+    val akcOut = DogTransformations.mapBreed(
+      RawRecord(id = 1, akcExample),
+      HlesDog.init(dogId = 1, ownerId = 1)
+    )
+    val nonAkcOut = DogTransformations.mapBreed(
+      RawRecord(id = 1, nonAkcExample),
+      HlesDog.init(dogId = 1, ownerId = 1)
+    )
+
+    akcOut.ddBreedPureOrMixed.value shouldBe 1L
+    akcOut.ddBreedPure.value shouldBe 10L
+    akcOut.ddBreedPureNonAkc shouldBe None
+    akcOut.ddBreedMixedPrimary shouldBe None
+
+    nonAkcOut.ddBreedPureOrMixed.value shouldBe 1L
+    nonAkcOut.ddBreedPure.value shouldBe 277L
+    nonAkcOut.ddBreedPureNonAkc.value shouldBe "This should pass through"
+  }
+
+  it should "map mixed-breed demographics fields" in {
+    val example = Map[String, Array[String]](
+      "dd_dog_pure_or_mixed" -> Array("2"),
+      "dd_dog_breed" -> Array("wot, shouldn't be here"),
+      "dd_dog_breed_mix_1" -> Array("11"),
+      "dd_dog_breed_mix_2" -> Array("3")
+    )
+    val out = DogTransformations.mapBreed(
+      RawRecord(id = 1, example),
+      HlesDog.init(dogId = 1, ownerId = 1)
+    )
+
+    out.ddBreedPureOrMixed.value shouldBe 2L
+    out.ddBreedPure shouldBe None
+    out.ddBreedMixedPrimary.value shouldBe 11L
+    out.ddBreedMixedSecondary.value shouldBe 3L
+  }
+
+  it should "map age-related demographics fields when birth year and month are known" in {
+    val example = Map[String, Array[String]](
+      "dd_dog_birth_year_certain" -> Array("1"),
+      "dd_dog_current_year_calc" -> Array("2020"),
+      "dd_dog_birth_year" -> Array("2010"),
+      "dd_dog_current_month_calc" -> Array("5"),
+      "dd_dog_birth_month_yn" -> Array("1"),
+      "dd_dog_birth_month" -> Array("4"),
+      "dd_dog_age_certain_why" -> Array("2", "4", "98"),
+      "dd_dog_age_certain_other" -> Array("It is known")
+    )
+    val out = DogTransformations.mapAge(
+      RawRecord(id = 1, example),
+      HlesDog.init(dogId = 1, ownerId = 1)
+    )
+
+    // Make sure we're within a half-month of accuracy.
+    out.ddAgeYears.value shouldBe (10d + 1 / 12d) +- 1 / 24d
+    out.ddAgeBasis.value shouldBe 1L
+    out.ddAgeExactSourceAcquiredAsPuppy.value shouldBe false
+    out.ddAgeExactSourceRegistrationInformation.value shouldBe true
+    out.ddAgeExactSourceDeterminedByRescueOrg.value shouldBe false
+    out.ddAgeExactSourceDeterminedByVeterinarian.value shouldBe true
+    out.ddAgeExactSourceFromLitterOwnerBred.value shouldBe false
+    out.ddAgeExactSourceOther.value shouldBe true
+    out.ddAgeExactSourceOtherDescription.value shouldBe "It is known"
+  }
+
+  it should "map age-related demographics fields when birth year is known" in {
+    val example = Map[String, Array[String]](
+      "dd_dog_birth_year_certain" -> Array("1"),
+      "dd_dog_current_year_calc" -> Array("2020"),
+      "dd_dog_birth_year" -> Array("2010"),
+      "dd_dog_current_month_calc" -> Array("5"),
+      "dd_dog_birth_month_yn" -> Array("2"),
+      "dd_dog_age_certain_why" -> Array("1", "3", "5")
+    )
+    val out = DogTransformations.mapAge(
+      RawRecord(id = 1, example),
+      HlesDog.init(dogId = 1, ownerId = 1)
+    )
+
+    // Make sure we're within a half-year of accuracy.
+    out.ddAgeYears.value shouldBe 10d +- 1 / 2d
+    out.ddAgeBasis.value shouldBe 2L
+    out.ddAgeExactSourceAcquiredAsPuppy.value shouldBe true
+    out.ddAgeExactSourceRegistrationInformation.value shouldBe false
+    out.ddAgeExactSourceDeterminedByRescueOrg.value shouldBe true
+    out.ddAgeExactSourceDeterminedByVeterinarian.value shouldBe false
+    out.ddAgeExactSourceFromLitterOwnerBred.value shouldBe true
+    out.ddAgeExactSourceOther.value shouldBe false
+  }
+
+  it should "map age-related demographics fields when age is estimated by owner" in {
+    val example = Map[String, Array[String]](
+      "dd_dog_birth_year_certain" -> Array("2"),
+      "dd_dog_age" -> Array("15"),
+      "dd_dog_age_estimate_why" -> Array("1", "2", "4", "98"),
+      "dd_dog_age_estimate_other" -> Array("The dog told me")
+    )
+    val out = DogTransformations.mapAge(
+      RawRecord(id = 1, example),
+      HlesDog.init(dogId = 1, ownerId = 1)
+    )
+
+    out.ddAgeYears.value shouldBe 15d
+    out.ddAgeBasis.value shouldBe 3L
+    out.ddAgeEstimateSourceToldByPreviousOwner.value shouldBe true
+    // Not a typo: The "2" above is apparently deprecated(?) and
+    // doesn't map to anything.
+    out.ddAgeEstimateSourceDeterminedByRescueOrg.value shouldBe false
+    out.ddAgeEstimateSourceDeterminedByVeterinarian.value shouldBe true
+    out.ddAgeEstimateSourceOther.value shouldBe true
+    out.ddAgeEstimateSourceOtherDescription.value shouldBe "The dog told me"
+  }
+
+  it should "map sex-related demographics fields for neutered male dogs" in {
+    val noLitters = Map[String, Array[String]](
+      "dd_dog_sex" -> Array("1"),
+      "dd_dog_spay_neuter" -> Array("1"),
+      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_ms_sired_yn" -> Array("2")
+    )
+    val litters = Map[String, Array[String]](
+      "dd_dog_sex" -> Array("1"),
+      "dd_dog_spay_neuter" -> Array("1"),
+      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_ms_sired_yn" -> Array("1"),
+      "dd_mns_nbr_litters_2" -> Array("3")
+    )
+    val unknown = Map[String, Array[String]](
+      "dd_dog_sex" -> Array("1"),
+      "dd_dog_spay_neuter" -> Array("1"),
+      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_ms_sired_yn" -> Array("99")
+    )
+
+    val noLittersOut = DogTransformations.mapSexSpayNeuter(
+      RawRecord(1, noLitters),
+      HlesDog.init(1, 1)
+    )
+    val littersOut = DogTransformations.mapSexSpayNeuter(
+      RawRecord(1, litters),
+      HlesDog.init(1, 1)
+    )
+    val unknownOut = DogTransformations.mapSexSpayNeuter(
+      RawRecord(1, unknown),
+      HlesDog.init(1, 1)
+    )
+
+    noLittersOut.ddSex.value shouldBe 1L
+    noLittersOut.ddSpayedOrNeutered.value shouldBe true
+    noLittersOut.ddSpayOrNeuterAge.value shouldBe 2L
+    noLittersOut.ddHasSiredLitters.value shouldBe 2L
+    noLittersOut.ddLitterCount shouldBe None
+
+    littersOut.ddSex.value shouldBe 1L
+    littersOut.ddSpayedOrNeutered.value shouldBe true
+    littersOut.ddSpayOrNeuterAge.value shouldBe 2L
+    littersOut.ddHasSiredLitters.value shouldBe 1L
+    littersOut.ddLitterCount.value shouldBe 3L
+
+    unknownOut.ddSex.value shouldBe 1L
+    unknownOut.ddSpayedOrNeutered.value shouldBe true
+    unknownOut.ddSpayOrNeuterAge.value shouldBe 2L
+    unknownOut.ddHasSiredLitters.value shouldBe 99L
+    unknownOut.ddLitterCount shouldBe None
+  }
+
+  it should "map sex-related demographics fields for un-neutered male dogs" in {
+    val noLitters = Map[String, Array[String]](
+      "dd_dog_sex" -> Array("1"),
+      "dd_dog_spay_neuter" -> Array("2"),
+      "dd_mns_sired_yn" -> Array("2")
+    )
+    val litters = Map[String, Array[String]](
+      "dd_dog_sex" -> Array("1"),
+      "dd_dog_spay_neuter" -> Array("2"),
+      "dd_mns_sired_yn" -> Array("1"),
+      "dd_mns_nbr_litters" -> Array("3")
+    )
+    val unknown = Map[String, Array[String]](
+      "dd_dog_sex" -> Array("1"),
+      "dd_dog_spay_neuter" -> Array("2"),
+      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_mns_sired_yn" -> Array("99")
+    )
+
+    val noLittersOut = DogTransformations.mapSexSpayNeuter(
+      RawRecord(1, noLitters),
+      HlesDog.init(1, 1)
+    )
+    val littersOut = DogTransformations.mapSexSpayNeuter(
+      RawRecord(1, litters),
+      HlesDog.init(1, 1)
+    )
+    val unknownOut = DogTransformations.mapSexSpayNeuter(
+      RawRecord(1, unknown),
+      HlesDog.init(1, 1)
+    )
+
+    noLittersOut.ddSex.value shouldBe 1L
+    noLittersOut.ddSpayedOrNeutered.value shouldBe false
+    noLittersOut.ddHasSiredLitters.value shouldBe 2L
+    noLittersOut.ddLitterCount shouldBe None
+
+    littersOut.ddSex.value shouldBe 1L
+    littersOut.ddSpayedOrNeutered.value shouldBe false
+    littersOut.ddHasSiredLitters.value shouldBe 1L
+    littersOut.ddLitterCount.value shouldBe 3L
+
+    unknownOut.ddSex.value shouldBe 1L
+    unknownOut.ddSpayedOrNeutered.value shouldBe false
+    unknownOut.ddHasSiredLitters.value shouldBe 99L
+    unknownOut.ddLitterCount shouldBe None
+  }
+
+  it should "map sex-related demographics fields for spayed female dogs" in {
+    val noLitters = Map[String, Array[String]](
+      "dd_dog_sex" -> Array("2"),
+      "dd_dog_spay_neuter" -> Array("1"),
+      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_fs_spay_method" -> Array("3"),
+      "dd_fs_pregnant" -> Array("2"),
+      "dd_fs_heat_yn" -> Array("99")
+    )
+    val litters = Map[String, Array[String]](
+      "dd_dog_sex" -> Array("2"),
+      "dd_dog_spay_neuter" -> Array("1"),
+      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_fs_spay_method" -> Array("2"),
+      "dd_fs_pregnant" -> Array("1"),
+      "dd_fs_nbr_litters" -> Array("3"),
+      "dd_fs_heat_yn" -> Array("2")
+    )
+    val unknown = Map[String, Array[String]](
+      "dd_dog_sex" -> Array("2"),
+      "dd_dog_spay_neuter" -> Array("1"),
+      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_fs_spay_method" -> Array("1"),
+      "dd_fs_pregnant" -> Array("99"),
+      "dd_fs_heat_yn" -> Array("1"),
+      "dd_fs_nbr_cycles" -> Array("1")
+    )
+
+    val noLittersOut = DogTransformations.mapSexSpayNeuter(
+      RawRecord(1, noLitters),
+      HlesDog.init(1, 1)
+    )
+    val littersOut = DogTransformations.mapSexSpayNeuter(
+      RawRecord(1, litters),
+      HlesDog.init(1, 1)
+    )
+    val unknownOut = DogTransformations.mapSexSpayNeuter(
+      RawRecord(1, unknown),
+      HlesDog.init(1, 1)
+    )
+
+    noLittersOut.ddSex.value shouldBe 2L
+    noLittersOut.ddSpayedOrNeutered.value shouldBe true
+    noLittersOut.ddSpayOrNeuterAge.value shouldBe 2L
+    noLittersOut.ddSpayMethod.value shouldBe 3L
+    noLittersOut.ddHasBeenPregnant.value shouldBe 2L
+    noLittersOut.ddLitterCount shouldBe None
+    noLittersOut.ddEstrousCycleExperiencedBeforeSpayed.value shouldBe 99L
+    noLittersOut.ddEstrousCycleCount shouldBe None
+
+    littersOut.ddSex.value shouldBe 2L
+    littersOut.ddSpayedOrNeutered.value shouldBe true
+    littersOut.ddSpayOrNeuterAge.value shouldBe 2L
+    littersOut.ddSpayMethod.value shouldBe 2L
+    littersOut.ddHasBeenPregnant.value shouldBe 1L
+    littersOut.ddLitterCount.value shouldBe 3L
+    littersOut.ddEstrousCycleExperiencedBeforeSpayed.value shouldBe 2L
+    littersOut.ddEstrousCycleCount shouldBe None
+
+    unknownOut.ddSex.value shouldBe 2L
+    unknownOut.ddSpayedOrNeutered.value shouldBe true
+    unknownOut.ddSpayOrNeuterAge.value shouldBe 2L
+    unknownOut.ddSpayMethod.value shouldBe 1L
+    unknownOut.ddHasBeenPregnant.value shouldBe 99L
+    unknownOut.ddLitterCount shouldBe None
+    unknownOut.ddEstrousCycleExperiencedBeforeSpayed.value shouldBe 1L
+    unknownOut.ddEstrousCycleCount.value shouldBe 1L
+  }
+
+  it should "map sex-related demographics fields for un-spayed female dogs" in {
+    val noLitters = Map[String, Array[String]](
+      "dd_dog_sex" -> Array("2"),
+      "dd_dog_spay_neuter" -> Array("2"),
+      "dd_fns_pregnant" -> Array("2"),
+      "dd_fns_nbr_cycles" -> Array("10")
+    )
+    val litters = Map[String, Array[String]](
+      "dd_dog_sex" -> Array("2"),
+      "dd_dog_spay_neuter" -> Array("2"),
+      "dd_fns_pregnant" -> Array("1"),
+      "dd_fns_nbr_litters" -> Array("3")
+    )
+    val unknown = Map[String, Array[String]](
+      "dd_dog_sex" -> Array("2"),
+      "dd_dog_spay_neuter" -> Array("2"),
+      "dd_fns_pregnant" -> Array("99"),
+      "dd_fns_nbr_cycles" -> Array("1")
+    )
+
+    val noLittersOut = DogTransformations.mapSexSpayNeuter(
+      RawRecord(1, noLitters),
+      HlesDog.init(1, 1)
+    )
+    val littersOut = DogTransformations.mapSexSpayNeuter(
+      RawRecord(1, litters),
+      HlesDog.init(1, 1)
+    )
+    val unknownOut = DogTransformations.mapSexSpayNeuter(
+      RawRecord(1, unknown),
+      HlesDog.init(1, 1)
+    )
+
+    noLittersOut.ddSex.value shouldBe 2L
+    noLittersOut.ddSpayedOrNeutered.value shouldBe false
+    noLittersOut.ddHasBeenPregnant.value shouldBe 2L
+    noLittersOut.ddLitterCount shouldBe None
+    noLittersOut.ddEstrousCycleCount.value shouldBe 10L
+
+    littersOut.ddSex.value shouldBe 2L
+    littersOut.ddSpayedOrNeutered.value shouldBe false
+    littersOut.ddHasBeenPregnant.value shouldBe 1L
+    littersOut.ddLitterCount.value shouldBe 3L
+    littersOut.ddEstrousCycleCount shouldBe None
+
+    unknownOut.ddSex.value shouldBe 2L
+    unknownOut.ddSpayedOrNeutered.value shouldBe false
+    unknownOut.ddHasBeenPregnant.value shouldBe 99L
+    unknownOut.ddLitterCount shouldBe None
+    unknownOut.ddEstrousCycleCount.value shouldBe 1L
+  }
+
+  it should "map weight-related demographics fields" in {
+    val example = Map[String, Array[String]](
+      "dd_dog_weight" -> Array("3"),
+      "dd_dog_weight_lbs" -> Array("100.25"),
+      "dd_weight_range_expected_adult" -> Array("4")
+    )
+    val out = DogTransformations.mapWeight(
+      RawRecord(id = 1, example),
+      HlesDog.init(dogId = 1, ownerId = 1)
+    )
+
+    out.ddWeightRange.value shouldBe 3L
+    out.ddWeightLbs.value shouldBe 100.25d
+    out.ddWeightRangeExpectedAdult.value shouldBe 4L
+  }
+
+  it should "map insurance-related demographics fields" in {
+    val insurance = Map[String, Array[String]](
+      "dd_insurance_yn" -> Array("1"),
+      "dd_insurance" -> Array("98"),
+      "dd_insurance_other" -> Array("My special insurance")
+    )
+    val noInsurance = Map[String, Array[String]](
+      "dd_insurance_yn" -> Array("2"),
+      "dd_insurance" -> Array("3")
+    )
+
+    val insuranceOut = DogTransformations.mapInsurance(
+      RawRecord(1, insurance),
+      HlesDog.init(1, 1)
+    )
+    val noInsuranceOut = DogTransformations.mapInsurance(
+      RawRecord(1, noInsurance),
+      HlesDog.init(1, 1)
+    )
+
+    insuranceOut.ddInsuranceProvider.value shouldBe 98L
+    insuranceOut.ddInsuranceProviderOtherDescription.value shouldBe "My special insurance"
+
+    noInsuranceOut.ddInsuranceProvider shouldBe None
+  }
+
+  it should "map acquisition-related demographics fields" in {
+    val usBorn = Map[String, Array[String]](
+      "dd_us_born" -> Array("1"),
+      "dd_acquired_location_yn" -> Array("1"),
+      "dd_acquired_st" -> Array("OH"),
+      "dd_acquired_zip" -> Array("44657"),
+      "dd_acquire_source" -> Array("2")
+    )
+    val international = Map[String, Array[String]](
+      "dd_us_born" -> Array("0"),
+      "dd_us_born_no" -> Array("UK"),
+      "dd_acquire_source" -> Array("5")
+    )
+    val unknown = Map[String, Array[String]](
+      "dd_us_born" -> Array("99"),
+      "dd_acquired_location_yn" -> Array("1"),
+      "dd_acquired_st" -> Array("OH"),
+      "dd_acquire_source" -> Array("98"),
+      "dd_acquire_source_other" -> Array("?????")
+    )
+
+    val usBornOut = DogTransformations.mapAcquiredInfo(
+      RawRecord(1, usBorn),
+      HlesDog.init(1, 1)
+    )
+    val internationalOut = DogTransformations.mapAcquiredInfo(
+      RawRecord(1, international),
+      HlesDog.init(1, 1)
+    )
+    val unknownOut = DogTransformations.mapAcquiredInfo(
+      RawRecord(1, unknown),
+      HlesDog.init(1, 1)
+    )
+
+    usBornOut.ddAcquiredCountry.value shouldBe "US"
+    usBornOut.ddAcquiredState.value shouldBe "OH"
+    usBornOut.ddAcquiredZip.value shouldBe "44657"
+    usBornOut.ddAcquiredSource.value shouldBe 2L
+
+    internationalOut.ddAcquiredCountry.value shouldBe "UK"
+    internationalOut.ddAcquiredSource.value shouldBe 5L
+
+    unknownOut.ddAcquiredCountry.value shouldBe "99"
+    unknownOut.ddAcquiredState shouldBe None
+    unknownOut.ddAcquiredZip shouldBe None
+    unknownOut.ddAcquiredSource.value shouldBe 98L
+    unknownOut.ddAcquiredSourceOtherDescription.value shouldBe "?????"
+  }
+
+  it should "map activity-related demographics fields" in {
+    val serviceDog = Map[String, Array[String]](
+      "dd_activities" -> Array("2", "4", "6", "8", "10", "98"),
+      "dd_service_m" -> Array("1"),
+      "dd_other_m" -> Array("2"),
+      "dd_2nd_activity_other" -> Array("Activity!"),
+      "dd_service_type_1" -> Array("1", "3", "5", "7"),
+      "dd_service_health_other_1" -> Array("Health?")
+    )
+    val assistanceDog = Map[String, Array[String]](
+      "dd_activities" -> Array("1", "3", "5", "7", "9", "11", "98"),
+      "dd_assistance_m" -> Array("2"),
+      "dd_other_m" -> Array("1"),
+      "dd_1st_activity_other" -> Array("Activity?"),
+      "dd_service_type_1" -> Array("2", "4", "6", "98"),
+      "dd_service_medical_other_1" -> Array("Medical!"),
+      "dd_service_other_1" -> Array("Activity!")
+    )
+
+    val serviceOut = DogTransformations.mapActivities(
+      RawRecord(1, serviceDog),
+      HlesDog.init(1, 1)
+    )
+    val assistanceOut = DogTransformations.mapActivities(
+      RawRecord(1, assistanceDog),
+      HlesDog.init(1, 1)
+    )
+
+    serviceOut.ddActivitiesObedience.value shouldBe 3L
+    serviceOut.ddActivitiesBreeding.value shouldBe 3L
+    serviceOut.ddActivitiesHunting.value shouldBe 3L
+    serviceOut.ddActivitiesFieldTrials.value shouldBe 3L
+    serviceOut.ddActivitiesService.value shouldBe 1L
+    serviceOut.ddActivitiesOther.value shouldBe 2L
+    serviceOut.ddActivitiesOtherDescription.value shouldBe "Activity!"
+    serviceOut.ddActivitiesServiceSeeingEye.value shouldBe true
+    serviceOut.ddActivitiesServiceWheelchair.value shouldBe true
+    serviceOut.ddActivitiesServiceOtherHealth.value shouldBe true
+    serviceOut.ddActivitiesServiceEmotionalSupport.value shouldBe true
+    serviceOut.ddActivitiesServiceOtherHealthDescription.value shouldBe "Health?"
+
+    assistanceOut.ddActivitiesCompanionAnimal.value shouldBe 3L
+    assistanceOut.ddActivitiesShow.value shouldBe 3L
+    assistanceOut.ddActivitiesAgility.value shouldBe 3L
+    assistanceOut.ddActivitiesWorking.value shouldBe 3L
+    assistanceOut.ddActivitiesSearchAndRescue.value shouldBe 3L
+    assistanceOut.ddActivitiesAssistanceOrTherapy.value shouldBe 2L
+    assistanceOut.ddActivitiesOther.value shouldBe 1L
+    assistanceOut.ddActivitiesOtherDescription.value shouldBe "Activity?"
+    assistanceOut.ddActivitiesServiceHearingOrSignal.value shouldBe true
+    assistanceOut.ddActivitiesServiceOtherMedical.value shouldBe true
+    assistanceOut.ddActivitiesServiceCommunityTherapy.value shouldBe true
+    assistanceOut.ddActivitiesServiceOther.value shouldBe true
+    assistanceOut.ddActivitiesServiceOtherMedicalDescription.value shouldBe "Medical!"
+    assistanceOut.ddActivitiesServiceOtherDescription.value shouldBe "Activity!"
+  }
+
+  it should "map residence-related demographics fields" in {
+    val oneAddress = Map[String, Array[String]](
+      "oc_address2_yn" -> Array("0"),
+      "dd_2nd_residence_yn" -> Array("0"),
+      "oc_address1_state" -> Array("MA"),
+      "oc_address1_zip" -> Array("02114"),
+      "oc_address1_own" -> Array("98"),
+      "oc_address1_own_other" -> Array("Squatter's rights"),
+      "oc_address1_pct" -> Array("2")
+    )
+    val manyAddresses = Map[String, Array[String]](
+      "oc_address2_yn" -> Array("1"),
+      "dd_2nd_residence_yn" -> Array("1"),
+      "dd_2nd_residence_nbr" -> Array("2"),
+      "oc_address1_state" -> Array("MA"),
+      "oc_address1_zip" -> Array("02114"),
+      "oc_address1_own" -> Array("1"),
+      "oc_address1_pct" -> Array("1"),
+      "oc_address2_state" -> Array("MA"),
+      "oc_address2_zip" -> Array("02115"),
+      "oc_address2_own" -> Array("98"),
+      "oc_address2_own_other" -> Array("Foo"),
+      "oc_2nd_address_pct" -> Array("3"),
+      "dd_2nd_residence_01_st" -> Array("NH"),
+      "dd_2nd_residence_01_zip" -> Array("00000"),
+      "dd_2nd_residence_01_time" -> Array("1"),
+      "dd_2nd_residence_02_st" -> Array("VT"),
+      "dd_2nd_residence_02_zip" -> Array("00001"),
+      "dd_2nd_residence_02_time" -> Array("2"),
+      "dd_2nd_residence_03_st" -> Array("CA"),
+      "dd_2nd_residence_03_zip" -> Array("99999"),
+      "dd_2nd_residence_03_time" -> Array("3")
+    )
+
+    val oneAddrOut = DogTransformations.mapResidences(
+      RawRecord(1, oneAddress),
+      HlesDog.init(1, 1)
+    )
+    val manyAddrOut = DogTransformations.mapResidences(
+      RawRecord(1, manyAddresses),
+      HlesDog.init(1, 1)
+    )
+
+    oneAddrOut.ocPrimaryResidenceState.value shouldBe "MA"
+    oneAddrOut.ocPrimaryResidenceZip.value shouldBe "02114"
+    oneAddrOut.ocPrimaryResidenceOwnership.value shouldBe 98L
+    oneAddrOut.ocPrimaryResidenceOwnershipOtherDescription.value shouldBe "Squatter's rights"
+    // Not a typo: Time percentage not carried forward if only 1 address.
+    oneAddrOut.ocPrimaryResidenceTimePercentage shouldBe None
+
+    manyAddrOut.ocPrimaryResidenceState.value shouldBe "MA"
+    manyAddrOut.ocPrimaryResidenceZip.value shouldBe "02114"
+    manyAddrOut.ocPrimaryResidenceOwnership.value shouldBe 1L
+    manyAddrOut.ocPrimaryResidenceTimePercentage.value shouldBe 1L
+    manyAddrOut.ocSecondaryResidenceState.value shouldBe "MA"
+    manyAddrOut.ocSecondaryResidenceZip.value shouldBe "02115"
+    manyAddrOut.ocSecondaryResidenceOwnership.value shouldBe 98L
+    manyAddrOut.ocSecondaryResidenceOwnershipOtherDescription.value shouldBe "Foo"
+    manyAddrOut.ocSecondaryResidenceTimePercentage.value shouldBe 3L
+    manyAddrOut.ddAlternateRecentResidence1State.value shouldBe "NH"
+    manyAddrOut.ddAlternateRecentResidence1Zip.value shouldBe "00000"
+    manyAddrOut.ddAlternateRecentResidence1Weeks.value shouldBe 1L
+    manyAddrOut.ddAlternateRecentResidence2State.value shouldBe "VT"
+    manyAddrOut.ddAlternateRecentResidence2Zip.value shouldBe "00001"
+    manyAddrOut.ddAlternateRecentResidence2Weeks.value shouldBe 2L
+    // The data says there are only 2 alternate residences, so the data for
+    // the 3rd should not carry forward.
+    manyAddrOut.ddAlternateRecentResidence3State shouldBe None
+    manyAddrOut.ddAlternateRecentResidence3Zip shouldBe None
+    manyAddrOut.ddAlternateRecentResidence3Weeks shouldBe None
   }
 }

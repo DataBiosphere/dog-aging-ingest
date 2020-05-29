@@ -38,8 +38,12 @@
       "datatype": "date"
     },
     {
+      "name": "dd_breed_pure_or_mixed",
+      "datatype": "integer"
+    },
+    {
       "name": "dd_breed_pure",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_breed_pure_non_akc",
@@ -47,11 +51,11 @@
     },
     {
       "name": "dd_breed_mixed_primary",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_breed_mixed_secondary",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_age_years",
@@ -59,37 +63,66 @@
     },
     {
       "name": "dd_age_basis",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
-      "name": "dd_age_exact_source",
-      "datatype": "string",
-      "type": "repeated"
+      "name": "dd_age_exact_source_acquired_as_puppy",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_exact_source_registration_information",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_exact_source_determined_by_rescue_org",
+      "datatype": "boolean"
+    },{
+      "name": "dd_age_exact_source_determined_by_veterinarian",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_exact_source_from_litter_owner_bred",
+      "datatype": "boolean"
     },
     {
       "name": "dd_age_exact_source_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_exact_source_other_description",
       "datatype": "string"
     },
     {
-      "name": "dd_age_estimate_source",
-      "datatype": "string",
-      "type": "repeated"
+      "name": "dd_age_estimate_source_told_by_previous_owner",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_estimate_source_determined_by_rescue_org",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_estimate_source_determined_by_veterinarian",
+      "datatype": "boolean"
     },
     {
       "name": "dd_age_estimate_source_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_estimate_source_other_description",
       "datatype": "string"
     },
     {
       "name": "dd_birth_year",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_birth_month",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_sex",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_spayed_or_neutered",
@@ -97,35 +130,35 @@
     },
     {
       "name": "dd_spay_or_neuter_age",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_spay_method",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_estrous_cycle_experienced_before_spayed",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_estrous_cycle_count",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_has_been_pregnant",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_has_sired_litters",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_litter_count",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_weight_range",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_weight_lbs",
@@ -133,30 +166,30 @@
     },
     {
       "name": "dd_weight_range_expected_adult",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_insurance_provider",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
-      "name": "dd_insurance_provider_other",
+      "name": "dd_insurance_provider_other_description",
       "datatype": "string"
     },
     {
       "name": "dd_acquired_year",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_acquired_month",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "dd_acquired_source",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
-      "name": "dd_acquired_source_other",
+      "name": "dd_acquired_source_other_description",
       "datatype": "string"
     },
     {
@@ -172,41 +205,99 @@
       "datatype": "string"
     },
     {
-      "name": "dd_primary_role",
+      "name": "dd_activities_companion_animal",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_obedience",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_show",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_breeding",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_agility",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_hunting",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_working",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_field_trials",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_search_and_rescue",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_service",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_assistance_or_therapy",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_other_description",
       "datatype": "string"
     },
     {
-      "name": "dd_primary_role_other",
+      "name": "dd_activities_service_seeing_eye",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_hearing_or_signal",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_wheelchair",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_other_medical",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_other_medical_description",
       "datatype": "string"
     },
     {
-      "name": "dd_secondary_role",
+      "name": "dd_activities_service_other_health",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_other_health_description",
       "datatype": "string"
     },
     {
-      "name": "dd_secondary_role_other",
-      "datatype": "string"
+      "name": "dd_activities_service_community_therapy",
+      "datatype": "boolean"
     },
     {
-      "name": "dd_other_roles",
-      "datatype": "string",
-      "type": "repeated"
+      "name": "dd_activities_service_emotional_support",
+      "datatype": "boolean"
     },
     {
-      "name": "dd_service_types",
-      "datatype": "string",
-      "type": "repeated"
+      "name": "dd_activities_service_other",
+      "datatype": "boolean"
     },
     {
-      "name": "dd_service_types_other_medical",
-      "datatype": "string"
-    },
-    {
-      "name": "dd_service_types_other_health",
-      "datatype": "string"
-    },
-    {
-      "name": "dd_service_types_other",
+      "name": "dd_activities_service_other_description",
       "datatype": "string"
     },
     {
@@ -223,15 +314,15 @@
     },
     {
       "name": "oc_primary_residence_ownership",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
-      "name": "oc_primary_residence_ownership_other",
+      "name": "oc_primary_residence_ownership_other_description",
       "datatype": "string"
     },
     {
       "name": "oc_primary_residence_time_percentage",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "oc_secondary_residence_state",
@@ -243,22 +334,175 @@
     },
     {
       "name": "oc_secondary_residence_ownership",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
-      "name": "oc_secondary_residence_ownership_other",
+      "name": "oc_secondary_residence_ownership_other_description",
       "datatype": "string"
     },
     {
       "name": "oc_secondary_residence_time_percentage",
-      "datatype": "string"
-    }
-  ],
-  "struct_columns": [
+      "datatype": "integer"
+    },
     {
-      "name": "dd_other_recent_short_term_residences",
-      "struct_name": "hles_dog_residence",
-      "type": "repeated"
+      "name": "dd_alternate_recent_residence_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_1_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_1_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_1_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_2_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_2_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_2_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_3_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_3_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_3_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_4_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_4_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_4_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_5_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_5_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_5_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_6_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_6_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_6_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_7_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_7_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_7_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_8_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_8_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_8_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_9_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_9_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_9_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_10_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_10_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_10_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_11_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_11_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_11_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_12_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_12_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_12_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_13_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_13_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_13_weeks",
+      "datatype": "integer"
     }
   ]
 }

@@ -51,8 +51,12 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
 
   /** Get the singleton value for an attribute in this record if one exists, parsed as a date. */
   def getOptionalDate(field: String): Option[LocalDate] =
-    getOptional(field).map(LocalDate.parse(_, DateTimeFormatter.ofPattern("MM-dd-yyyy")))
+    getOptional(field).map(LocalDate.parse(_, RawRecord.DateFormatter))
 
   /** Get every value for an attribute in this record. */
   def getArray(field: String): Array[String] = fields.getOrElse(field, Array.empty)
+}
+
+object RawRecord {
+  val DateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 }
