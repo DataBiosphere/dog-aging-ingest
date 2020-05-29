@@ -10,8 +10,7 @@ object OwnerTransformations {
     val raceValues = rawRecord.fields.get("od_race")
 
     HlesOwner(
-      // FIXME: Once DAP figures out a name for a dedicated owner ID, use that.
-      ownerId = rawRecord.id,
+      ownerId = rawRecord.getRequired("st_owner_id").toLong,
       odAgeRangeYears = rawRecord.getOptionalNumber("od_age"),
       odMaxEducation = rawRecord.getOptionalNumber("od_education"),
       odMaxEducationOtherDescription = rawRecord.getOptional("od_education_other"),
@@ -31,14 +30,14 @@ object OwnerTransformations {
       ocHouseholdChildCount = rawRecord.getOptionalNumber("oc_children_household"),
       ssHouseholdDogCount = rawRecord.getOptionalNumber("ss_num_dogs_hh"),
       ocPrimaryResidenceState = rawRecord.getOptional("oc_address1_state"),
-      ocPrimaryResidenceCensusDivision = rawRecord.getOptionalNumber("oc_address1_division"),
-      ocPrimaryResidenceZip = rawRecord.getOptionalNumber("oc_address1_zip"),
+      ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division"),
+      ocPrimaryResidenceZip = rawRecord.getOptional("oc_address1_zip"),
       ocPrimaryResidenceOwnership = rawRecord.getOptionalNumber("oc_address1_own"),
       ocPrimaryResidenceOwnershipOtherDescription = rawRecord.getOptional("oc_address1_own_other"),
       ocSecondaryResidenceState =
         if (secondaryAddress) rawRecord.getOptional("oc_address2_state") else None,
       ocSecondaryResidenceZip =
-        if (secondaryAddress) rawRecord.getOptionalNumber("oc_address2_zip") else None,
+        if (secondaryAddress) rawRecord.getOptional("oc_address2_zip") else None,
       ocSecondaryResidenceOwnership =
         if (secondaryAddress) rawRecord.getOptionalNumber("oc_address2_own") else None,
       ocSecondaryResidenceOwnershipOtherDescription =

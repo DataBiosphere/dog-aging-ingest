@@ -8,6 +8,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
   behavior of "OwnerTransformations"
 
   private val exampleOwnerFields = Map[String, Array[String]](
+    "st_owner_id" -> Array("10"),
     "od_age" -> Array("5"),
     "od_education" -> Array("3"),
     "od_education_other" -> Array("other education"),
@@ -20,8 +21,8 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     "oc_children_household" -> Array("2"),
     "ss_num_dogs_hh" -> Array("2"),
     "oc_address1_state" -> Array("OH"),
-    "oc_address1_division" -> Array("3"),
-    "oc_address1_zip" -> Array("01111"),
+    "oc_address1_division" -> Array("Division 3: East North Central"),
+    "oc_address1_zip" -> Array("32837-4949"),
     "oc_address1_own" -> Array("1"),
     "oc_address1_own_other" -> Array("some text"),
     "oc_address2_yn" -> Array("1"),
@@ -35,7 +36,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     val exampleOwnerRecord = RawRecord(id = 1, exampleOwnerFields)
     val output = OwnerTransformations.mapOwner(exampleOwnerRecord)
 
-    output.ownerId shouldBe 1
+    output.ownerId shouldBe 10
     // owner demographic info
     output.odAgeRangeYears shouldBe Some(5)
     output.odMaxEducation shouldBe Some(3)
@@ -58,12 +59,12 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     output.ssHouseholdDogCount shouldBe Some(2)
     // residence fields
     output.ocPrimaryResidenceState shouldBe Some("OH")
-    output.ocPrimaryResidenceCensusDivision shouldBe Some(3)
-    output.ocPrimaryResidenceZip shouldBe Some(1111)
+    output.ocPrimaryResidenceCensusDivision shouldBe Some("Division 3: East North Central")
+    output.ocPrimaryResidenceZip shouldBe Some("32837-4949")
     output.ocPrimaryResidenceOwnership shouldBe Some(1)
     output.ocPrimaryResidenceOwnershipOtherDescription shouldBe Some("some text")
     output.ocSecondaryResidenceState shouldBe Some("MA")
-    output.ocSecondaryResidenceZip shouldBe Some(2222)
+    output.ocSecondaryResidenceZip shouldBe Some("02222")
     output.ocSecondaryResidenceOwnership shouldBe Some(2)
     output.ocSecondaryResidenceOwnershipOtherDescription shouldBe Some("some text")
 
@@ -81,8 +82,8 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "correctly map owner data when optional fields are null" in {
-    val emptyRecord = RawRecord(id = 1, Map[String, Array[String]]())
+    val emptyRecord = RawRecord(id = 1, Map[String, Array[String]]("st_owner_id" -> Array("5")))
 
-    OwnerTransformations.mapOwner(emptyRecord) shouldBe HlesOwner.init(ownerId = 1)
+    OwnerTransformations.mapOwner(emptyRecord) shouldBe HlesOwner.init(ownerId = 5)
   }
 }
