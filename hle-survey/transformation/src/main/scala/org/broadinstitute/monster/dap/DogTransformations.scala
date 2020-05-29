@@ -49,19 +49,23 @@ object DogTransformations {
     * injecting them into a partially-modeled dog record.
     */
   def mapBreed(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
-    val isPureBreed = rawRecord.getBoolean("dd_dog_pure_or_mixed")
-    if (isPureBreed) {
-      val breed = rawRecord.getOptionalNumber("dd_dog_breed")
-      dog.copy(
-        ddBreedPure = breed,
-        ddBreedPureNonAkc =
-          if (breed.contains(277L)) rawRecord.getOptional("dd_dog_breed_non_akc") else None
-      )
-    } else {
-      dog.copy(
-        ddBreedMixedPrimary = rawRecord.getOptionalNumber("dd_dog_breed_mix_1"),
-        ddBreedMixedSecondary = rawRecord.getOptionalNumber("dd_dog_breed_mix_2")
-      )
+    val breedType = rawRecord.getOptionalNumber("dd_dog_pure_or_mixed")
+    breedType match {
+      case Some(1) =>
+        val breed = rawRecord.getOptionalNumber("dd_dog_breed")
+        dog.copy(
+          ddBreedPureOrMixed = breedType,
+          ddBreedPure = breed,
+          ddBreedPureNonAkc =
+            if (breed.contains(277L)) rawRecord.getOptional("dd_dog_breed_non_akc") else None
+        )
+      case Some(2) =>
+        dog.copy(
+          ddBreedPureOrMixed = breedType,
+          ddBreedMixedPrimary = rawRecord.getOptionalNumber("dd_dog_breed_mix_1"),
+          ddBreedMixedSecondary = rawRecord.getOptionalNumber("dd_dog_breed_mix_2")
+        )
+      case _ => dog
     }
   }
 

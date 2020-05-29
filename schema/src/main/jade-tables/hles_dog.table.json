@@ -38,6 +38,10 @@
       "datatype": "date"
     },
     {
+      "name": "dd_breed_pure_or_mixed",
+      "datatype": "integer"
+    },
+    {
       "name": "dd_breed_pure",
       "datatype": "integer"
     },

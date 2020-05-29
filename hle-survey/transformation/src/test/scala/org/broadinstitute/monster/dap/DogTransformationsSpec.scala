@@ -52,10 +52,12 @@ class DogTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesDog.init(dogId = 1, ownerId = 1)
     )
 
+    akcOut.ddBreedPureOrMixed shouldBe Some(1L)
     akcOut.ddBreedPure shouldBe Some(10L)
     akcOut.ddBreedPureNonAkc shouldBe None
     akcOut.ddBreedMixedPrimary shouldBe None
 
+    nonAkcOut.ddBreedPureOrMixed shouldBe Some(1L)
     nonAkcOut.ddBreedPure shouldBe Some(277L)
     nonAkcOut.ddBreedPureNonAkc shouldBe Some("This should pass through")
   }
@@ -72,6 +74,7 @@ class DogTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesDog.init(dogId = 1, ownerId = 1)
     )
 
+    out.ddBreedPureOrMixed shouldBe Some(2L)
     out.ddBreedPure shouldBe None
     out.ddBreedMixedPrimary shouldBe Some(11L)
     out.ddBreedMixedSecondary shouldBe Some(3L)
