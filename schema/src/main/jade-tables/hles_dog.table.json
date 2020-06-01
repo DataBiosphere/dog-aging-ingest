@@ -515,6 +515,350 @@
     {
       "name": "dd_alternate_recent_residence_13_weeks",
       "datatype": "integer"
+    },
+    {
+      "name": "pa_activity_level",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_avg_daily_active_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_avg_activity_intensity",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_moderate_weather_months_per_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_moderate_weather_daily_hours_outside",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_moderate_weather_outdoor_concrete",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_moderate_weather_outdoor_wood",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_moderate_weather_outdoor_other_hard_surface",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_moderate_weather_outdoor_grass_or_dirt",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_moderate_weather_outdoor_gravel",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_moderate_weather_outdoor_sand",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_moderate_weather_outdoor_astroturf",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_moderate_weather_outdoor_other_surface",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_moderate_weather_outdoor_other_surface_description",
+      "datatype": "string"
+    },
+    {
+      "name": "pa_moderate_weather_sun_exposure_level",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_hot_weather_months_per_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_hot_weather_daily_hours_outside",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_hot_weather_outdoor_concrete",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_hot_weather_outdoor_wood",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_hot_weather_outdoor_other_hard_surface",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_hot_weather_outdoor_grass_or_dirt",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_hot_weather_outdoor_gravel",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_hot_weather_outdoor_sand",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_hot_weather_outdoor_astroturf",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_hot_weather_outdoor_other_surface",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_hot_weather_outdoor_other_surface_description",
+      "datatype": "string"
+    },
+    {
+      "name": "pa_hot_weather_sun_exposure_level",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_cold_weather_months_per_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_cold_weather_daily_hours_outside",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_cold_weather_outdoor_concrete",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_cold_weather_outdoor_wood",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_cold_weather_outdoor_other_hard_surface",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_cold_weather_outdoor_grass_or_dirt",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_cold_weather_outdoor_gravel",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_cold_weather_outdoor_sand",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_cold_weather_outdoor_astroturf",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_cold_weather_outdoor_other_surface",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_cold_weather_outdoor_other_surface_description",
+      "datatype": "string"
+    },
+    {
+      "name": "pa_cold_weather_sun_exposure_level",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_on_leash_off_leash_walk",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_on_leash_walk_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_on_leash_walk_avg_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_on_leash_walk_slow_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "pa_on_leash_walk_average_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "pa_on_leash_walk_brisk_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "pa_on_leash_walk_jog_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "pa_on_leash_walk_run_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "pa_on_leash_walk_reasons_dog_relieve_itself",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_on_leash_walk_reasons_activity_and_enjoyment",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_on_leash_walk_reasons_exercise_for_dog",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_on_leash_walk_reasons_exercise_for_owner",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_on_leash_walk_reasons_training_obedience",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_on_leash_walk_reasons_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_on_leash_walk_reasons_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "pa_off_leash_walk_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_off_leash_walk_avg_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_off_leash_walk_slow_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "pa_off_leash_walk_average_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "pa_off_leash_walk_brisk_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "pa_off_leash_walk_jog_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "pa_off_leash_walk_run_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "pa_off_leash_walk_reasons_dog_relieve_itself",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_off_leash_walk_reasons_activity_and_enjoyment",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_off_leash_walk_reasons_exercise_for_dog",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_off_leash_walk_reasons_exercise_for_owner",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_off_leash_walk_reasons_training_obedience",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_off_leash_walk_reasons_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_off_leash_walk_reasons_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "pa_off_leash_walk_in_enclosed_area",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_off_leash_walk_in_open_area",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_off_leash_walk_returns_when_called_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_physical_games_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_swim",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_swim_moderate_weather_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_swim_hot_weather_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_swim_cold_weather_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_swim_locations_swimming_pool",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_swim_locations_pond_or_lake",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_swim_locations_river_stream_or_creek",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_swim_locations_agricultural_ditch",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_swim_locations_ocean",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_swim_locations_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "pa_swim_locations_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "pa_other_aerobic_activity_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_other_aerobic_activity_avg_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_other_aerobic_activity_avg_intensity",
+      "datatype": "integer"
     }
   ]
 }
