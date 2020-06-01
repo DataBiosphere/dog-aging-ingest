@@ -3,30 +3,14 @@ package org.broadinstitute.monster.dap
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import java.time.LocalDate
 
-class DogTransformationsSpec extends AnyFlatSpec with Matchers {
+import org.scalatest.OptionValues
+
+class DogTransformationsSpec extends AnyFlatSpec with Matchers with OptionValues {
   behavior of "DogTransformations"
 
-  // TODO add tests for dog demographics transformation
-
-  it should "correctly map study status fields" in {
-    val exampleDogFields = Map[String, Array[String]](
-      "st_vip_or_staff" -> Array("2"),
-      "st_batch_label" -> Array("this is my label"),
-      "st_invite_to_portal" -> Array("05-22-2020"),
-      "st_portal_account_date" -> Array("01-01-2000"),
-      "st_dap_pack_date" -> Array("12-31-1999")
-    )
-    val output = DogTransformations.mapStudyStatus(
-      RawRecord(id = 1, exampleDogFields),
-      HlesDog.init(dogId = 1, ownerId = 1)
-    )
-
-    output.stVipOrStaff shouldBe Some(2)
-    output.stBatchLabel shouldBe Some("this is my label")
-    output.stPortalInvitationDate shouldBe Some(LocalDate.of(2020, 5, 22))
-    output.stPortalAccountCreationDate shouldBe Some(LocalDate.of(2000, 1, 1))
-    output.stHlesCompletionDate shouldBe Some(LocalDate.of(1999, 12, 31))
+  it should "map required fields" in {
+    val mapped = DogTransformations.mapDog(RawRecord(1, Map("st_owner_id" -> Array("2"))))
+    mapped shouldBe HlesDog.init(1L, 2L)
   }
 }
