@@ -10,7 +10,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
   private val exampleOwnerFields = Map[String, Array[String]](
     "st_owner_id" -> Array("10"),
     "od_age" -> Array("5"),
-    "od_education" -> Array("3"),
+    "od_education" -> Array("98"),
     "od_education_other" -> Array("other education"),
     "od_race" -> Array("1", "4", "98"),
     "od_race_other" -> Array("some description"),
@@ -23,12 +23,12 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     "oc_address1_state" -> Array("OH"),
     "oc_address1_division" -> Array("Division 3: East North Central"),
     "oc_address1_zip" -> Array("32837-4949"),
-    "oc_address1_own" -> Array("1"),
+    "oc_address1_own" -> Array("98"),
     "oc_address1_own_other" -> Array("some text"),
     "oc_address2_yn" -> Array("1"),
     "oc_address2_state" -> Array("MA"),
     "oc_address2_zip" -> Array("02222"),
-    "oc_address2_own" -> Array("2"),
+    "oc_address2_own" -> Array("98"),
     "oc_address2_own_other" -> Array("some text")
   )
 
@@ -39,7 +39,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     output.ownerId shouldBe 10
     // owner demographic info
     output.odAgeRangeYears shouldBe Some(5)
-    output.odMaxEducation shouldBe Some(3)
+    output.odMaxEducation shouldBe Some(98)
     output.odMaxEducationOtherDescription shouldBe Some("other education")
     output.odRaceWhite shouldBe Some(true)
     output.odRaceBlackOrAfricanAmerican shouldBe Some(false)
@@ -61,11 +61,12 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     output.ocPrimaryResidenceState shouldBe Some("OH")
     output.ocPrimaryResidenceCensusDivision shouldBe Some("Division 3: East North Central")
     output.ocPrimaryResidenceZip shouldBe Some("32837-4949")
-    output.ocPrimaryResidenceOwnership shouldBe Some(1)
+    output.ocPrimaryResidenceOwnership shouldBe Some(98)
     output.ocPrimaryResidenceOwnershipOtherDescription shouldBe Some("some text")
+    output.ocSecondaryResidence shouldBe Some(true)
     output.ocSecondaryResidenceState shouldBe Some("MA")
     output.ocSecondaryResidenceZip shouldBe Some("02222")
-    output.ocSecondaryResidenceOwnership shouldBe Some(2)
+    output.ocSecondaryResidenceOwnership shouldBe Some(98)
     output.ocSecondaryResidenceOwnershipOtherDescription shouldBe Some("some text")
 
   }

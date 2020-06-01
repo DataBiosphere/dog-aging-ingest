@@ -99,6 +99,10 @@
       "datatype": "string"
     },
     {
+      "name": "oc_secondary_residence",
+      "datatype": "boolean"
+    },
+    {
       "name": "oc_secondary_residence_state",
       "datatype": "string"
     },

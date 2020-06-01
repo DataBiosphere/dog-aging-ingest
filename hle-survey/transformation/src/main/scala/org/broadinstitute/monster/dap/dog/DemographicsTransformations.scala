@@ -99,6 +99,7 @@ object DemographicsTransformations {
           ddAgeExactSourceOtherDescription =
             if (sources.contains("98")) rawRecord.getOptional("dd_dog_age_certain_other") else None,
           ddBirthYear = Some(birthYear.toLong),
+          ddBirthMonthKnown = Some(exactMonthKnown),
           ddBirthMonth = if (exactMonthKnown) Some(birthMonth.toLong) else None
         )
       } else {
@@ -184,15 +185,18 @@ object DemographicsTransformations {
     * injecting them into a partially-modeled dog record.
     */
   def mapInsurance(rawRecord: RawRecord, dog: HlesDog): HlesDog =
-    if (rawRecord.getBoolean("dd_insurance_yn")) {
-      val provider = rawRecord.getOptionalNumber("dd_insurance")
-      dog.copy(
-        ddInsuranceProvider = provider,
-        ddInsuranceProviderOtherDescription =
-          if (provider.contains(98)) rawRecord.getOptional("dd_insurance_other") else None
-      )
-    } else {
-      dog
+    rawRecord.getOptionalBoolean("dd_insurance_yn").fold(dog) { insurance =>
+      if (insurance) {
+        val provider = rawRecord.getOptionalNumber("dd_insurance")
+        dog.copy(
+          ddInsurance = Some(insurance),
+          ddInsuranceProvider = provider,
+          ddInsuranceProviderOtherDescription =
+            if (provider.contains(98)) rawRecord.getOptional("dd_insurance_other") else None
+        )
+      } else {
+        dog.copy(ddInsurance = Some(insurance))
+      }
     }
 
   /**
@@ -310,7 +314,7 @@ object DemographicsTransformations {
     * injecting them into a partially-modeled dog record.
     */
   def mapResidences(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
-    val hasSecondaryResidence = rawRecord.getBoolean("oc_address2_yn")
+    val hasSecondaryResidence = rawRecord.getOptionalBoolean("oc_address2_yn")
     val hasTertiaryResidences = rawRecord.getOptionalBoolean("dd_2nd_residence_yn")
     val tertiaryResidenceCount = hasTertiaryResidences.map { yn =>
       if (yn) rawRecord.getRequired("dd_2nd_residence_nbr").toInt else 0
@@ -326,8 +330,9 @@ object DemographicsTransformations {
     }
 
     val primaryOwned = rawRecord.getOptionalNumber("oc_address1_own")
-    val secondaryOwned =
-      if (hasSecondaryResidence) rawRecord.getOptionalNumber("oc_address2_own") else None
+    val secondaryOwned = hasSecondaryResidence.flatMap {
+      if (_) rawRecord.getOptionalNumber("oc_address2_own") else None
+    }
 
     dog.copy(
       ocPrimaryResidenceState = rawRecord.getOptional("oc_address1_state"),
@@ -336,14 +341,15 @@ object DemographicsTransformations {
       ocPrimaryResidenceOwnership = primaryOwned,
       ocPrimaryResidenceOwnershipOtherDescription =
         if (primaryOwned.contains(98)) rawRecord.getOptional("oc_address1_own_other") else None,
-      ocPrimaryResidenceTimePercentage =
-        if (hasSecondaryResidence) rawRecord.getOptionalNumber("oc_address1_pct") else None,
-      ocSecondaryResidenceState =
-        if (hasSecondaryResidence) rawRecord.getOptional("oc_address2_state") else None,
-      ocSecondaryResidenceZip = if (hasSecondaryResidence) {
-        rawRecord.getOptional("oc_address2_zip")
-      } else {
-        None
+      ocPrimaryResidenceTimePercentage = hasSecondaryResidence.flatMap {
+        if (_) rawRecord.getOptionalNumber("oc_address1_pct") else None
+      },
+      ocSecondaryResidence = hasSecondaryResidence,
+      ocSecondaryResidenceState = hasSecondaryResidence.flatMap {
+        if (_) rawRecord.getOptional("oc_address2_state") else None
+      },
+      ocSecondaryResidenceZip = hasSecondaryResidence.flatMap {
+        if (_) rawRecord.getOptional("oc_address2_zip") else None
       },
       ocSecondaryResidenceOwnership = secondaryOwned,
       ocSecondaryResidenceOwnershipOtherDescription = if (secondaryOwned.contains(98)) {
@@ -351,10 +357,8 @@ object DemographicsTransformations {
       } else {
         None
       },
-      ocSecondaryResidenceTimePercentage = if (hasSecondaryResidence) {
-        rawRecord.getOptionalNumber("oc_2nd_address_pct")
-      } else {
-        None
+      ocSecondaryResidenceTimePercentage = hasSecondaryResidence.flatMap {
+        if (_) rawRecord.getOptionalNumber("oc_2nd_address_pct") else None
       },
       ddAlternateRecentResidenceCount = tertiaryResidenceCount.map(_.toLong),
       ddAlternateRecentResidence1State =

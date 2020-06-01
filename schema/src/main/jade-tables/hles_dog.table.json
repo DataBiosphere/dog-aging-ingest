@@ -117,6 +117,10 @@
       "datatype": "integer"
     },
     {
+      "name": "dd_birth_month_known",
+      "datatype": "boolean"
+    },
+    {
       "name": "dd_birth_month",
       "datatype": "integer"
     },
@@ -167,6 +171,10 @@
     {
       "name": "dd_weight_range_expected_adult",
       "datatype": "integer"
+    },
+    {
+      "name": "dd_insurance",
+      "datatype": "boolean"
     },
     {
       "name": "dd_insurance_provider",
@@ -323,6 +331,10 @@
     {
       "name": "oc_primary_residence_time_percentage",
       "datatype": "integer"
+    },
+    {
+      "name": "oc_secondary_residence",
+      "datatype": "boolean"
     },
     {
       "name": "oc_secondary_residence_state",

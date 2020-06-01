@@ -85,6 +85,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     out.ddAgeExactSourceFromLitterOwnerBred.value shouldBe false
     out.ddAgeExactSourceOther.value shouldBe true
     out.ddAgeExactSourceOtherDescription.value shouldBe "It is known"
+    out.ddBirthMonthKnown.value shouldBe true
   }
 
   it should "map age-related demographics fields when birth year is known" in {
@@ -110,6 +111,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     out.ddAgeExactSourceDeterminedByVeterinarian.value shouldBe false
     out.ddAgeExactSourceFromLitterOwnerBred.value shouldBe true
     out.ddAgeExactSourceOther.value shouldBe false
+    out.ddBirthMonthKnown.value shouldBe false
   }
 
   it should "map age-related demographics fields when age is estimated by owner" in {
@@ -393,9 +395,11 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
       HlesDog.init(1, 1)
     )
 
+    insuranceOut.ddInsurance.value shouldBe true
     insuranceOut.ddInsuranceProvider.value shouldBe 98L
     insuranceOut.ddInsuranceProviderOtherDescription.value shouldBe "My special insurance"
 
+    noInsuranceOut.ddInsurance.value shouldBe false
     noInsuranceOut.ddInsuranceProvider shouldBe None
   }
 
@@ -554,11 +558,13 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     oneAddrOut.ocPrimaryResidenceOwnershipOtherDescription.value shouldBe "Squatter's rights"
     // Not a typo: Time percentage not carried forward if only 1 address.
     oneAddrOut.ocPrimaryResidenceTimePercentage shouldBe None
+    oneAddrOut.ocSecondaryResidence.value shouldBe false
 
     manyAddrOut.ocPrimaryResidenceState.value shouldBe "MA"
     manyAddrOut.ocPrimaryResidenceZip.value shouldBe "02114"
     manyAddrOut.ocPrimaryResidenceOwnership.value shouldBe 1L
     manyAddrOut.ocPrimaryResidenceTimePercentage.value shouldBe 1L
+    manyAddrOut.ocSecondaryResidence.value shouldBe true
     manyAddrOut.ocSecondaryResidenceState.value shouldBe "MA"
     manyAddrOut.ocSecondaryResidenceZip.value shouldBe "02115"
     manyAddrOut.ocSecondaryResidenceOwnership.value shouldBe 98L
