@@ -22,6 +22,4 @@ jobs:
       - name: Setup GCR auth
         run: gcloud auth configure-docker --quiet
       - name: Publish
-        run: sbt publish
-        env:
-          JAVA_OPTS: -Xmx4g -Xms4g -Xss16m
+        run: sbt -mem 6144 publish
