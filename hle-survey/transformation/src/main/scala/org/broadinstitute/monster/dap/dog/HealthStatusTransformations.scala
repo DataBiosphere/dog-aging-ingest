@@ -5,7 +5,10 @@ import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
 
 object HealthStatusTransformations {
 
-  /** TODO */
+  /**
+    * Parse all high-level health fields out of a raw RedCap record,
+    * injecting them into a partially-modeled dog record.
+    */
   def mapHealthStatus(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
     val transformations = List(
       mapHealthSummary _,
@@ -16,7 +19,10 @@ object HealthStatusTransformations {
     transformations.foldLeft(dog)((acc, f) => f(rawRecord, acc))
   }
 
-  /** TODO */
+  /**
+   * Parse summary health fields out of a raw RedCap record,
+   * injecting them into a partially-modeled dog record.
+   */
   def mapHealthSummary(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
     val recentHospitalization = rawRecord.getOptionalBoolean("hs_hosp_yn")
     val hospitalizationReason = recentHospitalization.flatMap {
@@ -43,7 +49,10 @@ object HealthStatusTransformations {
     )
   }
 
-  /** TODO */
+  /**
+   * Parse the Y/N flags for condition types out of a raw RedCap record,
+   * injecting them into a partially-modeled dog record as recoded enums.
+   */
   def mapConditions(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
 
     def code(congenitalField: Option[String], diagnosedField: Option[String]): Option[Long] = {
@@ -87,7 +96,10 @@ object HealthStatusTransformations {
     )
   }
 
-  /** TODO */
+  /**
+   * Parse alternative-care info out of a raw RedCap record,
+   * injecting the data into a partially-modeled dog record as "unrolled" booleans.
+   */
   def mapAltCare(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
     val altCareMethods = rawRecord.get("hs_other_health_care")
     val otherAltCare = altCareMethods.map(_.contains("98"))
