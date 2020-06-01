@@ -15,7 +15,8 @@ object DogTransformations {
     val transformations = List(
       StudyStatusTransformations.mapStudyStatus _,
       DemographicsTransformations.mapDemographics _,
-      BehaviorTransformations.mapBehavior _
+      BehaviorTransformations.mapBehavior _,
+      HealthStatusTransformations.mapHealthStatus _
     )
 
     transformations.foldLeft(dogBase)((acc, f) => f(rawRecord, acc))
