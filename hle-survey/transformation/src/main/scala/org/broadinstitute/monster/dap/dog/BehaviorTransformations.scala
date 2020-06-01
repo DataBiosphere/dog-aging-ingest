@@ -15,14 +15,17 @@ object BehaviorTransformations {
       dbExcitementLevelBeforeCarRide = rawRecord.getOptionalNumber("db_e_before_car"),
       dbAggressionLevelOnLeashUnknownHuman = rawRecord.getOptionalNumber("db_a_approach_walk"),
       dbAggressionLevelToysTakenAway = rawRecord.getOptionalNumber("db_a_toy_family"),
-      dbAggressionLevelApproachedWhileEating = rawRecord.getOptionalNumber("db_a_food_approach_family"),
+      dbAggressionLevelApproachedWhileEating =
+        rawRecord.getOptionalNumber("db_a_food_approach_family"),
       dbAggressionLevelDeliveryWorkersAtHome = rawRecord.getOptionalNumber("db_a_delivery"),
       dbAggressionLevelFoodTakenAway = rawRecord.getOptionalNumber("db_a_food_take_family"),
       dbAggressionLevelOnLeashUnknownDog = rawRecord.getOptionalNumber("db_a_dog_approach"),
       dbAggressionLevelUnknownHumanNearYard = rawRecord.getOptionalNumber("db_a_stranger_yard"),
       dbAggressionLevelUnknownAggressiveDog = rawRecord.getOptionalNumber("db_a_dog_growled_at"),
-      dbAggressionLevelFamiliarDogWhileEating = rawRecord.getOptionalNumber("db_a_food_familiar_dog"),
-      dbAggressionLevelFamiliarDogWhilePlaying = rawRecord.getOptionalNumber("db_a_toy_familiar_dog"),
+      dbAggressionLevelFamiliarDogWhileEating =
+        rawRecord.getOptionalNumber("db_a_food_familiar_dog"),
+      dbAggressionLevelFamiliarDogWhilePlaying =
+        rawRecord.getOptionalNumber("db_a_toy_familiar_dog"),
       dbFearLevelUnknownHumanAwayFromHome = rawRecord.getOptionalNumber("db_f_approach_stranger"),
       dbFearLevelLoudNoises = rawRecord.getOptionalNumber("db_f_noise"),
       dbFearLevelUnknownHumanTouch = rawRecord.getOptionalNumber("db_f_unfamiliar_touch"),
