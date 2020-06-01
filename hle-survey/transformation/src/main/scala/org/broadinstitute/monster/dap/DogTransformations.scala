@@ -1,6 +1,6 @@
 package org.broadinstitute.monster.dap
 
-import org.broadinstitute.monster.dap.dog.{DemographicsTransformations, StudyStatusTransformations}
+import org.broadinstitute.monster.dap.dog._
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
 
 object DogTransformations {
@@ -14,7 +14,8 @@ object DogTransformations {
 
     val transformations = List(
       StudyStatusTransformations.mapStudyStatus _,
-      DemographicsTransformations.mapDemographics _
+      DemographicsTransformations.mapDemographics _,
+      BehaviorTransformations.mapBehavior _
     )
 
     transformations.foldLeft(dogBase)((acc, f) => f(rawRecord, acc))
