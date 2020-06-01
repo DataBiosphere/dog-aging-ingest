@@ -18,7 +18,7 @@ jobs:
       - name: Compile
         run: sbt Compile/compile Test/compile IntegrationTest/compile
         env:
-          JAVA_OPTS: -Xmx4g -Xms4g -Xss4m
+          JAVA_OPTS: -Xmx4g -Xms4g -Xss16m
       - name: Test
         run: sbt "set ThisBuild/coverageEnabled := true" test IntegrationTest/test coverageAggregate
         env:
@@ -39,4 +39,4 @@ jobs:
       - name: Publish
         run: sbt publish
         env:
-          JAVA_OPTS: -Xmx4g -Xms4g -Xss4m
+          JAVA_OPTS: -Xmx4g -Xms4g -Xss16m
