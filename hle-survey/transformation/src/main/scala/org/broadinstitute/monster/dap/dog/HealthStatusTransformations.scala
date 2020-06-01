@@ -20,9 +20,9 @@ object HealthStatusTransformations {
   }
 
   /**
-   * Parse summary health fields out of a raw RedCap record,
-   * injecting them into a partially-modeled dog record.
-   */
+    * Parse summary health fields out of a raw RedCap record,
+    * injecting them into a partially-modeled dog record.
+    */
   def mapHealthSummary(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
     val recentHospitalization = rawRecord.getOptionalBoolean("hs_hosp_yn")
     val hospitalizationReason = recentHospitalization.flatMap {
@@ -50,9 +50,9 @@ object HealthStatusTransformations {
   }
 
   /**
-   * Parse the Y/N flags for condition types out of a raw RedCap record,
-   * injecting them into a partially-modeled dog record as recoded enums.
-   */
+    * Parse the Y/N flags for condition types out of a raw RedCap record,
+    * injecting them into a partially-modeled dog record as recoded enums.
+    */
   def mapConditions(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
 
     def code(congenitalField: Option[String], diagnosedField: Option[String]): Option[Long] = {
@@ -97,9 +97,9 @@ object HealthStatusTransformations {
   }
 
   /**
-   * Parse alternative-care info out of a raw RedCap record,
-   * injecting the data into a partially-modeled dog record as "unrolled" booleans.
-   */
+    * Parse alternative-care info out of a raw RedCap record,
+    * injecting the data into a partially-modeled dog record as "unrolled" booleans.
+    */
   def mapAltCare(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
     val altCareMethods = rawRecord.get("hs_other_health_care")
     val otherAltCare = altCareMethods.map(_.contains("98"))
