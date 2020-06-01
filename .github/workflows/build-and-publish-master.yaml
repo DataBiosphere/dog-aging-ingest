@@ -17,6 +17,8 @@ jobs:
         run: sbt scalafmtCheckAll
       - name: Compile
         run: sbt Compile/compile Test/compile IntegrationTest/compile
+        env:
+          JAVA_OPTS: -Xmx4g -Xms4g -Xss2m
       - name: Test
         run: sbt "set ThisBuild/coverageEnabled := true" test IntegrationTest/test coverageAggregate
         env:
@@ -36,3 +38,5 @@ jobs:
         run: gcloud auth configure-docker --quiet
       - name: Publish
         run: sbt publish
+        env:
+          JAVA_OPTS: -Xmx4g -Xms4g -Xss2m

@@ -23,3 +23,5 @@ jobs:
         run: gcloud auth configure-docker --quiet
       - name: Publish
         run: sbt publish
+        env:
+          JAVA_OPTS: -Xmx4g -Xms4g -Xss2m
