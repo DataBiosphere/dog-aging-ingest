@@ -1,7 +1,7 @@
 package org.broadinstitute.monster.dap
 
 import caseapp.{AppName, AppVersion, HelpMessage, ProgName}
-import org.broadinstitute.monster.DogAgingHleTransformationBuildInfo
+import org.broadinstitute.monster.buildinfo.DogAgingHleTransformationBuildInfo
 
 @AppName("HLESurvey transformation pipeline")
 @AppVersion(DogAgingHleTransformationBuildInfo.version)

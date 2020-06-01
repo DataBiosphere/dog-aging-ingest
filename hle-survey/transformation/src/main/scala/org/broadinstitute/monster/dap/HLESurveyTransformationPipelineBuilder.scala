@@ -1,23 +1,11 @@
 package org.broadinstitute.monster.dap
 
-import java.time.{LocalDate, OffsetDateTime}
-
 import com.spotify.scio.ScioContext
-import com.spotify.scio.coders.Coder
 import com.spotify.scio.values.SCollection
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.common.msg._
-import upack.Msg
 
 object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
-
-  implicit val msgCoder: Coder[Msg] = Coder.beam(new UpackMsgCoder)
-
-  implicit val dateCoder: Coder[LocalDate] =
-    Coder.xmap(Coder.stringCoder)(LocalDate.parse(_), _.toString)
-
-  implicit val odtCoder: Coder[OffsetDateTime] =
-    Coder.xmap(Coder.stringCoder)(OffsetDateTime.parse(_), _.toString)
 
   /**
     * Schedule all the steps for the Dog Aging transformation in the given pipeline context.
