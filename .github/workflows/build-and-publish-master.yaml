@@ -14,11 +14,11 @@ jobs:
         with:
           java-version: graalvm@20.0.0
       - name: Check formatting
-        run: sbt -mem 6144 scalafmtCheckAll
+        run: sbt --mem 6144 scalafmtCheckAll
       - name: Compile
-        run: sbt -mem 6144 Compile/compile Test/compile IntegrationTest/compile
+        run: sbt --mem 6144 Compile/compile Test/compile IntegrationTest/compile
       - name: Test
-        run: sbt -mem 6144 "set ThisBuild/coverageEnabled := true" test IntegrationTest/test coverageAggregate
+        run: sbt --mem 6144 "set ThisBuild/coverageEnabled := true" test IntegrationTest/test coverageAggregate
         env:
           VAULT_ADDR: ${{ secrets.VaultAddress }}
           VAULT_ROLE_ID: ${{ secrets.VaultRoleId }}
@@ -35,4 +35,4 @@ jobs:
       - name: Setup GCR auth
         run: gcloud auth configure-docker --quiet
       - name: Publish
-        run: sbt -mem 6144 publish
+        run: sbt --mem 6144 publish
