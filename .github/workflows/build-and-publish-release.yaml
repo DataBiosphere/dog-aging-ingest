@@ -24,4 +24,4 @@ jobs:
       - name: Publish
         run: sbt publish
         env:
-          JAVA_OPTS: -Xmx4g -Xms4g -Xss2m
+          JVM_OPTS: -Xmx6144m -Xms6144m -Xss16m

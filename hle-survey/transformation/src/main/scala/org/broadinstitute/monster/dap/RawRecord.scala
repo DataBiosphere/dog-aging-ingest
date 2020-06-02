@@ -11,6 +11,9 @@ import java.time.format.DateTimeFormatter
   */
 case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
 
+  /** Get the raw value(s) paired with the given key, if any. */
+  def get(field: String): Option[Array[String]] = fields.get(field)
+
   /**
     * Get the singleton value for an attribute in this record.
     *
