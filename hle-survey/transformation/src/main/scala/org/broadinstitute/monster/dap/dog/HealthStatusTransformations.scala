@@ -25,8 +25,8 @@ object HealthStatusTransformations {
     */
   def mapHealthSummary(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
     val recentHospitalization = rawRecord.getOptionalBoolean("hs_hosp_yn")
-    val hospitalizationReason = recentHospitalization.flatMap {
-      if (_) rawRecord.getOptionalNumber("hs_hosp_why") else None
+    val hospitalizationReasons = recentHospitalization.flatMap {
+      if (_) rawRecord.get("hs_hosp_why") else None
     }
 
     dog.copy(
@@ -39,12 +39,16 @@ object HealthStatusTransformations {
         rawRecord.getOptionalBoolean("hs_cond_chron_change"),
       hsCongenitalConditionPresent = rawRecord.getOptionalBoolean("hs_congenital_yn"),
       hsRecentHospitalization = recentHospitalization,
-      hsRecentHospitalizationReason = hospitalizationReason,
-      hsRecentHospitalizationReasonOtherDescription = if (hospitalizationReason.contains(98L)) {
-        rawRecord.getOptional("hs_hosp_why_other")
-      } else {
-        None
-      },
+      hsRecentHospitalizationReasonSpayOrNeuter = hospitalizationReasons.map(_.contains("1")),
+      hsRecentHospitalizationReasonDentistry = hospitalizationReasons.map(_.contains("2")),
+      hsRecentHospitalizationReasonBoarding = hospitalizationReasons.map(_.contains("3")),
+      hsRecentHospitalizationReasonOther = hospitalizationReasons.map(_.contains("99")),
+      hsRecentHospitalizationReasonOtherDescription =
+        if (hospitalizationReasons.getOrElse(Array.empty).contains("99")) {
+          rawRecord.getOptional("hs_hosp_why_other")
+        } else {
+          None
+        },
       hsOtherMedicalInfo = rawRecord.getOptional("hs_other_med_info")
     )
   }
