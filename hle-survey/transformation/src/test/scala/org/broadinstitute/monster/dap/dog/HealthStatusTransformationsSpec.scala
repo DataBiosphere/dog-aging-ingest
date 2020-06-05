@@ -20,7 +20,7 @@ class HealthStatusTransformationsSpec extends AnyFlatSpec with Matchers with Opt
       "hs_cond_chron_change" -> Array("0"),
       "hs_congenital_yn" -> Array("0"),
       "hs_hosp_yn" -> Array("1"),
-      "hs_hosp_why" -> Array("98"),
+      "hs_hosp_why" -> Array("1", "3", "99"),
       "hs_hosp_why_other" -> Array("D'oh"),
       "hs_other_med_info" -> Array("Dog is a zombie")
     )
@@ -38,7 +38,10 @@ class HealthStatusTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     out.hsChronicConditionRecentlyChangedOrTreated.value shouldBe false
     out.hsCongenitalConditionPresent.value shouldBe false
     out.hsRecentHospitalization.value shouldBe true
-    out.hsRecentHospitalizationReason.value shouldBe 98L
+    out.hsRecentHospitalizationReasonSpayOrNeuter.value shouldBe true
+    out.hsRecentHospitalizationReasonDentistry.value shouldBe false
+    out.hsRecentHospitalizationReasonBoarding.value shouldBe true
+    out.hsRecentHospitalizationReasonOther.value shouldBe true
     out.hsRecentHospitalizationReasonOtherDescription.value shouldBe "D'oh"
     out.hsOtherMedicalInfo.value shouldBe "Dog is a zombie"
   }

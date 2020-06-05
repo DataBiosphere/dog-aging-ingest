@@ -34,8 +34,20 @@
       "datatype": "boolean"
     },
     {
-      "name": "hs_recent_hospitalization_reason",
-      "datatype": "integer"
+      "name": "hs_recent_hospitalization_reason_spay_or_neuter",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_recent_hospitalization_reason_dentistry",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_recent_hospitalization_reason_boarding",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_recent_hospitalization_reason_other",
+      "datatype": "boolean"
     },
     {
       "name": "hs_recent_hospitalization_reason_other_description",
