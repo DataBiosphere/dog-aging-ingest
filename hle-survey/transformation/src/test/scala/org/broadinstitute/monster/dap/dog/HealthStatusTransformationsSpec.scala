@@ -25,7 +25,7 @@ class HealthStatusTransformationsSpec extends AnyFlatSpec with Matchers with Opt
       "hs_other_med_info" -> Array("Dog is a zombie")
     )
 
-    val out = HealthStatusTransformations.mapHealthSummary(
+    val out = HealthStatusTransformations.mapHighLevelFields(
       RawRecord(1, example),
       HlesDog.init(1, 1)
     )

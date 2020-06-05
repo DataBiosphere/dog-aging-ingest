@@ -3,12 +3,14 @@ package org.broadinstitute.monster.dap.dog
 import java.time.{LocalDate, Period}
 
 import org.broadinstitute.monster.dap.RawRecord
-import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
+import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogDemographics
 
 object DemographicsTransformations {
 
   /** Map all demographics-related fields out of a raw RedCap record into a partial Dog model. */
-  def mapDemographics(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
+  def mapDemographics(rawRecord: RawRecord): HlesDogDemographics = {
+    val init = HlesDogDemographics.init()
+
     val transformations = List(
       mapBreed _,
       mapAge _,
@@ -16,18 +18,17 @@ object DemographicsTransformations {
       mapWeight _,
       mapInsurance _,
       mapAcquiredInfo _,
-      mapActivities _,
-      mapResidences _
+      mapActivities _
     )
 
-    transformations.foldLeft(dog)((acc, f) => f(rawRecord, acc))
+    transformations.foldLeft(init)((acc, f) => f(rawRecord, acc))
   }
 
   /**
     * Parse all breed-related fields out of a raw RedCap record,
     * injecting them into a partially-modeled dog record.
     */
-  def mapBreed(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
+  def mapBreed(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics = {
     val breedType = rawRecord.getOptionalNumber("dd_dog_pure_or_mixed")
     breedType match {
       case Some(1) =>
@@ -52,7 +53,7 @@ object DemographicsTransformations {
     * Parse all age-related fields out of a raw RedCap record,
     * injecting them into a partially-modeled dog record.
     */
-  def mapAge(rawRecord: RawRecord, dog: HlesDog): HlesDog =
+  def mapAge(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics =
     rawRecord.getOptionalBoolean("dd_dog_birth_year_certain").fold(dog) { ageCertain =>
       /*
        * TODO: Encode this lookup table in the data.
@@ -123,7 +124,7 @@ object DemographicsTransformations {
     * Parse all sex-related fields out of a raw RedCap record,
     * injecting them into a partially-modeled dog record.
     */
-  def mapSexSpayNeuter(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
+  def mapSexSpayNeuter(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics = {
     val sex = rawRecord.getOptionalNumber("dd_dog_sex")
     rawRecord.getOptionalBoolean("dd_dog_spay_neuter").fold(dog.copy(ddSex = sex)) {
       spayedOrNeutered =>
@@ -174,7 +175,7 @@ object DemographicsTransformations {
     * Parse all weight-related fields out of a raw RedCap record,
     * injecting them into a partially-modeled dog record.
     */
-  def mapWeight(rawRecord: RawRecord, dog: HlesDog): HlesDog = dog.copy(
+  def mapWeight(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics = dog.copy(
     ddWeightRange = rawRecord.getOptionalNumber("dd_dog_weight"),
     ddWeightLbs = rawRecord.getOptional("dd_dog_weight_lbs").map(_.toDouble),
     ddWeightRangeExpectedAdult = rawRecord.getOptionalNumber("dd_weight_range_expected_adult")
@@ -184,7 +185,7 @@ object DemographicsTransformations {
     * Parse all insurance-related fields out of a raw RedCap record,
     * injecting them into a partially-modeled dog record.
     */
-  def mapInsurance(rawRecord: RawRecord, dog: HlesDog): HlesDog =
+  def mapInsurance(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics =
     rawRecord.getOptionalBoolean("dd_insurance_yn").fold(dog) { insurance =>
       if (insurance) {
         val provider = rawRecord.getOptionalNumber("dd_insurance")
@@ -203,7 +204,7 @@ object DemographicsTransformations {
     * Parse all acquisition-related fields out of a raw RedCap record,
     * injecting them into a partially-modeled dog record.
     */
-  def mapAcquiredInfo(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
+  def mapAcquiredInfo(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics = {
     val usBorn = rawRecord.getOptional("dd_us_born")
     val country = usBorn match {
       case Some("1") => Some("US")
@@ -249,7 +250,7 @@ object DemographicsTransformations {
     * Parse all activity-related fields out of a raw RedCap record,
     * injecting them into a partially-modeled dog record.
     */
-  def mapActivities(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
+  def mapActivities(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics = {
     val allActivities = rawRecord.getArray("dd_activities").map(_.toLong)
 
     def activityLevel(activity: String): Option[Long] =
@@ -306,139 +307,6 @@ object DemographicsTransformations {
       ddActivitiesServiceOther = otherService,
       ddActivitiesServiceOtherDescription =
         if (otherService.contains(true)) rawRecord.getOptional("dd_service_other_1") else None
-    )
-  }
-
-  /**
-    * Parse all residence-related fields out of a raw RedCap record,
-    * injecting them into a partially-modeled dog record.
-    */
-  def mapResidences(rawRecord: RawRecord, dog: HlesDog): HlesDog = {
-    val hasSecondaryResidence = rawRecord.getOptionalBoolean("oc_address2_yn")
-    val hasTertiaryResidences = rawRecord.getOptionalBoolean("dd_2nd_residence_yn")
-    val tertiaryResidenceCount = hasTertiaryResidences.map { yn =>
-      if (yn) rawRecord.getRequired("dd_2nd_residence_nbr").toInt else 0
-    }
-    val tertiaryResidenceCutoff = tertiaryResidenceCount.getOrElse(0)
-
-    val tertiaryResidences = List.tabulate(tertiaryResidenceCutoff) { i =>
-      val prefix = f"dd_2nd_residence_${i + 1}%02d"
-      val state = rawRecord.getOptional(s"${prefix}_st")
-      val zip = rawRecord.getOptional(s"${prefix}_zip")
-      val weeks = rawRecord.getOptionalNumber(s"${prefix}_time")
-      (state, zip, weeks)
-    }
-
-    val primaryOwned = rawRecord.getOptionalNumber("oc_address1_own")
-    val secondaryOwned = hasSecondaryResidence.flatMap {
-      if (_) rawRecord.getOptionalNumber("oc_address2_own") else None
-    }
-
-    dog.copy(
-      ocPrimaryResidenceState = rawRecord.getOptional("oc_address1_state"),
-      ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division"),
-      ocPrimaryResidenceZip = rawRecord.getOptional("oc_address1_zip"),
-      ocPrimaryResidenceOwnership = primaryOwned,
-      ocPrimaryResidenceOwnershipOtherDescription =
-        if (primaryOwned.contains(98)) rawRecord.getOptional("oc_address1_own_other") else None,
-      ocPrimaryResidenceTimePercentage = hasSecondaryResidence.flatMap {
-        if (_) rawRecord.getOptionalNumber("oc_address1_pct") else None
-      },
-      ocSecondaryResidence = hasSecondaryResidence,
-      ocSecondaryResidenceState = hasSecondaryResidence.flatMap {
-        if (_) rawRecord.getOptional("oc_address2_state") else None
-      },
-      ocSecondaryResidenceZip = hasSecondaryResidence.flatMap {
-        if (_) rawRecord.getOptional("oc_address2_zip") else None
-      },
-      ocSecondaryResidenceOwnership = secondaryOwned,
-      ocSecondaryResidenceOwnershipOtherDescription = if (secondaryOwned.contains(98)) {
-        rawRecord.getOptional("oc_address2_own_other")
-      } else {
-        None
-      },
-      ocSecondaryResidenceTimePercentage = hasSecondaryResidence.flatMap {
-        if (_) rawRecord.getOptionalNumber("oc_2nd_address_pct") else None
-      },
-      ddAlternateRecentResidenceCount = tertiaryResidenceCount.map(_.toLong),
-      ddAlternateRecentResidence1State =
-        if (tertiaryResidenceCutoff >= 1) tertiaryResidences(0)._1 else None,
-      ddAlternateRecentResidence1Zip =
-        if (tertiaryResidenceCutoff >= 1) tertiaryResidences(0)._2 else None,
-      ddAlternateRecentResidence1Weeks =
-        if (tertiaryResidenceCutoff >= 1) tertiaryResidences(0)._3 else None,
-      ddAlternateRecentResidence2State =
-        if (tertiaryResidenceCutoff >= 2) tertiaryResidences(1)._1 else None,
-      ddAlternateRecentResidence2Zip =
-        if (tertiaryResidenceCutoff >= 2) tertiaryResidences(1)._2 else None,
-      ddAlternateRecentResidence2Weeks =
-        if (tertiaryResidenceCutoff >= 2) tertiaryResidences(1)._3 else None,
-      ddAlternateRecentResidence3State =
-        if (tertiaryResidenceCutoff >= 3) tertiaryResidences(2)._1 else None,
-      ddAlternateRecentResidence3Zip =
-        if (tertiaryResidenceCutoff >= 3) tertiaryResidences(2)._2 else None,
-      ddAlternateRecentResidence3Weeks =
-        if (tertiaryResidenceCutoff >= 3) tertiaryResidences(2)._3 else None,
-      ddAlternateRecentResidence4State =
-        if (tertiaryResidenceCutoff >= 4) tertiaryResidences(3)._1 else None,
-      ddAlternateRecentResidence4Zip =
-        if (tertiaryResidenceCutoff >= 4) tertiaryResidences(3)._2 else None,
-      ddAlternateRecentResidence4Weeks =
-        if (tertiaryResidenceCutoff >= 4) tertiaryResidences(3)._3 else None,
-      ddAlternateRecentResidence5State =
-        if (tertiaryResidenceCutoff >= 5) tertiaryResidences(4)._1 else None,
-      ddAlternateRecentResidence5Zip =
-        if (tertiaryResidenceCutoff >= 5) tertiaryResidences(4)._2 else None,
-      ddAlternateRecentResidence5Weeks =
-        if (tertiaryResidenceCutoff >= 5) tertiaryResidences(4)._3 else None,
-      ddAlternateRecentResidence6State =
-        if (tertiaryResidenceCutoff >= 6) tertiaryResidences(5)._1 else None,
-      ddAlternateRecentResidence6Zip =
-        if (tertiaryResidenceCutoff >= 6) tertiaryResidences(5)._2 else None,
-      ddAlternateRecentResidence6Weeks =
-        if (tertiaryResidenceCutoff >= 6) tertiaryResidences(5)._3 else None,
-      ddAlternateRecentResidence7State =
-        if (tertiaryResidenceCutoff >= 7) tertiaryResidences(6)._1 else None,
-      ddAlternateRecentResidence7Zip =
-        if (tertiaryResidenceCutoff >= 7) tertiaryResidences(6)._2 else None,
-      ddAlternateRecentResidence7Weeks =
-        if (tertiaryResidenceCutoff >= 7) tertiaryResidences(6)._3 else None,
-      ddAlternateRecentResidence8State =
-        if (tertiaryResidenceCutoff >= 8) tertiaryResidences(7)._1 else None,
-      ddAlternateRecentResidence8Zip =
-        if (tertiaryResidenceCutoff >= 8) tertiaryResidences(7)._2 else None,
-      ddAlternateRecentResidence8Weeks =
-        if (tertiaryResidenceCutoff >= 8) tertiaryResidences(7)._3 else None,
-      ddAlternateRecentResidence9State =
-        if (tertiaryResidenceCutoff >= 9) tertiaryResidences(8)._1 else None,
-      ddAlternateRecentResidence9Zip =
-        if (tertiaryResidenceCutoff >= 9) tertiaryResidences(8)._2 else None,
-      ddAlternateRecentResidence9Weeks =
-        if (tertiaryResidenceCutoff >= 9) tertiaryResidences(8)._3 else None,
-      ddAlternateRecentResidence10State =
-        if (tertiaryResidenceCutoff >= 10) tertiaryResidences(9)._1 else None,
-      ddAlternateRecentResidence10Zip =
-        if (tertiaryResidenceCutoff >= 10) tertiaryResidences(9)._2 else None,
-      ddAlternateRecentResidence10Weeks =
-        if (tertiaryResidenceCutoff >= 10) tertiaryResidences(9)._3 else None,
-      ddAlternateRecentResidence11State =
-        if (tertiaryResidenceCutoff >= 11) tertiaryResidences(10)._1 else None,
-      ddAlternateRecentResidence11Zip =
-        if (tertiaryResidenceCutoff >= 11) tertiaryResidences(10)._2 else None,
-      ddAlternateRecentResidence11Weeks =
-        if (tertiaryResidenceCutoff >= 11) tertiaryResidences(10)._3 else None,
-      ddAlternateRecentResidence12State =
-        if (tertiaryResidenceCutoff >= 12) tertiaryResidences(11)._1 else None,
-      ddAlternateRecentResidence12Zip =
-        if (tertiaryResidenceCutoff >= 12) tertiaryResidences(11)._2 else None,
-      ddAlternateRecentResidence12Weeks =
-        if (tertiaryResidenceCutoff >= 12) tertiaryResidences(11)._3 else None,
-      ddAlternateRecentResidence13State =
-        if (tertiaryResidenceCutoff >= 13) tertiaryResidences(12)._1 else None,
-      ddAlternateRecentResidence13Zip =
-        if (tertiaryResidenceCutoff >= 13) tertiaryResidences(12)._2 else None,
-      ddAlternateRecentResidence13Weeks =
-        if (tertiaryResidenceCutoff >= 13) tertiaryResidences(12)._3 else None
     )
   }
 }

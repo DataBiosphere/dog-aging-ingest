@@ -1,0 +1,169 @@
+{
+  "name": "hles_dog_health_summary",
+  "columns": [
+    {
+      "name": "ss_vet_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_general_health",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_new_condition_diagnosed_recently",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_new_condition_diagnosed_last_month",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_chronic_condition_present",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_chronic_condition_recently_changed_or_treated",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_congenital_condition_present",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_recent_hospitalization",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_recent_hospitalization_reason",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_recent_hospitalization_reason_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "hs_health_conditions_eye",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_ear",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_oral",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_skin",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_cardiac",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_respiratory",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_gastrointestinal",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_liver",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_kidney",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_reproductive",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_orthopedic",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_neurological",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_endocrine",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_hematologic",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_immune",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_infectious_disease",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_toxin_consumption",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_trauma",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_cancer",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_health_conditions_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_alternative_care_acupuncture",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_alternative_care_herbal_medicine",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_alternative_care_homeopathy",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_alternative_care_chiropractic",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_alternative_care_massage",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_alternative_care_rehabilitation_therapy",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_alternative_care_reiki",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_alternative_care_traditional_chinese_medicine",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_alternative_care_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "hs_alternative_care_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "hs_other_medical_info",
+      "datatype": "string"
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+{
+  "name": "hles_dog_residences",
+  "columns": [
+    {
+      "name": "oc_primary_residence_state",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_primary_residence_census_division",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_primary_residence_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_primary_residence_ownership",
+      "datatype": "integer"
+    },
+    {
+      "name": "oc_primary_residence_ownership_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_primary_residence_time_percentage",
+      "datatype": "integer"
+    },
+    {
+      "name": "oc_secondary_residence",
+      "datatype": "boolean"
+    },
+    {
+      "name": "oc_secondary_residence_state",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_secondary_residence_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_secondary_residence_ownership",
+      "datatype": "integer"
+    },
+    {
+      "name": "oc_secondary_residence_ownership_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "oc_secondary_residence_time_percentage",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_1_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_1_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_1_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_2_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_2_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_2_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_3_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_3_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_3_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_4_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_4_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_4_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_5_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_5_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_5_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_6_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_6_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_6_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_7_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_7_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_7_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_8_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_8_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_8_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_9_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_9_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_9_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_10_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_10_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_10_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_11_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_11_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_11_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_12_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_12_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_12_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_alternate_recent_residence_13_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_13_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_alternate_recent_residence_13_weeks",
+      "datatype": "integer"
+    }
+  ]
+}
