@@ -3,7 +3,6 @@ package org.broadinstitute.monster.dap.dog
 import java.time.LocalDate
 
 import org.broadinstitute.monster.dap.RawRecord
-import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -19,10 +18,7 @@ class StudyStatusTransformationsSpec extends AnyFlatSpec with Matchers with Opti
       "st_portal_account_date" -> Array("2000-01-01"),
       "st_dap_pack_date" -> Array("2020-01-15 10:21")
     )
-    val output = StudyStatusTransformations.mapStudyStatus(
-      RawRecord(id = 1, exampleDogFields),
-      HlesDog.init(dogId = 1, ownerId = 1)
-    )
+    val output = StudyStatusTransformations.mapStudyStatus(RawRecord(id = 1, exampleDogFields))
 
     output.stVipOrStaff.value shouldBe 2
     output.stBatchLabel.value shouldBe "this is my label"
