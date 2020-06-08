@@ -54,159 +54,159 @@
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_1_state",
+      "name": "dd_alternate_recent_residence1_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_1_zip",
+      "name": "dd_alternate_recent_residence1_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_1_weeks",
+      "name": "dd_alternate_recent_residence1_weeks",
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_2_state",
+      "name": "dd_alternate_recent_residence2_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_2_zip",
+      "name": "dd_alternate_recent_residence2_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_2_weeks",
+      "name": "dd_alternate_recent_residence2_weeks",
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_3_state",
+      "name": "dd_alternate_recent_residence3_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_3_zip",
+      "name": "dd_alternate_recent_residence3_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_3_weeks",
+      "name": "dd_alternate_recent_residence3_weeks",
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_4_state",
+      "name": "dd_alternate_recent_residence4_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_4_zip",
+      "name": "dd_alternate_recent_residence4_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_4_weeks",
+      "name": "dd_alternate_recent_residence4_weeks",
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_5_state",
+      "name": "dd_alternate_recent_residence5_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_5_zip",
+      "name": "dd_alternate_recent_residence5_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_5_weeks",
+      "name": "dd_alternate_recent_residence5_weeks",
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_6_state",
+      "name": "dd_alternate_recent_residence6_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_6_zip",
+      "name": "dd_alternate_recent_residence6_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_6_weeks",
+      "name": "dd_alternate_recent_residence6_weeks",
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_7_state",
+      "name": "dd_alternate_recent_residence7_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_7_zip",
+      "name": "dd_alternate_recent_residence7_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_7_weeks",
+      "name": "dd_alternate_recent_residence7_weeks",
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_8_state",
+      "name": "dd_alternate_recent_residence8_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_8_zip",
+      "name": "dd_alternate_recent_residence8_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_8_weeks",
+      "name": "dd_alternate_recent_residence8_weeks",
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_9_state",
+      "name": "dd_alternate_recent_residence9_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_9_zip",
+      "name": "dd_alternate_recent_residence9_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_9_weeks",
+      "name": "dd_alternate_recent_residence9_weeks",
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_10_state",
+      "name": "dd_alternate_recent_residence10_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_10_zip",
+      "name": "dd_alternate_recent_residence10_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_10_weeks",
+      "name": "dd_alternate_recent_residence10_weeks",
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_11_state",
+      "name": "dd_alternate_recent_residence11_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_11_zip",
+      "name": "dd_alternate_recent_residence11_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_11_weeks",
+      "name": "dd_alternate_recent_residence11_weeks",
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_12_state",
+      "name": "dd_alternate_recent_residence12_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_12_zip",
+      "name": "dd_alternate_recent_residence12_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_12_weeks",
+      "name": "dd_alternate_recent_residence12_weeks",
       "datatype": "integer"
     },
     {
-      "name": "dd_alternate_recent_residence_13_state",
+      "name": "dd_alternate_recent_residence13_state",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_13_zip",
+      "name": "dd_alternate_recent_residence13_zip",
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence_13_weeks",
+      "name": "dd_alternate_recent_residence13_weeks",
       "datatype": "integer"
     }
   ]
