@@ -130,20 +130,26 @@ object PhysicalActivityTransformations {
     * injecting the data into a partially-modeled dog record.
     */
   def mapSwims(rawRecord: RawRecord, dog: HlesDogPhysicalActivity): HlesDogPhysicalActivity = {
-    dog.copy()
-
-    /* Swims */
-    //paSwim,
-    //paSwimModerateWeatherFrequency,
-    //paSwimHotWeatherFrequency,
-    //paSwimColdWeatherFrequency,
-    //paSwimLocationsSwimmingPool,
-    //paSwimLocationsPondOrLake,
-    //paSwimLocationsRiverStreamOrCreek,
-    //paSwimLocationsAgriculturalDitch,
-    //paSwimLocationsOcean,
-    //paSwimLocationsOther,
-    //paSwimLocationsOtherDescription,
+    rawRecord.getOptionalBoolean("pa_swim_yn").fold(dog) { swims =>
+      if (swims) {
+        val swimLocations = rawRecord.get("pa_swim_location")
+        val otherSwimLocation = swimLocations.map(_.contains("98"))
+        dog.copy(
+          paSwimModerateWeatherFrequency = rawRecord.getOptionalNumber("pa_swim_warm_freq"),
+          paSwimHotWeatherFrequency = rawRecord.getOptionalNumber("pa_swim_hot_freq"),
+          paSwimColdWeatherFrequency = rawRecord.getOptionalNumber("pa_swim_cold_freq"),
+          paSwimLocationsSwimmingPool = swimLocations.map(_.contains("1")),
+          paSwimLocationsPondOrLake = swimLocations.map(_.contains("2")),
+          paSwimLocationsRiverStreamOrCreek = swimLocations.map(_.contains("3")),
+          paSwimLocationsAgriculturalDitch = swimLocations.map(_.contains("4")),
+          paSwimLocationsOcean = swimLocations.map(_.contains("5")),
+          paSwimLocationsOther = otherSwimLocation,
+          paSwimLocationsOtherDescription = if (otherSwimLocation.contains(true)) rawRecord.getOptional("pa_swim_location_other") else None
+        )
+      } else {
+        dog.copy(paSwim = Some(swims))
+      }
+    }
   }
 }
 
