@@ -1,0 +1,276 @@
+{
+  "name": "hles_dog_demographics",
+  "columns": [
+    {
+      "name": "dd_breed_pure_or_mixed",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_breed_pure",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_breed_pure_non_akc",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_breed_mixed_primary",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_breed_mixed_secondary",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_age_years",
+      "datatype": "float"
+    },
+    {
+      "name": "dd_age_basis",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_age_exact_source_acquired_as_puppy",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_exact_source_registration_information",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_exact_source_determined_by_rescue_org",
+      "datatype": "boolean"
+    },{
+      "name": "dd_age_exact_source_determined_by_veterinarian",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_exact_source_from_litter_owner_bred",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_exact_source_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_exact_source_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_age_estimate_source_told_by_previous_owner",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_estimate_source_determined_by_rescue_org",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_estimate_source_determined_by_veterinarian",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_estimate_source_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_age_estimate_source_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_birth_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_birth_month_known",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_birth_month",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_sex",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_spayed_or_neutered",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_spay_or_neuter_age",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_spay_method",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_estrous_cycle_experienced_before_spayed",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_estrous_cycle_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_has_been_pregnant",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_has_sired_litters",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_litter_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_weight_range",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_weight_lbs",
+      "datatype": "float"
+    },
+    {
+      "name": "dd_weight_range_expected_adult",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_insurance",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_insurance_provider",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_insurance_provider_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_acquired_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_acquired_month",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_acquired_source",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_acquired_source_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_acquired_country",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_acquired_state",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_acquired_zip",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_activities_companion_animal",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_obedience",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_show",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_breeding",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_agility",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_hunting",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_working",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_field_trials",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_search_and_rescue",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_service",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_assistance_or_therapy",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "dd_activities_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_activities_service_seeing_eye",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_hearing_or_signal",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_wheelchair",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_other_medical",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_other_medical_description",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_activities_service_other_health",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_other_health_description",
+      "datatype": "string"
+    },
+    {
+      "name": "dd_activities_service_community_therapy",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_emotional_support",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "dd_activities_service_other_description",
+      "datatype": "string"
+    }
+  ]
+}

@@ -1,7 +1,6 @@
 package org.broadinstitute.monster.dap.dog
 
 import org.broadinstitute.monster.dap.RawRecord
-import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -55,8 +54,7 @@ class BehaviorTransformationsSpec extends AnyFlatSpec with Matchers with OptionV
       "db_m_bark" -> Array("1")
     )
     val output = BehaviorTransformations.mapBehavior(
-      RawRecord(id = 1, exampleDogFields),
-      HlesDog.init(dogId = 1, ownerId = 1)
+      RawRecord(id = 1, exampleDogFields)
     )
 
     output.dbExcitementLevelBeforeWalk.value shouldBe 0

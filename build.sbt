@@ -11,6 +11,7 @@ lazy val `dog-aging-schema` = project
   .enablePlugins(MonsterJadeDatasetPlugin)
   .settings(
     jadeTablePackage := "org.broadinstitute.monster.dogaging.jadeschema.table",
+    jadeTableFragmentPackage := "org.broadinstitute.monster.dogaging.jadeschema.fragment",
     jadeStructPackage := "org.broadinstitute.monster.dogaging.jadeschema.struct"
   )
 
