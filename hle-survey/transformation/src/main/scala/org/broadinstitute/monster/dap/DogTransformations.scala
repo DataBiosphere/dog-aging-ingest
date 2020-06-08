@@ -13,7 +13,8 @@ object DogTransformations {
     hlesDogDemographics = Some(DemographicsTransformations.mapDemographics(rawRecord)),
     hlesDogResidences = Some(DogResidenceTransformations.mapDogResidences(rawRecord)),
     hlesDogBehavior = Some(BehaviorTransformations.mapBehavior(rawRecord)),
-    hlesDogHealthSummary = Some(HealthStatusTransformations.mapHealthSummary(rawRecord))
+    hlesDogHealthSummary = Some(HealthStatusTransformations.mapHealthSummary(rawRecord)),
+    hlesDogPhysicalActivity = Some(PhysicalActivityTransformations.mapPhysicalActivity(rawRecord))
   )
 
 }
