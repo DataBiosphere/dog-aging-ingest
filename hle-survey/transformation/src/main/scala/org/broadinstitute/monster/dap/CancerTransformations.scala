@@ -5,7 +5,7 @@ import org.broadinstitute.monster.dogaging.jadeschema.table.HlesCancerCondition
 object CancerTransformations {
 
   /** Parse all owner-related fields out of a raw RedCap record. */
-  def mapCancer(rawRecord: RawRecord): HlesCancerCondition = {
+  def mapCancerConditions(rawRecord: RawRecord): HlesCancerCondition = {
 
     val cancerLocations = rawRecord.fields.get("hs_dx_cancer_loc")
 
@@ -57,11 +57,12 @@ object CancerTransformations {
       hsCancerLocationsVenereal = cancerLocations.map(_.contains("34")),
       hsCancerLocationsUnknown = cancerLocations.map(_.contains("99")),
       hsCancerLocationsOther = cancerLocations.map(_.contains("98")),
-      hsCancerLocationsOtherDescription = if (cancerLocations.getOrElse(Array.empty).contains("98")) {
-        rawRecord.getOptional("hs_dx_cancer_loc_other")
-      } else {
-        None
-      },
+      hsCancerLocationsOtherDescription =
+        if (cancerLocations.getOrElse(Array.empty).contains("98")) {
+          rawRecord.getOptional("hs_dx_cancer_loc_other")
+        } else {
+          None
+        },
       hsCancerTypesAdenoma = cancerTypes.map(_.contains("1")),
       hsCancerTypesAdenocarcinoma = cancerTypes.map(_.contains("2")),
       hsCancerTypesBasalCellTumor = cancerTypes.map(_.contains("3")),
@@ -117,11 +118,12 @@ object CancerTransformations {
       hsLymphomaLymphosarcomaTypesTZone = lymphomaTypes.map(_.contains("3")),
       hsLymphomaLymphosarcomaTypesUnknown = lymphomaTypes.map(_.contains("99")),
       hsLymphomaLymphosarcomaTypesOther = lymphomaTypes.map(_.contains("98")),
-      hsLymphomaLymphosarcomaTypesOtherDescription = if (lymphomaTypes.getOrElse(Array.empty).contains("98")) {
-        rawRecord.getOptional("hs_dx_cancer_lymph_other")
-      } else {
-        None
-      }
+      hsLymphomaLymphosarcomaTypesOtherDescription =
+        if (lymphomaTypes.getOrElse(Array.empty).contains("98")) {
+          rawRecord.getOptional("hs_dx_cancer_lymph_other")
+        } else {
+          None
+        }
     )
   }
 }
