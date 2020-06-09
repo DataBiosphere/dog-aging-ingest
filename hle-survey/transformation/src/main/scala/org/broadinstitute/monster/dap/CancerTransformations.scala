@@ -4,7 +4,7 @@ import org.broadinstitute.monster.dogaging.jadeschema.table.HlesCancerCondition
 
 object CancerTransformations {
 
-  /** Parse all owner-related fields out of a raw RedCap record. */
+  /** Parse all cancer-related fields out of a raw RedCap record. */
   def mapCancerConditions(rawRecord: RawRecord): HlesCancerCondition = {
 
     val cancerLocations = rawRecord.fields.get("hs_dx_cancer_loc")
