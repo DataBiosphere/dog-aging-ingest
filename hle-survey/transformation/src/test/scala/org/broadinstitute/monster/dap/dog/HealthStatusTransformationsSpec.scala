@@ -1,7 +1,7 @@
 package org.broadinstitute.monster.dap.dog
 
 import org.broadinstitute.monster.dap.RawRecord
-import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
+import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogHealthSummary
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -25,9 +25,9 @@ class HealthStatusTransformationsSpec extends AnyFlatSpec with Matchers with Opt
       "hs_other_med_info" -> Array("Dog is a zombie")
     )
 
-    val out = HealthStatusTransformations.mapHealthSummary(
+    val out = HealthStatusTransformations.mapHighLevelFields(
       RawRecord(1, example),
-      HlesDog.init(1, 1)
+      HlesDogHealthSummary.init()
     )
 
     out.ssVetFrequency.value shouldBe 1L
@@ -86,7 +86,7 @@ class HealthStatusTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     val out = HealthStatusTransformations.mapConditions(
       RawRecord(1, example),
-      HlesDog.init(1, 1)
+      HlesDogHealthSummary.init()
     )
 
     out.hsHealthConditionsEye.value shouldBe 1L
@@ -119,7 +119,7 @@ class HealthStatusTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     val out = HealthStatusTransformations.mapAltCare(
       RawRecord(1, example),
-      HlesDog.init(1, 1)
+      HlesDogHealthSummary.init()
     )
 
     out.hsAlternativeCareAcupuncture.value shouldBe true

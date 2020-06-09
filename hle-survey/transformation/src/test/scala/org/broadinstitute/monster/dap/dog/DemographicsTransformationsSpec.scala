@@ -1,7 +1,7 @@
 package org.broadinstitute.monster.dap.dog
 
 import org.broadinstitute.monster.dap.RawRecord
-import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
+import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogDemographics
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -24,11 +24,11 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     val akcOut = DemographicsTransformations.mapBreed(
       RawRecord(id = 1, akcExample),
-      HlesDog.init(dogId = 1, ownerId = 1)
+      HlesDogDemographics.init()
     )
     val nonAkcOut = DemographicsTransformations.mapBreed(
       RawRecord(id = 1, nonAkcExample),
-      HlesDog.init(dogId = 1, ownerId = 1)
+      HlesDogDemographics.init()
     )
 
     akcOut.ddBreedPureOrMixed.value shouldBe 1L
@@ -50,7 +50,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     )
     val out = DemographicsTransformations.mapBreed(
       RawRecord(id = 1, example),
-      HlesDog.init(dogId = 1, ownerId = 1)
+      HlesDogDemographics.init()
     )
 
     out.ddBreedPureOrMixed.value shouldBe 2L
@@ -72,7 +72,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     )
     val out = DemographicsTransformations.mapAge(
       RawRecord(id = 1, example),
-      HlesDog.init(dogId = 1, ownerId = 1)
+      HlesDogDemographics.init()
     )
 
     // Make sure we're within a half-month of accuracy.
@@ -99,7 +99,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     )
     val out = DemographicsTransformations.mapAge(
       RawRecord(id = 1, example),
-      HlesDog.init(dogId = 1, ownerId = 1)
+      HlesDogDemographics.init()
     )
 
     // Make sure we're within a half-year of accuracy.
@@ -123,7 +123,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     )
     val out = DemographicsTransformations.mapAge(
       RawRecord(id = 1, example),
-      HlesDog.init(dogId = 1, ownerId = 1)
+      HlesDogDemographics.init()
     )
 
     out.ddAgeYears.value shouldBe 15d
@@ -160,15 +160,15 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     val noLittersOut = DemographicsTransformations.mapSexSpayNeuter(
       RawRecord(1, noLitters),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
     val littersOut = DemographicsTransformations.mapSexSpayNeuter(
       RawRecord(1, litters),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
     val unknownOut = DemographicsTransformations.mapSexSpayNeuter(
       RawRecord(1, unknown),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
 
     noLittersOut.ddSex.value shouldBe 1L
@@ -211,15 +211,15 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     val noLittersOut = DemographicsTransformations.mapSexSpayNeuter(
       RawRecord(1, noLitters),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
     val littersOut = DemographicsTransformations.mapSexSpayNeuter(
       RawRecord(1, litters),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
     val unknownOut = DemographicsTransformations.mapSexSpayNeuter(
       RawRecord(1, unknown),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
 
     noLittersOut.ddSex.value shouldBe 1L
@@ -268,15 +268,15 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     val noLittersOut = DemographicsTransformations.mapSexSpayNeuter(
       RawRecord(1, noLitters),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
     val littersOut = DemographicsTransformations.mapSexSpayNeuter(
       RawRecord(1, litters),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
     val unknownOut = DemographicsTransformations.mapSexSpayNeuter(
       RawRecord(1, unknown),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
 
     noLittersOut.ddSex.value shouldBe 2L
@@ -329,15 +329,15 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     val noLittersOut = DemographicsTransformations.mapSexSpayNeuter(
       RawRecord(1, noLitters),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
     val littersOut = DemographicsTransformations.mapSexSpayNeuter(
       RawRecord(1, litters),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
     val unknownOut = DemographicsTransformations.mapSexSpayNeuter(
       RawRecord(1, unknown),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
 
     noLittersOut.ddSex.value shouldBe 2L
@@ -367,7 +367,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     )
     val out = DemographicsTransformations.mapWeight(
       RawRecord(id = 1, example),
-      HlesDog.init(dogId = 1, ownerId = 1)
+      HlesDogDemographics.init()
     )
 
     out.ddWeightRange.value shouldBe 3L
@@ -388,11 +388,11 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     val insuranceOut = DemographicsTransformations.mapInsurance(
       RawRecord(1, insurance),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
     val noInsuranceOut = DemographicsTransformations.mapInsurance(
       RawRecord(1, noInsurance),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
 
     insuranceOut.ddInsurance.value shouldBe true
@@ -426,15 +426,15 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     val usBornOut = DemographicsTransformations.mapAcquiredInfo(
       RawRecord(1, usBorn),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
     val internationalOut = DemographicsTransformations.mapAcquiredInfo(
       RawRecord(1, international),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
     val unknownOut = DemographicsTransformations.mapAcquiredInfo(
       RawRecord(1, unknown),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
 
     usBornOut.ddAcquiredCountry.value shouldBe "US"
@@ -473,11 +473,11 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     val serviceOut = DemographicsTransformations.mapActivities(
       RawRecord(1, serviceDog),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
     val assistanceOut = DemographicsTransformations.mapActivities(
       RawRecord(1, assistanceDog),
-      HlesDog.init(1, 1)
+      HlesDogDemographics.init()
     )
 
     serviceOut.ddActivitiesObedience.value shouldBe 3L
@@ -507,79 +507,5 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     assistanceOut.ddActivitiesServiceOther.value shouldBe true
     assistanceOut.ddActivitiesServiceOtherMedicalDescription.value shouldBe "Medical!"
     assistanceOut.ddActivitiesServiceOtherDescription.value shouldBe "Activity!"
-  }
-
-  it should "map residence-related demographics fields" in {
-    val oneAddress = Map[String, Array[String]](
-      "oc_address2_yn" -> Array("0"),
-      "dd_2nd_residence_yn" -> Array("0"),
-      "oc_address1_state" -> Array("MA"),
-      "oc_address1_zip" -> Array("02114"),
-      "oc_address1_own" -> Array("98"),
-      "oc_address1_own_other" -> Array("Squatter's rights"),
-      "oc_address1_pct" -> Array("2")
-    )
-    val manyAddresses = Map[String, Array[String]](
-      "oc_address2_yn" -> Array("1"),
-      "dd_2nd_residence_yn" -> Array("1"),
-      "dd_2nd_residence_nbr" -> Array("2"),
-      "oc_address1_state" -> Array("MA"),
-      "oc_address1_zip" -> Array("02114"),
-      "oc_address1_own" -> Array("1"),
-      "oc_address1_pct" -> Array("1"),
-      "oc_address2_state" -> Array("MA"),
-      "oc_address2_zip" -> Array("02115"),
-      "oc_address2_own" -> Array("98"),
-      "oc_address2_own_other" -> Array("Foo"),
-      "oc_2nd_address_pct" -> Array("3"),
-      "dd_2nd_residence_01_st" -> Array("NH"),
-      "dd_2nd_residence_01_zip" -> Array("00000"),
-      "dd_2nd_residence_01_time" -> Array("1"),
-      "dd_2nd_residence_02_st" -> Array("VT"),
-      "dd_2nd_residence_02_zip" -> Array("00001"),
-      "dd_2nd_residence_02_time" -> Array("2"),
-      "dd_2nd_residence_03_st" -> Array("CA"),
-      "dd_2nd_residence_03_zip" -> Array("99999"),
-      "dd_2nd_residence_03_time" -> Array("3")
-    )
-
-    val oneAddrOut = DemographicsTransformations.mapResidences(
-      RawRecord(1, oneAddress),
-      HlesDog.init(1, 1)
-    )
-    val manyAddrOut = DemographicsTransformations.mapResidences(
-      RawRecord(1, manyAddresses),
-      HlesDog.init(1, 1)
-    )
-
-    oneAddrOut.ocPrimaryResidenceState.value shouldBe "MA"
-    oneAddrOut.ocPrimaryResidenceZip.value shouldBe "02114"
-    oneAddrOut.ocPrimaryResidenceOwnership.value shouldBe 98L
-    oneAddrOut.ocPrimaryResidenceOwnershipOtherDescription.value shouldBe "Squatter's rights"
-    // Not a typo: Time percentage not carried forward if only 1 address.
-    oneAddrOut.ocPrimaryResidenceTimePercentage shouldBe None
-    oneAddrOut.ocSecondaryResidence.value shouldBe false
-
-    manyAddrOut.ocPrimaryResidenceState.value shouldBe "MA"
-    manyAddrOut.ocPrimaryResidenceZip.value shouldBe "02114"
-    manyAddrOut.ocPrimaryResidenceOwnership.value shouldBe 1L
-    manyAddrOut.ocPrimaryResidenceTimePercentage.value shouldBe 1L
-    manyAddrOut.ocSecondaryResidence.value shouldBe true
-    manyAddrOut.ocSecondaryResidenceState.value shouldBe "MA"
-    manyAddrOut.ocSecondaryResidenceZip.value shouldBe "02115"
-    manyAddrOut.ocSecondaryResidenceOwnership.value shouldBe 98L
-    manyAddrOut.ocSecondaryResidenceOwnershipOtherDescription.value shouldBe "Foo"
-    manyAddrOut.ocSecondaryResidenceTimePercentage.value shouldBe 3L
-    manyAddrOut.ddAlternateRecentResidence1State.value shouldBe "NH"
-    manyAddrOut.ddAlternateRecentResidence1Zip.value shouldBe "00000"
-    manyAddrOut.ddAlternateRecentResidence1Weeks.value shouldBe 1L
-    manyAddrOut.ddAlternateRecentResidence2State.value shouldBe "VT"
-    manyAddrOut.ddAlternateRecentResidence2Zip.value shouldBe "00001"
-    manyAddrOut.ddAlternateRecentResidence2Weeks.value shouldBe 2L
-    // The data says there are only 2 alternate residences, so the data for
-    // the 3rd should not carry forward.
-    manyAddrOut.ddAlternateRecentResidence3State shouldBe None
-    manyAddrOut.ddAlternateRecentResidence3Zip shouldBe None
-    manyAddrOut.ddAlternateRecentResidence3Weeks shouldBe None
   }
 }

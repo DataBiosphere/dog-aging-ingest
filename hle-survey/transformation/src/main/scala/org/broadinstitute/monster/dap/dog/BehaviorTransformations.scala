@@ -1,7 +1,7 @@
 package org.broadinstitute.monster.dap.dog
 
 import org.broadinstitute.monster.dap.RawRecord
-import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
+import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogBehavior
 
 object BehaviorTransformations {
 
@@ -9,8 +9,8 @@ object BehaviorTransformations {
     * Parse all behavior-related fields out of a raw RedCap record,
     * injecting them into a partially-modeled dog record.
     */
-  def mapBehavior(rawRecord: RawRecord, dog: HlesDog): HlesDog =
-    dog.copy(
+  def mapBehavior(rawRecord: RawRecord): HlesDogBehavior =
+    HlesDogBehavior(
       dbExcitementLevelBeforeWalk = rawRecord.getOptionalNumber("db_e_before_walk"),
       dbExcitementLevelBeforeCarRide = rawRecord.getOptionalNumber("db_e_before_car"),
       dbAggressionLevelOnLeashUnknownHuman = rawRecord.getOptionalNumber("db_a_approach_walk"),
