@@ -158,10 +158,14 @@ object PhysicalActivityTransformations {
     paceType: String,
     pacePercent: Option[Long]
   ): Option[Double] =
-    if (selectedPaceTypes.isEmpty) None
-    else if (!selectedPaceTypes.contains(paceType)) Some(0.0) // pace was not selected
-    else if (selectedPaceTypes.size == 1) Some(1.0) // pace was only value selected
-    else pacePercent.map(_.toDouble / 100) // pace was one of multiple values selected
+    if (selectedPaceTypes.isEmpty) { None }
+    else {
+      val selectedPaces = selectedPaceTypes.head
+      if (!selectedPaces.contains(paceType))
+        Some(0.0) // pace was not selected
+      else if (selectedPaces.size == 1) Some(1.0) // pace was only value selected
+      else pacePercent.map(_.toDouble / 100) // pace was one of multiple values selected
+    }
 
   /**
     * Parse walk-related physical activity fields out of a raw RedCap record,
@@ -186,7 +190,7 @@ object PhysicalActivityTransformations {
         paOnLeashWalkSlowPacePct =
           transformPace(paceTypes, "1", rawRecord.getOptionalNumber("pa_walk_leash_pace_slow")),
         paOnLeashWalkAveragePacePct =
-          transformPace(paceTypes, "2", rawRecord.getOptionalNumber("pa_walk_leash_pace_average")),
+          transformPace(paceTypes, "2", rawRecord.getOptionalNumber("pa_walk_leash_pace_avg")),
         paOnLeashWalkBriskPacePct =
           transformPace(paceTypes, "3", rawRecord.getOptionalNumber("pa_walk_leash_pace_brisk")),
         paOnLeashWalkJogPacePct =
@@ -217,11 +221,8 @@ object PhysicalActivityTransformations {
         paOffLeashWalkAvgMinutes = getTotalMinutes(walkHours, walkMinutes),
         paOffLeashWalkSlowPacePct =
           transformPace(paceTypes, "1", rawRecord.getOptionalNumber("pa_walk_unleash_pace_slow")),
-        paOffLeashWalkAveragePacePct = transformPace(
-          paceTypes,
-          "2",
-          rawRecord.getOptionalNumber("pa_walk_unleash_pace_average")
-        ),
+        paOffLeashWalkAveragePacePct =
+          transformPace(paceTypes, "2", rawRecord.getOptionalNumber("pa_walk_unleash_pace_avg")),
         paOffLeashWalkBriskPacePct =
           transformPace(paceTypes, "3", rawRecord.getOptionalNumber("pa_walk_unleash_pace_brisk")),
         paOffLeashWalkJogPacePct =
@@ -240,7 +241,7 @@ object PhysicalActivityTransformations {
         paOffLeashWalkInEnclosedArea = rawRecord.getOptionalBoolean("pa_walk_unleash_contain_yn"),
         paOffLeashWalkInOpenArea = rawRecord.getOptionalBoolean("pa_walk_unleash_open"),
         paOffLeashWalkReturnsWhenCalledFrequency =
-          rawRecord.getOptionalNumber("pa_walk_unleash_voice_yn")
+          rawRecord.getOptionalNumber("pa_walk_unleash_voice_yn") // not actually a y/n question
       )
     } else dogWithOnLeashInfo
   }

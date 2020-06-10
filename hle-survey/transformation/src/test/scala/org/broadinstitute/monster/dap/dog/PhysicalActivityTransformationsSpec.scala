@@ -174,47 +174,79 @@ class PhysicalActivityTransformationsSpec extends AnyFlatSpec with Matchers with
     output.paColdWeatherOutdoorOtherHardSurface shouldBe None
   }
 
-  it should "map walking-related fields" in {
-//    val exampleDogFields = Map[String, Array[String]](
-//      "" -> Array("")
-//    )
-//    val output =
-//      PhysicalActivityTransformations.mapPhysicalActivity(RawRecord(id = 1, exampleDogFields))
+  it should "map walking-related fields when all fields are used" in {
+    val exampleDogFields = Map[String, Array[String]](
+      "pa_walk_how" -> Array("3"), // both on and off leash
+      // on leash
+      "pa_walk_leash_freq" -> Array("1"),
+      "pa_walk_leash_hours" -> Array("2"),
+      "pa_walk_leash_minutes" -> Array("30"),
+      "pa_walk_leash_pace" -> Array("1", "2", "3", "4", "5"),
+      "pa_walk_leash_pace_slow" -> Array("10"),
+      "pa_walk_leash_pace_avg" -> Array("20"),
+      "pa_walk_leash_pace_brisk" -> Array("30"),
+      "pa_walk_leash_pace_jog" -> Array("20"),
+      "pa_walk_leash_pace_run" -> Array("20"),
+      "pa_walk_leash_why" -> Array("1", "3", "5", "98"),
+      "pa_walk_leash_why_other" -> Array("some other reason"),
+      // off leash
+      "pa_walk_unleash_freq" -> Array("2"),
+      "pa_walk_unleash_hours" -> Array("1"),
+      "pa_walk_unleash_minutes" -> Array("40"),
+      "pa_walk_unleash_pace" -> Array("1", "2", "3", "4", "5"),
+      "pa_walk_unleash_pace_slow" -> Array("10"),
+      "pa_walk_unleash_pace_avg" -> Array("30"),
+      "pa_walk_unleash_pace_brisk" -> Array("20"),
+      "pa_walk_unleash_pace_jog" -> Array("30"),
+      "pa_walk_unleash_pace_run" -> Array("10"),
+      "pa_walk_unleash_why" -> Array("2", "4", "98"),
+      "pa_walk_unleash_why_other" -> Array("another reason"),
+      "pa_walk_unleash_contain_yn" -> Array("1"),
+      "pa_walk_unleash_open" -> Array("1"),
+      "pa_walk_unleash_voice_yn" -> Array("3") // not actually a y/n question
+    )
+    val output =
+      PhysicalActivityTransformations.mapPhysicalActivity(RawRecord(id = 1, exampleDogFields))
 
-    /* Walks */
-    //paOnLeashOffLeashWalk,
-    //paOnLeashWalkFrequency,
-    //paOnLeashWalkAvgMinutes,
-    //paOnLeashWalkSlowPacePct,
-    //paOnLeashWalkAveragePacePct,
-    //paOnLeashWalkBriskPacePct,
-    //paOnLeashWalkJogPacePct,
-    //paOnLeashWalkRunPacePct,
-    //paOnLeashWalkReasonsDogRelieveItself,
-    //paOnLeashWalkReasonsActivityAndEnjoyment,
-    //paOnLeashWalkReasonsExerciseForDog,
-    //paOnLeashWalkReasonsExerciseForOwner,
-    //paOnLeashWalkReasonsTrainingObedience,
-    //paOnLeashWalkReasonsOther,
-    //paOnLeashWalkReasonsOtherDescription,
-    //paOffLeashWalkFrequency,
-    //paOffLeashWalkAvgMinutes,
-    //paOffLeashWalkSlowPacePct,
-    //paOffLeashWalkAveragePacePct,
-    //paOffLeashWalkBriskPacePct,
-    //paOffLeashWalkJogPacePct,
-    //paOffLeashWalkRunPacePct,
-    //paOffLeashWalkReasonsDogRelieveItself,
-    //paOffLeashWalkReasonsActivityAndEnjoyment,
-    //paOffLeashWalkReasonsExerciseForDog,
-    //paOffLeashWalkReasonsExerciseForOwner,
-    //paOffLeashWalkReasonsTrainingObedience,
-    //paOffLeashWalkReasonsOther,
-    //paOffLeashWalkReasonsOtherDescription,
-    //paOffLeashWalkInEnclosedArea,
-    //paOffLeashWalkInOpenArea,
-    //paOffLeashWalkReturnsWhenCalledFrequency,
+    output.paOnLeashOffLeashWalk shouldBe Some(3)
+    // on leash
+    output.paOnLeashWalkFrequency shouldBe Some(1)
+    output.paOnLeashWalkAvgMinutes shouldBe Some(150)
+    output.paOnLeashWalkSlowPacePct shouldBe Some(0.1)
+    output.paOnLeashWalkAveragePacePct shouldBe Some(0.2)
+    output.paOnLeashWalkBriskPacePct shouldBe Some(0.3)
+    output.paOnLeashWalkJogPacePct shouldBe Some(0.2)
+    output.paOnLeashWalkRunPacePct shouldBe Some(0.2)
+    output.paOnLeashWalkReasonsDogRelieveItself shouldBe Some(true)
+    output.paOnLeashWalkReasonsActivityAndEnjoyment shouldBe Some(false)
+    output.paOnLeashWalkReasonsExerciseForDog shouldBe Some(true)
+    output.paOnLeashWalkReasonsExerciseForOwner shouldBe Some(false)
+    output.paOnLeashWalkReasonsTrainingObedience shouldBe Some(true)
+    output.paOnLeashWalkReasonsOther shouldBe Some(true)
+    output.paOnLeashWalkReasonsOtherDescription shouldBe Some("some other reason")
+    // off leash
+    output.paOffLeashWalkFrequency shouldBe Some(2)
+    output.paOffLeashWalkAvgMinutes shouldBe Some(100)
+    output.paOffLeashWalkSlowPacePct shouldBe Some(0.1)
+    output.paOffLeashWalkAveragePacePct shouldBe Some(0.3)
+    output.paOffLeashWalkBriskPacePct shouldBe Some(0.2)
+    output.paOffLeashWalkJogPacePct shouldBe Some(0.3)
+    output.paOffLeashWalkRunPacePct shouldBe Some(0.1)
+    output.paOffLeashWalkReasonsDogRelieveItself shouldBe Some(false)
+    output.paOffLeashWalkReasonsActivityAndEnjoyment shouldBe Some(true)
+    output.paOffLeashWalkReasonsExerciseForDog shouldBe Some(false)
+    output.paOffLeashWalkReasonsExerciseForOwner shouldBe Some(true)
+    output.paOffLeashWalkReasonsTrainingObedience shouldBe Some(false)
+    output.paOffLeashWalkReasonsOther shouldBe Some(true)
+    output.paOffLeashWalkReasonsOtherDescription shouldBe Some("another reason")
+    output.paOffLeashWalkInEnclosedArea shouldBe Some(true)
+    output.paOffLeashWalkInOpenArea shouldBe Some(true)
+    output.paOffLeashWalkReturnsWhenCalledFrequency shouldBe Some(3)
   }
+
+  it should "map walking-related fields when single pace chosen" in {}
+
+  it should "map walking-related fields when some paces chosen" in {}
 
   it should "map swimming-related fields when all fields are used" in {
     val exampleDogFields = Map[String, Array[String]](
