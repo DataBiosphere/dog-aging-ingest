@@ -255,6 +255,7 @@ object PhysicalActivityTransformations {
         val swimLocations = rawRecord.get("pa_swim_location")
         val otherSwimLocation = swimLocations.map(_.contains("98"))
         dog.copy(
+          paSwim = Some(swims),
           paSwimModerateWeatherFrequency = rawRecord.getOptionalNumber("pa_swim_warm_freq"),
           paSwimHotWeatherFrequency = rawRecord.getOptionalNumber("pa_swim_hot_freq"),
           paSwimColdWeatherFrequency = rawRecord.getOptionalNumber("pa_swim_cold_freq"),
