@@ -22,7 +22,7 @@ object PhysicalActivityTransformations {
 
   def getTotalMinutes(hours: Option[Long], minutes: Option[Long]): Option[Long] =
     if (hours.isEmpty || minutes.isEmpty) None else Some(hours.head * 60 + minutes.head)
-    // TODO decide how to handle the 8+ option for hours
+  // TODO decide how to handle the 8+ option for hours
 
   /**
     * Parse all high-level physical activity fields out of a raw RedCap record,
@@ -50,46 +50,107 @@ object PhysicalActivityTransformations {
     * Parse weather and outdoor surface fields out of a raw RedCap record,
     * injecting the data into a partially-modeled dog record.
     */
-  def mapWeather(rawRecord: RawRecord, dog: HlesDogPhysicalActivity): HlesDogPhysicalActivity =
-    dog.copy()
+  def mapWeather(rawRecord: RawRecord, dog: HlesDogPhysicalActivity): HlesDogPhysicalActivity = {
+    // moderate weather
+    val moderateMonths = rawRecord.getOptionalNumber("pa_warm_months")
+    val moderateDaily =
+      if (moderateMonths.isDefined && moderateMonths.head > 0)
+        rawRecord.getOptionalNumber("pa_warm_outdoors")
+      else None
+    val hasModerateWeather = moderateDaily.isDefined && moderateDaily.head != 5L
+    val moderateWeatherOtherSurface =
+      if (hasModerateWeather) rawRecord.getOptionalBoolean("pa_w_other_yn") else None
 
-  /* Weather */
-  //paModerateWeatherMonthsPerYear,
-  //paModerateWeatherDailyHoursOutside,
-  //paModerateWeatherOutdoorConcrete,
-  //paModerateWeatherOutdoorWood,
-  //paModerateWeatherOutdoorOtherHardSurface,
-  //paModerateWeatherOutdoorGrassOrDirt,
-  //paModerateWeatherOutdoorGravel,
-  //paModerateWeatherOutdoorSand,
-  //paModerateWeatherOutdoorAstroturf,
-  //paModerateWeatherOutdoorOtherSurface,
-  //paModerateWeatherOutdoorOtherSurfaceDescription,
-  //paModerateWeatherSunExposureLevel,
-  //paHotWeatherMonthsPerYear,
-  //paHotWeatherDailyHoursOutside,
-  //paHotWeatherOutdoorConcrete,
-  //paHotWeatherOutdoorWood,
-  //paHotWeatherOutdoorOtherHardSurface,
-  //paHotWeatherOutdoorGrassOrDirt,
-  //paHotWeatherOutdoorGravel,
-  //paHotWeatherOutdoorSand,
-  //paHotWeatherOutdoorAstroturf,
-  //paHotWeatherOutdoorOtherSurface,
-  //paHotWeatherOutdoorOtherSurfaceDescription,
-  //paHotWeatherSunExposureLevel,
-  //paColdWeatherMonthsPerYear,
-  //paColdWeatherDailyHoursOutside,
-  //paColdWeatherOutdoorConcrete,
-  //paColdWeatherOutdoorWood,
-  //paColdWeatherOutdoorOtherHardSurface,
-  //paColdWeatherOutdoorGrassOrDirt,
-  //paColdWeatherOutdoorGravel,
-  //paColdWeatherOutdoorSand,
-  //paColdWeatherOutdoorAstroturf,
-  //paColdWeatherOutdoorOtherSurface,
-  //paColdWeatherOutdoorOtherSurfaceDescription,
-  //paColdWeatherSunExposureLevel,
+    // hot weather
+    val hotMonths = rawRecord.getOptionalNumber("pa_hot_months")
+    val hotDaily =
+      if (hotMonths.isDefined && hotMonths.head > 0)
+        rawRecord.getOptionalNumber("pa_hot_outdoors")
+      else None
+    val hasHotWeather = hotDaily.isDefined && hotDaily.head != 5L
+    val hotWeatherOtherSurface =
+      if (hasHotWeather) rawRecord.getOptionalBoolean("pa_h_other_yn") else None
+
+    // cold weather
+    val coldMonths = rawRecord.getOptionalNumber("pa_cold_months")
+    val coldDaily =
+      if (coldMonths.isDefined && coldMonths.head > 0)
+        rawRecord.getOptionalNumber("pa_cold_outdoors")
+      else None
+    val hasColdWeather = coldDaily.isDefined && coldDaily.head != 5L
+    val coldWeatherOtherSurface =
+      if (hasColdWeather) rawRecord.getOptionalBoolean("pa_c_other_yn") else None
+
+
+    dog.copy(
+      // moderate weather
+      paModerateWeatherMonthsPerYear = moderateMonths,
+      paModerateWeatherDailyHoursOutside = moderateDaily,
+      paModerateWeatherOutdoorConcrete =
+        if (hasModerateWeather) rawRecord.getOptionalBoolean("pa_w_concrete") else None,
+      paModerateWeatherOutdoorWood =
+        if (hasModerateWeather) rawRecord.getOptionalBoolean("pa_w_wood") else None,
+      paModerateWeatherOutdoorOtherHardSurface =
+        if (hasModerateWeather) rawRecord.getOptionalBoolean("pa_w_other_hard") else None,
+      paModerateWeatherOutdoorGrassOrDirt =
+        if (hasModerateWeather) rawRecord.getOptionalBoolean("pa_w_grass_dirt") else None,
+      paModerateWeatherOutdoorGravel =
+        if (hasModerateWeather) rawRecord.getOptionalBoolean("pa_w_gravel") else None,
+      paModerateWeatherOutdoorSand =
+        if (hasModerateWeather) rawRecord.getOptionalBoolean("pa_w_sand") else None,
+      paModerateWeatherOutdoorAstroturf =
+        if (hasModerateWeather) rawRecord.getOptionalBoolean("pa_w_astro") else None,
+      paModerateWeatherOutdoorOtherSurface = moderateWeatherOtherSurface,
+      paModerateWeatherOutdoorOtherSurfaceDescription =
+        if (moderateWeatherOtherSurface.getOrElse(false)) rawRecord.getOptional("pa_w_other")
+        else None,
+      paModerateWeatherSunExposureLevel = rawRecord.getOptionalNumber("pa_w_sun"),
+      // hot weather
+      paHotWeatherMonthsPerYear = hotMonths,
+      paHotWeatherDailyHoursOutside = hotDaily,
+      paHotWeatherOutdoorConcrete =
+        if (hasHotWeather) rawRecord.getOptionalBoolean("pa_h_concrete") else None,
+      paHotWeatherOutdoorWood =
+        if (hasHotWeather) rawRecord.getOptionalBoolean("pa_h_wood") else None,
+      paHotWeatherOutdoorOtherHardSurface =
+        if (hasHotWeather) rawRecord.getOptionalBoolean("pa_h_other_hard") else None,
+      paHotWeatherOutdoorGrassOrDirt =
+        if (hasHotWeather) rawRecord.getOptionalBoolean("pa_h_grass_dirt") else None,
+      paHotWeatherOutdoorGravel =
+        if (hasHotWeather) rawRecord.getOptionalBoolean("pa_h_gravel") else None,
+      paHotWeatherOutdoorSand =
+        if (hasHotWeather) rawRecord.getOptionalBoolean("pa_h_sand") else None,
+      paHotWeatherOutdoorAstroturf =
+        if (hasHotWeather) rawRecord.getOptionalBoolean("pa_h_astro") else None,
+      paHotWeatherOutdoorOtherSurface = hotWeatherOtherSurface,
+      paHotWeatherOutdoorOtherSurfaceDescription =
+        if (hotWeatherOtherSurface.getOrElse(false)) rawRecord.getOptional("pa_h_other")
+        else None,
+      paHotWeatherSunExposureLevel = rawRecord.getOptionalNumber("pa_h_sun"),
+      // cold weather
+      paColdWeatherMonthsPerYear = coldMonths,
+      paColdWeatherDailyHoursOutside = coldDaily,
+      paColdWeatherOutdoorConcrete =
+        if (hasColdWeather) rawRecord.getOptionalBoolean("pa_c_concrete") else None,
+      paColdWeatherOutdoorWood =
+        if (hasColdWeather) rawRecord.getOptionalBoolean("pa_c_wood") else None,
+      paColdWeatherOutdoorOtherHardSurface =
+        if (hasColdWeather) rawRecord.getOptionalBoolean("pa_c_other_hard") else None,
+      paColdWeatherOutdoorGrassOrDirt =
+        if (hasColdWeather) rawRecord.getOptionalBoolean("pa_c_grass_dirt") else None,
+      paColdWeatherOutdoorGravel =
+        if (hasColdWeather) rawRecord.getOptionalBoolean("pa_c_gravel") else None,
+      paColdWeatherOutdoorSand =
+        if (hasColdWeather) rawRecord.getOptionalBoolean("pa_c_sand") else None,
+      paColdWeatherOutdoorAstroturf =
+        if (hasColdWeather) rawRecord.getOptionalBoolean("pa_c_astro") else None,
+      paColdWeatherOutdoorOtherSurface = coldWeatherOtherSurface,
+      paColdWeatherOutdoorOtherSurfaceDescription =
+        if (coldWeatherOtherSurface.getOrElse(false)) rawRecord.getOptional("pa_c_other")
+        else None,
+      paColdWeatherSunExposureLevel = rawRecord.getOptionalNumber("pa_c_sun")
+    )
+  }
 
   def transformPace(
     selectedPaceTypes: Option[Array[String]],
@@ -99,7 +160,7 @@ object PhysicalActivityTransformations {
     if (selectedPaceTypes.isEmpty) None
     else if (!selectedPaceTypes.contains(paceType)) Some(0.0) // pace was not selected
     else if (selectedPaceTypes.size == 1) Some(1.0) // pace was only value selected
-    else pacePercent.map(_ / 100) // pace was one of multiple values selected
+    else pacePercent.map(_.toDouble / 100) // pace was one of multiple values selected
 
   /**
     * Parse walk-related physical activity fields out of a raw RedCap record,
