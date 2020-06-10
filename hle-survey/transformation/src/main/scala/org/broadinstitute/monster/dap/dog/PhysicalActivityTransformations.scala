@@ -20,6 +20,10 @@ object PhysicalActivityTransformations {
     transformations.foldLeft(HlesDogPhysicalActivity.init())((acc, f) => f(rawRecord, acc))
   }
 
+  def getTotalMinutes(hours: Option[Long], minutes: Option[Long]): Option[Long] =
+    if (hours.isEmpty || minutes.isEmpty) None else Some(hours.head * 60 + minutes.head)
+    // TODO decide how to handle the 8+ option for hours
+
   /**
     * Parse all high-level physical activity fields out of a raw RedCap record,
     * injecting the data into a partially-modeled dog record.
@@ -27,17 +31,20 @@ object PhysicalActivityTransformations {
   def mapHighLevelFields(
     rawRecord: RawRecord,
     dog: HlesDogPhysicalActivity
-  ): HlesDogPhysicalActivity =
-    dog.copy()
+  ): HlesDogPhysicalActivity = {
+    val activeHours = rawRecord.getOptionalNumber("pa_active_hours")
+    val activeMinutes = rawRecord.getOptionalNumber("pa_active_minutes")
 
-  /* HighLevelFields */
-  //paActivityLevel,
-  //paAvgDailyActiveMinutes,
-  //paAvgActivityIntensity,
-  //paPhysicalGamesFrequency,
-  //paOtherAerobicActivityFrequency,
-  //paOtherAerobicActivityAvgMinutes,
-  //paOtherAerobicActivityAvgIntensity
+    dog.copy(
+      paActivityLevel = rawRecord.getOptionalNumber("pa_lifestyle"),
+      paAvgDailyActiveMinutes = getTotalMinutes(activeHours, activeMinutes),
+      paAvgActivityIntensity = rawRecord.getOptionalNumber("pa_intensity"),
+      paPhysicalGamesFrequency = rawRecord.getOptionalNumber("pa_play_yn"),
+      paOtherAerobicActivityFrequency = rawRecord.getOptionalNumber("pa_aerobic_freq"),
+      paOtherAerobicActivityAvgMinutes = rawRecord.getOptionalNumber(""),
+      paOtherAerobicActivityAvgIntensity = rawRecord.getOptionalNumber("pa_walk_aerobic_level")
+    )
+  }
 
   /**
     * Parse weather and outdoor surface fields out of a raw RedCap record,
@@ -113,9 +120,7 @@ object PhysicalActivityTransformations {
 
       dogWithBasicLeashInfo.copy(
         paOnLeashWalkFrequency = rawRecord.getOptionalNumber("pa_walk_leash_freq"),
-        paOnLeashWalkAvgMinutes =
-          if (walkHours.isEmpty || walkMinutes.isEmpty) None
-          else Some(walkHours.head * 60 + walkMinutes.head),
+        paOnLeashWalkAvgMinutes = getTotalMinutes(walkHours, walkMinutes),
         paOnLeashWalkSlowPacePct =
           transformPace(paceTypes, "1", rawRecord.getOptionalNumber("pa_walk_leash_pace_slow")),
         paOnLeashWalkAveragePacePct =
@@ -147,9 +152,7 @@ object PhysicalActivityTransformations {
 
       dogWithOnLeashInfo.copy(
         paOffLeashWalkFrequency = rawRecord.getOptionalNumber("pa_walk_unleash_freq"),
-        paOffLeashWalkAvgMinutes =
-          if (walkHours.isEmpty || walkMinutes.isEmpty) None
-          else Some(walkHours.head * 60 + walkMinutes.head),
+        paOffLeashWalkAvgMinutes = getTotalMinutes(walkHours, walkMinutes),
         paOffLeashWalkSlowPacePct =
           transformPace(paceTypes, "1", rawRecord.getOptionalNumber("pa_walk_unleash_pace_slow")),
         paOffLeashWalkAveragePacePct = transformPace(
