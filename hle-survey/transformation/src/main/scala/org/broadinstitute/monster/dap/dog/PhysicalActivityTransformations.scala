@@ -34,6 +34,8 @@ object PhysicalActivityTransformations {
   ): HlesDogPhysicalActivity = {
     val activeHours = rawRecord.getOptionalNumber("pa_active_hours")
     val activeMinutes = rawRecord.getOptionalNumber("pa_active_minutes")
+    val aerobicHours = rawRecord.getOptionalNumber("pa_aerobic_hours")
+    val aerobicMinutes = rawRecord.getOptionalNumber("pa_aerobic_minutes")
 
     dog.copy(
       paActivityLevel = rawRecord.getOptionalNumber("pa_lifestyle"),
@@ -41,7 +43,7 @@ object PhysicalActivityTransformations {
       paAvgActivityIntensity = rawRecord.getOptionalNumber("pa_intensity"),
       paPhysicalGamesFrequency = rawRecord.getOptionalNumber("pa_play_yn"),
       paOtherAerobicActivityFrequency = rawRecord.getOptionalNumber("pa_aerobic_freq"),
-      paOtherAerobicActivityAvgMinutes = rawRecord.getOptionalNumber(""),
+      paOtherAerobicActivityAvgMinutes = getTotalMinutes(aerobicHours, aerobicMinutes),
       paOtherAerobicActivityAvgIntensity = rawRecord.getOptionalNumber("pa_walk_aerobic_level")
     )
   }
@@ -80,7 +82,6 @@ object PhysicalActivityTransformations {
     val hasColdWeather = coldDaily.isDefined && coldDaily.head != 5L
     val coldWeatherOtherSurface =
       if (hasColdWeather) rawRecord.getOptionalBoolean("pa_c_other_yn") else None
-
 
     dog.copy(
       // moderate weather
