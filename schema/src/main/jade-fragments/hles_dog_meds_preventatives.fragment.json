@@ -1,0 +1,241 @@
+{
+  "name": "hles_dog_meds_preventatives",
+  "columns": [
+    {
+      "name": "mp_dental_examination_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "mp_dental_brushing_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "mp_dental_treat_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "mp_dental_food_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "mp_dental_breath_freshener_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "mp_dental_procedure_undergone",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_dental_cleaning",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_dental_cleaning_months_ago",
+      "datatype": "integer"
+    },
+    {
+      "name": "mp_dental_extraction",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_dental_extraction_months_ago",
+      "datatype": "integer"
+    },
+    {
+      "name": "mp_professional_grooming",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_professional_grooming_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "mp_professional_grooming_shampoos_regular",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_professional_grooming_shampoos_flea_or_tick_control",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_professional_grooming_shampoos_medicated",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_professional_grooming_shampoos_unknown",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_professional_grooming_shampoos_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_professional_grooming_shampoos_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "mp_home_grooming",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_home_grooming_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "mp_home_grooming_shampoos_regular",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_home_grooming_shampoos_flea_or_tick_control",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_home_grooming_shampoos_medicated",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_home_grooming_shampoos_unknown",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_home_grooming_shampoos_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_home_grooming_shampoos_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "mp_flea_and_tick_treatment",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_flea_and_tick_treatment_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "mp_flea_and_tick_treatment_topical",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_flea_and_tick_treatment_oral",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_flea_and_tick_treatment_dip",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_flea_and_tick_treatment_collar",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_flea_and_tick_treatment_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_flea_and_tick_treatment_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "mp_heartworm_preventative",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_heartworm_preventative_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "mp_heartworm_preventative_oral_chewable",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_heartworm_preventative_oral_solution",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_heartworm_preventative_topical",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_heartworm_preventative_injectable",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_heartworm_preventative_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_heartworm_preventative_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "mp_vaccination_status",
+      "datatype": "integer"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_antibiotic_ointment",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_antihistamine",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_anti_inflammatory",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_ear_cleaner",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_enzymes",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_eye_lubricant",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_joint_supplement",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_upset_stomach",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_omega3",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_non_oil_skin",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_probiotic",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_acidify_supplement",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_alkalinize_supplement",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_vitamin",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_recent_non_prescription_meds_other_description",
+      "datatype": "string"
+    }
+  ]
+}

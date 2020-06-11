@@ -12,9 +12,11 @@ object DogTransformations {
     hlesDogStudyStatus = Some(StudyStatusTransformations.mapStudyStatus(rawRecord)),
     hlesDogDemographics = Some(DemographicsTransformations.mapDemographics(rawRecord)),
     hlesDogResidences = Some(DogResidenceTransformations.mapDogResidences(rawRecord)),
+    hlesDogPhysicalActivity = Some(PhysicalActivityTransformations.mapPhysicalActivity(rawRecord)),
     hlesDogBehavior = Some(BehaviorTransformations.mapBehavior(rawRecord)),
-    hlesDogHealthSummary = Some(HealthStatusTransformations.mapHealthSummary(rawRecord)),
-    hlesDogPhysicalActivity = Some(PhysicalActivityTransformations.mapPhysicalActivity(rawRecord))
+    hlesDogMedsPreventatives =
+      Some(MedsAndPreventativesTransformations.mapMedsPreventatives(rawRecord)),
+    hlesDogHealthSummary = Some(HealthStatusTransformations.mapHealthSummary(rawRecord))
   )
 
 }
