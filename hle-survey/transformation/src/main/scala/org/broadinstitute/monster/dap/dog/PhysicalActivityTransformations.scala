@@ -48,30 +48,26 @@ object PhysicalActivityTransformations {
     // moderate weather
     val moderateMonths = rawRecord.getOptionalNumber("pa_warm_months")
     val moderateDaily =
-      if (moderateMonths.isDefined && moderateMonths.head > 0)
-        rawRecord.getOptionalNumber("pa_warm_outdoors")
-      else None
-    val hasModerateWeather = moderateDaily.isDefined && moderateDaily.head != 5L
+      if (moderateMonths.exists(_ > 0)) rawRecord.getOptionalNumber("pa_warm_outdoors") else None
+    val hasModerateWeather = moderateDaily.exists(_ != 5L)
     val moderateWeatherOtherSurface =
       if (hasModerateWeather) rawRecord.getOptionalBoolean("pa_w_other_yn") else None
 
     // hot weather
     val hotMonths = rawRecord.getOptionalNumber("pa_hot_months")
     val hotDaily =
-      if (hotMonths.isDefined && hotMonths.head > 0)
-        rawRecord.getOptionalNumber("pa_hot_outdoors")
-      else None
-    val hasHotWeather = hotDaily.isDefined && hotDaily.head != 5L
+      if (hotMonths.exists(_ > 0)) rawRecord.getOptionalNumber("pa_hot_outdoors") else None
+    val hasHotWeather = hotDaily.exists(_ != 5L)
     val hotWeatherOtherSurface =
       if (hasHotWeather) rawRecord.getOptionalBoolean("pa_h_other_yn") else None
 
     // cold weather
     val coldMonths = rawRecord.getOptionalNumber("pa_cold_months")
     val coldDaily =
-      if (coldMonths.isDefined && coldMonths.head > 0)
+      if (coldMonths.exists(_ > 0))
         rawRecord.getOptionalNumber("pa_cold_outdoors")
       else None
-    val hasColdWeather = coldDaily.isDefined && coldDaily.head != 5L
+    val hasColdWeather = coldDaily.exists(_ != 5L)
     val coldWeatherOtherSurface =
       if (hasColdWeather) rawRecord.getOptionalBoolean("pa_c_other_yn") else None
 
@@ -153,18 +149,13 @@ object PhysicalActivityTransformations {
     * @return A decimal value representing the percentage of time a dog walks at the given pace.
     */
   def transformPace(
-    selectedPaceTypes: Option[Array[String]],
+    selectedPaceTypes: Array[String],
     paceType: String,
     pacePercent: Option[Long]
   ): Option[Double] =
-    if (selectedPaceTypes.isEmpty) { None }
-    else {
-      val selectedPaces = selectedPaceTypes.head
-      if (!selectedPaces.contains(paceType))
-        Some(0.0) // pace was not selected
-      else if (selectedPaces.length == 1) Some(1.0) // pace was only value selected
-      else pacePercent.map(_.toDouble / 100) // pace was one of multiple values selected
-    }
+    if (!selectedPaceTypes.contains(paceType)) Some(0.0) // pace was not selected
+    else if (selectedPaceTypes.length == 1) Some(1.0) // pace was only value selected
+    else pacePercent.map(_.toDouble / 100) // pace was one of multiple values selected
 
   /**
     * Parse walk-related physical activity fields out of a raw RedCap record,
@@ -177,7 +168,7 @@ object PhysicalActivityTransformations {
     val dogWithBasicLeashInfo = dog.copy(paOnLeashOffLeashWalk = leashType)
 
     val dogWithOnLeashInfo = if (includesOnLeash) {
-      val paceTypes = rawRecord.get("pa_walk_leash_pace")
+      val paceTypes = rawRecord.getArray("pa_walk_leash_pace")
       val walkReasons = rawRecord.get("pa_walk_leash_why")
       val otherWalkReason = walkReasons.map(_.contains("98"))
 
@@ -208,7 +199,7 @@ object PhysicalActivityTransformations {
     } else dogWithBasicLeashInfo
 
     if (includesOffLeash) {
-      val paceTypes = rawRecord.get("pa_walk_unleash_pace")
+      val paceTypes = rawRecord.getArray("pa_walk_unleash_pace")
       val walkReasons = rawRecord.get("pa_walk_unleash_why")
       val otherWalkReason = walkReasons.map(_.contains("98"))
 
