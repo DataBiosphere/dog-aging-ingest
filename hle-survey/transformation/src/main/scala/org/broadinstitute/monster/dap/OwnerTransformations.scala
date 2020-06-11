@@ -16,6 +16,28 @@ object OwnerTransformations {
     val secondaryAddressOwnership = secondaryAddress.flatMap {
       if (_) rawRecord.getOptionalNumber("oc_address2_own") else None
     }
+    
+    // Parsing the oc_primary_residence_census_division
+    // format is: "Division <N>: <some-description>"
+    val censusDivisionPattern: Regex = "(Division \\d+:)"
+    
+    /**
+      * Extract the Division value from the full text string.
+      *
+      * @param divisionString the text string to be parsed
+      * @return an integer of the division number
+    **/
+    def getCensusDivision(divisionString: String): (integer) = {
+      val matches = censusDivisionPattern
+        .findFirstMatchIn(divisionString)
+        .getOrElse(
+          throw new Exception(
+            s"ownerTransformations: error while parsing census division id from $divisionString"
+          )
+        )
+      val censusDivisionId = matches.group(1)
+      censusDivisionId
+    }
 
     HlesOwner(
       ownerId = rawRecord.getRequired("st_owner_id").toLong,
@@ -44,7 +66,12 @@ object OwnerTransformations {
       ocHouseholdChildCount = rawRecord.getOptionalNumber("oc_children_household"),
       ssHouseholdDogCount = rawRecord.getOptionalNumber("ss_num_dogs_hh"),
       ocPrimaryResidenceState = rawRecord.getOptional("oc_address1_state"),
-      ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division"),
+      ocPrimaryResidenceCensusDivision = getCensusDivision(rawRecord.getOptional("oc_address1_division")),
+
+            ocSecondaryResidenceState = secondaryAddress.flatMap {
+        if (_) rawRecord.getOptional("oc_address2_state") else None
+      },
+      
       ocPrimaryResidenceZip = rawRecord.getOptional("oc_address1_zip"),
       ocPrimaryResidenceOwnership = primaryAddressOwnership,
       ocPrimaryResidenceOwnershipOtherDescription = if (primaryAddressOwnership.contains(98)) {
