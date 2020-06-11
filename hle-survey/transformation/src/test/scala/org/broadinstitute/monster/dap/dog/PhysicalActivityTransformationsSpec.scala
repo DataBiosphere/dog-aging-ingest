@@ -8,8 +8,6 @@ import org.scalatest.matchers.should.Matchers
 class PhysicalActivityTransformationsSpec extends AnyFlatSpec with Matchers with OptionValues {
   behavior of "PhysicalActivityTransformations"
 
-  it should "correctly handle null hour and minute values" in {}
-
   it should "map all high level fields" in {
     val exampleDogFields = Map[String, Array[String]](
       "pa_lifestyle" -> Array("3"),
@@ -26,11 +24,13 @@ class PhysicalActivityTransformationsSpec extends AnyFlatSpec with Matchers with
       PhysicalActivityTransformations.mapPhysicalActivity(RawRecord(id = 1, exampleDogFields))
 
     output.paActivityLevel shouldBe Some(3)
-    output.paAvgDailyActiveMinutes shouldBe Some(100)
+    output.paAvgDailyActiveHours shouldBe Some(1)
+    output.paAvgDailyActiveMinutes shouldBe Some(40)
     output.paAvgActivityIntensity shouldBe Some(3)
     output.paPhysicalGamesFrequency shouldBe Some(3)
     output.paOtherAerobicActivityFrequency shouldBe Some(3)
-    output.paOtherAerobicActivityAvgMinutes shouldBe Some(150)
+    output.paOtherAerobicActivityAvgHours shouldBe Some(2)
+    output.paOtherAerobicActivityAvgMinutes shouldBe Some(30)
     output.paOtherAerobicActivityAvgIntensity shouldBe Some(3)
   }
 
@@ -211,7 +211,8 @@ class PhysicalActivityTransformationsSpec extends AnyFlatSpec with Matchers with
     output.paOnLeashOffLeashWalk shouldBe Some(3)
     // on leash
     output.paOnLeashWalkFrequency shouldBe Some(1)
-    output.paOnLeashWalkAvgMinutes shouldBe Some(150)
+    output.paOnLeashWalkAvgHours shouldBe Some(2)
+    output.paOnLeashWalkAvgMinutes shouldBe Some(30)
     output.paOnLeashWalkSlowPacePct shouldBe Some(0.1)
     output.paOnLeashWalkAveragePacePct shouldBe Some(0.2)
     output.paOnLeashWalkBriskPacePct shouldBe Some(0.3)
@@ -226,7 +227,8 @@ class PhysicalActivityTransformationsSpec extends AnyFlatSpec with Matchers with
     output.paOnLeashWalkReasonsOtherDescription shouldBe Some("some other reason")
     // off leash
     output.paOffLeashWalkFrequency shouldBe Some(2)
-    output.paOffLeashWalkAvgMinutes shouldBe Some(100)
+    output.paOffLeashWalkAvgHours shouldBe Some(1)
+    output.paOffLeashWalkAvgMinutes shouldBe Some(40)
     output.paOffLeashWalkSlowPacePct shouldBe Some(0.1)
     output.paOffLeashWalkAveragePacePct shouldBe Some(0.3)
     output.paOffLeashWalkBriskPacePct shouldBe Some(0.2)
@@ -244,9 +246,41 @@ class PhysicalActivityTransformationsSpec extends AnyFlatSpec with Matchers with
     output.paOffLeashWalkReturnsWhenCalledFrequency shouldBe Some(3)
   }
 
-  it should "map walking-related fields when single pace chosen" in {}
+  it should "map walking-related fields when single pace chosen" in {
+    val exampleDogFields = Map[String, Array[String]](
+      "pa_walk_how" -> Array("3"), // both on and off leash
+      "pa_walk_leash_pace" -> Array("2"), // only avg pace
+      "pa_walk_unleash_pace" -> Array("3"), // only brisk pace
+      // should be ignored
+      "pa_walk_leash_pace_slow" -> Array("10"),
+      "pa_walk_leash_pace_avg" -> Array("20"),
+      "pa_walk_unleash_pace_avg" -> Array("30"),
+      "pa_walk_unleash_pace_brisk" -> Array("40")
+    )
+    val output =
+      PhysicalActivityTransformations.mapPhysicalActivity(RawRecord(id = 1, exampleDogFields))
 
-  it should "map walking-related fields when some paces chosen" in {}
+    output.paOnLeashOffLeashWalk shouldBe Some(3)
+    output.paOnLeashWalkSlowPacePct shouldBe Some(0.0)
+    output.paOnLeashWalkAveragePacePct shouldBe Some(1.0)
+    output.paOffLeashWalkAveragePacePct shouldBe Some(0.0)
+    output.paOffLeashWalkBriskPacePct shouldBe Some(1.0)
+
+  }
+
+  it should "map walking-related fields when dog does not walk" in {
+    val exampleDogFields = Map[String, Array[String]](
+      "pa_walk_how" -> Array("4"), // no walks
+      "pa_walk_leash_freq" -> Array("1"),
+      "pa_walk_unleash_freq" -> Array("2")
+    )
+    val output =
+      PhysicalActivityTransformations.mapPhysicalActivity(RawRecord(id = 1, exampleDogFields))
+
+    output.paOnLeashOffLeashWalk shouldBe Some(4)
+    output.paOnLeashWalkFrequency shouldBe None
+    output.paOffLeashWalkFrequency shouldBe None
+  }
 
   it should "map swimming-related fields when all fields are used" in {
     val exampleDogFields = Map[String, Array[String]](

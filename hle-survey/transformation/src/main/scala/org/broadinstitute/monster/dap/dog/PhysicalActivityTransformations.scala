@@ -20,10 +20,6 @@ object PhysicalActivityTransformations {
     transformations.foldLeft(HlesDogPhysicalActivity.init())((acc, f) => f(rawRecord, acc))
   }
 
-  def getTotalMinutes(hours: Option[Long], minutes: Option[Long]): Option[Long] =
-    if (hours.isEmpty || minutes.isEmpty) None else Some(hours.head * 60 + minutes.head)
-  // TODO decide how to handle the 8+ option for hours
-
   /**
     * Parse all high-level physical activity fields out of a raw RedCap record,
     * injecting the data into a partially-modeled dog record.
@@ -31,22 +27,18 @@ object PhysicalActivityTransformations {
   def mapHighLevelFields(
     rawRecord: RawRecord,
     dog: HlesDogPhysicalActivity
-  ): HlesDogPhysicalActivity = {
-    val activeHours = rawRecord.getOptionalNumber("pa_active_hours")
-    val activeMinutes = rawRecord.getOptionalNumber("pa_active_minutes")
-    val aerobicHours = rawRecord.getOptionalNumber("pa_aerobic_hours")
-    val aerobicMinutes = rawRecord.getOptionalNumber("pa_aerobic_minutes")
-
+  ): HlesDogPhysicalActivity =
     dog.copy(
       paActivityLevel = rawRecord.getOptionalNumber("pa_lifestyle"),
-      paAvgDailyActiveMinutes = getTotalMinutes(activeHours, activeMinutes),
+      paAvgDailyActiveHours = rawRecord.getOptionalNumber("pa_active_hours"),
+      paAvgDailyActiveMinutes = rawRecord.getOptionalNumber("pa_active_minutes"),
       paAvgActivityIntensity = rawRecord.getOptionalNumber("pa_intensity"),
       paPhysicalGamesFrequency = rawRecord.getOptionalNumber("pa_play_yn"),
       paOtherAerobicActivityFrequency = rawRecord.getOptionalNumber("pa_aerobic_freq"),
-      paOtherAerobicActivityAvgMinutes = getTotalMinutes(aerobicHours, aerobicMinutes),
+      paOtherAerobicActivityAvgHours = rawRecord.getOptionalNumber("pa_aerobic_hours"),
+      paOtherAerobicActivityAvgMinutes = rawRecord.getOptionalNumber("pa_aerobic_minutes"),
       paOtherAerobicActivityAvgIntensity = rawRecord.getOptionalNumber("pa_walk_aerobic_level")
     )
-  }
 
   /**
     * Parse weather and outdoor surface fields out of a raw RedCap record,
@@ -153,6 +145,13 @@ object PhysicalActivityTransformations {
     )
   }
 
+  /**
+    * Calculate the percentage of time a dog walks at a given pace.
+    * @param selectedPaceTypes The set of all paces a dog walks at.
+    * @param paceType The pace for which we want to calculate a percent value
+    * @param pacePercent The proportion of time a dog walks at the given pace (only defined when the pace was one of multiple values selected).
+    * @return A decimal value representing the percentage of time a dog walks at the given pace.
+    */
   def transformPace(
     selectedPaceTypes: Option[Array[String]],
     paceType: String,
@@ -163,7 +162,7 @@ object PhysicalActivityTransformations {
       val selectedPaces = selectedPaceTypes.head
       if (!selectedPaces.contains(paceType))
         Some(0.0) // pace was not selected
-      else if (selectedPaces.size == 1) Some(1.0) // pace was only value selected
+      else if (selectedPaces.length == 1) Some(1.0) // pace was only value selected
       else pacePercent.map(_.toDouble / 100) // pace was one of multiple values selected
     }
 
@@ -178,15 +177,14 @@ object PhysicalActivityTransformations {
     val dogWithBasicLeashInfo = dog.copy(paOnLeashOffLeashWalk = leashType)
 
     val dogWithOnLeashInfo = if (includesOnLeash) {
-      val walkHours = rawRecord.getOptionalNumber("pa_walk_leash_hours")
-      val walkMinutes = rawRecord.getOptionalNumber("pa_walk_leash_minutes")
       val paceTypes = rawRecord.get("pa_walk_leash_pace")
       val walkReasons = rawRecord.get("pa_walk_leash_why")
       val otherWalkReason = walkReasons.map(_.contains("98"))
 
       dogWithBasicLeashInfo.copy(
         paOnLeashWalkFrequency = rawRecord.getOptionalNumber("pa_walk_leash_freq"),
-        paOnLeashWalkAvgMinutes = getTotalMinutes(walkHours, walkMinutes),
+        paOnLeashWalkAvgHours = rawRecord.getOptionalNumber("pa_walk_leash_hours"),
+        paOnLeashWalkAvgMinutes = rawRecord.getOptionalNumber("pa_walk_leash_minutes"),
         paOnLeashWalkSlowPacePct =
           transformPace(paceTypes, "1", rawRecord.getOptionalNumber("pa_walk_leash_pace_slow")),
         paOnLeashWalkAveragePacePct =
@@ -210,15 +208,14 @@ object PhysicalActivityTransformations {
     } else dogWithBasicLeashInfo
 
     if (includesOffLeash) {
-      val walkHours = rawRecord.getOptionalNumber("pa_walk_unleash_hours")
-      val walkMinutes = rawRecord.getOptionalNumber("pa_walk_unleash_minutes")
       val paceTypes = rawRecord.get("pa_walk_unleash_pace")
       val walkReasons = rawRecord.get("pa_walk_unleash_why")
       val otherWalkReason = walkReasons.map(_.contains("98"))
 
       dogWithOnLeashInfo.copy(
         paOffLeashWalkFrequency = rawRecord.getOptionalNumber("pa_walk_unleash_freq"),
-        paOffLeashWalkAvgMinutes = getTotalMinutes(walkHours, walkMinutes),
+        paOffLeashWalkAvgHours = rawRecord.getOptionalNumber("pa_walk_unleash_hours"),
+        paOffLeashWalkAvgMinutes = rawRecord.getOptionalNumber("pa_walk_unleash_minutes"),
         paOffLeashWalkSlowPacePct =
           transformPace(paceTypes, "1", rawRecord.getOptionalNumber("pa_walk_unleash_pace_slow")),
         paOffLeashWalkAveragePacePct =

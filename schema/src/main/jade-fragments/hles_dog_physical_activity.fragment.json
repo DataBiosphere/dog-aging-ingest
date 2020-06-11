@@ -6,6 +6,10 @@
       "datatype": "integer"
     },
     {
+      "name": "pa_avg_daily_active_hours",
+      "datatype": "integer"
+    },
+    {
       "name": "pa_avg_daily_active_minutes",
       "datatype": "integer"
     },
@@ -166,6 +170,10 @@
       "datatype": "integer"
     },
     {
+      "name": "pa_on_leash_walk_avg_hours",
+      "datatype": "integer"
+    },
+    {
       "name": "pa_on_leash_walk_avg_minutes",
       "datatype": "integer"
     },
@@ -219,6 +227,10 @@
     },
     {
       "name": "pa_off_leash_walk_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_off_leash_walk_avg_hours",
       "datatype": "integer"
     },
     {
@@ -335,6 +347,10 @@
     },
     {
       "name": "pa_other_aerobic_activity_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "pa_other_aerobic_activity_avg_hours",
       "datatype": "integer"
     },
     {
