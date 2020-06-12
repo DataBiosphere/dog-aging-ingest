@@ -23,6 +23,7 @@
     "hles_dog_demographics",
     "hles_dog_residences",
     "hles_dog_behavior",
-    "hles_dog_health_summary"
+    "hles_dog_health_summary",
+    "hles_dog_physical_activity"
   ]
 }
