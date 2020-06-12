@@ -21,7 +21,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     "oc_children_household" -> Array("2"),
     "ss_num_dogs_hh" -> Array("2"),
     "oc_address1_state" -> Array("OH"),
-    "oc_address1_division" -> Array("Division 33: East North Central"),
+    "oc_address1_division" -> Array("Division 3: East North Central"),
     "oc_address1_zip" -> Array("32837-4949"),
     "oc_address1_own" -> Array("98"),
     "oc_address1_own_other" -> Array("some text"),
