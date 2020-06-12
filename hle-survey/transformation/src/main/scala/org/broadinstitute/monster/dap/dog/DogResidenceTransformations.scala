@@ -2,6 +2,7 @@ package org.broadinstitute.monster.dap.dog
 
 import org.broadinstitute.monster.dap.RawRecord
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogResidences
+import org.broadinstitute.monster.dap.OwnerTransformations
 
 object DogResidenceTransformations {
 
@@ -29,7 +30,9 @@ object DogResidenceTransformations {
 
     HlesDogResidences(
       ocPrimaryResidenceState = rawRecord.getOptional("oc_address1_state"),
-      ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division"),
+      ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division").flatMap {
+        OwnerTransformations.getCensusDivision(_)
+      },
       ocPrimaryResidenceZip = rawRecord.getOptional("oc_address1_zip"),
       ocPrimaryResidenceOwnership = primaryOwned,
       ocPrimaryResidenceOwnershipOtherDescription =
