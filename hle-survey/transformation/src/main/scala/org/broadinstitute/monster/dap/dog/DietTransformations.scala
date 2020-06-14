@@ -5,6 +5,7 @@ import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogDiet
 
 object DietTransformations {
 
+  /** Map all diet-related RedCap fields into our target schema. */
   def mapDiet(rawRecord: RawRecord): HlesDogDiet = {
     val transforms = List(
       mapSummary _,
@@ -18,8 +19,9 @@ object DietTransformations {
     transforms.foldLeft(HlesDogDiet.init())((acc, f) => f(rawRecord, acc))
   }
 
+  /** Map high-level information about dog diet. */
   def mapSummary(rawRecord: RawRecord, dog: HlesDogDiet): HlesDogDiet = {
-    val consistency = rawRecord.getOptionalNumber("df_diet_consist")
+    val consistency = rawRecord.getOptionalNumber("df_consistent")
     val appetiteChange = rawRecord.getOptionalNumber("df_app_change")
     val weightChange = rawRecord.getOptionalNumber("df_weight_change")
 
@@ -27,7 +29,7 @@ object DietTransformations {
       dfFeedingsPerDay = rawRecord.getOptionalNumber("df_frequency"),
       dfDietConsistency = consistency,
       dfDietConsistencyOtherDescription = if (consistency.contains(98L)) {
-        rawRecord.getOptional("df_diet_consistent_other")
+        rawRecord.getOptional("df_consistent_other")
       } else {
         None
       },
@@ -48,6 +50,7 @@ object DietTransformations {
     )
   }
 
+  /** Map fields about the primary component of a dog's diet. */
   def mapPrimaryComponent(rawRecord: RawRecord, dog: HlesDogDiet): HlesDogDiet = {
     val component = rawRecord.getOptionalNumber("df_prim")
     val recentlyChanged = rawRecord.getOptionalBoolean("df_prim_change_12m")
@@ -83,6 +86,7 @@ object DietTransformations {
     )
   }
 
+  /** Map fields about the secondary component of a dog's diet. */
   def mapSecondaryComponent(rawRecord: RawRecord, dog: HlesDogDiet): HlesDogDiet = {
     val secondaryUsed = rawRecord.getOptionalBoolean("df_sec_yn")
     val component = secondaryUsed.flatMap {
@@ -124,6 +128,7 @@ object DietTransformations {
     )
   }
 
+  /** Map fields about the treats a dog regularly eats. */
   def mapTreats(rawRecord: RawRecord, dog: HlesDogDiet): HlesDogDiet = {
     val otherTreats = rawRecord.getOptionalBoolean("df_t_other")
 
@@ -146,6 +151,7 @@ object DietTransformations {
     )
   }
 
+  /** Map fields about supplements taken daily by a dog. */
   def mapDailySupplements(rawRecord: RawRecord, dog: HlesDogDiet): HlesDogDiet = {
     val otherSupps = rawRecord.getOptionalNumber("df_s_other").filter(_ != 0L)
 
@@ -177,6 +183,7 @@ object DietTransformations {
     )
   }
 
+  /** Map fields about supplements taken less-than-daily by a dog. */
   def mapInfrequentSupplements(rawRecord: RawRecord, dog: HlesDogDiet): HlesDogDiet = {
     val otherSupps = rawRecord.getOptionalNumber("df_s_other_ltd").filter(_ != 0L)
 
