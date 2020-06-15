@@ -59,7 +59,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     output.ssHouseholdDogCount shouldBe Some(2)
     // residence fields
     output.ocPrimaryResidenceState shouldBe Some("OH")
-    output.ocPrimaryResidenceCensusDivision shouldBe Some("Division 3: East North Central")
+    output.ocPrimaryResidenceCensusDivision shouldBe Some(3)
     output.ocPrimaryResidenceZip shouldBe Some("32837-4949")
     output.ocPrimaryResidenceOwnership shouldBe Some(98)
     output.ocPrimaryResidenceOwnershipOtherDescription shouldBe Some("some text")

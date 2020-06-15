@@ -35,6 +35,7 @@ class DogResidenceTransformationsSpec extends AnyFlatSpec with Matchers with Opt
       "dd_2nd_residence_yn" -> Array("1"),
       "dd_2nd_residence_nbr" -> Array("2"),
       "oc_address1_state" -> Array("MA"),
+      "oc_address1_division" -> Array("Division 33: East North Central"),
       "oc_address1_zip" -> Array("02114"),
       "oc_address1_own" -> Array("1"),
       "oc_address1_pct" -> Array("1"),
@@ -56,6 +57,7 @@ class DogResidenceTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     val manyAddrOut = DogResidenceTransformations.mapDogResidences(RawRecord(1, manyAddresses))
     manyAddrOut.ocPrimaryResidenceState.value shouldBe "MA"
+    manyAddrOut.ocPrimaryResidenceCensusDivision.value shouldBe 33L
     manyAddrOut.ocPrimaryResidenceZip.value shouldBe "02114"
     manyAddrOut.ocPrimaryResidenceOwnership.value shouldBe 1L
     manyAddrOut.ocPrimaryResidenceTimePercentage.value shouldBe 1L

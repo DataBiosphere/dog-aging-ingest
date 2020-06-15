@@ -1,8 +1,24 @@
 package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesOwner
+import scala.util.matching.Regex
 
 object OwnerTransformations {
+
+  // Parsing the oc_primary_residence_census_division
+  // format is: "Division <N>: <some-description>"
+  val censusDivisionPattern: Regex = "Division (\\d+):".r
+
+  /**
+    * Extract the Division value from the full text string.
+    *
+    * @param divisionString the text string to be parsed
+    * @return an integer of the division number
+    **/
+  def getCensusDivision(divisionString: String): Option[Long] =
+    censusDivisionPattern
+      .findFirstMatchIn(divisionString)
+      .map(_.group(1).toLong)
 
   /** Parse all owner-related fields out of a raw RedCap record. */
   def mapOwner(rawRecord: RawRecord): HlesOwner = {
@@ -44,7 +60,9 @@ object OwnerTransformations {
       ocHouseholdChildCount = rawRecord.getOptionalNumber("oc_children_household"),
       ssHouseholdDogCount = rawRecord.getOptionalNumber("ss_num_dogs_hh"),
       ocPrimaryResidenceState = rawRecord.getOptional("oc_address1_state"),
-      ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division"),
+      ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division").flatMap {
+        getCensusDivision(_)
+      },
       ocPrimaryResidenceZip = rawRecord.getOptional("oc_address1_zip"),
       ocPrimaryResidenceOwnership = primaryAddressOwnership,
       ocPrimaryResidenceOwnershipOtherDescription = if (primaryAddressOwnership.contains(98)) {

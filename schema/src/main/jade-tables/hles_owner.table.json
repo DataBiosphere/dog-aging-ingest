@@ -84,7 +84,7 @@
     },
     {
       "name": "oc_primary_residence_census_division",
-      "datatype": "string"
+      "datatype": "integer"
     },
     {
       "name": "oc_primary_residence_zip",
