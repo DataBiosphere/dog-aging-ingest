@@ -142,7 +142,7 @@ object DietTransformations {
       dfTreatsVegetables = rawRecord.getOptionalBoolean("df_t_veg"),
       dfTreatsHomemadeProtein = rawRecord.getOptionalBoolean("df_t_hm_prot"),
       dfTreatsHomemadeBiscuits = rawRecord.getOptionalBoolean("df_t_hm_biscuit"),
-      dfTreatsPumpkins = rawRecord.getOptionalBoolean("df_t_pumpkin"),
+      dfTreatsPumpkin = rawRecord.getOptionalBoolean("df_t_pumpkin"),
       dfTreatsPeanutButter = rawRecord.getOptionalBoolean("df_t_pb"),
       dfTreatsOther = otherTreats,
       dfTreatsOtherDescription = otherTreats.flatMap {
@@ -173,7 +173,7 @@ object DietTransformations {
       dfDailySupplementsAcidify = rawRecord.getOptionalNumber("df_s_acidify").filter(_ != 0L),
       dfDailySupplementsTaurine = rawRecord.getOptionalNumber("df_s_taurine").filter(_ != 0L),
       dfDailySupplementsAntiox = rawRecord.getOptionalNumber("df_s_antiox").filter(_ != 0L),
-      dfDailySupplementsCoenzymeQ10 = rawRecord.getOptionalNumber("df_s_q10"),
+      dfDailySupplementsCoenzymeQ10 = rawRecord.getOptionalNumber("df_s_q10").filter(_ != 0L),
       dfDailySupplementsOther = otherSupps,
       dfDailySupplementsOtherDescription = if (otherSupps.nonEmpty) {
         rawRecord.getOptional("df_s_other_text")

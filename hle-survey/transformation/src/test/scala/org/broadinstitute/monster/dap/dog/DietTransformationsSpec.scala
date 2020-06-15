@@ -208,7 +208,7 @@ class DietTransformationsSpec extends AnyFlatSpec with Matchers with OptionValue
     out.dfTreatsVegetables.value shouldBe false
     out.dfTreatsHomemadeProtein.value shouldBe true
     out.dfTreatsHomemadeBiscuits.value shouldBe false
-    out.dfTreatsPumpkins.value shouldBe true
+    out.dfTreatsPumpkin.value shouldBe true
     out.dfTreatsPeanutButter.value shouldBe false
     out.dfTreatsOther.value shouldBe true
     out.dfTreatsOtherDescription.value shouldBe "foob"
