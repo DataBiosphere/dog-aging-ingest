@@ -1,0 +1,437 @@
+{
+  "name": "hles_dog_routine_environment",
+  "columns": [
+    {
+      "name": "de_dogpark",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_dogpark_days_per_month",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_dogpark_travel_walk",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_dogpark_travel_drive",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_dogpark_travel_bike",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_dogpark_travel_public_transportation",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_dogpark_travel_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_dogpark_travel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_dogpark_travel_time_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_recreational_spaces",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recreational_spaces_travel_walk",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recreational_spaces_travel_drive",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recreational_spaces_travel_bike",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recreational_spaces_travel_public_transportation",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recreational_spaces_travel_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recreational_spaces_travel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_recreational_spaces_travel_time_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_work",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_work_days_per_month",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_work_travel_walk",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_work_travel_drive",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_work_travel_bike",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_work_travel_public_transportation",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_work_travel_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_work_travel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_work_travel_time_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_sitter_or_daycare",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_sitter_or_daycare_days_per_month",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_sitter_or_daycare_travel_walk",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_sitter_or_daycare_travel_drive",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_sitter_or_daycare_travel_bike",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_sitter_or_daycare_travel_public_transportation",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_sitter_or_daycare_travel_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_sitter_or_daycare_travel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_sitter_or_daycare_travel_time_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_eats_grass_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_eats_feces",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_eats_feces_own_feces",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_eats_feces_other_dog",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_eats_feces_cat",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_eats_feces_horse",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_eats_feces_cattle",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_eats_feces_wildlife",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_eats_feces_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_eats_feces_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_drinks_outdoor_water",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_drinks_outdoor_water_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_toys",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_routine_toys_include_plastic",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_toys_include_stuffed_fabric",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_toys_include_unstuffed_fabric",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_toys_include_rubber",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_toys_include_metal",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_toys_include_animal_products",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_toys_include_latex",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_toys_include_tennis_balls",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_toys_include_sticks",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_toys_include_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_toys_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_routine_toys_hours_per_day",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_nighttime_sleep_location",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_nighttime_sleep_location_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_nighttime_sleep_avg_hours",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_daytime_sleep_location_different",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_daytime_sleep_location",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_daytime_sleep_location_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_daytime_sleep_avg_hours",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_licks_chews_or_plays_with_non_toys",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recent_toxins_or_hazards_ingested_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_recent_toxins_or_hazards_ingested_chocolate",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recent_toxins_or_hazards_ingested_poison",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recent_toxins_or_hazards_ingested_human_medication",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recent_toxins_or_hazards_ingested_pet_medication",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recent_toxins_or_hazards_ingested_garbage_or_food",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recent_toxins_or_hazards_ingested_dead_animal",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recent_toxins_or_hazards_ingested_toys",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recent_toxins_or_hazards_ingested_clothing",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recent_toxins_or_hazards_ingested_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_recent_toxins_or_hazards_ingested_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_recent_toxins_or_hazards_ingested_required_vet",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_other_present_animals",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_other_present_animals_dogs",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_other_present_animals_cats",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_other_present_animals_birds",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_other_present_animals_reptiles",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_other_present_animals_livestock",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_other_present_animals_horses",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_other_present_animals_rodents",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_other_present_animals_fish",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_other_present_animals_wildlife",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_other_present_animals_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_other_present_animals_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_other_present_animals_indoor_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_other_present_animals_outdoor_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_other_present_animals_interact_with_dog",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_routine_consistency",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_hours_per_day_in_crate",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_hours_per_day_roaming_house",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_hours_per_day_in_garage",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_hours_per_day_in_outdoor_kennel",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_hours_per_day_in_yard",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_hours_per_day_roaming_outside",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_hours_per_day_chained_outside",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_hours_per_day_away_from_home",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_hours_per_day_with_other_animals",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_hours_per_day_with_adults",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_hours_per_day_with_teens",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_routine_hours_per_day_with_children",
+      "datatype": "integer"
+    }
+  ]
+}
