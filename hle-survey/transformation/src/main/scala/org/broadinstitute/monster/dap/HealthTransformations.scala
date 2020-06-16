@@ -49,9 +49,9 @@ object HealthTransformations {
         case ("infect_other", categorical) =>
           createHealthConditionRow(
             rawRecord,
-            s"dx_infect_other",
-            1L,
-            categorical.toLong,
+            "dx_infect_other",
+            infectiousDiseaseCondition,
+            categorical,
             isCongenital = false,
             rawRecord.getOptional("hs_dx_infect_other_spec")
           )
@@ -60,15 +60,19 @@ object HealthTransformations {
           createHealthConditionRow(
             rawRecord,
             s"dx_${disease}",
-            1L,
-            categorical.toLong
+            infectiousDiseaseCondition,
+            categorical
           )
       }
     } else {
       None
     }
 
-  val infectious_diseases: Map[String, Int] = Map(
+  // list conditions and assign categorical Longs
+  val infectiousDiseaseCondition = 1L
+
+  // specific condition type maps
+  val infectious_diseases: Map[String, Long] = Map(
     "anaplasmosis" -> 0,
     "asperg" -> 1,
     "babesio" -> 2,
@@ -109,6 +113,6 @@ object HealthTransformations {
     "toxop" -> 37,
     "tular" -> 38,
     "whpworm" -> 39,
-    "infect_other" -> 99
+    "infect_other" -> 98
   )
 }
