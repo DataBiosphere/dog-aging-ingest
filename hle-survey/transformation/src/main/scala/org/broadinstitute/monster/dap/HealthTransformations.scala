@@ -19,8 +19,10 @@ object HealthTransformations {
               dogId = rawRecord.getRequired("study_id").toLong,
               hsConditionType = conditionCategorical.toLong,
               hsCondition = infectionCategorical.toLong,
-              // should only be populated if hs_dx_infect_other is true
-              hsConditionOtherDescription = rawRecord.getOptional("hs_dx_infect_other_spec"),
+              // should only be populated if hs_dx_infect_other is the current infectionCategorical (value is 40)
+              hsConditionOtherDescription = if (infectionCategorical == 40) {
+                rawRecord.getOptional("hs_dx_infect_other_spec")
+              } else { None },
               // infectious diseases are not categorized as congenital
               hsConditionIsCongenital = false,
               // no relevant field for infectious diseases
@@ -34,8 +36,9 @@ object HealthTransformations {
               hsFollowUpOngoing = rawRecord.getOptionalBoolean(s"hs_dx_${infection}_fu")
             )
         }
-      // an "else" case to please the compiler gods for now
-      case (placeholder, conditionCategorical) =>
+      // an "else" case to please the compiler gods for now, will eventually be replaced by all the other health
+      // condition cases
+      case (_, conditionCategorical) =>
         List(
           HlesHealthCondition(
             dogId = rawRecord.getRequired("study_id").toLong,
