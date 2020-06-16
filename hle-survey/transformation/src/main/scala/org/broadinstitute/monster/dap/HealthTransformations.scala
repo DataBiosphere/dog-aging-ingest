@@ -6,119 +6,109 @@ object HealthTransformations {
 
   /** Parse all health-condition-related fields out of a raw RedCap record. */
   def mapHealthConditions(rawRecord: RawRecord): Iterable[HlesHealthCondition] =
-    // condition type is congenital vs infectious vs tox vs trauma vs etc
-    health_conditions.filter { case (condition, _) => rawRecord.getBoolean(s"hs_${condition}_yn") }.flatMap {
-      // infectious disease
-      case ("dx_infectious", conditionCategorical) =>
-        // process infectious disease data
-        infectious_diseases.filter {
-          case (infection, _) => rawRecord.getBoolean(s"hs_dx_${infection}")
-        }.map {
-          case (infection, infectionCategorical) =>
-            HlesHealthCondition(
-              dogId = rawRecord.getRequired("study_id").toLong,
-              hsConditionType = conditionCategorical.toLong,
-              hsCondition = infectionCategorical.toLong,
-              // should only be populated if hs_dx_infect_other is the current infectionCategorical (value is 40)
-              hsConditionOtherDescription = if (infectionCategorical == 40) {
-                rawRecord.getOptional("hs_dx_infect_other_spec")
-              } else { None },
-              // infectious diseases are not categorized as congenital
-              hsConditionIsCongenital = false,
-              // no relevant field for infectious diseases
-              hsConditionCause = None,
-              // no relevant field for infectious diseases
-              hsConditionCauseOtherDescription = None,
-              hsDiagnosisYear = rawRecord.getOptionalNumber(s"hs_dx_${infection}_year"),
-              hsDiagnosisMonth = rawRecord.getOptionalNumber(s"hs_dx_${infection}_month"),
-              hsRequiredSurgeryOrHospitalization =
-                rawRecord.getOptionalNumber(s"hs_dx_${infection}_surg"),
-              hsFollowUpOngoing = rawRecord.getOptionalBoolean(s"hs_dx_${infection}_fu")
-            )
-        }
-      // an "else" case to please the compiler gods for now, will eventually be replaced by all the other health
-      // condition cases
-      case (_, conditionCategorical) =>
-        List(
-          HlesHealthCondition(
-            dogId = rawRecord.getRequired("study_id").toLong,
-            hsConditionType = conditionCategorical.toLong,
-            hsCondition = 100L,
-            hsConditionOtherDescription = Some("falafel"),
-            hsConditionIsCongenital = false,
-            hsConditionCause = None,
-            hsConditionCauseOtherDescription = None,
-            hsDiagnosisYear = Some(2020),
-            hsDiagnosisMonth = Some(3),
-            hsRequiredSurgeryOrHospitalization = Some(1),
-            hsFollowUpOngoing = Some(true)
-          )
+    mapInfectiousDisease(rawRecord)
+
+  /** Generic helper method for creating Hles Health Condition rows. */
+  def createHealthConditionRow(
+    rawRecord: RawRecord,
+    conditionName: String,
+    conditionType: Long,
+    condition: Long,
+    isCongenital: Boolean = false,
+    conditionOtherDescription: Option[String] = None,
+    conditionCause: Option[Long] = None,
+    conditionCauseOtherDescription: Option[String] = None
+  ): Option[HlesHealthCondition] =
+    if (rawRecord.getBoolean(s"hs_${conditionName}")) {
+      Some(
+        HlesHealthCondition(
+          dogId = rawRecord.getRequired("study_id").toLong,
+          hsConditionType = conditionType,
+          hsCondition = condition,
+          hsConditionOtherDescription = conditionOtherDescription,
+          hsConditionIsCongenital = isCongenital,
+          hsConditionCause = conditionCause,
+          hsConditionCauseOtherDescription = conditionCauseOtherDescription,
+          hsDiagnosisYear = rawRecord.getOptionalNumber(s"hs_${conditionName}_year"),
+          hsDiagnosisMonth = rawRecord.getOptionalNumber(s"hs_${conditionName}_month"),
+          hsRequiredSurgeryOrHospitalization =
+            rawRecord.getOptionalNumber(s"hs_${conditionName}_surg"),
+          hsFollowUpOngoing = rawRecord.getOptionalBoolean(s"hs_${conditionName}_fu")
         )
+      )
+    } else {
+      None
     }
 
-  val health_conditions: List[(String, Int)] = List(
-    "congenital",
-    "dx_infectious",
-    "dx_tox",
-    "dx_trauma",
-    "dx_eye",
-    "dx_ear",
-    "dx_oral",
-    "dx_skin",
-    "dx_cardiac",
-    "dx_respire",
-    "dx_gi",
-    "dx_liver",
-    "dx_kidney",
-    "dx_repro",
-    "dx_ortho",
-    "dx_neuro",
-    "dx_endo",
-    "dx_hema",
-    "dx_immune"
-  ).zipWithIndex
+  /** Parse all infectious disease related fields out of a raw RedCap record. */
+  def mapInfectiousDisease(rawRecord: RawRecord): Iterable[HlesHealthCondition] =
+    if (rawRecord.getBoolean("hs_dx_infectious_yn")) {
+      // iterate over all infectious diseases
+      infectious_diseases.flatMap {
+        // "other" case
+        case ("infect_other", categorical) =>
+          createHealthConditionRow(
+            rawRecord,
+            s"dx_infect_other",
+            1L,
+            categorical.toLong,
+            isCongenital = false,
+            rawRecord.getOptional("hs_dx_infect_other_spec")
+          )
+        // generic case for infectious disease
+        case (disease, categorical) =>
+          createHealthConditionRow(
+            rawRecord,
+            s"dx_${disease}",
+            1L,
+            categorical.toLong
+          )
+      }
+    } else {
+      None
+    }
 
-  val infectious_diseases: List[(String, Int)] = List(
-    "anaplasmosis",
-    "asperg",
-    "babesio",
-    "blastomy",
-    "bordetella",
-    "brucellosis",
-    "campylo",
-    "chagas",
-    "ccdia",
-    "ccdio",
-    "crypto",
-    "dermato",
-    "dstmp",
-    "ehrlich",
-    "fever",
-    "gp",
-    "giar",
-    "granu",
-    "hrtworm",
-    "histo",
-    "hepato",
-    "hkworm",
-    "influ",
-    "isosp",
-    "leish",
-    "lepto",
-    "lyme",
-    "mrsa",
-    "mycob",
-    "parvo",
-    "plague",
-    "pythium",
-    "rmsf",
-    "rndworm",
-    "slmosis",
-    "slmpois",
-    "tpworm",
-    "toxop",
-    "tular",
-    "whpworm",
-    "infect_other"
-  ).zipWithIndex
+  val infectious_diseases: Map[String, Int] = Map(
+    "anaplasmosis" -> 0,
+    "asperg" -> 1,
+    "babesio" -> 2,
+    "blastomy" -> 3,
+    "bordetella" -> 4,
+    "brucellosis" -> 5,
+    "campylo" -> 6,
+    "chagas" -> 7,
+    "ccdia" -> 8,
+    "ccdio" -> 9,
+    "crypto" -> 10,
+    "dermato" -> 11,
+    "dstmp" -> 12,
+    "ehrlich" -> 13,
+    "fever" -> 14,
+    "gp" -> 15,
+    "giar" -> 16,
+    "granu" -> 17,
+    "hrtworm" -> 18,
+    "histo" -> 19,
+    "hepato" -> 20,
+    "hkworm" -> 21,
+    "influ" -> 22,
+    "isosp" -> 23,
+    "leish" -> 24,
+    "lepto" -> 25,
+    "lyme" -> 26,
+    "mrsa" -> 27,
+    "mycob" -> 28,
+    "parvo" -> 29,
+    "plague" -> 30,
+    "pythium" -> 31,
+    "rmsf" -> 32,
+    "rndworm" -> 33,
+    "slmosis" -> 34,
+    "slmpois" -> 35,
+    "tpworm" -> 36,
+    "toxop" -> 37,
+    "tular" -> 38,
+    "whpworm" -> 39,
+    "infect_other" -> 99
+  )
 }

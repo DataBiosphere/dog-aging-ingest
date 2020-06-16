@@ -33,7 +33,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     "hs_dx_plague_year" -> Array("2020"),
     "hs_dx_plague_surg" -> Array("4"),
     "hs_dx_plague_fu" -> Array("0"),
-    // infect_other is 40
+    // infect_other is 99
     "hs_dx_infect_other" -> Array("1"),
     "hs_dx_infect_other_spec" -> Array("falafel"),
     "hs_dx_infect_other_month" -> Array("10"),
@@ -100,8 +100,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
         dogId = 10L,
         // 1 for infectious disease
         hsConditionType = 1L,
-        // 40 for infect_other
-        hsCondition = 40,
+        // 99 for infect_other
+        hsCondition = 99,
         hsConditionOtherDescription = Some("falafel"),
         hsConditionIsCongenital = false,
         hsConditionCause = None,
