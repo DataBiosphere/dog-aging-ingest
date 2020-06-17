@@ -19,7 +19,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     val owners = rawRecords.transform("Map Owners")(_.map(OwnerTransformations.mapOwner))
     val cancer_conditions =
       rawRecords.transform("Map Cancer conditions")(
-        _.map(CancerTransformations.mapCancerConditions)
+        _.flatMap(CancerTransformations.mapCancerConditions)
       )
     val health_conditions = rawRecords.transform("Map health conditions")(
       _.flatMap(HealthTransformations.mapHealthConditions)
