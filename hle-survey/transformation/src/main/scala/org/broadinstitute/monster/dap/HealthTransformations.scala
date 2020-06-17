@@ -79,15 +79,22 @@ object HealthTransformations {
             categorical,
             conditionOtherDescription = rawRecord.getOptional("hs_dx_eye_other_spec")
           )
-        case ("blind", categorical) =>
+        case ("blind", categorical) => {
+          val isCauseKnown = rawRecord.getBoolean("hs_dx_eye_cause_yn")
+          val conditionCause = if (isCauseKnown) { rawRecord.getOptionalNumber("hs_dx_eye_cause") }
+          else { None }
           createHealthConditionRow(
             rawRecord,
             "dx_blind",
             eyeDiseaseCondition,
             categorical,
-            conditionCause = rawRecord.getOptionalNumber("hs_dx_eye_cause"),
-            conditionCauseOtherDescription = rawRecord.getOptional("hs_dx_eye_cause_other")
+            conditionCause = conditionCause,
+            conditionCauseOtherDescription =
+              if (isCauseKnown && (conditionCause.getOrElse(None) == 98)) {
+                rawRecord.getOptional("hs_dx_eye_cause_other")
+              } else { None }
           )
+        }
         case (disease, categorical) =>
           createHealthConditionRow(rawRecord, s"dx_${disease}", eyeDiseaseCondition, categorical)
       }

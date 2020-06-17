@@ -8,7 +8,7 @@ import org.scalatest.matchers.should.Matchers
 class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
   behavior of "HealthTransformations"
 
-  private val singleInfectiousDiseaseFields = Map[String, Array[String]](
+  private val singleInfectiousDisease = Map[String, Array[String]](
     "study_id" -> Array("10"),
     "hs_dx_infectious_yn" -> Array("1"),
     // anaplasmosis is 0
@@ -19,7 +19,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     "hs_dx_anaplasmosis_fu" -> Array("1")
   )
 
-  private val multipleInfectiousDiseaseFields = Map[String, Array[String]](
+  private val multipleInfectiousDisease = Map[String, Array[String]](
     "study_id" -> Array("10"),
     "hs_dx_infectious_yn" -> Array("1"),
     // anaplasmosis is 0
@@ -43,7 +43,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     "hs_dx_infect_other_fu" -> Array("1")
   )
 
-  private val singleEyeDiseaseFields = Map[String, Array[String]](
+  private val singleEyeDisease = Map[String, Array[String]](
     "study_id" -> Array("10"),
     "hs_dx_eye_yn" -> Array("1"),
     // cat is 0
@@ -54,7 +54,46 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     "hs_dx_cat_fu" -> Array("1")
   )
 
-  private val multipleEyeDiseaseFields = Map[String, Array[String]](
+  private val singleEyeDiseaseBlindCase1 = Map[String, Array[String]](
+    "study_id" -> Array("10"),
+    "hs_dx_eye_yn" -> Array("1"),
+    // blind is 1 (need to check the special case)
+    "hs_dx_blind" -> Array("1"),
+    "hs_dx_blind_month" -> Array("5"),
+    "hs_dx_blind_year" -> Array("2020"),
+    "hs_dx_blind_surg" -> Array("4"),
+    "hs_dx_blind_fu" -> Array("0"),
+    "hs_dx_eye_cause_yn" -> Array("0")
+  )
+
+  private val singleEyeDiseaseBlindCase2 = Map[String, Array[String]](
+    "study_id" -> Array("10"),
+    "hs_dx_eye_yn" -> Array("1"),
+    // blind is 1 (need to check the special case)
+    "hs_dx_blind" -> Array("1"),
+    "hs_dx_blind_month" -> Array("5"),
+    "hs_dx_blind_year" -> Array("2020"),
+    "hs_dx_blind_surg" -> Array("4"),
+    "hs_dx_blind_fu" -> Array("0"),
+    "hs_dx_eye_cause_yn" -> Array("1"),
+    "hs_dx_eye_cause" -> Array("5")
+  )
+
+  private val singleEyeDiseaseBlindCase3 = Map[String, Array[String]](
+    "study_id" -> Array("10"),
+    "hs_dx_eye_yn" -> Array("1"),
+    // blind is 1 (need to check the special case)
+    "hs_dx_blind" -> Array("1"),
+    "hs_dx_blind_month" -> Array("5"),
+    "hs_dx_blind_year" -> Array("2020"),
+    "hs_dx_blind_surg" -> Array("4"),
+    "hs_dx_blind_fu" -> Array("0"),
+    "hs_dx_eye_cause_yn" -> Array("1"),
+    "hs_dx_eye_cause" -> Array("98"),
+    "hs_dx_eye_cause_other" -> Array("hummus")
+  )
+
+  private val multipleEyeDisease = Map[String, Array[String]](
     "study_id" -> Array("10"),
     "hs_dx_eye_yn" -> Array("1"),
     // cat is 0
@@ -82,7 +121,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
   )
 
   it should "correctly map infectious disease values when values are defined for a single infectious disease" in {
-    val exampleInfectiousDiseaseRecord = RawRecord(id = 1, singleInfectiousDiseaseFields)
+    val exampleInfectiousDiseaseRecord = RawRecord(id = 1, singleInfectiousDisease)
     val output = HealthTransformations.mapHealthConditions(exampleInfectiousDiseaseRecord)
 
     output.foreach { row =>
@@ -101,7 +140,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "correctly map infectious disease values when values are defined for multiple infectious diseases" in {
-    val exampleInfectiousDiseaseRecord = RawRecord(id = 1, multipleInfectiousDiseaseFields)
+    val exampleInfectiousDiseaseRecord = RawRecord(id = 1, multipleInfectiousDisease)
     val output = HealthTransformations.mapHealthConditions(exampleInfectiousDiseaseRecord)
 
     val truth = List(
@@ -156,7 +195,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "correctly map eye disease values when values are defined for a single eye disease" in {
-    val exampleEyeDiseaseRecord = RawRecord(id = 1, singleEyeDiseaseFields)
+    val exampleEyeDiseaseRecord = RawRecord(id = 1, singleEyeDisease)
     val output = HealthTransformations.mapHealthConditions(exampleEyeDiseaseRecord)
 
     output.foreach { row =>
@@ -174,8 +213,61 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     }
   }
 
+  it should "correctly map eye disease values when values are defined for different cases of blindness" in {
+    val exampleEyeDiseaseRecord1 = RawRecord(id = 1, singleEyeDiseaseBlindCase1)
+    val output1 = HealthTransformations.mapHealthConditions(exampleEyeDiseaseRecord1)
+
+    output1.foreach { row =>
+      row.dogId shouldBe 10
+      row.hsConditionType shouldBe 2L
+      row.hsCondition shouldBe 1L
+      row.hsConditionOtherDescription shouldBe None
+      row.hsConditionIsCongenital shouldBe false
+      row.hsConditionCause shouldBe None
+      row.hsConditionCauseOtherDescription shouldBe None
+      row.hsDiagnosisYear shouldBe Some(2020)
+      row.hsDiagnosisMonth shouldBe Some(5)
+      row.hsRequiredSurgeryOrHospitalization shouldBe Some(4)
+      row.hsFollowUpOngoing shouldBe Some(false)
+    }
+
+    val exampleEyeDiseaseRecord2 = RawRecord(id = 2, singleEyeDiseaseBlindCase2)
+    val output2 = HealthTransformations.mapHealthConditions(exampleEyeDiseaseRecord2)
+
+    output2.foreach { row =>
+      row.dogId shouldBe 10
+      row.hsConditionType shouldBe 2L
+      row.hsCondition shouldBe 1L
+      row.hsConditionOtherDescription shouldBe None
+      row.hsConditionIsCongenital shouldBe false
+      row.hsConditionCause shouldBe Some(5)
+      row.hsConditionCauseOtherDescription shouldBe None
+      row.hsDiagnosisYear shouldBe Some(2020)
+      row.hsDiagnosisMonth shouldBe Some(5)
+      row.hsRequiredSurgeryOrHospitalization shouldBe Some(4)
+      row.hsFollowUpOngoing shouldBe Some(false)
+    }
+
+    val exampleEyeDiseaseRecord3 = RawRecord(id = 2, singleEyeDiseaseBlindCase3)
+    val output3 = HealthTransformations.mapHealthConditions(exampleEyeDiseaseRecord3)
+
+    output3.foreach { row =>
+      row.dogId shouldBe 10
+      row.hsConditionType shouldBe 2L
+      row.hsCondition shouldBe 1L
+      row.hsConditionOtherDescription shouldBe None
+      row.hsConditionIsCongenital shouldBe false
+      row.hsConditionCause shouldBe Some(98)
+      row.hsConditionCauseOtherDescription shouldBe Some("hummus")
+      row.hsDiagnosisYear shouldBe Some(2020)
+      row.hsDiagnosisMonth shouldBe Some(5)
+      row.hsRequiredSurgeryOrHospitalization shouldBe Some(4)
+      row.hsFollowUpOngoing shouldBe Some(false)
+    }
+  }
+
   it should "correctly map eye disease values when values are defined for multiple eye diseases" in {
-    val exampleEyeDiseaseRecord = RawRecord(id = 1, multipleEyeDiseaseFields)
+    val exampleEyeDiseaseRecord = RawRecord(id = 1, multipleEyeDisease)
     val output = HealthTransformations.mapHealthConditions(exampleEyeDiseaseRecord)
 
     val truth = List(
