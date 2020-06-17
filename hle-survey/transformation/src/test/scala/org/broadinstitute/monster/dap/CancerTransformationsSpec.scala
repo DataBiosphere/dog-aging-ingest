@@ -23,7 +23,7 @@ class CancerTransformationsSpec extends AnyFlatSpec with Matchers {
     "hs_dx_cancer_lymph_other" -> Array("other lymph")
   )
 
-  it should "correctly map owner values when numerous values are defined" in {
+  it should "correctly map cancer values when all values are defined" in {
     val exampleCancerRecord = RawRecord(id = 1, exampleCancerFields)
     val output = CancerTransformations.mapCancerConditions(exampleCancerRecord).get
 
