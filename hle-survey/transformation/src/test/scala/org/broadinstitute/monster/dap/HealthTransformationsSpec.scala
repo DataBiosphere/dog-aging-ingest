@@ -11,7 +11,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
   private val singleInfectiousDiseaseFields = Map[String, Array[String]](
     "study_id" -> Array("10"),
     "hs_dx_infectious_yn" -> Array("1"),
-    "hs_dx_anaplasmosis" -> Array("1"), // anaplasmosis is 0
+    // anaplasmosis is 0
+    "hs_dx_anaplasmosis" -> Array("1"),
     "hs_dx_anaplasmosis_month" -> Array("2"),
     "hs_dx_anaplasmosis_year" -> Array("2020"),
     "hs_dx_anaplasmosis_surg" -> Array("3"),
@@ -42,7 +43,45 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     "hs_dx_infect_other_fu" -> Array("1")
   )
 
-  it should "correctly map infectious disease values when values are defined for a single disease" in {
+  private val singleEyeDiseaseFields = Map[String, Array[String]](
+    "study_id" -> Array("10"),
+    "hs_dx_eye_yn" -> Array("1"),
+    // cat is 0
+    "hs_dx_cat" -> Array("1"),
+    "hs_dx_cat_month" -> Array("2"),
+    "hs_dx_cat_year" -> Array("2020"),
+    "hs_dx_cat_surg" -> Array("3"),
+    "hs_dx_cat_fu" -> Array("1")
+  )
+
+  private val multipleEyeDiseaseFields = Map[String, Array[String]](
+    "study_id" -> Array("10"),
+    "hs_dx_eye_yn" -> Array("1"),
+    // cat is 0
+    "hs_dx_cat" -> Array("1"),
+    "hs_dx_cat_month" -> Array("2"),
+    "hs_dx_cat_year" -> Array("2020"),
+    "hs_dx_cat_surg" -> Array("3"),
+    "hs_dx_cat_fu" -> Array("1"),
+    // blind is 1 (need to check the special case)
+    "hs_dx_blind" -> Array("1"),
+    "hs_dx_blind_month" -> Array("5"),
+    "hs_dx_blind_year" -> Array("2020"),
+    "hs_dx_blind_surg" -> Array("4"),
+    "hs_dx_blind_fu" -> Array("0"),
+    "hs_dx_eye_cause_yn" -> Array("1"),
+    "hs_dx_eye_cause" -> Array("98"),
+    "hs_dx_eye_cause_other" -> Array("hummus"),
+    // other is 98
+    "hs_dx_eye_other" -> Array("1"),
+    "hs_dx_eye_other_spec" -> Array("falafel"),
+    "hs_dx_eye_other_month" -> Array("10"),
+    "hs_dx_eye_other_year" -> Array("2020"),
+    "hs_dx_eye_other_surg" -> Array("1"),
+    "hs_dx_eye_other_fu" -> Array("1")
+  )
+
+  it should "correctly map infectious disease values when values are defined for a single infectious disease" in {
     val exampleInfectiousDiseaseRecord = RawRecord(id = 1, singleInfectiousDiseaseFields)
     val output = HealthTransformations.mapHealthConditions(exampleInfectiousDiseaseRecord)
 
@@ -61,7 +100,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     }
   }
 
-  it should "correctly map infectious disease values when values are defined for multiple diseases" in {
+  it should "correctly map infectious disease values when values are defined for multiple infectious diseases" in {
     val exampleInfectiousDiseaseRecord = RawRecord(id = 1, multipleInfectiousDiseaseFields)
     val output = HealthTransformations.mapHealthConditions(exampleInfectiousDiseaseRecord)
 
@@ -86,7 +125,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
         // 1 for infectious disease
         hsConditionType = 1L,
         // 30 for plague
-        hsCondition = 30,
+        hsCondition = 30L,
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsConditionCause = None,
@@ -101,7 +140,81 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
         // 1 for infectious disease
         hsConditionType = 1L,
         // 98 for infect_other
-        hsCondition = 98,
+        hsCondition = 98L,
+        hsConditionOtherDescription = Some("falafel"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(10),
+        hsRequiredSurgeryOrHospitalization = Some(1),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs (truth)
+  }
+
+  it should "correctly map eye disease values when values are defined for a single eye disease" in {
+    val exampleEyeDiseaseRecord = RawRecord(id = 1, singleEyeDiseaseFields)
+    val output = HealthTransformations.mapHealthConditions(exampleEyeDiseaseRecord)
+
+    output.foreach { row =>
+      row.dogId shouldBe 10
+      row.hsConditionType shouldBe 2L
+      row.hsCondition shouldBe 0
+      row.hsConditionOtherDescription shouldBe None
+      row.hsConditionIsCongenital shouldBe false
+      row.hsConditionCause shouldBe None
+      row.hsConditionCauseOtherDescription shouldBe None
+      row.hsDiagnosisYear shouldBe Some(2020)
+      row.hsDiagnosisMonth shouldBe Some(2)
+      row.hsRequiredSurgeryOrHospitalization shouldBe Some(3)
+      row.hsFollowUpOngoing shouldBe Some(true)
+    }
+  }
+
+  it should "correctly map eye disease values when values are defined for multiple eye diseases" in {
+    val exampleEyeDiseaseRecord = RawRecord(id = 1, multipleEyeDiseaseFields)
+    val output = HealthTransformations.mapHealthConditions(exampleEyeDiseaseRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 10L,
+        // 2 for eye disease
+        hsConditionType = 2L,
+        // 0 for cat
+        hsCondition = 0,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 10L,
+        // 2 for eye disease
+        hsConditionType = 2L,
+        // 1 for blind
+        hsCondition = 1L,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = Some(98),
+        hsConditionCauseOtherDescription = Some("hummus"),
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(5),
+        hsRequiredSurgeryOrHospitalization = Some(4),
+        hsFollowUpOngoing = Some(false)
+      ),
+      HlesHealthCondition(
+        dogId = 10L,
+        // 2 for eye disease
+        hsConditionType = 2L,
+        // 98 for eye_other
+        hsCondition = 98L,
         hsConditionOtherDescription = Some("falafel"),
         hsConditionIsCongenital = false,
         hsConditionCause = None,

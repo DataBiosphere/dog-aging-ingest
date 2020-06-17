@@ -6,7 +6,7 @@ object HealthTransformations {
 
   /** Parse all health-condition-related fields out of a raw RedCap record. */
   def mapHealthConditions(rawRecord: RawRecord): Iterable[HlesHealthCondition] =
-    mapInfectiousDisease(rawRecord)
+    mapInfectiousDisease(rawRecord) ++ mapEyeDisease(rawRecord)
 
   /** Generic helper method for creating Hles Health Condition rows. */
   def createHealthConditionRow(
@@ -52,8 +52,7 @@ object HealthTransformations {
             "dx_infect_other",
             infectiousDiseaseCondition,
             categorical,
-            isCongenital = false,
-            rawRecord.getOptional("hs_dx_infect_other_spec")
+            conditionOtherDescription = rawRecord.getOptional("hs_dx_infect_other_spec")
           )
         // generic case for infectious disease
         case (disease, categorical) =>
@@ -68,8 +67,35 @@ object HealthTransformations {
       None
     }
 
+  def mapEyeDisease(rawRecord: RawRecord): Iterable[HlesHealthCondition] =
+    if (rawRecord.getBoolean("hs_dx_eye_yn")) {
+      eye_diseases.flatMap {
+        // "other" case
+        case ("eye_other", categorical) =>
+          createHealthConditionRow(
+            rawRecord,
+            "dx_eye_other",
+            eyeDiseaseCondition,
+            categorical,
+            conditionOtherDescription = rawRecord.getOptional("hs_dx_eye_other_spec")
+          )
+        case ("blind", categorical) =>
+          createHealthConditionRow(
+            rawRecord,
+            "dx_blind",
+            eyeDiseaseCondition,
+            categorical,
+            conditionCause = rawRecord.getOptionalNumber("hs_dx_eye_cause"),
+            conditionCauseOtherDescription = rawRecord.getOptional("hs_dx_eye_cause_other")
+          )
+        case (disease, categorical) =>
+          createHealthConditionRow(rawRecord, s"dx_${disease}", eyeDiseaseCondition, categorical)
+      }
+    } else { None }
+
   // list conditions and assign categorical Longs
   val infectiousDiseaseCondition = 1L
+  val eyeDiseaseCondition = 2L
 
   // specific condition type maps
   val infectious_diseases: Map[String, Long] = Map(
@@ -114,5 +140,27 @@ object HealthTransformations {
     "tular" -> 38,
     "whpworm" -> 39,
     "infect_other" -> 98
+  )
+
+  val eye_diseases: Map[String, Long] = Map(
+    "cat" -> 0,
+    "blind" -> 1,
+    "ce" -> 2,
+    "conj" -> 3,
+    "cu" -> 4,
+    "dist" -> 5,
+    "kcs" -> 6,
+    "ectrop" -> 7,
+    "entrop" -> 8,
+    "glauc" -> 9,
+    "ilp" -> 10,
+    "ic" -> 11,
+    "jcat" -> 12,
+    "ns" -> 13,
+    "pu" -> 14,
+    "pra" -> 15,
+    "rd" -> 16,
+    "uvei" -> 17,
+    "eye_other" -> 98
   )
 }
