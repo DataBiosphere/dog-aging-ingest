@@ -36,9 +36,7 @@ object HealthTransformations {
           hsFollowUpOngoing = rawRecord.getOptionalBoolean(s"hs_${conditionName}_fu")
         )
       )
-    } else {
-      None
-    }
+    } else None
 
   /** Parse all infectious disease related fields out of a raw RedCap record. */
   def mapInfectiousDisease(rawRecord: RawRecord): Iterable[HlesHealthCondition] =
@@ -63,9 +61,7 @@ object HealthTransformations {
             categorical
           )
       }
-    } else {
-      None
-    }
+    } else None
 
   def mapEyeDisease(rawRecord: RawRecord): Iterable[HlesHealthCondition] =
     if (rawRecord.getBoolean("hs_dx_eye_yn")) {
@@ -81,8 +77,8 @@ object HealthTransformations {
           )
         case ("blind", categorical) => {
           val isCauseKnown = rawRecord.getBoolean("hs_dx_eye_cause_yn")
-          val conditionCause = if (isCauseKnown) { rawRecord.getOptionalNumber("hs_dx_eye_cause") }
-          else { None }
+          val conditionCause =
+            if (isCauseKnown) rawRecord.getOptionalNumber("hs_dx_eye_cause") else None
           createHealthConditionRow(
             rawRecord,
             "dx_blind",
@@ -90,15 +86,15 @@ object HealthTransformations {
             categorical,
             conditionCause = conditionCause,
             conditionCauseOtherDescription =
-              if (isCauseKnown && (conditionCause.getOrElse(None) == 98)) {
+              if (isCauseKnown && (conditionCause.getOrElse(None) == 98))
                 rawRecord.getOptional("hs_dx_eye_cause_other")
-              } else { None }
+              else None
           )
         }
         case (disease, categorical) =>
           createHealthConditionRow(rawRecord, s"dx_${disease}", eyeDiseaseCondition, categorical)
       }
-    } else { None }
+    } else None
 
   // list conditions and assign categorical Longs
   val eyeDiseaseCondition = 1L
