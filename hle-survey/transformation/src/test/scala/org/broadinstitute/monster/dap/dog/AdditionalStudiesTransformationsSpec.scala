@@ -58,12 +58,12 @@ class AdditionalStudiesTransformationsSpec extends AnyFlatSpec with Matchers wit
     // output of a record without primary care vet consent
     lacksConsentOut.fsPrimaryCareVeterinarianExists.value shouldBe true
     lacksConsentOut.fsPrimaryCareVeterinarianConsentShareVemr.value shouldBe false
-    lacksConsentOut.fsPrimaryCareVeterinarianCanProvideEmail.value shouldBe None
-    lacksConsentOut.fsPrimaryCareVeterinarianState.value shouldBe None
-    lacksConsentOut.fsPrimaryCareVeterinarianZip.value shouldBe None
+    lacksConsentOut.fsPrimaryCareVeterinarianCanProvideEmail shouldBe None
+    lacksConsentOut.fsPrimaryCareVeterinarianState shouldBe None
+    lacksConsentOut.fsPrimaryCareVeterinarianZip shouldBe None
     lacksConsentOut.fsFutureStudiesParticipationLikelihood.value shouldBe 3L
-    lacksConsentOut.fsPhenotypeVsLifespanParticipationLikelihood.value shouldBe None
-    lacksConsentOut.fsGenotypeVsLifespanParticipationLikelihood.value shouldBe None
-    lacksConsentOut.fsMedicallySlowedAgingParticipationLikelihood.value shouldBe None
+    lacksConsentOut.fsPhenotypeVsLifespanParticipationLikelihood shouldBe None
+    lacksConsentOut.fsGenotypeVsLifespanParticipationLikelihood shouldBe None
+    lacksConsentOut.fsMedicallySlowedAgingParticipationLikelihood shouldBe None
   }
 }
