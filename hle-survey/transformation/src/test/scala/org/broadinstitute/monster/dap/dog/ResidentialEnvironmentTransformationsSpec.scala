@@ -70,7 +70,32 @@ class ResidentialEnvironmentTransformationsSpec
     output.dePastResidenceCountry10.value shouldBe "country10"
   }
 
-  // TODO Test past residence mapping where one past residence & single current home
+  it should "map past-residence-related fields where there is a single past and current home" in {
+    val exampleDogFields = Map[String, Array[String]](
+      "de_home_nbr" -> Array("1"),
+      "oc_address2_yn" -> Array("0"),
+      "de_zip_nbr" -> Array("1"),
+      "de_zip_01_only" -> Array("12345"),
+      "de_zip_01" -> Array("ignoredZip1"),
+      "de_zip_01" -> Array("ignoredZip2"),
+      "de_country_nbr" -> Array("1"),
+      "de_country_01_only" -> Array("USA!"),
+      "de_country_01" -> Array("this should be ignored"),
+      "de_country_02" -> Array("IgnoredCountry")
+    )
+    val output =
+      ResidentialEnvironmentTransformations.mapResidentialEnvironment(
+        RawRecord(id = 1, exampleDogFields)
+      )
+
+    output.deLifetimeResidenceCount.value shouldBe 2
+    output.dePastResidenceZipCount.value shouldBe 1
+    output.dePastResidenceZip1.value shouldBe "12345"
+    output.dePastResidenceZip2 shouldBe None
+    output.dePastResidenceCountryCount.value shouldBe 1
+    output.dePastResidenceCountry1.value shouldBe "USA!"
+    output.dePastResidenceCountry2 shouldBe None
+  }
 
   it should "map all home-related fields" in {
     val exampleDogFields = Map[String, Array[String]](
@@ -124,7 +149,35 @@ class ResidentialEnvironmentTransformationsSpec
     output.deSecondaryStoveFuelOtherDescription.value shouldBe "a grill"
   }
 
-  // TODO map heating fields with no secondary heat or stove
+  it should "map heating-related fields where there is no secondary heat or stove and no 'other' values selected" in {
+    val exampleDogFields = Map[String, Array[String]](
+      "de_primary_heat" -> Array("1"),
+      "de_primary_heat_other" -> Array("should be ignored"),
+      "de_secondary_heat_yn" -> Array("0"),
+      "de_secondary_heat" -> Array("98"),
+      "de_secondary_heat_other" -> Array("should be ignored"),
+      "de_primary_stove" -> Array("3"),
+      "de_primary_stove_other" -> Array("should be ignored"),
+      "de_secondary_stove_yn" -> Array("0"),
+      "de_secondary_stove" -> Array("98"),
+      "de_secondary_stove_other" -> Array("should be ignored")
+    )
+    val output =
+      ResidentialEnvironmentTransformations.mapResidentialEnvironment(
+        RawRecord(id = 1, exampleDogFields)
+      )
+
+    output.dePrimaryHeatFuel.value shouldBe 1L
+    output.dePrimaryHeatFuelOtherDescription shouldBe None
+    output.deSecondaryHeatFuelUsed.value shouldBe 0L
+    output.deSecondaryHeatFuel shouldBe None
+    output.deSecondaryHeatFuelOtherDescription shouldBe None
+    output.dePrimaryStoveFuel.value shouldBe 3L
+    output.dePrimaryStoveFuelOtherDescription shouldBe None
+    output.deSecondaryStoveFuelUsed.value shouldBe 0L
+    output.deSecondaryStoveFuel shouldBe None
+    output.deSecondaryStoveFuelOtherDescription shouldBe None
+  }
 
   it should "map all drinking-water-related fields" in {
     val exampleDogFields = Map[String, Array[String]](
@@ -147,7 +200,26 @@ class ResidentialEnvironmentTransformationsSpec
     output.dePipeTypeOtherDescription.value shouldBe "ceramic"
   }
 
-  // TODO map drinking fields where unknown
+  it should "map drinking-water-related fields where pipe type is unknown" in {
+    val exampleDogFields = Map[String, Array[String]](
+      "de_water_source" -> Array("3"),
+      "de_water_source_other" -> Array("ignore me"),
+      "de_water_filter_yn" -> Array("0"),
+      "de_pipe_yn" -> Array("0"),
+      "de_pipe_type" -> Array("4"),
+      "de_pipe_type_other" -> Array("ignore me")
+    )
+    val output =
+      ResidentialEnvironmentTransformations.mapResidentialEnvironment(
+        RawRecord(id = 1, exampleDogFields)
+      )
+
+    output.deDrinkingWaterSource.value shouldBe 3L
+    output.deDrinkingWaterSourceOtherDescription shouldBe None
+    output.deDrinkingWaterIsFiltered.value shouldBe 0L
+    output.dePipeType.value shouldBe 99L
+    output.dePipeTypeOtherDescription shouldBe None
+  }
 
   it should "map all toxin-related fields" in {
     val exampleDogFields = Map[String, Array[String]](
@@ -235,7 +307,49 @@ class ResidentialEnvironmentTransformationsSpec
     output.deStairsAvgFlightsPerDay.value shouldBe 3L
   }
 
-  // TODO test flooring where no flooring types are selected
+  it should "map flooring-related fields where no flooring types are selected" in {
+    val exampleDogFields = Map[String, Array[String]](
+      "de_floor_wood_yn" -> Array("0"),
+      "de_floor_wood_freq" -> Array("0"),
+      "de_floor_carpet_yn" -> Array("0"),
+      "de_floor_carpet_freq" -> Array("0"),
+      "de_floor_concrete_yn" -> Array("0"),
+      "de_floor_concrete_freq" -> Array("0"),
+      "de_floor_tile_yn" -> Array("0"),
+      "de_floor_tile_freq" -> Array("0"),
+      "de_floor_linoleum_yn" -> Array("0"),
+      "de_floor_linoleum_freq" -> Array("0"),
+      "de_floor_laminate_yn" -> Array("0"),
+      "de_floor_laminate_freq" -> Array("0"),
+      "de_floor_other_yn" -> Array("0"),
+      "de_floor_other" -> Array("should be ignored"),
+      "de_floor_other_freq" -> Array("0"),
+      "de_stairs" -> Array("0"),
+      "de_stairs_nbr" -> Array("0")
+    )
+    val output =
+      ResidentialEnvironmentTransformations.mapResidentialEnvironment(
+        RawRecord(id = 1, exampleDogFields)
+      )
+
+    output.deFloorTypesWood.value shouldBe false
+    output.deFloorFrequencyOnWood shouldBe None
+    output.deFloorTypesCarpet.value shouldBe false
+    output.deFloorFrequencyOnCarpet shouldBe None
+    output.deFloorTypesConcrete.value shouldBe false
+    output.deFloorFrequencyOnConcrete shouldBe None
+    output.deFloorTypesTile.value shouldBe false
+    output.deFloorFrequencyOnTile shouldBe None
+    output.deFloorTypesLinoleum.value shouldBe false
+    output.deFloorFrequencyOnLinoleum shouldBe None
+    output.deFloorTypesLaminate.value shouldBe false
+    output.deFloorFrequencyOnLaminate shouldBe None
+    output.deFloorTypesOther.value shouldBe false
+    output.deFloorTypesOtherDescription shouldBe None
+    output.deFloorFrequencyOnOther shouldBe None
+    output.deStairsInHome.value shouldBe false
+    output.deStairsAvgFlightsPerDay shouldBe None
+  }
 
   it should "map all property-related fields" in {
     val exampleDogFields = Map[String, Array[String]](
@@ -271,7 +385,39 @@ class ResidentialEnvironmentTransformationsSpec
     output.dePropertyPestControlFrequency.value shouldBe 6L
   }
 
-  // TODO test property where there is no access, no weeds, no pests
+  it should "map property-related fields where there are no access, no weeds, and no pests" in {
+    val exampleDogFields = Map[String, Array[String]](
+      "de_property_size" -> Array("3"),
+      "de_property_access_yn" -> Array("0"),
+      "de_property_access" -> Array("2"),
+      "de_property_fence_yn" -> Array("4"),
+      "de_property_fence_other" -> Array("ignore this"),
+      "de_outside_water" -> Array("2", "99"),
+      "de_outside_water_other" -> Array("ignore this"),
+      "de_yard_weed_ctl_yn" -> Array("0"),
+      "de_yard_weed_ctl_freq" -> Array("5"),
+      "de_yard_pest_ctl_yn" -> Array("0"),
+      "de_yard_pest_ctl_freq" -> Array("6")
+    )
+    val output =
+      ResidentialEnvironmentTransformations.mapResidentialEnvironment(
+        RawRecord(id = 1, exampleDogFields)
+      )
+
+    output.dePropertyArea.value shouldBe 3L
+    output.dePropertyAccessible.value shouldBe false
+    output.dePropertyAreaAccessible shouldBe None
+    output.dePropertyContainmentType shouldBe None
+    output.dePropertyContainmentTypeOtherDescription shouldBe None
+    output.dePropertyDrinkingWaterBowl.value shouldBe false
+    output.dePropertyDrinkingWaterHose.value shouldBe true
+    output.dePropertyDrinkingWaterPuddles.value shouldBe false
+    output.dePropertyDrinkingWaterUnknown.value shouldBe true
+    output.dePropertyDrinkingWaterOther.value shouldBe false
+    output.dePropertyDrinkingWaterOtherDescription shouldBe None
+    output.dePropertyWeedControlFrequency.value shouldBe 0
+    output.dePropertyPestControlFrequency.value shouldBe 0
+  }
 
   it should "map all neighborhood-related fields" in {
     val exampleDogFields = Map[String, Array[String]](
@@ -299,5 +445,21 @@ class ResidentialEnvironmentTransformationsSpec
     output.deInteractsWithNeighborhoodHumansWithoutOwner.value shouldBe false
   }
 
-  // TODO test neighborhood where there's no interaction
+  it should "map neighborhood-related fields where there are no neighborhood animal interactions" in {
+    val exampleDogFields = Map[String, Array[String]](
+      "de_animal_interact" -> Array("0"),
+      "de_animal_interact_present" -> Array("1"),
+      "de_human_interact" -> Array("0"),
+      "de_human_interact_present" -> Array("1")
+    )
+    val output =
+      ResidentialEnvironmentTransformations.mapResidentialEnvironment(
+        RawRecord(id = 1, exampleDogFields)
+      )
+
+    output.deInteractsWithNeighborhoodAnimals.value shouldBe false
+    output.deInteractsWithNeighborhoodAnimalsWithoutOwner shouldBe None
+    output.deInteractsWithNeighborhoodHumans.value shouldBe false
+    output.deInteractsWithNeighborhoodHumansWithoutOwner shouldBe None
+  }
 }
