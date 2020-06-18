@@ -10,25 +10,8 @@ object AdditionalStudiesTransformations {
     * injecting them into a partially-modeled dog record.
     */
   def mapFutureStudies(rawRecord: RawRecord): HlesDogFutureStudies = {
-    val init = HlesDogFutureStudies.init()
-
-    val transformations = List(
-      mapFutureStudiesFields _
-    )
-
-    transformations.foldLeft(init)((acc, f) => f(rawRecord, acc))
-  }
-
-  /**
-    * Parse primary care vet and participation likelihood fields out of a
-    * raw RedCap record, injecting them into a partially-modeled dog record.
-    */
-  def mapFutureStudiesFields(
-    rawRecord: RawRecord,
-    dog: HlesDogFutureStudies
-  ): HlesDogFutureStudies = {
     val pcVetConsent = rawRecord.getBoolean("fs_pcvet_consent")
-    dog.copy(
+    HlesDogFutureStudies(
       fsPrimaryCareVeterinarianExists = rawRecord.getOptionalBoolean("fs_pcvet"),
       fsPrimaryCareVeterinarianConsentShareVemr = rawRecord.getOptionalBoolean("fs_pcvet_consent"),
       fsPrimaryCareVeterinarianCanProvideEmail =
