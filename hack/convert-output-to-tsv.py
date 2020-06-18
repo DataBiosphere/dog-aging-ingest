@@ -1,3 +1,6 @@
+# A script to convert transformed data into TSV files
+# Note: Before uploading to Terra, manually go in and update PK column name to be prefixed by "entity:"
+
 import json
 import csv
 from os import listdir
@@ -6,8 +9,7 @@ import sys
 if (len(sys.argv) < 3):
     print "Please provide the input directory and output directory as arguments!"
 
-#table_names = ["hles_dog", "hles_owner"]
-table_names = ["hles_owner"]
+table_names = ["hles_dog", "hles_owner"]
 schema_dir = '../schema/src/main/jade-tables/'
 input_dir = sys.argv[1]
 output_dir = sys.argv[2]
@@ -38,5 +40,3 @@ for table_name in table_names:
         dw = csv.DictWriter(output_file, column_list, delimiter='\t')
         dw.writeheader()
         dw.writerows(obj_list)
-
-# Note: Before uploading to Terra, manually go in and update PK column name to be prefixed by "entity:"
