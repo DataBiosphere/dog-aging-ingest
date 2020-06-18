@@ -1,0 +1,53 @@
+{
+  "name": "hles_health_condition",
+  "columns": [
+    {
+      "name": "dog_id",
+      "datatype": "integer",
+      "type": "primary_key"
+    },
+    {
+      "name": "hs_condition_type",
+      "datatype": "integer",
+      "type": "required"
+    },
+    {
+      "name": "hs_condition",
+      "datatype": "integer",
+      "type": "required"
+    },
+    {
+      "name": "hs_condition_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "hs_condition_is_congenital",
+      "datatype": "boolean",
+      "type": "required"
+    },
+    {
+      "name": "hs_condition_cause",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_condition_cause_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "hs_diagnosis_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_diagnosis_month",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_required_surgery_or_hospitalization",
+      "datatype": "integer"
+    },
+    {
+      "name": "hs_follow_up_ongoing",
+      "datatype": "boolean"
+    }
+  ]
+}
