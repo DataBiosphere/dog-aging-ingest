@@ -6,7 +6,7 @@ object HealthTransformations {
 
   /** Parse all health-condition-related fields out of a raw RedCap record. */
   def mapHealthConditions(rawRecord: RawRecord): Iterable[HlesHealthCondition] =
-    mapInfectiousDisease(rawRecord) ++ mapEyeDisease(rawRecord)
+    Iterable.concat(mapInfectiousDisease(rawRecord), mapEyeDisease(rawRecord))
 
   /** Generic helper method for creating Hles Health Condition rows. */
   def createHealthConditionRow(
