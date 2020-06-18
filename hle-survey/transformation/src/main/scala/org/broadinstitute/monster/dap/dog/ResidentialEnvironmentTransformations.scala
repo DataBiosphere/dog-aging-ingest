@@ -13,7 +13,11 @@ object ResidentialEnvironmentTransformations {
       mapPastResidences _,
       mapHouse _,
       mapHeating _,
-      mapDrinkingWater _
+      mapDrinkingWater _,
+      mapToxinExposure _,
+      mapFlooring _,
+      mapProperty _,
+      mapNeighborhood _
     )
 
     transformations.foldLeft(init)((acc, f) => f(rawRecord, acc))
