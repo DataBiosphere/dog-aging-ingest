@@ -120,6 +120,38 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     "hs_dx_eye_other_fu" -> Array("1")
   )
 
+  private val singleCongenitalEyeDisorder = Map[String, Array[String]](
+    "study_id" -> Array("10"),
+    "hs_congenital_yn" -> Array("1"),
+    "hs_cg_disorders_yn" -> Array("1"),
+    // cat is 1
+    "hs_cg_eye_cat" -> Array("1"),
+    "hs_cg_eye_cat_month" -> Array("2"),
+    "hs_cg_eye_cat_year" -> Array("2020"),
+    "hs_cg_eye_cat_surg" -> Array("3"),
+    "hs_cg_eye_cat_fu" -> Array("1")
+  )
+
+  private val multipleCongenitalEyeDisorder = Map[String, Array[String]](
+    "study_id" -> Array("10"),
+    "hs_congenital_yn" -> Array("1"),
+    "hs_cg_eye_disorders_yn" -> Array("1"),
+    // cat is 1
+    "hs_cg_eye_cat" -> Array("1"),
+    "hs_cg_eye_cat_month" -> Array("2"),
+    "hs_cg_eye_cat_year" -> Array("2020"),
+    "hs_cg_eye_cat_surg" -> Array("3"),
+    "hs_cg_eye_cat_fu" -> Array("1"),
+    "hs_cg_disorders_yn" -> Array("1"),
+    // other is 98
+    "hs_cg_eye_other" -> Array("1"),
+    "hs_cg_eye_other_spec" -> Array("olives"),
+    "hs_cg_eye_other_month" -> Array("2"),
+    "hs_cg_eye_other_year" -> Array("2020"),
+    "hs_cg_eye_other_surg" -> Array("3"),
+    "hs_cg_eye_other_fu" -> Array("0")
+  )
+
   it should "correctly map infectious disease values when values are defined for a single infectious disease" in {
     val exampleInfectiousDiseaseRecord = RawRecord(id = 1, singleInfectiousDisease)
     val output = HealthTransformations.mapHealthConditions(exampleInfectiousDiseaseRecord)
@@ -309,6 +341,63 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
         hsDiagnosisMonth = Some(10),
         hsRequiredSurgeryOrHospitalization = Some(1),
         hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs (truth)
+  }
+
+  it should "correctly map congenital eye disorders when values are defined for a single congenital eye disorder" in {
+    val exampleEyeDisorderRecord = RawRecord(id = 1, singleCongenitalEyeDisorder)
+    val output = HealthTransformations.mapHealthConditions(exampleEyeDisorderRecord)
+
+    output.foreach { row =>
+      row.dogId shouldBe 10
+      row.hsConditionType shouldBe HealthTransformations.eyeDiseaseCondition
+      row.hsCondition shouldBe 1L
+      row.hsConditionOtherDescription shouldBe None
+      row.hsConditionIsCongenital shouldBe true
+      row.hsConditionCause shouldBe None
+      row.hsConditionCauseOtherDescription shouldBe None
+      row.hsDiagnosisYear shouldBe Some(2020)
+      row.hsDiagnosisMonth shouldBe Some(2)
+      row.hsRequiredSurgeryOrHospitalization shouldBe Some(3)
+      row.hsFollowUpOngoing shouldBe Some(true)
+    }
+  }
+
+  it should "correctly map congenital eye disorders when values are defined for multiple congenital eye disorders" in {
+    val exampleEyeDisorderRecord = RawRecord(id = 1, multipleCongenitalEyeDisorder)
+    val output = HealthTransformations.mapHealthConditions(exampleEyeDisorderRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 10L,
+        hsConditionType = HealthTransformations.eyeDiseaseCondition,
+        // 1 for cat
+        hsCondition = 1,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 10L,
+        hsConditionType = HealthTransformations.eyeDiseaseCondition,
+        // 98 for eye_other
+        hsCondition = 98L,
+        hsConditionOtherDescription = Some("olives"),
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(false)
       )
     )
 

@@ -6,7 +6,11 @@ object HealthTransformations {
 
   /** Parse all health-condition-related fields out of a raw RedCap record. */
   def mapHealthConditions(rawRecord: RawRecord): Iterable[HlesHealthCondition] =
-    Iterable.concat(mapInfectiousDisease(rawRecord), mapEyeDisease(rawRecord))
+    Iterable.concat(
+      mapInfectiousDisease(rawRecord),
+      mapEyeDisease(rawRecord),
+      mapCongenitalEyeDisorder(rawRecord)
+    )
 
   /** Generic helper method for creating Hles Health Condition rows. */
   def createHealthConditionRow(
@@ -63,6 +67,31 @@ object HealthTransformations {
       }
     } else None
 
+  def mapCongenitalEyeDisorder(rawRecord: RawRecord): Iterable[HlesHealthCondition] =
+    if (rawRecord.getBoolean("hs_congenital_yn") && rawRecord.getBoolean("hs_cg_eye_disorders_yn"))
+      eye_cg_disorders.flatMap {
+        // "other" case
+        case ("other", categorical) =>
+          createHealthConditionRow(
+            rawRecord,
+            "cg_eye_other",
+            eyeDiseaseCondition,
+            categorical,
+            isCongenital = true,
+            conditionOtherDescription = rawRecord.getOptional("hs_cg_eye_other_spec")
+          )
+        // general case
+        case (disorder, categorical) =>
+          createHealthConditionRow(
+            rawRecord,
+            s"cg_eye_${disorder}",
+            eyeDiseaseCondition,
+            categorical,
+            isCongenital = true
+          )
+      }
+    else None
+
   def mapEyeDisease(rawRecord: RawRecord): Iterable[HlesHealthCondition] =
     if (rawRecord.getBoolean("hs_dx_eye_yn")) {
       eye_diseases.flatMap {
@@ -96,11 +125,49 @@ object HealthTransformations {
       }
     } else None
 
-  // list conditions and assign categorical Longs
+  ////////////////////////////////
+  //// condition categoricals ////
+  ////////////////////////////////
   val eyeDiseaseCondition = 1L
   val infectiousDiseaseCondition = 50L
 
-  // specific condition type maps
+  //////////////////////////////////////
+  //// specific condition type maps ////
+  //////////////////////////////////////
+
+  // eye disorders and diseases
+  val eye_cg_disorders: Map[String, Long] = Map(
+    "blind" -> 0,
+    "cat" -> 1,
+    "glauc" -> 2,
+    "kcs" -> 3,
+    "ppm" -> 4,
+    "miss" -> 5,
+    "other" -> 98
+  )
+
+  val eye_diseases: Map[String, Long] = Map(
+    "cat" -> 0,
+    "blind" -> 1,
+    "ce" -> 2,
+    "conj" -> 3,
+    "cu" -> 4,
+    "dist" -> 5,
+    "kcs" -> 6,
+    "ectrop" -> 7,
+    "entrop" -> 8,
+    "glauc" -> 9,
+    "ilp" -> 10,
+    "ic" -> 11,
+    "jcat" -> 12,
+    "ns" -> 13,
+    "pu" -> 14,
+    "pra" -> 15,
+    "rd" -> 16,
+    "uvei" -> 17,
+    "eye_other" -> 98
+  )
+
   val infectious_diseases: Map[String, Long] = Map(
     "anaplasmosis" -> 0,
     "asperg" -> 1,
@@ -143,27 +210,5 @@ object HealthTransformations {
     "tular" -> 38,
     "whpworm" -> 39,
     "infect_other" -> 98
-  )
-
-  val eye_diseases: Map[String, Long] = Map(
-    "cat" -> 0,
-    "blind" -> 1,
-    "ce" -> 2,
-    "conj" -> 3,
-    "cu" -> 4,
-    "dist" -> 5,
-    "kcs" -> 6,
-    "ectrop" -> 7,
-    "entrop" -> 8,
-    "glauc" -> 9,
-    "ilp" -> 10,
-    "ic" -> 11,
-    "jcat" -> 12,
-    "ns" -> 13,
-    "pu" -> 14,
-    "pra" -> 15,
-    "rd" -> 16,
-    "uvei" -> 17,
-    "eye_other" -> 98
   )
 }
