@@ -39,4 +39,4 @@ for table_name in table_names:
         dw.writeheader()
         dw.writerows(obj_list)
 
-# TODO: update PK name to include "entity:" in front
+# Note: Before uploading to Terra, manually go in and update PK column name to be prefixed by "entity:"
