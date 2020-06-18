@@ -126,7 +126,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
 
     output.foreach { row =>
       row.dogId shouldBe 10
-      row.hsConditionType shouldBe 1L
+      row.hsConditionType shouldBe HealthTransformations.infectiousDiseaseCondition
       row.hsCondition shouldBe 0
       row.hsConditionOtherDescription shouldBe None
       row.hsConditionIsCongenital shouldBe false
@@ -146,8 +146,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth = List(
       HlesHealthCondition(
         dogId = 10L,
-        // 1 for infectious disease
-        hsConditionType = 1L,
+        hsConditionType = HealthTransformations.infectiousDiseaseCondition,
         // 0 for anaplasmosis
         hsCondition = 0,
         hsConditionOtherDescription = None,
@@ -161,8 +160,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       ),
       HlesHealthCondition(
         dogId = 10L,
-        // 1 for infectious disease
-        hsConditionType = 1L,
+        hsConditionType = HealthTransformations.infectiousDiseaseCondition,
         // 30 for plague
         hsCondition = 30L,
         hsConditionOtherDescription = None,
@@ -176,8 +174,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       ),
       HlesHealthCondition(
         dogId = 10L,
-        // 1 for infectious disease
-        hsConditionType = 1L,
+        hsConditionType = HealthTransformations.infectiousDiseaseCondition,
         // 98 for infect_other
         hsCondition = 98L,
         hsConditionOtherDescription = Some("falafel"),
@@ -200,7 +197,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
 
     output.foreach { row =>
       row.dogId shouldBe 10
-      row.hsConditionType shouldBe 2L
+      row.hsConditionType shouldBe HealthTransformations.eyeDiseaseCondition
       row.hsCondition shouldBe 0
       row.hsConditionOtherDescription shouldBe None
       row.hsConditionIsCongenital shouldBe false
@@ -219,7 +216,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
 
     output1.foreach { row =>
       row.dogId shouldBe 10
-      row.hsConditionType shouldBe 2L
+      row.hsConditionType shouldBe HealthTransformations.eyeDiseaseCondition
       row.hsCondition shouldBe 1L
       row.hsConditionOtherDescription shouldBe None
       row.hsConditionIsCongenital shouldBe false
@@ -236,7 +233,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
 
     output2.foreach { row =>
       row.dogId shouldBe 10
-      row.hsConditionType shouldBe 2L
+      row.hsConditionType shouldBe HealthTransformations.eyeDiseaseCondition
       row.hsCondition shouldBe 1L
       row.hsConditionOtherDescription shouldBe None
       row.hsConditionIsCongenital shouldBe false
@@ -253,7 +250,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
 
     output3.foreach { row =>
       row.dogId shouldBe 10
-      row.hsConditionType shouldBe 2L
+      row.hsConditionType shouldBe HealthTransformations.eyeDiseaseCondition
       row.hsCondition shouldBe 1L
       row.hsConditionOtherDescription shouldBe None
       row.hsConditionIsCongenital shouldBe false
@@ -273,8 +270,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth = List(
       HlesHealthCondition(
         dogId = 10L,
-        // 2 for eye disease
-        hsConditionType = 2L,
+        hsConditionType = HealthTransformations.eyeDiseaseCondition,
         // 0 for cat
         hsCondition = 0,
         hsConditionOtherDescription = None,
@@ -288,8 +284,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       ),
       HlesHealthCondition(
         dogId = 10L,
-        // 2 for eye disease
-        hsConditionType = 2L,
+        hsConditionType = HealthTransformations.eyeDiseaseCondition,
         // 1 for blind
         hsCondition = 1L,
         hsConditionOtherDescription = None,
@@ -303,8 +298,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       ),
       HlesHealthCondition(
         dogId = 10L,
-        // 2 for eye disease
-        hsConditionType = 2L,
+        hsConditionType = HealthTransformations.eyeDiseaseCondition,
         // 98 for eye_other
         hsCondition = 98L,
         hsConditionOtherDescription = Some("falafel"),

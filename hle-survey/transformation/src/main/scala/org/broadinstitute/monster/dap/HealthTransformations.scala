@@ -101,8 +101,8 @@ object HealthTransformations {
     } else { None }
 
   // list conditions and assign categorical Longs
-  val infectiousDiseaseCondition = 1L
-  val eyeDiseaseCondition = 2L
+  val eyeDiseaseCondition = 1L
+  val infectiousDiseaseCondition = 50L
 
   // specific condition type maps
   val infectious_diseases: Map[String, Long] = Map(
