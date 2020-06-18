@@ -10,23 +10,29 @@ object AdditionalStudiesTransformations {
     * injecting them into a partially-modeled dog record.
     */
   def mapFutureStudies(rawRecord: RawRecord): HlesDogFutureStudies = {
-    val pcVetConsent = rawRecord.getBoolean("fs_pcvet_consent")
+    val pcVetConsent = rawRecord.getOptionalBoolean("fs_pcvet_consent")
     HlesDogFutureStudies(
       fsPrimaryCareVeterinarianExists = rawRecord.getOptionalBoolean("fs_pcvet"),
-      fsPrimaryCareVeterinarianConsentShareVemr = rawRecord.getOptionalBoolean("fs_pcvet_consent"),
-      fsPrimaryCareVeterinarianCanProvideEmail =
-        if (pcVetConsent) rawRecord.getOptionalBoolean("fs_pcvet_email_yn") else None,
-      fsPrimaryCareVeterinarianState =
-        if (pcVetConsent) rawRecord.getOptional("fs_pcvet_st") else None,
-      fsPrimaryCareVeterinarianZip =
-        if (pcVetConsent) rawRecord.getOptional("fs_pcvet_zip") else None,
+      fsPrimaryCareVeterinarianConsentShareVemr = pcVetConsent,
+      fsPrimaryCareVeterinarianCanProvideEmail = pcVetConsent.flatMap {
+        if (_) rawRecord.getOptionalBoolean("fs_pcvet_email_yn") else None
+      },
+      fsPrimaryCareVeterinarianState = pcVetConsent.flatMap {
+        if (_) rawRecord.getOptional("fs_pcvet_st") else None
+      },
+      fsPrimaryCareVeterinarianZip = pcVetConsent.flatMap {
+        if (_) rawRecord.getOptional("fs_pcvet_zip") else None
+      },
       fsFutureStudiesParticipationLikelihood = rawRecord.getOptionalNumber("fs_future_studies"),
-      fsPhenotypeVsLifespanParticipationLikelihood =
-        if (pcVetConsent) rawRecord.getOptionalNumber("fs_pc_ppf_lifespan") else None,
-      fsGenotypeVsLifespanParticipationLikelihood =
-        if (pcVetConsent) rawRecord.getOptionalNumber("fs_gene_lifespan") else None,
-      fsMedicallySlowedAgingParticipationLikelihood =
-        if (pcVetConsent) rawRecord.getOptionalNumber("fs_med_aging") else None
+      fsPhenotypeVsLifespanParticipationLikelihood = pcVetConsent.flatMap {
+        if (_) rawRecord.getOptionalNumber("fs_pc_ppf_lifespan") else None
+      },
+      fsGenotypeVsLifespanParticipationLikelihood = pcVetConsent.flatMap {
+        if (_) rawRecord.getOptionalNumber("fs_gene_lifespan") else None
+      },
+      fsMedicallySlowedAgingParticipationLikelihood = pcVetConsent.flatMap {
+        if (_) rawRecord.getOptionalNumber("fs_med_aging") else None
+      }
     )
   }
 }
