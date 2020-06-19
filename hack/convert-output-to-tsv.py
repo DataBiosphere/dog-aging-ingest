@@ -12,15 +12,23 @@ if (len(sys.argv) < 3):
 schema_dir = '../schema/src/main/jade-tables/'
 input_dir = sys.argv[1]
 output_dir = sys.argv[2]
-table_names = listdir(input_dir) # ["hles_dog", "hles_owner"]
+# table_names = listdir(input_dir) 
+table_names = ["hles_owner"]
+pk_prefix = 'entity:'
 
 for table_name in table_names:
     # get set of all keys/column names from the schema file
     column_list = []
+    primary_key_list = []
     with open(schema_dir + table_name + '.table.json') as schema_file:
         schema = json.load(schema_file)
         for column in schema['columns']:
-            column_list.append(column['name'])
+            column_name = column['name']
+            if (column.get('type') == 'primary_key'):
+                primary_key_list.append(column_name)
+                column_list.append(pk_prefix + column_name)
+            else: 
+                column_list.append(column_name)
 
     # get the set of files in the directory
     full_input_directory = input_dir + table_name + '/'
@@ -32,6 +40,11 @@ for table_name in table_names:
         with open(full_input_directory + json_file_name, 'r') as json_file:
             for jsonObj in json_file:
                 obj = json.loads(jsonObj)
+                # rename primary key columns
+                for pk in primary_key_list:
+                    obj[pk_prefix + pk] = obj.pop(pk)
+                    #obj[pk] = None
+
                 obj_list.append(obj)
 
     # output to tsv
