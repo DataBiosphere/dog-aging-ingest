@@ -9,10 +9,10 @@ import sys
 if (len(sys.argv) < 3):
     print "Please provide the input directory and output directory as arguments!"
 
-table_names = ["hles_dog", "hles_owner"]
 schema_dir = '../schema/src/main/jade-tables/'
 input_dir = sys.argv[1]
 output_dir = sys.argv[2]
+table_names = listdir(input_dir) # ["hles_dog", "hles_owner"]
 
 for table_name in table_names:
     # get set of all keys/column names from the schema file
