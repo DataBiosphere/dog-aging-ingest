@@ -1,5 +1,4 @@
 # A script to convert transformed data into TSV files
-# Note: Before uploading to Terra, manually go in and update PK column name to be prefixed by "entity:"
 
 import json
 import csv
@@ -12,8 +11,7 @@ if (len(sys.argv) < 3):
 schema_dir = '../schema/src/main/jade-tables/'
 input_dir = sys.argv[1]
 output_dir = sys.argv[2]
-# table_names = listdir(input_dir) 
-table_names = ["hles_owner"]
+table_names = listdir(input_dir) 
 pk_prefix = 'entity:'
 
 for table_name in table_names:
@@ -43,8 +41,6 @@ for table_name in table_names:
                 # rename primary key columns
                 for pk in primary_key_list:
                     obj[pk_prefix + pk] = obj.pop(pk)
-                    #obj[pk] = None
-
                 obj_list.append(obj)
 
     # output to tsv
