@@ -37,9 +37,9 @@ object ResidentialEnvironmentTransformations {
       val currentResidenceCount = if (secondaryHome.head) 2 else 1
       val totalResidenceCount = pastResidenceCount.head + currentResidenceCount
       val pastZipCount =
-        if (totalResidenceCount > 0) rawRecord.getRequired("de_zip_nbr").toLong else 0L
+        if (pastResidenceCount.head > 0) rawRecord.getRequired("de_zip_nbr").toLong else 0L
       val pastCountryCount =
-        if (totalResidenceCount > 0) rawRecord.getRequired("de_country_nbr").toLong else 0L
+        if (pastResidenceCount.head > 0) rawRecord.getRequired("de_country_nbr").toLong else 0L
 
       dog.copy(
         deLifetimeResidenceCount = Some(totalResidenceCount),
@@ -155,10 +155,9 @@ object ResidentialEnvironmentTransformations {
   ): HlesDogResidentialEnvironment = {
     val source = rawRecord.getOptionalNumber("de_water_source")
     val knownPipes = rawRecord.getOptionalBoolean("de_pipe_yn")
-    val pipeType = knownPipes match {
-      case Some(false) => Some(99L) // unknown type
-      case Some(true)  => rawRecord.getOptionalNumber("de_pipe_type")
-      case None        => None
+    val pipeType = knownPipes.flatMap {
+      case true  => rawRecord.getOptionalNumber("de_pipe_type")
+      case false => Some(99L) // unknown type
     }
     dog.copy(
       deDrinkingWaterSource = source,
