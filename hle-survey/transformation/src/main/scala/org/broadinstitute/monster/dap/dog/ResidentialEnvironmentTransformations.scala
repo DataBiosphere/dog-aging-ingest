@@ -44,9 +44,11 @@ object ResidentialEnvironmentTransformations {
       dog.copy(
         deLifetimeResidenceCount = Some(totalResidenceCount),
         dePastResidenceZipCount = Some(pastZipCount),
-        dePastResidenceZip1 =
-          if (pastZipCount > 1) rawRecord.getOptional("de_zip_01")
-          else rawRecord.getOptional("de_zip_01_only"),
+        dePastResidenceZip1 = if (pastZipCount > 1) {
+          rawRecord.getOptional("de_zip_01")
+        } else {
+          rawRecord.getOptional("de_zip_01_only")
+        },
         dePastResidenceZip2 = if (pastZipCount > 1) rawRecord.getOptional("de_zip_02") else None,
         dePastResidenceZip3 = if (pastZipCount > 2) rawRecord.getOptional("de_zip_03") else None,
         dePastResidenceZip4 = if (pastZipCount > 3) rawRecord.getOptional("de_zip_04") else None,
@@ -57,9 +59,11 @@ object ResidentialEnvironmentTransformations {
         dePastResidenceZip9 = if (pastZipCount > 8) rawRecord.getOptional("de_zip_09") else None,
         dePastResidenceZip10 = if (pastZipCount > 9) rawRecord.getOptional("de_zip_10") else None,
         dePastResidenceCountryCount = Some(pastCountryCount),
-        dePastResidenceCountry1 =
-          if (pastCountryCount > 1) rawRecord.getOptional("de_country_01")
-          else rawRecord.getOptional("de_country_01_only"),
+        dePastResidenceCountry1 = if (pastCountryCount > 1) {
+          rawRecord.getOptional("de_country_01")
+        } else {
+          rawRecord.getOptional("de_country_01_only")
+        },
         dePastResidenceCountry2 =
           if (pastCountryCount > 1) rawRecord.getOptional("de_country_02") else None,
         dePastResidenceCountry3 =
@@ -79,7 +83,9 @@ object ResidentialEnvironmentTransformations {
         dePastResidenceCountry10 =
           if (pastCountryCount > 9) rawRecord.getOptional("de_country_10") else None
       )
-    } else dog.copy()
+    } else {
+      dog.copy()
+    }
   }
 
   /**
@@ -113,9 +119,11 @@ object ResidentialEnvironmentTransformations {
       if (secondaryHeatUsed.contains(1L)) rawRecord.getOptionalNumber("de_secondary_heat") else None
     val primaryStove = rawRecord.getOptionalNumber("de_primary_stove")
     val secondaryStoveUsed = rawRecord.getOptionalNumber("de_secondary_stove_yn")
-    val secondaryStove =
-      if (secondaryStoveUsed.contains(1L)) rawRecord.getOptionalNumber("de_secondary_stove")
-      else None
+    val secondaryStove = if (secondaryStoveUsed.contains(1L)) {
+      rawRecord.getOptionalNumber("de_secondary_stove")
+    } else {
+      None
+    }
     dog.copy(
       dePrimaryHeatFuel = primaryHeat,
       dePrimaryHeatFuelOtherDescription =
@@ -129,9 +137,11 @@ object ResidentialEnvironmentTransformations {
         if (primaryStove.contains(98L)) rawRecord.getOptional("de_primary_stove_other") else None,
       deSecondaryStoveFuelUsed = secondaryStoveUsed,
       deSecondaryStoveFuel = secondaryStove,
-      deSecondaryStoveFuelOtherDescription =
-        if (secondaryStove.contains(98L)) rawRecord.getOptional("de_secondary_stove_other")
-        else None
+      deSecondaryStoveFuelOtherDescription = if (secondaryStove.contains(98L)) {
+        rawRecord.getOptional("de_secondary_stove_other")
+      } else {
+        None
+      }
     )
   }
 
@@ -186,9 +196,11 @@ object ResidentialEnvironmentTransformations {
       deHepaPresent = rawRecord.getOptionalNumber("de_hepa"),
       deWoodFireplacePresent = woodFireplace,
       deGasFireplacePresent = gasFireplace,
-      deWoodFireplaceLightingsPerWeek =
-        if (woodFireplace.contains(1L)) rawRecord.getOptionalNumber("de_wood_fireplace_lit")
-        else None,
+      deWoodFireplaceLightingsPerWeek = if (woodFireplace.contains(1L)) {
+        rawRecord.getOptionalNumber("de_wood_fireplace_lit")
+      } else {
+        None
+      },
       deGasFireplaceLightingsPerWeek =
         if (gasFireplace.contains(1L)) rawRecord.getOptionalNumber("de_gas_fireplace_lit") else None
     )
@@ -219,20 +231,26 @@ object ResidentialEnvironmentTransformations {
       deFloorFrequencyOnCarpet =
         if (hasCarpet.contains(true)) rawRecord.getOptionalNumber("de_floor_carpet_freq") else None,
       deFloorTypesConcrete = hasConcrete,
-      deFloorFrequencyOnConcrete =
-        if (hasConcrete.contains(true)) rawRecord.getOptionalNumber("de_floor_concrete_freq")
-        else None,
+      deFloorFrequencyOnConcrete = if (hasConcrete.contains(true)) {
+        rawRecord.getOptionalNumber("de_floor_concrete_freq")
+      } else {
+        None
+      },
       deFloorTypesTile = hasTile,
       deFloorFrequencyOnTile =
         if (hasTile.contains(true)) rawRecord.getOptionalNumber("de_floor_tile_freq") else None,
       deFloorTypesLinoleum = hasLinoleum,
-      deFloorFrequencyOnLinoleum =
-        if (hasLinoleum.contains(true)) rawRecord.getOptionalNumber("de_floor_linoleum_freq")
-        else None,
+      deFloorFrequencyOnLinoleum = if (hasLinoleum.contains(true)) {
+        rawRecord.getOptionalNumber("de_floor_linoleum_freq")
+      } else {
+        None
+      },
       deFloorTypesLaminate = hasLaminate,
-      deFloorFrequencyOnLaminate =
-        if (hasLaminate.contains(true)) rawRecord.getOptionalNumber("de_floor_laminate_freq")
-        else None,
+      deFloorFrequencyOnLaminate = if (hasLaminate.contains(true)) {
+        rawRecord.getOptionalNumber("de_floor_laminate_freq")
+      } else {
+        None
+      },
       deFloorTypesOther = hasOther,
       deFloorTypesOtherDescription =
         if (hasOther.contains(true)) rawRecord.getOptional("de_floor_other") else None,
@@ -253,9 +271,11 @@ object ResidentialEnvironmentTransformations {
     dog: HlesDogResidentialEnvironment
   ): HlesDogResidentialEnvironment = {
     val propertyAccess = rawRecord.getOptionalBoolean("de_property_access_yn")
-    val containmentType =
-      if (propertyAccess.contains(true)) rawRecord.getOptionalNumber("de_property_fence_yn")
-      else None
+    val containmentType = if (propertyAccess.contains(true)) {
+      rawRecord.getOptionalNumber("de_property_fence_yn")
+    } else {
+      None
+    }
     val drinkingWaterSources = rawRecord.get("de_outside_water")
     val drinkingWaterOther = drinkingWaterSources.map(_.contains("98"))
     val weedControl = rawRecord.getOptionalNumber("de_yard_weed_ctl_yn")
@@ -264,27 +284,37 @@ object ResidentialEnvironmentTransformations {
     dog.copy(
       dePropertyArea = rawRecord.getOptionalNumber("de_property_size"),
       dePropertyAccessible = propertyAccess,
-      dePropertyAreaAccessible =
-        if (propertyAccess.contains(true)) rawRecord.getOptionalNumber("de_property_access")
-        else None,
+      dePropertyAreaAccessible = if (propertyAccess.contains(true)) {
+        rawRecord.getOptionalNumber("de_property_access")
+      } else {
+        None
+      },
       dePropertyContainmentType = containmentType,
-      dePropertyContainmentTypeOtherDescription =
-        if (containmentType.contains(4L)) rawRecord.getOptional("de_property_fence_other")
-        else None,
+      dePropertyContainmentTypeOtherDescription = if (containmentType.contains(4L)) {
+        rawRecord.getOptional("de_property_fence_other")
+      } else {
+        None
+      },
       dePropertyDrinkingWaterBowl = drinkingWaterSources.map(_.contains("1")),
       dePropertyDrinkingWaterHose = drinkingWaterSources.map(_.contains("2")),
       dePropertyDrinkingWaterPuddles = drinkingWaterSources.map(_.contains("3")),
       dePropertyDrinkingWaterUnknown = drinkingWaterSources.map(_.contains("99")),
       dePropertyDrinkingWaterOther = drinkingWaterOther,
-      dePropertyDrinkingWaterOtherDescription =
-        if (drinkingWaterOther.contains(true)) rawRecord.getOptional("de_outside_water_other")
-        else None,
-      dePropertyWeedControlFrequency =
-        if (weedControl.contains(1L)) rawRecord.getOptionalNumber("de_yard_weed_ctl_freq")
-        else weedControl,
-      dePropertyPestControlFrequency =
-        if (pestControl.contains(1L)) rawRecord.getOptionalNumber("de_yard_pest_ctl_freq")
-        else pestControl
+      dePropertyDrinkingWaterOtherDescription = if (drinkingWaterOther.contains(true)) {
+        rawRecord.getOptional("de_outside_water_other")
+      } else {
+        None
+      },
+      dePropertyWeedControlFrequency = if (weedControl.contains(1L)) {
+        rawRecord.getOptionalNumber("de_yard_weed_ctl_freq")
+      } else {
+        weedControl
+      },
+      dePropertyPestControlFrequency = if (pestControl.contains(1L)) {
+        rawRecord.getOptionalNumber("de_yard_pest_ctl_freq")
+      } else {
+        pestControl
+      }
     )
   }
 
@@ -304,15 +334,17 @@ object ResidentialEnvironmentTransformations {
       deNeighborhoodHasSidewalks = rawRecord.getOptionalNumber("de_sidewalk_yn"),
       deNeighborhoodHasParks = rawRecord.getOptionalBoolean("de_parks_near"),
       deInteractsWithNeighborhoodAnimals = animalsInteract,
-      deInteractsWithNeighborhoodAnimalsWithoutOwner =
-        if (animalsInteract.contains(true))
-          rawRecord.getOptionalBoolean("de_animal_interact_present").map(!_)
-        else None,
+      deInteractsWithNeighborhoodAnimalsWithoutOwner = if (animalsInteract.contains(true)) {
+        rawRecord.getOptionalBoolean("de_animal_interact_present").map(!_)
+      } else {
+        None
+      },
       deInteractsWithNeighborhoodHumans = humansInteract,
-      deInteractsWithNeighborhoodHumansWithoutOwner =
-        if (humansInteract.contains(true))
-          rawRecord.getOptionalBoolean("de_human_interact_present").map(!_)
-        else None
+      deInteractsWithNeighborhoodHumansWithoutOwner = if (humansInteract.contains(true)) {
+        rawRecord.getOptionalBoolean("de_human_interact_present").map(!_)
+      } else {
+        None
+      }
     )
   }
 }
