@@ -13,6 +13,8 @@ object DogTransformations {
     hlesDogDemographics = Some(DemographicsTransformations.mapDemographics(rawRecord)),
     hlesDogResidences = Some(DogResidenceTransformations.mapDogResidences(rawRecord)),
     hlesDogPhysicalActivity = Some(PhysicalActivityTransformations.mapPhysicalActivity(rawRecord)),
+    hlesDogResidentialEnvironment =
+      Some(ResidentialEnvironmentTransformations.mapResidentialEnvironment(rawRecord)),
     hlesDogBehavior = Some(BehaviorTransformations.mapBehavior(rawRecord)),
     hlesDogDiet = Some(DietTransformations.mapDiet(rawRecord)),
     hlesDogMedsPreventatives =
@@ -20,5 +22,4 @@ object DogTransformations {
     hlesDogHealthSummary = Some(HealthStatusTransformations.mapHealthSummary(rawRecord)),
     hlesDogFutureStudies = Some(AdditionalStudiesTransformations.mapFutureStudies(rawRecord))
   )
-
 }

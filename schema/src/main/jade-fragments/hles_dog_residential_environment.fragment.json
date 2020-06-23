@@ -1,0 +1,397 @@
+{
+  "name": "hles_dog_residential_environment",
+  "columns": [
+    {
+      "name": "de_lifetime_residence_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_past_residence_zip_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_past_residence_zip1",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_zip2",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_zip3",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_zip4",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_zip5",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_zip6",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_zip7",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_zip8",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_zip9",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_zip10",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_past_residence_country1",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country2",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country3",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country4",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country5",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country6",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country7",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country8",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country9",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country10",
+      "datatype": "string"
+    },
+    {
+      "name": "de_home_area_type",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_home_type",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_home_type_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_home_construction_decade",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_home_years_lived_in",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_home_square_footage",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_primary_heat_fuel",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_primary_heat_fuel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_secondary_heat_fuel_used",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_secondary_heat_fuel",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_secondary_heat_fuel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_primary_stove_fuel",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_primary_stove_fuel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_secondary_stove_fuel_used",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_secondary_stove_fuel",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_secondary_stove_fuel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_drinking_water_source",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_drinking_water_source_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_drinking_water_is_filtered",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_pipe_type",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_pipe_type_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_second_hand_smoke_hours_per_day",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_central_air_conditioning_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_room_or_window_air_conditioning_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_central_heat_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_asbestos_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_radon_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_lead_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_mothball_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_incense_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_air_freshener_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_air_cleaner_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_hepa_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_wood_fireplace_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_gas_fireplace_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_wood_fireplace_lightings_per_week",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_gas_fireplace_lightings_per_week",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_floor_types_wood",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_floor_frequency_on_wood",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_floor_types_carpet",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_floor_frequency_on_carpet",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_floor_types_concrete",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_floor_frequency_on_concrete",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_floor_types_tile",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_floor_frequency_on_tile",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_floor_types_linoleum",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_floor_frequency_on_linoleum",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_floor_types_laminate",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_floor_frequency_on_laminate",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_floor_types_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_floor_types_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_floor_frequency_on_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_stairs_in_home",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_stairs_avg_flights_per_day",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_property_area",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_property_accessible",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_property_area_accessible",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_property_containment_type",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_property_containment_type_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_property_drinking_water_bowl",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_property_drinking_water_hose",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_property_drinking_water_puddles",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_property_drinking_water_unknown",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_property_drinking_water_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_property_drinking_water_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "de_property_weed_control_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_property_pest_control_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_traffic_noise_in_home_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_traffic_noise_in_property_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_neighborhood_has_sidewalks",
+      "datatype": "integer"
+    },
+    {
+      "name": "de_neighborhood_has_parks",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_interacts_with_neighborhood_animals",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_interacts_with_neighborhood_animals_without_owner",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_interacts_with_neighborhood_humans",
+      "datatype": "boolean"
+    },
+    {
+      "name": "de_interacts_with_neighborhood_humans_without_owner",
+      "datatype": "boolean"
+    }
+  ]
+}
