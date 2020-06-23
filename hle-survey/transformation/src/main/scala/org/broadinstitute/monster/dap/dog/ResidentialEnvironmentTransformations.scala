@@ -33,9 +33,12 @@ object ResidentialEnvironmentTransformations {
   ): HlesDogResidentialEnvironment = {
     val secondaryHome = rawRecord.getOptionalBoolean("oc_address2_yn")
     val pastResidenceCount = rawRecord.getOptionalNumber("de_home_nbr")
-    if (secondaryHome.isDefined && pastResidenceCount.isDefined) {
-      val currentResidenceCount = if (secondaryHome.head) 2 else 1
-      val totalResidenceCount = pastResidenceCount.head + currentResidenceCount
+    val currentResidenceCount = secondaryHome.flatMap {
+      case true => Some(2L)
+      case false => Some(1L)
+    }
+    if (pastResidenceCount.isDefined) {
+      val totalResidenceCount = pastResidenceCount.head + currentResidenceCount.getOrElse(0L)
       val pastZipCount =
         if (pastResidenceCount.head > 0) rawRecord.getRequired("de_zip_nbr").toLong else 0L
       val pastCountryCount =
