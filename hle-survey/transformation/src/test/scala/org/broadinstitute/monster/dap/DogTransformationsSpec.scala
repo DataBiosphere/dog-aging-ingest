@@ -21,7 +21,8 @@ class DogTransformationsSpec extends AnyFlatSpec with Matchers with OptionValues
       hlesDogDiet = Some(HlesDogDiet.init()),
       hlesDogHealthSummary = Some(HlesDogHealthSummary.init()),
       hlesDogPhysicalActivity = Some(HlesDogPhysicalActivity.init()),
-      hlesDogMedsPreventatives = Some(HlesDogMedsPreventatives.init())
+      hlesDogMedsPreventatives = Some(HlesDogMedsPreventatives.init()),
+      hlesDogFutureStudies = Some(HlesDogFutureStudies.init())
     )
   }
 }
