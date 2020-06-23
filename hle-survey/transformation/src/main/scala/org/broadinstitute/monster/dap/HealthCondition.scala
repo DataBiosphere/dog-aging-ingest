@@ -10,10 +10,13 @@ package org.broadinstitute.monster.dap
   * @param nonCongenital a tuple where the first element is the piece of the target field name that fits in "hs_*",
   *                      like "dx_blind", and where the second element is the higher level boolean flag name that fits
   *                      in "hs_*_yn", like "dx_eye", that the first depends on
+  * @param isOther       a boolean flag that indicates this condition is an "other" condition, helpful for the business
+  *                      logic to correctly transform data
   */
 case class HealthCondition(
   conditionType: String,
   condition: String,
   congenital: Option[(String, String)] = None,
-  nonCongenital: Option[(String, String)] = None
+  nonCongenital: Option[(String, String)] = None,
+  isOther: Boolean = false
 )

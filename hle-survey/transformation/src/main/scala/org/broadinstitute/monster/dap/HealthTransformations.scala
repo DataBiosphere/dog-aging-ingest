@@ -6,7 +6,7 @@ object HealthTransformations {
 
   /** Parse all health-condition-related fields out of a raw RedCap record. */
   def mapHealthConditions(rawRecord: RawRecord): Iterable[HlesHealthCondition] =
-    healthConditions.flatMap(healthCondition => processHealthCondition(rawRecord, healthCondition))
+    healthConditions.flatMap(processHealthCondition(rawRecord, _))
 
   /** Generic helper method for creating Hles Health Condition rows. */
   def createHealthConditionRow(
@@ -42,73 +42,73 @@ object HealthTransformations {
     rawRecord: RawRecord,
     healthCondition: HealthCondition
   ): Iterable[HlesHealthCondition] = {
-    val congenital: Option[HlesHealthCondition] = if (healthCondition.congenital.isDefined) {
-      // if congenital, then check hs_congenital_yn && healthCondition.congenital._2
-      if (rawRecord.getBoolean("hs_congenital_yn") &&
-          rawRecord.getBoolean(s"hs_${healthCondition.congenital.get._2}_yn"))
-        // congenital other
-        if (conditions.apply(healthCondition.condition) == -1L)
-          createHealthConditionRow(
-            rawRecord,
-            healthCondition.congenital.get._1,
-            conditionTypes.apply(healthCondition.conditionType),
-            conditions.apply(healthCondition.condition),
-            isCongenital = true,
-            conditionOtherDescription =
-              rawRecord.getOptional(s"hs_${healthCondition.congenital.get._1}_spec")
-          )
-        // congenital general
-        else if (rawRecord.getBoolean(s"hs_${healthCondition.congenital.get._1}"))
-          createHealthConditionRow(
-            rawRecord,
-            healthCondition.congenital.get._1,
-            conditionTypes.apply(healthCondition.conditionType),
-            conditions.apply(healthCondition.condition),
-            isCongenital = true
-          )
+    val congenital: Option[HlesHealthCondition] = healthCondition.congenital.flatMap {
+      case (target, dependent) =>
+        // if congenital, then check hs_congenital_yn && healthCondition.congenital._2
+        if (rawRecord.getBoolean("hs_congenital_yn") &&
+            rawRecord.getBoolean(s"hs_${dependent}_yn"))
+          // congenital other
+          if (healthCondition.isOther)
+            createHealthConditionRow(
+              rawRecord,
+              healthCondition.congenital.get._1,
+              conditionTypes.apply(healthCondition.conditionType),
+              conditions.apply(healthCondition.condition),
+              isCongenital = true,
+              conditionOtherDescription = rawRecord.getOptional(s"hs_${target}_spec")
+            )
+          // congenital general
+          else if (rawRecord.getBoolean(s"hs_${target}"))
+            createHealthConditionRow(
+              rawRecord,
+              target,
+              conditionTypes.apply(healthCondition.conditionType),
+              conditions.apply(healthCondition.condition),
+              isCongenital = true
+            )
+          else None
         else None
-      else None
-    } else None
-    val nonCongenital: Option[HlesHealthCondition] = if (healthCondition.nonCongenital.isDefined) {
-      if (rawRecord.getBoolean(s"hs_${healthCondition.nonCongenital.get._2}_yn"))
-        // non-congenital other
-        if (conditions.apply(healthCondition.condition) == -1L)
-          createHealthConditionRow(
-            rawRecord,
-            healthCondition.nonCongenital.get._1,
-            conditionTypes.apply(healthCondition.conditionType),
-            conditions.apply(healthCondition.condition),
-            conditionOtherDescription =
-              rawRecord.getOptional(s"hs_${healthCondition.nonCongenital.get._1}_spec")
-          )
-        // specific non-congenital blindness case
-        else if (healthCondition.condition == "blind") {
-          val isCauseKnown = rawRecord.getBoolean("hs_dx_eye_cause_yn")
-          val conditionCause =
-            if (isCauseKnown) rawRecord.getOptionalNumber("hs_dx_eye_cause") else None
-          createHealthConditionRow(
-            rawRecord,
-            healthCondition.nonCongenital.get._1,
-            conditionTypes.apply(healthCondition.conditionType),
-            conditions.apply(healthCondition.condition),
-            conditionCause = conditionCause,
-            conditionCauseOtherDescription =
-              if (isCauseKnown && (conditionCause.getOrElse(false) == 98))
-                rawRecord.getOptional("hs_dx_eye_cause_other")
-              else None
-          )
-        }
-        // non congenital general case
-        else if (rawRecord.getBoolean(s"hs_${healthCondition.nonCongenital.get._1}"))
-          createHealthConditionRow(
-            rawRecord,
-            healthCondition.nonCongenital.get._1,
-            conditionTypes.apply(healthCondition.conditionType),
-            conditions.apply(healthCondition.condition)
-          )
+    }
+    val nonCongenital: Option[HlesHealthCondition] = healthCondition.nonCongenital.flatMap {
+      case (target, dependent) =>
+        if (rawRecord.getBoolean(s"hs_${dependent}_yn"))
+          // non-congenital other
+          if (healthCondition.isOther)
+            createHealthConditionRow(
+              rawRecord,
+              target,
+              conditionTypes.apply(healthCondition.conditionType),
+              conditions.apply(healthCondition.condition),
+              conditionOtherDescription = rawRecord.getOptional(s"hs_${target}_spec")
+            )
+          // specific non-congenital blindness case
+          else if (healthCondition.condition == "blind") {
+            val isCauseKnown = rawRecord.getBoolean("hs_dx_eye_cause_yn")
+            val conditionCause =
+              if (isCauseKnown) rawRecord.getOptionalNumber("hs_dx_eye_cause") else None
+            createHealthConditionRow(
+              rawRecord,
+              target,
+              conditionTypes.apply(healthCondition.conditionType),
+              conditions.apply(healthCondition.condition),
+              conditionCause = conditionCause,
+              conditionCauseOtherDescription =
+                if (isCauseKnown && (conditionCause.getOrElse(false) == 98))
+                  rawRecord.getOptional("hs_dx_eye_cause_other")
+                else None
+            )
+          }
+          // non congenital general case
+          else if (rawRecord.getBoolean(s"hs_${target}"))
+            createHealthConditionRow(
+              rawRecord,
+              target,
+              conditionTypes.apply(healthCondition.conditionType),
+              conditions.apply(healthCondition.condition)
+            )
+          else None
         else None
-      else None
-    } else None
+    }
     Iterable.concat(congenital, nonCongenital)
   }
 
@@ -144,7 +144,8 @@ object HealthTransformations {
       "eye",
       "eye_other",
       Some(("cg_eye_other", "cg_eye_disorders")),
-      Some(("dx_eye_other", "dx_eye"))
+      Some(("dx_eye_other", "dx_eye")),
+      isOther = true
     ),
     HealthCondition("eye", "ce", None, Some(("dx_ce", "dx_eye"))),
     HealthCondition("eye", "conj", None, Some(("dx_conj", "dx_eye"))),
@@ -201,7 +202,13 @@ object HealthTransformations {
     HealthCondition("infectious", "toxop", None, Some(("dx_toxop", "dx_infectious"))),
     HealthCondition("infectious", "tular", None, Some(("dx_tular", "dx_infectious"))),
     HealthCondition("infectious", "whpworm", None, Some(("dx_whpworm", "dx_infectious"))),
-    HealthCondition("infectious", "infect_other", None, Some(("dx_infect_other", "dx_infectious")))
+    HealthCondition(
+      "infectious",
+      "infect_other",
+      None,
+      Some(("dx_infect_other", "dx_infectious")),
+      isOther = true
+    )
   )
 
   val conditionTypes: Map[String, Long] = Map(
@@ -231,7 +238,7 @@ object HealthTransformations {
     "pra" -> 17,
     "rd" -> 18,
     "uvei" -> 19,
-    "eye_other" -> -1,
+    "eye_other" -> 20,
     // infectious diseases
     "anaplasmosis" -> 21,
     "asperg" -> 22,
@@ -273,6 +280,6 @@ object HealthTransformations {
     "toxop" -> 58,
     "tular" -> 59,
     "whpworm" -> 60,
-    "infect_other" -> -1
+    "infect_other" -> 61
   )
 }
