@@ -34,7 +34,7 @@ object ResidentialEnvironmentTransformations {
     val secondaryHome = rawRecord.getOptionalBoolean("oc_address2_yn")
     val pastResidenceCount = rawRecord.getOptionalNumber("de_home_nbr")
     val currentResidenceCount = secondaryHome.flatMap {
-      case true => Some(2L)
+      case true  => Some(2L)
       case false => Some(1L)
     }
     if (pastResidenceCount.isDefined) {
