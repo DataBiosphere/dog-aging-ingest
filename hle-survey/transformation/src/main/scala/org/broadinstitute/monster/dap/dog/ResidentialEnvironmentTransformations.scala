@@ -31,21 +31,18 @@ object ResidentialEnvironmentTransformations {
     rawRecord: RawRecord,
     dog: HlesDogResidentialEnvironment
   ): HlesDogResidentialEnvironment = {
-    val secondaryHome = rawRecord.getOptionalBoolean("oc_address2_yn")
-    val pastResidenceCount = rawRecord.getOptionalNumber("de_home_nbr")
-    val currentResidenceCount = secondaryHome.flatMap {
-      case true  => Some(2L)
-      case false => Some(1L)
+    val currentResidenceCount = rawRecord.getOptionalBoolean("oc_address2_yn").map {
+      case true  => 2L
+      case false => 1L
     }
-    if (pastResidenceCount.isDefined) {
-      val totalResidenceCount = pastResidenceCount.head + currentResidenceCount.getOrElse(0L)
+    rawRecord.getOptionalNumber("de_home_nbr").fold(dog) { pastResidenceCount =>
       val pastZipCount =
-        if (pastResidenceCount.head > 0) rawRecord.getRequired("de_zip_nbr").toLong else 0L
+        if (pastResidenceCount > 0) rawRecord.getRequired("de_zip_nbr").toLong else 0L
       val pastCountryCount =
-        if (pastResidenceCount.head > 0) rawRecord.getRequired("de_country_nbr").toLong else 0L
+        if (pastResidenceCount > 0) rawRecord.getRequired("de_country_nbr").toLong else 0L
 
       dog.copy(
-        deLifetimeResidenceCount = Some(totalResidenceCount),
+        deLifetimeResidenceCount = Some(pastResidenceCount + currentResidenceCount.getOrElse(0L)),
         dePastResidenceZipCount = Some(pastZipCount),
         dePastResidenceZip1 = if (pastZipCount > 1) {
           rawRecord.getOptional("de_zip_01")
@@ -86,8 +83,6 @@ object ResidentialEnvironmentTransformations {
         dePastResidenceCountry10 =
           if (pastCountryCount > 9) rawRecord.getOptional("de_country_10") else None
       )
-    } else {
-      dog.copy()
     }
   }
 
