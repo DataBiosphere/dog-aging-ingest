@@ -35,55 +35,57 @@ object ResidentialEnvironmentTransformations {
       case true  => 2L
       case false => 1L
     }
-    rawRecord.getOptionalNumber("de_home_nbr").fold(dog) { pastResidenceCount =>
-      val pastZipCount =
-        if (pastResidenceCount > 0) rawRecord.getRequired("de_zip_nbr").toLong else 0L
-      val pastCountryCount =
-        if (pastResidenceCount > 0) rawRecord.getRequired("de_country_nbr").toLong else 0L
+    rawRecord
+      .getOptionalNumber("de_home_nbr")
+      .fold(dog.copy(deLifetimeResidenceCount = currentResidenceCount)) { pastResidenceCount =>
+        val pastZipCount =
+          if (pastResidenceCount > 0) rawRecord.getRequired("de_zip_nbr").toLong else 0L
+        val pastCountryCount =
+          if (pastResidenceCount > 0) rawRecord.getRequired("de_country_nbr").toLong else 0L
 
-      dog.copy(
-        deLifetimeResidenceCount = Some(pastResidenceCount + currentResidenceCount.getOrElse(0L)),
-        dePastResidenceZipCount = Some(pastZipCount),
-        dePastResidenceZip1 = if (pastZipCount > 1) {
-          rawRecord.getOptional("de_zip_01")
-        } else {
-          rawRecord.getOptional("de_zip_01_only")
-        },
-        dePastResidenceZip2 = if (pastZipCount > 1) rawRecord.getOptional("de_zip_02") else None,
-        dePastResidenceZip3 = if (pastZipCount > 2) rawRecord.getOptional("de_zip_03") else None,
-        dePastResidenceZip4 = if (pastZipCount > 3) rawRecord.getOptional("de_zip_04") else None,
-        dePastResidenceZip5 = if (pastZipCount > 4) rawRecord.getOptional("de_zip_05") else None,
-        dePastResidenceZip6 = if (pastZipCount > 5) rawRecord.getOptional("de_zip_06") else None,
-        dePastResidenceZip7 = if (pastZipCount > 6) rawRecord.getOptional("de_zip_07") else None,
-        dePastResidenceZip8 = if (pastZipCount > 7) rawRecord.getOptional("de_zip_08") else None,
-        dePastResidenceZip9 = if (pastZipCount > 8) rawRecord.getOptional("de_zip_09") else None,
-        dePastResidenceZip10 = if (pastZipCount > 9) rawRecord.getOptional("de_zip_10") else None,
-        dePastResidenceCountryCount = Some(pastCountryCount),
-        dePastResidenceCountry1 = if (pastCountryCount > 1) {
-          rawRecord.getOptional("de_country_01")
-        } else {
-          rawRecord.getOptional("de_country_01_only")
-        },
-        dePastResidenceCountry2 =
-          if (pastCountryCount > 1) rawRecord.getOptional("de_country_02") else None,
-        dePastResidenceCountry3 =
-          if (pastCountryCount > 2) rawRecord.getOptional("de_country_03") else None,
-        dePastResidenceCountry4 =
-          if (pastCountryCount > 3) rawRecord.getOptional("de_country_04") else None,
-        dePastResidenceCountry5 =
-          if (pastCountryCount > 4) rawRecord.getOptional("de_country_05") else None,
-        dePastResidenceCountry6 =
-          if (pastCountryCount > 5) rawRecord.getOptional("de_country_06") else None,
-        dePastResidenceCountry7 =
-          if (pastCountryCount > 6) rawRecord.getOptional("de_country_07") else None,
-        dePastResidenceCountry8 =
-          if (pastCountryCount > 7) rawRecord.getOptional("de_country_08") else None,
-        dePastResidenceCountry9 =
-          if (pastCountryCount > 8) rawRecord.getOptional("de_country_09") else None,
-        dePastResidenceCountry10 =
-          if (pastCountryCount > 9) rawRecord.getOptional("de_country_10") else None
-      )
-    }
+        dog.copy(
+          deLifetimeResidenceCount = Some(pastResidenceCount + currentResidenceCount.getOrElse(0L)),
+          dePastResidenceZipCount = Some(pastZipCount),
+          dePastResidenceZip1 = if (pastZipCount > 1) {
+            rawRecord.getOptional("de_zip_01")
+          } else {
+            rawRecord.getOptional("de_zip_01_only")
+          },
+          dePastResidenceZip2 = if (pastZipCount > 1) rawRecord.getOptional("de_zip_02") else None,
+          dePastResidenceZip3 = if (pastZipCount > 2) rawRecord.getOptional("de_zip_03") else None,
+          dePastResidenceZip4 = if (pastZipCount > 3) rawRecord.getOptional("de_zip_04") else None,
+          dePastResidenceZip5 = if (pastZipCount > 4) rawRecord.getOptional("de_zip_05") else None,
+          dePastResidenceZip6 = if (pastZipCount > 5) rawRecord.getOptional("de_zip_06") else None,
+          dePastResidenceZip7 = if (pastZipCount > 6) rawRecord.getOptional("de_zip_07") else None,
+          dePastResidenceZip8 = if (pastZipCount > 7) rawRecord.getOptional("de_zip_08") else None,
+          dePastResidenceZip9 = if (pastZipCount > 8) rawRecord.getOptional("de_zip_09") else None,
+          dePastResidenceZip10 = if (pastZipCount > 9) rawRecord.getOptional("de_zip_10") else None,
+          dePastResidenceCountryCount = Some(pastCountryCount),
+          dePastResidenceCountry1 = if (pastCountryCount > 1) {
+            rawRecord.getOptional("de_country_01")
+          } else {
+            rawRecord.getOptional("de_country_01_only")
+          },
+          dePastResidenceCountry2 =
+            if (pastCountryCount > 1) rawRecord.getOptional("de_country_02") else None,
+          dePastResidenceCountry3 =
+            if (pastCountryCount > 2) rawRecord.getOptional("de_country_03") else None,
+          dePastResidenceCountry4 =
+            if (pastCountryCount > 3) rawRecord.getOptional("de_country_04") else None,
+          dePastResidenceCountry5 =
+            if (pastCountryCount > 4) rawRecord.getOptional("de_country_05") else None,
+          dePastResidenceCountry6 =
+            if (pastCountryCount > 5) rawRecord.getOptional("de_country_06") else None,
+          dePastResidenceCountry7 =
+            if (pastCountryCount > 6) rawRecord.getOptional("de_country_07") else None,
+          dePastResidenceCountry8 =
+            if (pastCountryCount > 7) rawRecord.getOptional("de_country_08") else None,
+          dePastResidenceCountry9 =
+            if (pastCountryCount > 8) rawRecord.getOptional("de_country_09") else None,
+          dePastResidenceCountry10 =
+            if (pastCountryCount > 9) rawRecord.getOptional("de_country_10") else None
+        )
+      }
   }
 
   /**
