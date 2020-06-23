@@ -46,19 +46,19 @@ object HealthTransformations {
       case (target, dependent) =>
         // if congenital, then check hs_congenital_yn && healthCondition.congenital._2
         if (rawRecord.getBoolean("hs_congenital_yn") &&
-            rawRecord.getBoolean(s"hs_${dependent}_yn"))
+            rawRecord.getBoolean(s"hs_${dependent}_yn")) {
           // congenital other
-          if (healthCondition.isOther)
+          if (healthCondition.isOther) {
             createHealthConditionRow(
               rawRecord,
-              healthCondition.congenital.get._1,
+              target,
               conditionTypes.apply(healthCondition.conditionType),
               conditions.apply(healthCondition.condition),
               isCongenital = true,
               conditionOtherDescription = rawRecord.getOptional(s"hs_${target}_spec")
             )
-          // congenital general
-          else if (rawRecord.getBoolean(s"hs_${target}"))
+          } // congenital general
+          else if (rawRecord.getBoolean(s"hs_${target}")) {
             createHealthConditionRow(
               rawRecord,
               target,
@@ -66,14 +66,14 @@ object HealthTransformations {
               conditions.apply(healthCondition.condition),
               isCongenital = true
             )
-          else None
-        else None
+          } else None
+        } else None
     }
     val nonCongenital: Option[HlesHealthCondition] = healthCondition.nonCongenital.flatMap {
       case (target, dependent) =>
-        if (rawRecord.getBoolean(s"hs_${dependent}_yn"))
+        if (rawRecord.getBoolean(s"hs_${dependent}_yn")) {
           // non-congenital other
-          if (healthCondition.isOther)
+          if (healthCondition.isOther) {
             createHealthConditionRow(
               rawRecord,
               target,
@@ -81,7 +81,7 @@ object HealthTransformations {
               conditions.apply(healthCondition.condition),
               conditionOtherDescription = rawRecord.getOptional(s"hs_${target}_spec")
             )
-          // specific non-congenital blindness case
+          } // specific non-congenital blindness case
           else if (healthCondition.condition == "blind") {
             val isCauseKnown = rawRecord.getBoolean("hs_dx_eye_cause_yn")
             val conditionCause =
@@ -93,7 +93,7 @@ object HealthTransformations {
               conditions.apply(healthCondition.condition),
               conditionCause = conditionCause,
               conditionCauseOtherDescription =
-                if (isCauseKnown && (conditionCause.getOrElse(false) == 98))
+                if (isCauseKnown && (conditionCause.getOrElse(0) == 98))
                   rawRecord.getOptional("hs_dx_eye_cause_other")
                 else None
             )
@@ -107,7 +107,7 @@ object HealthTransformations {
               conditions.apply(healthCondition.condition)
             )
           else None
-        else None
+        } else None
     }
     Iterable.concat(congenital, nonCongenital)
   }
