@@ -21,20 +21,23 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     )
     val exampleInfectiousDiseaseRecord = RawRecord(id = 1, singleInfectiousDisease)
     val output = HealthTransformations.mapHealthConditions(exampleInfectiousDiseaseRecord)
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 10L,
+        hsConditionType = conditionTypes.apply("infectious"),
+        hsCondition = conditions.apply("anaplasmosis"),
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
 
-    output.foreach { row =>
-      row.dogId shouldBe 10
-      row.hsConditionType shouldBe conditionTypes.apply("infectious")
-      row.hsCondition shouldBe conditions.apply("anaplasmosis")
-      row.hsConditionOtherDescription shouldBe None
-      row.hsConditionIsCongenital shouldBe false
-      row.hsConditionCause shouldBe None
-      row.hsConditionCauseOtherDescription shouldBe None
-      row.hsDiagnosisYear shouldBe Some(2020)
-      row.hsDiagnosisMonth shouldBe Some(2)
-      row.hsRequiredSurgeryOrHospitalization shouldBe Some(3)
-      row.hsFollowUpOngoing shouldBe Some(true)
-    }
+    output should contain theSameElementsAs truth
   }
 
   it should "correctly map infectious disease values when values are defined for multiple infectious diseases" in {
@@ -118,20 +121,23 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     )
     val exampleEyeDiseaseRecord = RawRecord(id = 1, singleEyeDisease)
     val output = HealthTransformations.mapHealthConditions(exampleEyeDiseaseRecord)
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 10L,
+        hsConditionType = conditionTypes.apply("eye"),
+        hsCondition = conditions.apply("cat"),
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
 
-    output.foreach { row =>
-      row.dogId shouldBe 10
-      row.hsConditionType shouldBe conditionTypes.apply("eye")
-      row.hsCondition shouldBe conditions.apply("cat")
-      row.hsConditionOtherDescription shouldBe None
-      row.hsConditionIsCongenital shouldBe false
-      row.hsConditionCause shouldBe None
-      row.hsConditionCauseOtherDescription shouldBe None
-      row.hsDiagnosisYear shouldBe Some(2020)
-      row.hsDiagnosisMonth shouldBe Some(2)
-      row.hsRequiredSurgeryOrHospitalization shouldBe Some(3)
-      row.hsFollowUpOngoing shouldBe Some(true)
-    }
+    output should contain theSameElementsAs truth
   }
 
   it should "correctly map eye disease values when values are defined for different cases of blindness" in {
@@ -147,20 +153,23 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     )
     val exampleEyeDiseaseRecord1 = RawRecord(id = 1, singleEyeDiseaseBlindCase1)
     val output1 = HealthTransformations.mapHealthConditions(exampleEyeDiseaseRecord1)
+    val truth1 = List(
+      HlesHealthCondition(
+        dogId = 10L,
+        hsConditionType = conditionTypes.apply("eye"),
+        hsCondition = conditions.apply("blind"),
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(5),
+        hsRequiredSurgeryOrHospitalization = Some(4),
+        hsFollowUpOngoing = Some(false)
+      )
+    )
 
-    output1.foreach { row =>
-      row.dogId shouldBe 10
-      row.hsConditionType shouldBe conditionTypes.apply("eye")
-      row.hsCondition shouldBe conditions.apply("blind")
-      row.hsConditionOtherDescription shouldBe None
-      row.hsConditionIsCongenital shouldBe false
-      row.hsConditionCause shouldBe None
-      row.hsConditionCauseOtherDescription shouldBe None
-      row.hsDiagnosisYear shouldBe Some(2020)
-      row.hsDiagnosisMonth shouldBe Some(5)
-      row.hsRequiredSurgeryOrHospitalization shouldBe Some(4)
-      row.hsFollowUpOngoing shouldBe Some(false)
-    }
+    output1 should contain theSameElementsAs (truth1)
 
     val singleEyeDiseaseBlindCase2 = Map[String, Array[String]](
       "study_id" -> Array("10"),
@@ -175,20 +184,23 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     )
     val exampleEyeDiseaseRecord2 = RawRecord(id = 2, singleEyeDiseaseBlindCase2)
     val output2 = HealthTransformations.mapHealthConditions(exampleEyeDiseaseRecord2)
+    val truth2 = List(
+      HlesHealthCondition(
+        dogId = 10L,
+        hsConditionType = conditionTypes.apply("eye"),
+        hsCondition = conditions.apply("blind"),
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = Some(5),
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(5),
+        hsRequiredSurgeryOrHospitalization = Some(4),
+        hsFollowUpOngoing = Some(false)
+      )
+    )
 
-    output2.foreach { row =>
-      row.dogId shouldBe 10
-      row.hsConditionType shouldBe conditionTypes.apply("eye")
-      row.hsCondition shouldBe conditions.apply("blind")
-      row.hsConditionOtherDescription shouldBe None
-      row.hsConditionIsCongenital shouldBe false
-      row.hsConditionCause shouldBe Some(5)
-      row.hsConditionCauseOtherDescription shouldBe None
-      row.hsDiagnosisYear shouldBe Some(2020)
-      row.hsDiagnosisMonth shouldBe Some(5)
-      row.hsRequiredSurgeryOrHospitalization shouldBe Some(4)
-      row.hsFollowUpOngoing shouldBe Some(false)
-    }
+    output2 should contain theSameElementsAs (truth2)
 
     val singleEyeDiseaseBlindCase3 = Map[String, Array[String]](
       "study_id" -> Array("10"),
@@ -204,20 +216,23 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     )
     val exampleEyeDiseaseRecord3 = RawRecord(id = 2, singleEyeDiseaseBlindCase3)
     val output3 = HealthTransformations.mapHealthConditions(exampleEyeDiseaseRecord3)
+    val truth3 = List(
+      HlesHealthCondition(
+        dogId = 10L,
+        hsConditionType = conditionTypes.apply("eye"),
+        hsCondition = conditions.apply("blind"),
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = Some(98),
+        hsConditionCauseOtherDescription = Some("hummus"),
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(5),
+        hsRequiredSurgeryOrHospitalization = Some(4),
+        hsFollowUpOngoing = Some(false)
+      )
+    )
 
-    output3.foreach { row =>
-      row.dogId shouldBe 10
-      row.hsConditionType shouldBe conditionTypes.apply("eye")
-      row.hsCondition shouldBe conditions.apply("blind")
-      row.hsConditionOtherDescription shouldBe None
-      row.hsConditionIsCongenital shouldBe false
-      row.hsConditionCause shouldBe Some(98)
-      row.hsConditionCauseOtherDescription shouldBe Some("hummus")
-      row.hsDiagnosisYear shouldBe Some(2020)
-      row.hsDiagnosisMonth shouldBe Some(5)
-      row.hsRequiredSurgeryOrHospitalization shouldBe Some(4)
-      row.hsFollowUpOngoing shouldBe Some(false)
-    }
+    output3 should contain theSameElementsAs (truth3)
   }
 
   it should "correctly map eye disease values when values are defined for multiple eye diseases" in {
@@ -296,7 +311,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val singleCongenitalEyeDisorder = Map[String, Array[String]](
       "study_id" -> Array("10"),
       "hs_congenital_yn" -> Array("1"),
-      "hs_cg_disorders_yn" -> Array("1"),
+      "hs_cg_eye_disorders_yn" -> Array("1"),
       "hs_cg_eye_cat" -> Array("1"),
       "hs_cg_eye_cat_month" -> Array("2"),
       "hs_cg_eye_cat_year" -> Array("2020"),
@@ -305,20 +320,23 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     )
     val exampleEyeDisorderRecord = RawRecord(id = 1, singleCongenitalEyeDisorder)
     val output = HealthTransformations.mapHealthConditions(exampleEyeDisorderRecord)
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 10L,
+        hsConditionType = conditionTypes.apply("eye"),
+        hsCondition = conditions.apply("cat"),
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
 
-    output.foreach { row =>
-      row.dogId shouldBe 10
-      row.hsConditionType shouldBe conditionTypes.apply("eye")
-      row.hsCondition shouldBe conditions.apply("blind")
-      row.hsConditionOtherDescription shouldBe None
-      row.hsConditionIsCongenital shouldBe true
-      row.hsConditionCause shouldBe None
-      row.hsConditionCauseOtherDescription shouldBe None
-      row.hsDiagnosisYear shouldBe Some(2020)
-      row.hsDiagnosisMonth shouldBe Some(2)
-      row.hsRequiredSurgeryOrHospitalization shouldBe Some(3)
-      row.hsFollowUpOngoing shouldBe Some(true)
-    }
+    output should contain theSameElementsAs truth
   }
 
   it should "correctly map congenital eye disorders when values are defined for multiple congenital eye disorders" in {
@@ -371,6 +389,38 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     )
 
     output should contain theSameElementsAs (truth)
+  }
+
+  it should "correctly map other congenital disorders when values are defined for it" in {
+    val singleCongenitalOtherDisorder = Map[String, Array[String]](
+      "study_id" -> Array("10"),
+      "hs_congenital_yn" -> Array("1"),
+      "hs_cg_other_yn" -> Array("1"),
+      "hs_cg_other_spec" -> Array("spongebob"),
+      "hs_cg_other_month" -> Array("2"),
+      "hs_cg_other_year" -> Array("2020"),
+      "hs_cg_other_surg" -> Array("1"),
+      "hs_cg_other_fu" -> Array("0")
+    )
+    val exampleOtherDisorderRecord = RawRecord(id = 1, singleCongenitalOtherDisorder)
+    val output = HealthTransformations.mapHealthConditions(exampleOtherDisorderRecord)
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 10L,
+        hsConditionType = conditionTypes.apply("cg_other"),
+        hsCondition = conditions.apply("cg_other"),
+        hsConditionOtherDescription = Some("spongebob"),
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(1),
+        hsFollowUpOngoing = Some(false)
+      )
+    )
+
+    output should contain theSameElementsAs truth
   }
 
   it should "correctly map health status data when fields are null" in {

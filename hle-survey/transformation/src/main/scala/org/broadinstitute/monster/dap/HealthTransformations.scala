@@ -19,7 +19,11 @@ object HealthTransformations {
     conditionCause: Option[Long] = None,
     conditionCauseOtherDescription: Option[String] = None
   ): Option[HlesHealthCondition] =
-    if (rawRecord.getBoolean(s"hs_${conditionName}")) {
+    // include the OR because of inconsistent naming; for example, hs_cg_other_yn is the boolean flag, but
+    // the piece we want to treat as the condition name is cg_other, not cg_other_yn
+    if (rawRecord.getBoolean(s"hs_${conditionName}") || rawRecord.getBoolean(
+          s"hs_${conditionName}_yn"
+        )) {
       Some(
         HlesHealthCondition(
           dogId = rawRecord.getRequired("study_id").toLong,
@@ -208,12 +212,22 @@ object HealthTransformations {
       None,
       Some(("dx_infect_other", "dx_infectious")),
       isOther = true
+    ),
+    // the congenital dependent condition is redundant here because the congenital-other case doesn't have an additional
+    // requirement apart from "hs_congenital_yn"
+    HealthCondition(
+      "cg_other",
+      "cg_other",
+      Some(("cg_other", "congenital")),
+      None,
+      isOther = true
     )
   )
 
   val conditionTypes: Map[String, Long] = Map(
     "eye" -> 0,
-    "infectious" -> 1 // prolly need to make this way higher to fit in order correctly
+    "infectious" -> 1, // prolly need to make this way higher to fit in order correctly
+    "cg_other" -> 2 // will also probably change; this is only for congenital!
   )
 
   val conditions: Map[String, Long] = Map(
@@ -280,6 +294,8 @@ object HealthTransformations {
     "toxop" -> 58,
     "tular" -> 59,
     "whpworm" -> 60,
-    "infect_other" -> 61
+    "infect_other" -> 61,
+    // congenital other
+    "cg_other" -> 62
   )
 }
