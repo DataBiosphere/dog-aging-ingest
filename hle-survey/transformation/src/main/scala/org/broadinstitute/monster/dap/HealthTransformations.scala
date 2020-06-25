@@ -117,54 +117,6 @@ object HealthTransformations {
   }
 
   val healthConditions: List[HealthCondition] = List(
-    // eye conditions
-    HealthCondition(
-      "eye",
-      "blind",
-      Some(("cg_eye_blind", "cg_eye_disorders")),
-      Some(("dx_blind", "dx_eye"))
-    ),
-    HealthCondition(
-      "eye",
-      "cat",
-      Some(("cg_eye_cat", "cg_eye_disorders")),
-      Some(("dx_cat", "dx_eye"))
-    ),
-    HealthCondition(
-      "eye",
-      "glauc",
-      Some(("cg_eye_glauc", "cg_eye_disorders")),
-      Some(("dx_glauc", "dx_eye"))
-    ),
-    HealthCondition(
-      "eye",
-      "kcs",
-      Some(("cg_eye_kcs", "cg_eye_disorders")),
-      Some(("dx_kcs", "dx_eye"))
-    ),
-    HealthCondition("eye", "ppm", Some(("cg_eye_ppm", "cg_eye_disorders")), None),
-    HealthCondition("eye", "miss", Some(("cg_eye_miss", "cg_eye_disorders")), None),
-    HealthCondition(
-      "eye",
-      "eye_other",
-      Some(("cg_eye_other", "cg_eye_disorders")),
-      Some(("dx_eye_other", "dx_eye")),
-      isOther = true
-    ),
-    HealthCondition("eye", "ce", None, Some(("dx_ce", "dx_eye"))),
-    HealthCondition("eye", "conj", None, Some(("dx_conj", "dx_eye"))),
-    HealthCondition("eye", "cu", None, Some(("dx_cu", "dx_eye"))),
-    HealthCondition("eye", "dist", None, Some(("dx_dist", "dx_eye"))),
-    HealthCondition("eye", "ectrop", None, Some(("dx_ectrop", "dx_eye"))),
-    HealthCondition("eye", "entrop", None, Some(("dx_entrop", "dx_eye"))),
-    HealthCondition("eye", "ilp", None, Some(("dx_ilp", "dx_eye"))),
-    HealthCondition("eye", "ic", None, Some(("dx_ic", "dx_eye"))),
-    HealthCondition("eye", "jcat", None, Some(("dx_jcat", "dx_eye"))),
-    HealthCondition("eye", "ns", None, Some(("dx_ns", "dx_eye"))),
-    HealthCondition("eye", "pu", None, Some(("dx_pu", "dx_eye"))),
-    HealthCondition("eye", "pra", None, Some(("dx_pra", "dx_eye"))),
-    HealthCondition("eye", "rd", None, Some(("dx_rd", "dx_eye"))),
-    HealthCondition("eye", "uvei", None, Some(("dx_uvei", "dx_eye"))),
     // infectious conditions
     HealthCondition("infectious", "anaplasmosis", None, Some(("dx_anaplasmosis", "dx_infectious"))),
     HealthCondition("infectious", "asperg", None, Some(("dx_asperg", "dx_infectious"))),
@@ -222,12 +174,6 @@ object HealthTransformations {
       None,
       isOther = true
     )
-  )
-
-  val conditionTypes: Map[String, Long] = Map(
-    "eye" -> 0,
-    "infectious" -> 1, // prolly need to make this way higher to fit in order correctly
-    "cg_other" -> 2 // will also probably change; this is only for congenital!
   )
 
   val conditions: Map[String, Long] = Map(
