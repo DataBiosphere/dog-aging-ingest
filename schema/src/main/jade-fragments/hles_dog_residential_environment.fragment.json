@@ -10,43 +10,43 @@
       "datatype": "integer"
     },
     {
-      "name": "de_past_residence_zip_1",
+      "name": "de_past_residence_zip1",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_zip_2",
+      "name": "de_past_residence_zip2",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_zip_3",
+      "name": "de_past_residence_zip3",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_zip_4",
+      "name": "de_past_residence_zip4",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_zip_5",
+      "name": "de_past_residence_zip5",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_zip_6",
+      "name": "de_past_residence_zip6",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_zip_7",
+      "name": "de_past_residence_zip7",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_zip_8",
+      "name": "de_past_residence_zip8",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_zip_9",
+      "name": "de_past_residence_zip9",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_zip_10",
+      "name": "de_past_residence_zip10",
       "datatype": "string"
     },
     {
@@ -54,43 +54,43 @@
       "datatype": "integer"
     },
     {
-      "name": "de_past_residence_country_1",
+      "name": "de_past_residence_country1",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_country_2",
+      "name": "de_past_residence_country2",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_country_3",
+      "name": "de_past_residence_country3",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_country_4",
+      "name": "de_past_residence_country4",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_country_5",
+      "name": "de_past_residence_country5",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_country_6",
+      "name": "de_past_residence_country6",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_country_7",
+      "name": "de_past_residence_country7",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_country_8",
+      "name": "de_past_residence_country8",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_country_9",
+      "name": "de_past_residence_country9",
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_country_10",
+      "name": "de_past_residence_country10",
       "datatype": "string"
     },
     {

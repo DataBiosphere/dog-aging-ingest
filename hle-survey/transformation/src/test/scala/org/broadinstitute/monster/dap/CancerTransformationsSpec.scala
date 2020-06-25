@@ -1,6 +1,5 @@
 package org.broadinstitute.monster.dap
 
-import org.broadinstitute.monster.dogaging.jadeschema.table.HlesCancerCondition
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -9,6 +8,7 @@ class CancerTransformationsSpec extends AnyFlatSpec with Matchers {
 
   private val exampleCancerFields = Map[String, Array[String]](
     "study_id" -> Array("10"),
+    "hs_dx_cancer_yn" -> Array("1"),
     "hs_dx_cancer_year" -> Array("2020"),
     "hs_dx_cancer_mo" -> Array("10"),
     "hs_dx_cancer_surg" -> Array("2"),
@@ -23,9 +23,9 @@ class CancerTransformationsSpec extends AnyFlatSpec with Matchers {
     "hs_dx_cancer_lymph_other" -> Array("other lymph")
   )
 
-  it should "correctly map owner values when all values are defined" in {
+  it should "correctly map cancer values when numerous values are defined" in {
     val exampleCancerRecord = RawRecord(id = 1, exampleCancerFields)
-    val output = CancerTransformations.mapCancerConditions(exampleCancerRecord)
+    val output = CancerTransformations.mapCancerConditions(exampleCancerRecord).get
 
     output.dogId shouldBe 10
     output.hsInitialDiagnosisYear shouldBe Some(2020)
@@ -59,8 +59,15 @@ class CancerTransformationsSpec extends AnyFlatSpec with Matchers {
   it should "correctly map cancer data when optional fields are null" in {
     val emptyRecord = RawRecord(id = 1, Map[String, Array[String]]("study_id" -> Array("5")))
 
-    CancerTransformations.mapCancerConditions(emptyRecord) shouldBe HlesCancerCondition.init(dogId =
-      5
+    CancerTransformations.mapCancerConditions(emptyRecord) shouldBe None
+  }
+
+  it should "correctly map cancer data when the cancer boolean is false" in {
+    val falseRecord = RawRecord(
+      id = 1,
+      Map[String, Array[String]]("study_id" -> Array("5"), "hs_dx_cancer_yn" -> Array("0"))
     )
+
+    CancerTransformations.mapCancerConditions(falseRecord) shouldBe None
   }
 }

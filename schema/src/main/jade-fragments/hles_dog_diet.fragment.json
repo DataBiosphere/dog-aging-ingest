@@ -1,0 +1,353 @@
+{
+  "name": "hles_dog_diet",
+  "columns": [
+    {
+      "name": "df_feedings_per_day",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_primary_diet_component",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_primary_diet_component_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "df_primary_diet_component_organic",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_primary_diet_component_grain_free",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_primary_diet_component_grain_free_past",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_primary_diet_component_change_recent",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_primary_diet_component_change_months_ago",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_primary_diet_component_change_allergy_related",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_primary_diet_component_change_different_life_stage",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_primary_diet_component_change_stop_grain_free",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_primary_diet_component_change_health_condition_specific",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_primary_diet_component_change_brand_change",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_primary_diet_component_change_new_food_same_brand",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_primary_diet_component_change_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_primary_diet_component_change_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "df_secondary_diet_component_used",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_secondary_diet_component",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_secondary_diet_component_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "df_secondary_diet_component_organic",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_secondary_diet_component_grain_free",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_secondary_diet_component_grain_free_past",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_secondary_diet_component_change_recent",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_secondary_diet_component_change_months_ago",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_secondary_diet_component_change_allergy_related",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_secondary_diet_component_change_different_life_stage",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_secondary_diet_component_change_stop_grain_free",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_secondary_diet_component_change_health_condition_specific",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_secondary_diet_component_change_brand_change",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_secondary_diet_component_change_new_food_same_brand",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_secondary_diet_component_change_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_secondary_diet_component_change_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "df_treats_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_treats_commercial_biscuits",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_treats_rawhide",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_treats_bones",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_treats_table_meat",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_treats_table_carbs",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_treats_vegetables",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_treats_homemade_protein",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_treats_homemade_biscuits",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_treats_pumpkin",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_treats_peanut_butter",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_treats_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "df_treats_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "df_daily_supplements_bone_meal",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_glucosamine",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_chondroitin",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_other_joint",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_omega3",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_non_oil_skin",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_vitamins",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_enzyme",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_probiotics",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_fiber",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_alkalinize",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_acidify",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_taurine",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_antiox",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_coenzyme_q10",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_daily_supplements_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "df_infrequent_supplements_bone_meal",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_glucosamine",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_chondroitin",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_other_joint",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_omega3",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_non_oil_skin",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_vitamins",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_enzyme",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_probiotics",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_fiber",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_alkalinize",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_acidify",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_taurine",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_antiox",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_coenzyme_q10",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_infrequent_supplements_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "df_diet_consistency",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_diet_consistency_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "df_appetite",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_appetite_change_last_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_ever_malnourished",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_ever_underweight",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_ever_overweight",
+      "datatype": "integer"
+    },
+    {
+      "name": "df_weight_change_last_year",
+      "datatype": "integer"
+    }
+  ]
+}

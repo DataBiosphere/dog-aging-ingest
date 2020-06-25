@@ -18,9 +18,10 @@ object DogTransformations {
     hlesDogRoutineEnvironment =
       Some(RoutineEnvironmentTransformations.mapRoutineEnvironment(rawRecord)),
     hlesDogBehavior = Some(BehaviorTransformations.mapBehavior(rawRecord)),
+    hlesDogDiet = Some(DietTransformations.mapDiet(rawRecord)),
     hlesDogMedsPreventatives =
       Some(MedsAndPreventativesTransformations.mapMedsPreventatives(rawRecord)),
-    hlesDogHealthSummary = Some(HealthStatusTransformations.mapHealthSummary(rawRecord))
+    hlesDogHealthSummary = Some(HealthStatusTransformations.mapHealthSummary(rawRecord)),
+    hlesDogFutureStudies = Some(AdditionalStudiesTransformations.mapFutureStudies(rawRecord))
   )
-
 }
