@@ -55,15 +55,6 @@ object DemographicsTransformations {
     */
   def mapAge(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics =
     rawRecord.getOptionalBoolean("dd_dog_birth_year_certain").fold(dog) { ageCertain =>
-      /*
-       * TODO: Encode this lookup table in the data.
-       *
-       * Age basis codebook:
-       *  - 1 == Calculated from birth year and month
-       *  - 2 == Estimated from birth year
-       *  - 3 == Estimated by owner
-       */
-
       if (ageCertain) {
         val formYear = rawRecord.getRequired("dd_dog_current_year_calc").toInt
         val birthYear = rawRecord.getRequired("dd_dog_birth_year").toInt
@@ -90,7 +81,9 @@ object DemographicsTransformations {
 
         dog.copy(
           ddAgeYears = Some(age),
-          ddAgeBasis = Some(if (exactMonthKnown) 1 else 2),
+          ddAgeBasis =
+            Some(if (exactMonthKnown) AgeBasis.Calculated else AgeBasis.EstimatedFromYear)
+              .map(_.value),
           ddAgeExactSourceAcquiredAsPuppy = Some(sources.contains("1")),
           ddAgeExactSourceRegistrationInformation = Some(sources.contains("2")),
           ddAgeExactSourceDeterminedByRescueOrg = Some(sources.contains("3")),
@@ -108,7 +101,7 @@ object DemographicsTransformations {
 
         dog.copy(
           ddAgeYears = rawRecord.getOptional("dd_dog_age").map(_.toDouble),
-          ddAgeBasis = Some(3),
+          ddAgeBasis = Some(AgeBasis.EstimatedByOwner.value),
           ddAgeEstimateSourceToldByPreviousOwner = Some(sources.contains("1")),
           // Not a typo, not sure what happened to option 2.
           ddAgeEstimateSourceDeterminedByRescueOrg = Some(sources.contains("3")),
