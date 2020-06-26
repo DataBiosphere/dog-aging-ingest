@@ -81,9 +81,8 @@ object DemographicsTransformations {
 
         dog.copy(
           ddAgeYears = Some(age),
-          ddAgeBasis =
-            Some(if (exactMonthKnown) AgeBasis.Calculated else AgeBasis.EstimatedFromYear)
-              .map(_.value),
+          ddAgeBasis = Some(if (exactMonthKnown) AgeBasis.Calculated else AgeBasis.EstimatedFromYear)
+            .map(_.value),
           ddAgeExactSourceAcquiredAsPuppy = Some(sources.contains("1")),
           ddAgeExactSourceRegistrationInformation = Some(sources.contains("2")),
           ddAgeExactSourceDeterminedByRescueOrg = Some(sources.contains("3")),
@@ -168,11 +167,12 @@ object DemographicsTransformations {
     * Parse all weight-related fields out of a raw RedCap record,
     * injecting them into a partially-modeled dog record.
     */
-  def mapWeight(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics = dog.copy(
-    ddWeightRange = rawRecord.getOptionalNumber("dd_dog_weight"),
-    ddWeightLbs = rawRecord.getOptional("dd_dog_weight_lbs").map(_.toDouble),
-    ddWeightRangeExpectedAdult = rawRecord.getOptionalNumber("dd_weight_range_expected_adult")
-  )
+  def mapWeight(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics =
+    dog.copy(
+      ddWeightRange = rawRecord.getOptionalNumber("dd_dog_weight"),
+      ddWeightLbs = rawRecord.getOptional("dd_dog_weight_lbs").map(_.toDouble),
+      ddWeightRangeExpectedAdult = rawRecord.getOptionalNumber("dd_weight_range_expected_adult")
+    )
 
   /**
     * Parse all insurance-related fields out of a raw RedCap record,

@@ -77,17 +77,18 @@ object HealthTransformations {
     conditionType: Long,
     condition: Long,
     isCongenital: Boolean
-  ): HlesHealthCondition = HlesHealthCondition(
-    dogId = rawRecord.getRequired("study_id").toLong,
-    hsConditionType = conditionType,
-    hsCondition = condition,
-    hsConditionOtherDescription = None,
-    hsConditionIsCongenital = isCongenital,
-    hsConditionCause = None,
-    hsConditionCauseOtherDescription = None,
-    hsDiagnosisYear = rawRecord.getOptionalNumber(s"${fieldPrefix}_year"),
-    hsDiagnosisMonth = rawRecord.getOptionalNumber(s"${fieldPrefix}_month"),
-    hsRequiredSurgeryOrHospitalization = rawRecord.getOptionalNumber(s"${fieldPrefix}_surg"),
-    hsFollowUpOngoing = rawRecord.getOptionalBoolean(s"${fieldPrefix}_fu")
-  )
+  ): HlesHealthCondition =
+    HlesHealthCondition(
+      dogId = rawRecord.getRequired("study_id").toLong,
+      hsConditionType = conditionType,
+      hsCondition = condition,
+      hsConditionOtherDescription = None,
+      hsConditionIsCongenital = isCongenital,
+      hsConditionCause = None,
+      hsConditionCauseOtherDescription = None,
+      hsDiagnosisYear = rawRecord.getOptionalNumber(s"${fieldPrefix}_year"),
+      hsDiagnosisMonth = rawRecord.getOptionalNumber(s"${fieldPrefix}_month"),
+      hsRequiredSurgeryOrHospitalization = rawRecord.getOptionalNumber(s"${fieldPrefix}_surg"),
+      hsFollowUpOngoing = rawRecord.getOptionalBoolean(s"${fieldPrefix}_fu")
+    )
 }
