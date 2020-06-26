@@ -6,39 +6,41 @@ import org.broadinstitute.monster.dogaging.jadeschema.table.HlesHealthCondition
 object HealthTransformations {
 
   /** Parse all health-condition-related fields out of a raw RedCap record. */
-  def mapHealthConditions(rawRecord: RawRecord): Iterable[HlesHealthCondition] =
-    HealthCondition.values.flatMap { healthCondition =>
-      val cg = for {
-        cgKey <- healthCondition.conditionType.cgKey
-        if healthCondition.hasCg &&
-          rawRecord.getBoolean("hs_congenital_yn") &&
-          rawRecord.getBoolean(cgKey.gate)
-        infix = healthCondition.cgPrefixOverride.getOrElse(
-          s"${cgKey.abbreviation}_${healthCondition.abbreviation}"
-        )
-        prefix = s"hs_cg_$infix"
-        conditionGate = healthCondition.computeGate(prefix)
-        if rawRecord.getBoolean(conditionGate)
-      } yield {
-        val base = createHealthConditionRow(
-          rawRecord,
-          prefix,
-          healthCondition.conditionType.value,
-          healthCondition.value,
-          isCongenital = true
-        )
-        if (healthCondition.isOther) {
-          base.copy(hsConditionOtherDescription = rawRecord.getOptional(s"${prefix}_spec"))
-        } else {
-          base
+  def mapHealthConditions(rawRecord: RawRecord): Iterable[HlesHealthCondition] = {
+    val cgs = if (rawRecord.getBoolean("hs_congenital_yn")) {
+      HealthCondition.cgValues.flatMap { healthCondition =>
+        for {
+          cgKey <- healthCondition.conditionType.cgKey
+          if rawRecord.getBoolean(cgKey.categoryGate)
+          prefix = healthCondition.cgPrefixOverride.getOrElse(
+            s"${cgKey.dataPrefix}_${healthCondition.abbreviation}"
+          )
+          conditionGate = healthCondition.computeGate(prefix)
+          if rawRecord.getBoolean(conditionGate)
+        } yield {
+          val base = createHealthConditionRow(
+            rawRecord,
+            prefix,
+            healthCondition.conditionType.value,
+            healthCondition.value,
+            isCongenital = true
+          )
+          if (healthCondition.isOther) {
+            base.copy(hsConditionOtherDescription = rawRecord.getOptional(s"${prefix}_spec"))
+          } else {
+            base
+          }
         }
       }
+    } else {
+      Iterable.empty
+    }
 
-      val dx = for {
+    val dxs = HealthCondition.dxValues.flatMap { healthCondition =>
+      for {
         dxKey <- healthCondition.conditionType.dxKey
-        if healthCondition.hasDx && rawRecord.getBoolean(dxKey.gate)
-        infix = if (dxKey.typePrefixed) s"_${dxKey.abbreviation}" else ""
-        prefix = s"hs_dx${infix}_${healthCondition.abbreviation}"
+        if rawRecord.getBoolean(dxKey.categoryGate)
+        prefix = s"${dxKey.dataPrefix}_${healthCondition.abbreviation}"
         if rawRecord.getBoolean(prefix)
       } yield {
         val base = createHealthConditionRow(
@@ -66,9 +68,10 @@ object HealthTransformations {
           base
         }
       }
-
-      Iterable.concat(cg, dx)
     }
+
+    Iterable.concat(cgs, dxs)
+  }
 
   /** Generic helper method for creating Hles Health Condition rows. */
   def createHealthConditionRow(
@@ -79,7 +82,7 @@ object HealthTransformations {
     isCongenital: Boolean
   ): HlesHealthCondition =
     HlesHealthCondition(
-      dogId = rawRecord.getRequired("study_id").toLong,
+      dogId = rawRecord.id,
       hsConditionType = conditionType,
       hsCondition = condition,
       hsConditionOtherDescription = None,

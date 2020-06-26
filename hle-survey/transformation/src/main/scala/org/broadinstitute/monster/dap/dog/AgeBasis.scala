@@ -2,6 +2,12 @@ package org.broadinstitute.monster.dap.dog
 
 import enumeratum.values.{LongEnum, LongEnumEntry}
 
+/**
+  * Description of how a dog's age was determined.
+  *
+  * @param value raw value to store on a per-row basis in BQ
+  * @param label string label to associate with the raw value in lookup tables
+  */
 sealed abstract class AgeBasis(override val value: Long, val label: String) extends LongEnumEntry
 
 object AgeBasis extends LongEnum[AgeBasis] {

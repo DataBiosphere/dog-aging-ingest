@@ -2,6 +2,21 @@ package org.broadinstitute.monster.dap.healthcondition
 
 import enumeratum.values.{LongEnum, LongEnumEntry}
 
+/**
+  * Specific health condition that a dog might have experienced.
+  *
+  * @param value raw value to store on a per-row basis in BQ
+  * @param label string label to associate with the raw value in lookup tables
+  * @param conditionType general category of the condition
+  * @param abbreviation short-hand used in RedCap to represent the condition
+  * @param hasCg true if the RedCap data might contain 'cg' data for the condition
+  * @param hasDx true if the RedCap data might contain 'dx' data for the condition
+  * @param isOther true if the condition has a '_spec' field for free-form user entry
+  * @param cgPrefixOverride if set, will override the auto-computed value used for
+  *                         the prefix of congenital data fields
+  * @param computeGate mapping function from `data prefix` => the name of the Y/N field
+  *                    marking if any data exists for the condition
+  */
 sealed abstract class HealthCondition(
   override val value: Long,
   val label: String,
@@ -16,6 +31,9 @@ sealed abstract class HealthCondition(
 
 object HealthCondition extends LongEnum[HealthCondition] {
   override val values = findValues
+
+  val cgValues = values.filter(_.hasCg)
+  val dxValues = values.filter(_.hasDx)
 
   import HealthConditionType.{findValues => _, _}
 
@@ -42,7 +60,7 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object PRA extends HealthCondition(119L, "Progressive retinal atrophy", Eye, "pra", false, true)
   case object RD extends HealthCondition(120L, "Retinal detachment", Eye, "rd", false, true)
   case object Uveitis extends HealthCondition(121L, "Uveitis", Eye, "uvei", false, true)
-  case object OtherEye extends HealthCondition(198L, "Other eye condition", Eye, "eye_other", true, true, true, Some("eye_other"))
+  case object OtherEye extends HealthCondition(198L, "Other eye condition", Eye, "eye_other", true, true, true, Some("hs_cg_eye_other"))
 
   // Ear conditions.
   // TODO
@@ -93,7 +111,7 @@ object HealthCondition extends LongEnum[HealthCondition] {
         true,
         false,
         true,
-        Some("other"),
+        Some("hs_cg_other"),
         prefix => s"${prefix}_yn"
       )
 

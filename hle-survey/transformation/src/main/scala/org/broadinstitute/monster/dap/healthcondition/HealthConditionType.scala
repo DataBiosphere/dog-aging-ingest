@@ -2,6 +2,14 @@ package org.broadinstitute.monster.dap.healthcondition
 
 import enumeratum.values.{LongEnum, LongEnumEntry}
 
+/**
+  * General class of health condition that a dog might experience.
+  *
+  * @param value raw value to store on a per-row basis in BQ
+  * @param label string label to associate with the raw value in lookup tables
+  * @param cgKey metadata about how to look up congenital conditions in this category
+  * @param dxKey metadata about how to look up non-congenital conditions in this category
+  */
 sealed abstract class HealthConditionType(
   override val value: Long,
   val label: String,
@@ -11,12 +19,38 @@ sealed abstract class HealthConditionType(
 
 object HealthConditionType extends LongEnum[HealthConditionType] {
 
+  /**
+    * Container for metadata determining how to look up congenital conditions
+    * within a category.
+    *
+    * @param abbreviation short-hand used in RedCap to represent the congenital category
+    * @param disorder flag for whether or not the RedCap data uses a '_disorders' suffix
+    *                 in the Y/N flag for the category
+    */
   case class CgKey(abbreviation: String, disorder: Boolean = true) {
-    def gate: String = s"hs_cg_$abbreviation${if (disorder) "_disorders" else ""}_yn"
+
+    /** Name of the Y/N field marking if there is any data in this congential category. */
+    def categoryGate: String = s"hs_cg_$abbreviation${if (disorder) "_disorders" else ""}_yn"
+
+    /** Prefix used for individual condition fields under this congenital category. */
+    def dataPrefix: String = s"hs_cg_$abbreviation"
   }
 
+  /**
+    * Container for metadata determining how to look up non-congenital conditions
+    * within a category.
+    *
+    * @param abbreviation short-hand used in RedCap to represent the non-congenital category
+    * @param typePrefixed flag for whether or not the RedCap data uses the category
+    *                     abbreviation as a piece of field names for individual conditions
+    */
   case class DxKey(abbreviation: String, typePrefixed: Boolean = true) {
-    def gate: String = s"hs_dx_${abbreviation}_yn"
+
+    /** Name of the Y/N field marking if there is any data in this non-congential category. */
+    def categoryGate: String = s"hs_dx_${abbreviation}_yn"
+
+    /** Prefix used for individual condition fields under this non-congenital category. */
+    def dataPrefix: String = s"hs_dx${if (typePrefixed) s"_$abbreviation" else ""}"
   }
 
   override val values = findValues
