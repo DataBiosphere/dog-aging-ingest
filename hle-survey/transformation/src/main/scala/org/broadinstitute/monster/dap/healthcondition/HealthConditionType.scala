@@ -68,10 +68,15 @@ object HealthConditionType extends LongEnum[HealthConditionType] {
       extends HealthConditionType(14L, "Hematopoietic", Some(CgKey("blood")), Some(DxKey("hema")))
 
   case object OtherCongenital
-      extends HealthConditionType(15L, "Other Congenital", Some(CgKey("other", false)), None)
+      extends HealthConditionType(
+        15L,
+        "Other congenital disorder",
+        Some(CgKey("other", false)),
+        None
+      )
 
-  case object InfectiousDisease
-      extends HealthConditionType(16L, "Infectious Disease", None, Some(DxKey("infectious", false)))
+  case object Infection
+      extends HealthConditionType(16L, "Infectious disease", None, Some(DxKey("infectious", false)))
 
   case object ToxinConsumption
       extends HealthConditionType(17L, "Toxin Consumption", None, Some(DxKey("dx_tox")))

@@ -7,7 +7,7 @@ import org.scalatest.matchers.should.Matchers
 
 class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
   behavior of "HealthTransformations"
-  /*
+
   it should "correctly map infectious disease values when values are defined for a single infectious disease" in {
     val singleInfectiousDisease = Map[String, Array[String]](
       "study_id" -> Array("10"),
@@ -23,8 +23,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth = List(
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = HealthConditionType.InfectiousDisease.value,
-        hsCondition = conditions.apply("anaplasmosis"),
+        hsConditionType = HealthConditionType.Infection.value,
+        hsCondition = HealthCondition.Anaplasmosis.value,
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsConditionCause = None,
@@ -66,8 +66,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth = List(
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = HealthConditionType.InfectiousDisease.value,
-        hsCondition = conditions.apply("anaplasmosis"),
+        hsConditionType = HealthConditionType.Infection.value,
+        hsCondition = HealthCondition.Anaplasmosis.value,
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsConditionCause = None,
@@ -79,8 +79,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       ),
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = HealthConditionType.InfectiousDisease.value,
-        hsCondition = conditions.apply("plague"),
+        hsConditionType = HealthConditionType.Infection.value,
+        hsCondition = HealthCondition.Plague.value,
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsConditionCause = None,
@@ -92,8 +92,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       ),
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = HealthConditionType.InfectiousDisease.value,
-        hsCondition = conditions.apply("infect_other"),
+        hsConditionType = HealthConditionType.Infection.value,
+        hsCondition = HealthCondition.OtherInfection.value,
         hsConditionOtherDescription = Some("falafel"),
         hsConditionIsCongenital = false,
         hsConditionCause = None,
@@ -107,7 +107,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
 
     output should contain theSameElementsAs (truth)
   }
-   */
+
   it should "correctly map eye disease values when values are defined for a single eye disease" in {
     val singleEyeDisease = Map[String, Array[String]](
       "study_id" -> Array("10"),
