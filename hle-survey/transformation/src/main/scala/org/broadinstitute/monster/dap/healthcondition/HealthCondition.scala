@@ -44,6 +44,45 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object Uveitis extends HealthCondition(121L, "Uveitis", Eye, "uvei", false, true)
   case object OtherEye extends HealthCondition(198L, "Other eye condition", Eye, "eye_other", true, true, true, Some("eye_other"))
 
+  // Ear conditions.
+  // TODO
+
+  // Oral conditions.
+  // TODO
+
+  // Skin conditions.
+  // TODO
+
+  // Cardiac conditions.
+  // TODO
+
+  // Respiratory conditions.
+  // TODO
+
+  // Gastrointestinal conditions.
+  // TODO
+
+  // Liver conditions.
+  // TODO
+
+  // Kidney conditions.
+  // TODO
+
+  // Reproductive conditions.
+  // TODO
+
+  // Orthopedic conditions.
+  // TODO
+
+  // Neurologic conditions.
+  // TODO
+
+  // Endocrine conditions.
+  // TODO
+
+  // Hematopoietic conditions.
+  // TODO
+
   // Other congenital conditions (annoying one-off case).
   case object OtherCG
       extends HealthCondition(
@@ -102,4 +141,13 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object Whipworms extends HealthCondition(1640L, "Whipworms", Infection, "whpworm", false, true)
   case object OtherInfection
       extends HealthCondition(1698L, "Other infectious disease", Infection, "infect_other", false, true, isOther = true)
+
+  // Toxin consumption.
+  // TODO
+
+  // Trauma.
+  // TODO.
+
+  // Immune conditions.
+  // TODO
 }
