@@ -1,14 +1,13 @@
 package org.broadinstitute.monster.dap
 
+import org.broadinstitute.monster.dap.healthcondition.{HealthCondition, HealthConditionType}
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesHealthCondition
-
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
   behavior of "HealthTransformations"
-  import HealthTransformations.{conditionTypes, conditions}
-
+  /*
   it should "correctly map infectious disease values when values are defined for a single infectious disease" in {
     val singleInfectiousDisease = Map[String, Array[String]](
       "study_id" -> Array("10"),
@@ -24,7 +23,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth = List(
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("infectious"),
+        hsConditionType = HealthConditionType.InfectiousDisease.value,
         hsCondition = conditions.apply("anaplasmosis"),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
@@ -67,7 +66,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth = List(
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("infectious"),
+        hsConditionType = HealthConditionType.InfectiousDisease.value,
         hsCondition = conditions.apply("anaplasmosis"),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
@@ -80,7 +79,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       ),
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("infectious"),
+        hsConditionType = HealthConditionType.InfectiousDisease.value,
         hsCondition = conditions.apply("plague"),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
@@ -93,7 +92,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       ),
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("infectious"),
+        hsConditionType = HealthConditionType.InfectiousDisease.value,
         hsCondition = conditions.apply("infect_other"),
         hsConditionOtherDescription = Some("falafel"),
         hsConditionIsCongenital = false,
@@ -108,7 +107,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
 
     output should contain theSameElementsAs (truth)
   }
-
+   */
   it should "correctly map eye disease values when values are defined for a single eye disease" in {
     val singleEyeDisease = Map[String, Array[String]](
       "study_id" -> Array("10"),
@@ -124,8 +123,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth = List(
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("eye"),
-        hsCondition = conditions.apply("cat"),
+        hsConditionType = HealthConditionType.Eye.value,
+        hsCondition = HealthCondition.Cataracts.value,
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsConditionCause = None,
@@ -156,8 +155,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth1 = List(
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("eye"),
-        hsCondition = conditions.apply("blind"),
+        hsConditionType = HealthConditionType.Eye.value,
+        hsCondition = HealthCondition.Blindness.value,
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsConditionCause = None,
@@ -187,8 +186,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth2 = List(
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("eye"),
-        hsCondition = conditions.apply("blind"),
+        hsConditionType = HealthConditionType.Eye.value,
+        hsCondition = HealthCondition.Blindness.value,
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsConditionCause = Some(5),
@@ -219,8 +218,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth3 = List(
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("eye"),
-        hsCondition = conditions.apply("blind"),
+        hsConditionType = HealthConditionType.Eye.value,
+        hsCondition = HealthCondition.Blindness.value,
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsConditionCause = Some(98),
@@ -265,8 +264,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth = List(
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("eye"),
-        hsCondition = conditions.apply("cat"),
+        hsConditionType = HealthConditionType.Eye.value,
+        hsCondition = HealthCondition.Cataracts.value,
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsConditionCause = None,
@@ -278,8 +277,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       ),
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("eye"),
-        hsCondition = conditions.apply("blind"),
+        hsConditionType = HealthConditionType.Eye.value,
+        hsCondition = HealthCondition.Blindness.value,
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsConditionCause = Some(98),
@@ -291,8 +290,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       ),
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("eye"),
-        hsCondition = conditions.apply("eye_other"),
+        hsConditionType = HealthConditionType.Eye.value,
+        hsCondition = HealthCondition.OtherEye.value,
         hsConditionOtherDescription = Some("falafel"),
         hsConditionIsCongenital = false,
         hsConditionCause = None,
@@ -323,8 +322,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth = List(
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("eye"),
-        hsCondition = conditions.apply("cat"),
+        hsConditionType = HealthConditionType.Eye.value,
+        hsCondition = HealthCondition.Cataracts.value,
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsConditionCause = None,
@@ -362,8 +361,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth = List(
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("eye"),
-        hsCondition = conditions.apply("cat"),
+        hsConditionType = HealthConditionType.Eye.value,
+        hsCondition = HealthCondition.Cataracts.value,
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsConditionCause = None,
@@ -375,8 +374,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       ),
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("eye"),
-        hsCondition = conditions.apply("eye_other"),
+        hsConditionType = HealthConditionType.Eye.value,
+        hsCondition = HealthCondition.OtherEye.value,
         hsConditionOtherDescription = Some("olives"),
         hsConditionIsCongenital = true,
         hsConditionCause = None,
@@ -407,8 +406,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     val truth = List(
       HlesHealthCondition(
         dogId = 10L,
-        hsConditionType = conditionTypes.apply("cg_other"),
-        hsCondition = conditions.apply("cg_other"),
+        hsConditionType = HealthConditionType.OtherCongenital.value,
+        hsCondition = HealthCondition.OtherCG.value,
         hsConditionOtherDescription = Some("spongebob"),
         hsConditionIsCongenital = true,
         hsConditionCause = None,
