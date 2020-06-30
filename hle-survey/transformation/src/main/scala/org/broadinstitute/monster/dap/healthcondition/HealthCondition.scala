@@ -37,7 +37,7 @@ object HealthCondition extends LongEnum[HealthCondition] {
 
   import HealthConditionType.{findValues => _, _}
 
-  // scalafmt: { maxColumn = 140, newlines.topLevelStatements = [] }
+  // scalafmt: { maxColumn = 145, newlines.topLevelStatements = [] }
 
   // Eye conditions.
   case object Blindness extends HealthCondition(101L, "Blindness", Eye, "blind", true, true)
@@ -87,7 +87,30 @@ object HealthCondition extends LongEnum[HealthCondition] {
   // TODO
 
   // Gastrointestinal conditions.
-  // TODO
+  case object Atresia extends HealthCondition(701L, "Atresia ani", Gastrointestinal, "atresia", true, false)
+  case object EA extends HealthCondition(702L, "Esophageal achalasia", Gastrointestinal, "ea", true, false)
+  case object Megaesophagus extends HealthCondition(703L, "Megaesophagus", Gastrointestinal, /*"megaeso"/"meg"*/ ???, true, true)
+  case object UH extends HealthCondition(704L, "Umbilical hernia", Gastrointestinal, "uh", true, false)
+  case object ASI extends HealthCondition(705L, "Anal sac impaction", Gastrointestinal, "asi", false, true)
+  case object BVS extends HealthCondition(706L, "Bilious vomiting syndrome", Gastrointestinal, "bvs", false, true)
+  case object GDV extends HealthCondition(707L, "Bloat with torsion (GDV)", Gastrointestinal, "gdv", false, true)
+  case object CD extends HealthCondition(708L, "Chronic or recurrent diarrhea", Gastrointestinal, "cd", false, true)
+  case object CV extends HealthCondition(709L, "Chronic or recurrent vomiting", Gastrointestinal, "cv", false, true)
+  case object Constipation extends HealthCondition(710L, "Constipation", Gastrointestinal, "con", false, true)
+  case object FI extends HealthCondition(711L, "Fecal incontinence", Gastrointestinal, "fi", false, true)
+  case object FoodAllergy extends HealthCondition(712L, "Food or medicine allergies", Gastrointestinal, "fma", false, true)
+  case object FBIB extends HealthCondition(713L, "Foreign body ingestion or blockage", Gastrointestinal, "fbib", false, true)
+  case object HGE
+      extends HealthCondition(714L, "Hemorrhagic gastroenteritis (HGE) or stress colitis (acute)", Gastrointestinal, "hge", false, true)
+  case object ICC extends HealthCondition(715L, "Idiopathic canine colitis (chronic)", Gastrointestinal, "icc", false, true)
+  case object IBS
+      extends HealthCondition(716L, "Irritable bowel syndrome (IBS) or inflammatory bowel disease (IBD)", Gastrointestinal, "ibd", false, true)
+  case object Lymphangiectasia extends HealthCondition(717L, "Lymphangiectasia", Gastrointestinal, "lym", false, true)
+  case object MD extends HealthCondition(718L, "Malabsorptive disorder", Gastrointestinal, "md", false, true)
+  case object OtherAllergy extends HealthCondition(719L, "Other allergies", Gastrointestinal, "all", false, true)
+  case object PLE extends HealthCondition(720L, "Protein-losing enteropathy (PLE)", Gastrointestinal, "ple", false, true)
+  case object PS extends HealthCondition(721L, "Pyloric stenosis", Gastrointestinal, "ps", false, true)
+  case object OtherGI extends HealthCondition(798L, "Other gastrointestinal condition", Gastrointestinal, "other", true, true, true)
 
   // Liver conditions.
   // TODO
@@ -166,8 +189,7 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object Toxoplasma extends HealthCondition(1638L, "Toxoplasma", Infection, "toxop", false, true)
   case object Tularemia extends HealthCondition(1639L, "Tularemia", Infection, "tular", false, true)
   case object Whipworms extends HealthCondition(1640L, "Whipworms", Infection, "whpworm", false, true)
-  case object OtherInfection
-      extends HealthCondition(1698L, "Other infectious disease", Infection, "infect_other", false, true, isOther = true)
+  case object OtherInfection extends HealthCondition(1698L, "Other infectious disease", Infection, "infect_other", false, true, isOther = true)
 
   // Toxin consumption.
   // TODO
