@@ -1,6 +1,6 @@
 package org.broadinstitute.monster.dap
 
-import org.broadinstitute.monster.dap.healthcondition.HealthCondition
+import org.broadinstitute.monster.dap.healthcondition.{HealthCondition, HealthConditionType}
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesHealthCondition
 
 object HealthTransformations {
@@ -12,10 +12,17 @@ object HealthTransformations {
         for {
           cgKey <- healthCondition.conditionType.cgKey
           if rawRecord.getBoolean(cgKey.categoryGate)
-          prefix = healthCondition.cgPrefixOverride.getOrElse(
-            s"${cgKey.dataPrefix}_${healthCondition.abbreviation}"
-          )
-          conditionGate = healthCondition.computeGate(prefix)
+          prefix <- healthCondition.conditionType match {
+            case HealthConditionType.OtherCongenital => Some(cgKey.dataPrefix)
+            case _ =>
+              healthCondition.both.orElse(healthCondition.cg).map { abbrev =>
+                s"${cgKey.dataPrefix}_$abbrev"
+              }
+          }
+          conditionGate = healthCondition.conditionType match {
+            case HealthConditionType.OtherCongenital => s"${prefix}_yn"
+            case _                                   => prefix
+          }
           if rawRecord.getBoolean(conditionGate)
         } yield {
           val base = createHealthConditionRow(
@@ -40,7 +47,9 @@ object HealthTransformations {
       for {
         dxKey <- healthCondition.conditionType.dxKey
         if rawRecord.getBoolean(dxKey.categoryGate)
-        prefix = s"${dxKey.dataPrefix}_${healthCondition.abbreviation}"
+        prefix <- healthCondition.both.orElse(healthCondition.dx).map { abbrev =>
+          s"${dxKey.dataPrefix}_$abbrev"
+        }
         if rawRecord.getBoolean(prefix)
       } yield {
         val base = createHealthConditionRow(
