@@ -75,7 +75,39 @@ object HealthCondition extends LongEnum[HealthCondition] {
   // TODO
 
   // Skin conditions.
-  // TODO
+  case object DermoidCysts extends HealthCondition(401L, "Dermoid cysts", Skin, "dcysts", true, false)
+  case object SpinaBifida extends HealthCondition(402L, "Spina bifida", Skin, "sp_bif", true, false)
+  case object UmbilicalHernia extends HealthCondition(403L, "Umbilical hernia", Skin, "uh", true, false)
+  case object Alopecia extends HealthCondition(404L, "Alopecia (hair loss)", Skin, "alo", false, true)
+  case object AtopicDermatitis extends HealthCondition(405L, "Atopic dermatitis (atopy)", Skin, "ad", false, true)
+  case object ChronicHotSpots extends HealthCondition(406L, "Chronic or recurrent hot spots", Skin, "chs", false, true)
+  case object ChronicSkinInfections extends HealthCondition(407L, "Chronic or recurrent skin infections", Skin, "csi", false, true)
+  case object ContactDermatitis extends HealthCondition(408L, "Contact dermatitis", Skin, "cd", false, true)
+  case object DLE extends HealthCondition(409L, "Discoid lupus erythematosus (DLE)", Skin, "dle", false, true)
+  case object FAD extends HealthCondition(410L, "Flea allergy dermatitis", Skin, "fad", false, true)
+  case object Fleas extends HealthCondition(411L, "Fleas", Skin, "flea", false, true)
+  case object FMA extends HealthCondition(412L, "Food or medicine allergies that affect the skin", Skin, "fma", false, true)
+  case object Ichthyosis extends HealthCondition(413L, "Ichthyosis", Skin, "ich", false, true)
+  case object LickGranuloma extends HealthCondition(414L, "Lick granuloma", Skin, "lg", false, true)
+  case object NSD extends HealthCondition(415L, "Non-specific dermatosis", Skin, "nsd", false, true)
+  case object PPP extends HealthCondition(416L, "Panepidermal pustular pemphigus (PPP)", Skin, "ppp", false, true)
+  case object PNP extends HealthCondition(417L, "Paraneoplastic pemphigus (PNP)", Skin, "pnp", false, true)
+  case object PE extends HealthCondition(418L, "Pemphigus erythematosus (PE)", Skin, "pe", false, true)
+  case object PF extends HealthCondition(419L, "Pemphigus foliaceus (PF)", Skin, "pf", false, true)
+  case object PV extends HealthCondition(420L, "Pemphigus vulgaris (PV)", Skin, "pv", false, true)
+  case object Pododermatitis extends HealthCondition(421L, "Pododermatitis", Skin, "podo", false, true)
+  case object Polymyositis extends HealthCondition(422L, "Polymyositis", Skin, "poly", false, true)
+  case object Pruritis extends HealthCondition(423L, "Pruritis (itchy skin)", Skin, "pru", false, true)
+  case object Pyoderma extends HealthCondition(424L, "Pyoderma or bacterial dermatitis", Skin, "pyo", false, true)
+  case object SarcopticMange extends HealthCondition(425L, "Sarcoptic mange", Skin, "sm", false, true)
+  case object SeasonalAllergies extends HealthCondition(426L, "Seasonal allergies", Skin, "sall", false, true)
+  case object SebaceousAdenitis extends HealthCondition(427L, "Sebaceous adenitis", Skin, "sade", false, true)
+  case object SebaceousCysts extends HealthCondition(428L, "Sebaceous cysts", Skin, "scys", false, true)
+  case object Seborrhea extends HealthCondition(429L, "Seborrhea or seborrheic dermatitis (greasy skin)", Skin, "sd", false, true)
+  case object SDM extends HealthCondition(430L, "Systemic demodectic mange", Skin, "sdm", false, true)
+  case object SLE extends HealthCondition(431L, "Systemic lupus erythematosus (SLE)", Skin, "sle", false, true)
+  case object Ticks extends HealthCondition(432L, "Ticks", Skin, "tick", false, true)
+  case object OtherSkin extends HealthCondition(498L, "Other skin condition", Skin, "other", true, true, true, Some("hs_cg_skin_other"))
 
   // Cardiac conditions.
   // TODO
