@@ -110,7 +110,28 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherSkin extends HealthCondition(498L, "Other skin condition", Skin, both = Some("other"), isOther = true)
 
   // Cardiac conditions.
-  // TODO
+  case object AS extends HealthCondition(501L, "Aortic/Subaortic stenosis", Cardiac, cg = Some("as"))
+  case object ASD extends HealthCondition(502L, "Atrial septal defects", Cardiac, cg = Some("asd"))
+  case object MitralDysplasia extends HealthCondition(503L, "Mitral dysplasia", Cardiac, cg = Some("mit_dys"))
+  case object Murmur extends HealthCondition(504L, "Murmur", Cardiac, cg = Some("murmur"), dx = Some("mur"))
+  case object PDA extends HealthCondition(505L, "Patent ductus arteriosus (PDA)", Cardiac, cg = Some("pda"))
+  case object PRAA extends HealthCondition(506L, "Persistent right aortic arch", Cardiac, cg = Some("praa"))
+  case object PulmonicStenosis extends HealthCondition(507L, "Pulmonic stenosis", Cardiac, cg = Some("p_steno"))
+  case object TricuspidDysplasia extends HealthCondition(508L, "Tricuspid dysplasia", Cardiac, cg = Some("tri_dys"))
+  case object VSD extends HealthCondition(509L, "Ventricular septal defects", Cardiac, cg = Some("vsd"))
+  case object Arrhythmia extends HealthCondition(510L, "Arrhythmia", Cardiac, dx = Some("arr"))
+  case object Cardiomyopathy extends HealthCondition(511L, "Cardiomyopathy", Cardiac, dx = Some("car"))
+  case object CHF extends HealthCondition(512L, "Congestive heart failure", Cardiac, dx = Some("chf"))
+  case object Endocarditis extends HealthCondition(513L, "Endocarditis", Cardiac, dx = Some("end"))
+  case object Hypertension extends HealthCondition(514L, "Hypertension (high blood pressure)", Cardiac, dx = Some("hbp"))
+  case object PericardialEffusion extends HealthCondition(515L, "Pericardial effusion", Cardiac, dx = Some("pe"))
+  case object PulmonaryHypertension extends HealthCondition(516L, "Pulmonary hypertension", Cardiac, dx = Some("ph"))
+  case object PulmonicStenosis extends HealthCondition(517L, "Pulmonic stenosis", Cardiac, dx = Some("ps"))
+  case object SubaorticStenosis extends HealthCondition(518L, "Subaortic stenosis", Cardiac, dx = Some("ss"))
+  case object ValveDisease extends HealthCondition(519L, "Valve disease", Cardiac, dx = Some("vd")) // TODO treat as other
+  case object OtherCardiac extends HealthCondition(598L, "Other", Cardiac, both = Some("other"), isOther = true)
+  // TODO handle hs_dx_cardiac_valve field
+  // TODO: at least test other & valve disease -- maybe also Murmur
 
   // Respiratory conditions.
   // TODO
