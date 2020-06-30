@@ -63,7 +63,16 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherEye extends HealthCondition(198L, "Other eye condition", Eye, "eye_other", true, true, true, Some("hs_cg_eye_other"))
 
   // Ear conditions.
-  // TODO
+  case object Deafness extends HealthCondition(201L, "Deafness", Ear, "deaf", true, true)
+  case object EarInfection extends HealthCondition(202L, "Ear Infection", Ear, "ei", false, true)
+  case object EarMites extends HealthCondition(203L, "Ear Mites", Ear, "em", false, true)
+  case object Epistaxis extends HealthCondition(204L, "Epistaxis (nose bleeds)", Ear, "epis", false, true)
+  case object HearingLoss extends HealthCondition(205L, "Hearing loss (incompletely deaf)", Ear, "hl", false, true)
+  case object Hematoma extends HealthCondition(206L, "Hematoma", Ear, "hemato", false, true)
+  case object Pharyngitis extends HealthCondition(207L, "Pharyngitis", Ear, "phary", false, true)
+  case object Rhinitis extends HealthCondition(208L, "Rhinitis", Ear, "rhini", false, true)
+  case object Tonsillitis extends HealthCondition(209L, "Tonsillitis", Ear, "tonsi", false, true)
+  case object OtherEar extends HealthCondition(298L, "Other ear condition", Ear, "ear_other", true, true, true, Some("hs_cg_ear_other"))
 
   // Oral conditions.
   // TODO
