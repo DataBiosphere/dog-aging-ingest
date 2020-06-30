@@ -72,7 +72,7 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object Pharyngitis extends HealthCondition(207L, "Pharyngitis", Ear, "phary", false, true)
   case object Rhinitis extends HealthCondition(208L, "Rhinitis", Ear, "rhini", false, true)
   case object Tonsillitis extends HealthCondition(209L, "Tonsillitis", Ear, "tonsi", false, true)
-  case object OtherEar extends HealthCondition(298L, "Other ear condition", Ear, "ear_other", true, true, true, Some("hs_cg_ear_other"))
+  case object OtherEar extends HealthCondition(298L, "Other ear condition", Ear, "other", true, true, true, Some("hs_cg_ear_other"))
 
   // Oral conditions.
   // TODO
@@ -173,7 +173,20 @@ object HealthCondition extends LongEnum[HealthCondition] {
   // TODO
 
   // Trauma.
-  // TODO.
+  case object DogBite extends HealthCondition(1801L, "Dog bite", Trauma, "dogbite", false, true)
+  case object AnimalBite extends HealthCondition(1802L, "Bite wound from another animal", Trauma, "anibite", false, true)
+  case object Fall extends HealthCondition(1803L, "Fall from height", Trauma, "fall", false, true)
+  case object Fracture extends HealthCondition(1804L, "Fractured bone", Trauma, "frac", false, true)
+  case object Head extends HealthCondition(1805L, "Head trauma due to any cause", Trauma, "head", false, true)
+  case object Car extends HealthCondition(1806L, "Hit by car or other vehicle", Trauma, "car", false, true)
+  case object Kick extends HealthCondition(1807L, "Kicked by horse or other large animal", Trauma, "kick", false, true)
+  case object Laceration extends HealthCondition(1808L, "Laceration", Trauma, "lac", false, true)
+  case object PenetratingWound extends HealthCondition(1809L, "Penetrating wound (such as a stick)", Trauma, "pene", false, true)
+  case object Proptosis extends HealthCondition(1810L, "Proptosis (eye out of socket)", Trauma, "prop", false, true)
+  case object SnakeBite extends HealthCondition(1811L, "Snakebite", Trauma, "snake", false, true)
+  case object Tail extends HealthCondition(1812L, "Tail injury", Trauma, "tail", false, true)
+  case object Nail extends HealthCondition(1813L, "Torn or broken toenail", Trauma, "nail", false, true)
+  case object OtherTrauma extends HealthCondition(1898L, "Other trauma", Trauma, "other", false, true, true)
 
   // Immune conditions.
   // TODO

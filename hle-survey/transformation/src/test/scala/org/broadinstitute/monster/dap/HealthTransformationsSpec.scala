@@ -475,7 +475,13 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       "hs_dx_ear_em_month" -> Array("2"),
       "hs_dx_ear_em_year" -> Array("2020"),
       "hs_dx_ear_em_surg" -> Array("3"),
-      "hs_dx_ear_em_fu" -> Array("1")
+      "hs_dx_ear_em_fu" -> Array("1"),
+      "hs_dx_ear_other" -> Array("1"),
+      "hs_dx_ear_other_spec" -> Array("ohno"),
+      "hs_dx_ear_other_month" -> Array("2"),
+      "hs_dx_ear_other_year" -> Array("2020"),
+      "hs_dx_ear_other_surg" -> Array("3"),
+      "hs_dx_ear_other_fu" -> Array("1")
     )
     val exampleEarDiseaseRecord = RawRecord(id = 1, multipleEarDisease)
     val output = HealthTransformations.mapHealthConditions(exampleEarDiseaseRecord)
@@ -498,6 +504,68 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
         hsConditionType = HealthConditionType.Ear.value,
         hsCondition = HealthCondition.EarMites.value,
         hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Ear.value,
+        hsCondition = HealthCondition.OtherEar.value,
+        hsConditionOtherDescription = Some("ohno"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs truth
+  }
+
+  it should "correctly map trauma values when values are defined" in {
+    val multipleTrauma = Map[String, Array[String]](
+      "hs_dx_trauma_yn" -> Array("1"),
+      "hs_dx_trauma_dogbite" -> Array("1"),
+      "hs_dx_trauma_dogbite_month" -> Array("2"),
+      "hs_dx_trauma_dogbite_year" -> Array("2020"),
+      "hs_dx_trauma_dogbite_surg" -> Array("3"),
+      "hs_dx_trauma_dogbite_fu" -> Array("1"),
+      "hs_dx_trauma_other" -> Array("1"),
+      "hs_dx_trauma_other_spec" -> Array("ohno"),
+      "hs_dx_trauma_other_month" -> Array("2"),
+      "hs_dx_trauma_other_year" -> Array("2020"),
+      "hs_dx_trauma_other_surg" -> Array("3"),
+      "hs_dx_trauma_other_fu" -> Array("1")
+    )
+    val exampleTraumaRecord = RawRecord(id = 1, multipleTrauma)
+    val output = HealthTransformations.mapHealthConditions(exampleTraumaRecord)
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Trauma.value,
+        hsCondition = HealthCondition.DogBite.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Trauma.value,
+        hsCondition = HealthCondition.OtherTrauma.value,
+        hsConditionOtherDescription = Some("ohno"),
         hsConditionIsCongenital = false,
         hsConditionCause = None,
         hsConditionCauseOtherDescription = None,
