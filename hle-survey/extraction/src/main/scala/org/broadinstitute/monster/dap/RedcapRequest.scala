@@ -21,7 +21,7 @@ sealed trait RedcapRequest
   *                time will be downloaded
   * @param filters arbitrary field-value pairs to use as an exact-match
   *                filter on downloaded records
-  **/
+  */
 case class GetRecords(
   ids: List[String] = Nil,
   fields: List[String] = Nil,

@@ -14,7 +14,7 @@ object OwnerTransformations {
     *
     * @param divisionString the text string to be parsed
     * @return an integer of the division number
-    **/
+    */
   def getCensusDivision(divisionString: String): Option[Long] =
     censusDivisionPattern
       .findFirstMatchIn(divisionString)
