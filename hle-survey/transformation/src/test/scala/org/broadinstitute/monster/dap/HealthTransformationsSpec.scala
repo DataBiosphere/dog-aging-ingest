@@ -697,6 +697,124 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     output should contain theSameElementsAs truth
   }
 
+  it should "correctly map congenital GI disorders when values are defined" in {
+    val multipleCongenitalSkinDisorder = Map[String, Array[String]](
+      "hs_congenital_yn" -> Array("1"),
+      "hs_cg_gastro_disorders_yn" -> Array("1"),
+      "hs_cg_gastro_megaeso" -> Array("1"),
+      "hs_cg_gastro_megaeso_month" -> Array("2"),
+      "hs_cg_gastro_megaeso_year" -> Array("2020"),
+      "hs_cg_gastro_megaeso_surg" -> Array("3"),
+      "hs_cg_gastro_megaeso_fu" -> Array("1"),
+      "hs_cg_gastro_other" -> Array("1"),
+      "hs_cg_gastro_other_spec" -> Array("olives"),
+      "hs_cg_gastro_other_month" -> Array("2"),
+      "hs_cg_gastro_other_year" -> Array("2020"),
+      "hs_cg_gastro_other_surg" -> Array("3"),
+      "hs_cg_gastro_other_fu" -> Array("0")
+    )
+    val exampleSkinDisorderRecord = RawRecord(id = 1, multipleCongenitalSkinDisorder)
+    val output = HealthTransformations.mapHealthConditions(exampleSkinDisorderRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Gastrointestinal.value,
+        hsCondition = HealthCondition.Megaesophagus.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Gastrointestinal.value,
+        hsCondition = HealthCondition.OtherGI.value,
+        hsConditionOtherDescription = Some("olives"),
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(false)
+      )
+    )
+
+    output should contain theSameElementsAs (truth)
+  }
+
+  it should "correctly map GI disease values when values are defined" in {
+    val multipleEarDisease = Map[String, Array[String]](
+      "hs_dx_gi_yn" -> Array("1"),
+      "hs_dx_gi_meg" -> Array("1"),
+      "hs_dx_gi_meg_month" -> Array("2"),
+      "hs_dx_gi_meg_year" -> Array("2020"),
+      "hs_dx_gi_meg_surg" -> Array("3"),
+      "hs_dx_gi_meg_fu" -> Array("1"),
+      "hs_dx_gi_hge" -> Array("1"),
+      "hs_dx_gi_hge_month" -> Array("2"),
+      "hs_dx_gi_hge_year" -> Array("2020"),
+      "hs_dx_gi_hge_surg" -> Array("3"),
+      "hs_dx_gi_hge_fu" -> Array("1"),
+      "hs_dx_gi_other" -> Array("1"),
+      "hs_dx_gi_other_spec" -> Array("ohno"),
+      "hs_dx_gi_other_month" -> Array("2"),
+      "hs_dx_gi_other_year" -> Array("2020"),
+      "hs_dx_gi_other_surg" -> Array("3"),
+      "hs_dx_gi_other_fu" -> Array("1")
+    )
+    val exampleEarDiseaseRecord = RawRecord(id = 1, multipleEarDisease)
+    val output = HealthTransformations.mapHealthConditions(exampleEarDiseaseRecord)
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Gastrointestinal.value,
+        hsCondition = HealthCondition.Megaesophagus.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Gastrointestinal.value,
+        hsCondition = HealthCondition.HGE.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Gastrointestinal.value,
+        hsCondition = HealthCondition.OtherGI.value,
+        hsConditionOtherDescription = Some("ohno"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs truth
+  }
+
   it should "correctly map health status data when fields are null" in {
     val emptyRecord = RawRecord(1, Map.empty)
 

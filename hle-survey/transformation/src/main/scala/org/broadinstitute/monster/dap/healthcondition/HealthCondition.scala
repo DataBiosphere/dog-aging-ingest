@@ -8,12 +8,11 @@ import enumeratum.values.{LongEnum, LongEnumEntry}
   * @param value raw value to store on a per-row basis in BQ
   * @param label string label to associate with the raw value in lookup tables
   * @param conditionType general category of the condition
-  * @param both TODO
-  * @param cg TODO
-  * @param dx TODO
+  * @param both abbreviation used for both the 'cg' and 'dx' representations
+  *             of this condition, if one exists
+  * @param cg abbreviation used for the 'cg' representation of this condition, if one exists
+  * @param dx abbreviation used for the 'dx' representation of this condition, if one exists
   * @param isOther true if the condition has a '_spec' field for free-form user entry
-  * @param computeGate mapping function from `data prefix` => the name of the Y/N field
-  *                    marking if any data exists for the condition
   */
 sealed abstract class HealthCondition(
   override val value: Long,
@@ -22,8 +21,7 @@ sealed abstract class HealthCondition(
   val both: Option[String] = None,
   val cg: Option[String] = None,
   val dx: Option[String] = None,
-  val isOther: Boolean = false,
-  val computeGate: String => String = identity
+  val isOther: Boolean = false
 ) extends LongEnumEntry
 
 object HealthCondition extends LongEnum[HealthCondition] {
