@@ -9,7 +9,6 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
   behavior of "RoutineEnvironmentTransformations"
 
   it should "map dogpark fields when available" in {
-
     // de_dogpark_get_to = ('Walk' , 'Bike' , 'Other')
     val example1 = Map[String, Array[String]](
       "de_dogpark_yn" -> Array("1"),
@@ -20,9 +19,10 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
       "de_dogpark_min" -> Array("30")
     )
 
-    val output1 = RoutineEnvironmentTransformations.mapRoutineEnvironment(
-      RawRecord(id = 1, example1)
-    )
+    val output1 =
+      RoutineEnvironmentTransformations.mapRoutineEnvironment(
+        RawRecord(id = 1, example1)
+      )
 
     output1.deDogpark.value shouldBe true
     output1.deDogparkDaysPerMonth.value shouldBe 10
