@@ -33,7 +33,10 @@ object HealthTransformations {
             isCongenital = true
           )
           if (healthCondition.isOther) {
-            base.copy(hsConditionOtherDescription = rawRecord.getOptional(s"${prefix}_spec"))
+            val descriptionFieldName = healthCondition.descriptionSuffixOverride
+              .map(suffix => s"${cgKey.dataPrefix}_$suffix")
+              .getOrElse(s"${prefix}_spec")
+            base.copy(hsConditionOtherDescription = rawRecord.getOptional(descriptionFieldName))
           } else {
             base
           }
@@ -73,7 +76,7 @@ object HealthTransformations {
           )
         } else if (healthCondition.isOther) {
           val descriptionFieldName = healthCondition.descriptionSuffixOverride
-            .map(suffix => s"${healthCondition.conditionType.dxKey}_$suffix")
+            .map(suffix => s"${dxKey.dataPrefix}_$suffix")
             .getOrElse(s"${prefix}_spec")
           base.copy(hsConditionOtherDescription = rawRecord.getOptional(descriptionFieldName))
         } else {

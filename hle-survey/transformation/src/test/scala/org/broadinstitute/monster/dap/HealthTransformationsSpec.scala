@@ -815,6 +815,124 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     output should contain theSameElementsAs truth
   }
 
+  it should "correctly map congenital cardiac disorders when values are defined" in {
+    val multipleCongenitalCardiacDisorder = Map[String, Array[String]](
+      "hs_congenital_yn" -> Array("1"),
+      "hs_cg_heart_disorders_yn" -> Array("1"),
+      "hs_cg_heart_murmur" -> Array("1"),
+      "hs_cg_heart_murmur_month" -> Array("7"),
+      "hs_cg_heart_murmur_year" -> Array("2020"),
+      "hs_cg_heart_murmur_surg" -> Array("2"),
+      "hs_cg_heart_murmur_fu" -> Array("0"),
+      "hs_cg_heart_other" -> Array("1"),
+      "hs_cg_heart_other_spec" -> Array("waffles"),
+      "hs_cg_heart_other_month" -> Array("3"),
+      "hs_cg_heart_other_year" -> Array("1998"),
+      "hs_cg_heart_other_surg" -> Array("3"),
+      "hs_cg_heart_other_fu" -> Array("1")
+    )
+    val exampleCardiacDisorderRecord = RawRecord(id = 1, multipleCongenitalCardiacDisorder)
+    val output = HealthTransformations.mapHealthConditions(exampleCardiacDisorderRecord)
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Cardiac.value,
+        hsCondition = HealthCondition.Murmur.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(7),
+        hsRequiredSurgeryOrHospitalization = Some(2),
+        hsFollowUpOngoing = Some(false)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Cardiac.value,
+        hsCondition = HealthCondition.OtherCardiac.value,
+        hsConditionOtherDescription = Some("waffles"),
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(1998),
+        hsDiagnosisMonth = Some(3),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs truth
+  }
+
+  it should "correctly map cardiac disease values when values are defined" in {
+    val multipleCardiacDisease = Map[String, Array[String]](
+      "hs_dx_cardiac_yn" -> Array("1"),
+      "hs_dx_cardiac_mur" -> Array("1"),
+      "hs_dx_cardiac_mur_month" -> Array("1"),
+      "hs_dx_cardiac_mur_year" -> Array("2019"),
+      "hs_dx_cardiac_mur_surg" -> Array("1"),
+      "hs_dx_cardiac_mur_fu" -> Array("1"),
+      "hs_dx_cardiac_vd" -> Array("1"),
+      "hs_dx_cardiac_vd_month" -> Array("2"),
+      "hs_dx_cardiac_vd_year" -> Array("2019"),
+      "hs_dx_cardiac_vd_surg" -> Array("2"),
+      "hs_dx_cardiac_vd_fu" -> Array("1"),
+      "hs_dx_cardiac_valve" -> Array("pesto"),
+      "hs_dx_cardiac_other" -> Array("1"),
+      "hs_dx_cardiac_other_spec" -> Array("zucchini"),
+      "hs_dx_cardiac_other_month" -> Array("3"),
+      "hs_dx_cardiac_other_year" -> Array("2019"),
+      "hs_dx_cardiac_other_surg" -> Array("3"),
+      "hs_dx_cardiac_other_fu" -> Array("0")
+    )
+    val exampleCardiacDiseaseRecord = RawRecord(id = 1, multipleCardiacDisease)
+    val output = HealthTransformations.mapHealthConditions(exampleCardiacDiseaseRecord)
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Cardiac.value,
+        hsCondition = HealthCondition.Murmur.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2019),
+        hsDiagnosisMonth = Some(1),
+        hsRequiredSurgeryOrHospitalization = Some(1),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Cardiac.value,
+        hsCondition = HealthCondition.ValveDisease.value,
+        hsConditionOtherDescription = Some("pesto"), // currently None
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2019),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(2),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Cardiac.value,
+        hsCondition = HealthCondition.OtherCardiac.value,
+        hsConditionOtherDescription = Some("zucchini"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2019),
+        hsDiagnosisMonth = Some(3),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(false)
+      )
+    )
+
+    output should contain theSameElementsAs truth
+  }
+
   it should "correctly map health status data when fields are null" in {
     val emptyRecord = RawRecord(1, Map.empty)
 

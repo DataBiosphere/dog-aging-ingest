@@ -128,9 +128,10 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object PericardialEffusion extends HealthCondition(515L, "Pericardial effusion", Cardiac, dx = Some("pe"))
   case object PulmonaryHypertension extends HealthCondition(516L, "Pulmonary hypertension", Cardiac, dx = Some("ph"))
   case object SubaorticStenosis extends HealthCondition(518L, "Subaortic stenosis", Cardiac, dx = Some("ss"))
-  case object ValveDisease extends HealthCondition(519L, "Valve disease", Cardiac, dx = Some("vd"), descriptionSuffixOverride = Some("valve"))
+  case object ValveDisease
+      extends HealthCondition(519L, "Valve disease", Cardiac, dx = Some("vd"), isOther = true, descriptionSuffixOverride = Some("valve"))
+  // TODO check valve ordering
   case object OtherCardiac extends HealthCondition(598L, "Other", Cardiac, both = Some("other"), isOther = true)
-  // TODO: at least test other & valve disease -- maybe also Murmur
 
   // Respiratory conditions.
   // TODO
