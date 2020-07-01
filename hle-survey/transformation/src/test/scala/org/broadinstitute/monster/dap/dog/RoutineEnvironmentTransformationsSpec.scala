@@ -31,7 +31,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output1.deDogparkTravelBike.value shouldBe true
     output1.deDogparkTravelPublicTransportation.value shouldBe false
     output1.deDogparkTravelOther.value shouldBe true
-    output1.deDogparkTravelOtherDescription shouldBe "Helicopter Shuttle"
+    output1.deDogparkTravelOtherDescription shouldBe Some("Helicopter Shuttle")
     output1.deDogparkTravelTimeMinutes.value shouldBe 330
 
     // de_dogpark_get_to = ('Drive' , 'Public Transport')
@@ -409,7 +409,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
       "de_toy_latex" -> Array("1"),
       "de_toy_rope" -> Array("0"),
       "de_toy_tennis_ball" -> Array("1"),
-      "de_toy_sticks " -> Array("0"),
+      "de_toy_sticks" -> Array("0"),
       "de_toy_other_yn" -> Array("1"),
       "de_toy_other" -> Array("Soccer Ball"),
       "de_toys_amt" -> Array("3"),
@@ -446,7 +446,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
       "de_toy_latex" -> Array("0"),
       "de_toy_rope" -> Array("1"),
       "de_toy_tennis_ball" -> Array("0"),
-      "de_toy_sticks " -> Array("1"),
+      "de_toy_sticks" -> Array("1"),
       "de_toy_other_yn" -> Array("0"),
       "de_toy_other" -> Array("Softball"), //FIXME necessary?
       "de_toys_amt" -> Array("2"),
@@ -512,7 +512,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output1.deDaytimeSleepLocationDifferent.value shouldBe false
     output1.deDaytimeSleepLocation shouldBe None
     output1.deDaytimeSleepLocationOtherDescription shouldBe None
-    output1.deDaytimeSleepAvgHours.value shouldBe 0
+    output1.deDaytimeSleepAvgHours shouldBe None
 
     // de_sleep_location = '98', de_sleep_day_yn = '1', de_sleep_location_day = '1'
     val example2 = Map[String, Array[String]](
@@ -557,7 +557,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
   }
 
   it should "map Toxins Ingested fields when available" in {
-    // de_ingest_bad_amt = "1" + de_ingest_bad_what = "1", "2", "3", "4", "5" + de_ingest_bad_er_yn = "1"
+    // de_ingest_bad_amt = "1" + de_ingest_bad = "Some nasty stuff" + de_ingest_bad_what = "1", "2", "3", "4", "5" + de_ingest_bad_er_yn = "1"
     val example1 = Map[String, Array[String]](
       "de_ingest_bad_amt" -> Array("1"),
       "de_ingest_bad" -> Array("Some nasty stuff"),
@@ -577,10 +577,11 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output1.deRecentToxinsOrHazardsIngestedToys.value shouldBe false
     output1.deRecentToxinsOrHazardsIngestedClothing.value shouldBe false
     output1.deRecentToxinsOrHazardsIngestedOther.value shouldBe false
-    output1.deRecentToxinsOrHazardsIngestedOtherDescription shouldBe None
+    output1.deRecentToxinsOrHazardsIngestedOtherDescription.value shouldBe "Some nasty stuff"
     output1.deRecentToxinsOrHazardsIngestedRequiredVet.value shouldBe true
 
     // de_ingest_bad_amt = "2" + de_ingest_bad_what = "6", "7", "8", "98" + de_ingest_bad_er_yn = "1"
+    //de_ingest_bad = "Toothpaste" + de_ingest_bad_what_other = "Colgate Toothpaste"
     val example2 = Map[String, Array[String]](
       "de_ingest_bad_amt" -> Array("2"),
       "de_ingest_bad" -> Array("Toothpaste"),
@@ -601,28 +602,76 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output2.deRecentToxinsOrHazardsIngestedToys.value shouldBe true
     output2.deRecentToxinsOrHazardsIngestedClothing.value shouldBe true
     output2.deRecentToxinsOrHazardsIngestedOther.value shouldBe true
-    output2.deRecentToxinsOrHazardsIngestedOtherDescription.value shouldBe "Toothpaste" //FIXME check what's being output
+    output2.deRecentToxinsOrHazardsIngestedOtherDescription.value shouldBe "Toothpaste"
     output2.deRecentToxinsOrHazardsIngestedRequiredVet.value shouldBe false
 
-    // de_ingest_bad_amt = 0
+    // de_ingest_bad_amt = "1" + de_ingest_bad_what = "98"
+    // de_ingest_bad = "" + de_ingest_bad_what_other = "Colgate Toothpaste"
     val example3 = Map[String, Array[String]](
-      "de_ingest_bad_amt" -> Array("0")
+      "de_ingest_bad_amt" -> Array("1"),
+      "de_ingest_bad" -> Array(""),
+      "de_ingest_bad_what" -> Array("98"),
+      "de_ingest_bad_what_other" -> Array("Colgate Toothpaste")
     )
     val output3 =
       RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example3))
 
-    output3.deRecentToxinsOrHazardsIngestedFrequency.value shouldBe 0
-    output3.deRecentToxinsOrHazardsIngestedChocolate shouldBe None
-    output3.deRecentToxinsOrHazardsIngestedPoison shouldBe None
-    output3.deRecentToxinsOrHazardsIngestedHumanMedication shouldBe None
-    output3.deRecentToxinsOrHazardsIngestedPetMedication shouldBe None
-    output3.deRecentToxinsOrHazardsIngestedGarbageOrFood shouldBe None
-    output3.deRecentToxinsOrHazardsIngestedDeadAnimal shouldBe None
-    output3.deRecentToxinsOrHazardsIngestedToys shouldBe None
-    output3.deRecentToxinsOrHazardsIngestedClothing shouldBe None
-    output3.deRecentToxinsOrHazardsIngestedOther shouldBe None
-    output3.deRecentToxinsOrHazardsIngestedOtherDescription shouldBe None
+    output3.deRecentToxinsOrHazardsIngestedFrequency.value shouldBe 1
+    output3.deRecentToxinsOrHazardsIngestedChocolate.value shouldBe false
+    output3.deRecentToxinsOrHazardsIngestedPoison.value shouldBe false
+    output3.deRecentToxinsOrHazardsIngestedHumanMedication.value shouldBe false
+    output3.deRecentToxinsOrHazardsIngestedPetMedication.value shouldBe false
+    output3.deRecentToxinsOrHazardsIngestedGarbageOrFood.value shouldBe false
+    output3.deRecentToxinsOrHazardsIngestedDeadAnimal.value shouldBe false
+    output3.deRecentToxinsOrHazardsIngestedToys.value shouldBe false
+    output3.deRecentToxinsOrHazardsIngestedClothing.value shouldBe false
+    output3.deRecentToxinsOrHazardsIngestedOther.value shouldBe true
+    output3.deRecentToxinsOrHazardsIngestedOtherDescription.value shouldBe "Colgate Toothpaste"
     output3.deRecentToxinsOrHazardsIngestedRequiredVet shouldBe None
+
+    // de_ingest_bad_amt = "1" + de_ingest_bad_what = "98"
+    // de_ingest_bad is NONE + de_ingest_bad_what_other = "Colgate Toothpaste"
+    val example4 = Map[String, Array[String]](
+      "de_ingest_bad_amt" -> Array("1"),
+      "de_ingest_bad_what" -> Array("1"),
+      "de_ingest_bad_what_other" -> Array("Colgate Toothpaste"),
+      "de_ingest_bad_er_yn" -> Array("1")
+    )
+    val output4 =
+      RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example4))
+
+    output4.deRecentToxinsOrHazardsIngestedFrequency.value shouldBe 1
+    output4.deRecentToxinsOrHazardsIngestedChocolate.value shouldBe true
+    output4.deRecentToxinsOrHazardsIngestedPoison.value shouldBe false
+    output4.deRecentToxinsOrHazardsIngestedHumanMedication.value shouldBe false
+    output4.deRecentToxinsOrHazardsIngestedPetMedication.value shouldBe false
+    output4.deRecentToxinsOrHazardsIngestedGarbageOrFood.value shouldBe false
+    output4.deRecentToxinsOrHazardsIngestedDeadAnimal.value shouldBe false
+    output4.deRecentToxinsOrHazardsIngestedToys.value shouldBe false
+    output4.deRecentToxinsOrHazardsIngestedClothing.value shouldBe false
+    output4.deRecentToxinsOrHazardsIngestedOther.value shouldBe false
+    output4.deRecentToxinsOrHazardsIngestedOtherDescription shouldBe None
+    output4.deRecentToxinsOrHazardsIngestedRequiredVet.value shouldBe true
+
+    // de_ingest_bad_amt = 0
+    val example5 = Map[String, Array[String]](
+      "de_ingest_bad_amt" -> Array("0")
+    )
+    val output5 =
+      RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example5))
+
+    output5.deRecentToxinsOrHazardsIngestedFrequency.value shouldBe 0
+    output5.deRecentToxinsOrHazardsIngestedChocolate shouldBe None
+    output5.deRecentToxinsOrHazardsIngestedPoison shouldBe None
+    output5.deRecentToxinsOrHazardsIngestedHumanMedication shouldBe None
+    output5.deRecentToxinsOrHazardsIngestedPetMedication shouldBe None
+    output5.deRecentToxinsOrHazardsIngestedGarbageOrFood shouldBe None
+    output5.deRecentToxinsOrHazardsIngestedDeadAnimal shouldBe None
+    output5.deRecentToxinsOrHazardsIngestedToys shouldBe None
+    output5.deRecentToxinsOrHazardsIngestedClothing shouldBe None
+    output5.deRecentToxinsOrHazardsIngestedOther shouldBe None
+    output5.deRecentToxinsOrHazardsIngestedOtherDescription shouldBe None
+    output5.deRecentToxinsOrHazardsIngestedRequiredVet shouldBe None
   }
 
   it should "map Other Animals fields when available" in {

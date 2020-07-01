@@ -107,7 +107,7 @@ object RoutineEnvironmentTransformations {
     // ONLY if: de_dog_to_work = 1
     if (dogWork.contains(true)) {
       val dogWorkTravel = rawRecord.get("de_dog_to_work_how")
-      val dogWorkTravelOther = dogWorkTravel.map(_.contains("5"))
+      val dogWorkTravelOther = dogWorkTravel.map(_.contains("98"))
       dog.copy(
         deWork = dogWork,
         deWorkDaysPerMonth = rawRecord.getOptionalNumber("de_dog_to_work_freq"),
@@ -232,7 +232,7 @@ object RoutineEnvironmentTransformations {
         deRoutineToysIncludeOther = otherToys,
         // ONLY if: de_toy_other_yn = '1'
         deRoutineToysOtherDescription =
-          if (otherToys.contains(true)) rawRecord.getOptional("de_toy_other") else None,
+          if (otherToys.contains(1L)) rawRecord.getOptional("de_toy_other") else None,
         deRoutineToysHoursPerDay = rawRecord.getOptionalNumber("de_toys_amt"),
         deLicksChewsOrPlaysWithNonToys = nonToys
       )
@@ -279,7 +279,7 @@ object RoutineEnvironmentTransformations {
   ): HlesDogRoutineEnvironment = {
     val toxinsAmount = rawRecord.getOptionalNumber("de_ingest_bad_amt")
     //ONLY if: de_ingest_bad_amt = 1 OR de_ingest_bad_amt = 2
-    if (toxinsAmount.exists(_ > 0)) { //FIXME
+    if (toxinsAmount.exists(_ > 0)) {
       val toxinsDescription = rawRecord.getOptional("de_ingest_bad")
       val toxinsIngested = rawRecord.get("de_ingest_bad_what")
       val recentToxinsOrHazardsIngestedOther = toxinsIngested.map(_.contains("98"))
@@ -295,6 +295,7 @@ object RoutineEnvironmentTransformations {
         deRecentToxinsOrHazardsIngestedClothing = toxinsIngested.map(_.contains("8")),
         deRecentToxinsOrHazardsIngestedOther = recentToxinsOrHazardsIngestedOther,
         //de_ingest_bad is deprecated, check it first, then check de_ingest_bad_what_other
+        //FIXME SHOULD THIS FIELD BE FILLED EVEN WITHOUT THE OTHER (BOOL) ABOVE BEING TRUE?
         deRecentToxinsOrHazardsIngestedOtherDescription =
           if (toxinsDescription.exists(_.trim.nonEmpty)) toxinsDescription
           // ONLY if: de_ingest_bad_what(98) = 1
