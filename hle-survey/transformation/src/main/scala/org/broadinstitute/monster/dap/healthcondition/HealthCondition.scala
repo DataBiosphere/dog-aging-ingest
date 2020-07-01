@@ -13,6 +13,8 @@ import enumeratum.values.{LongEnum, LongEnumEntry}
   * @param cg abbreviation used for the 'cg' representation of this condition, if one exists
   * @param dx abbreviation used for the 'dx' representation of this condition, if one exists
   * @param isOther true if the condition has a '_spec' field for free-form user entry
+  * @param descriptionSuffixOverride if set, will override the auto-computed field name
+  *                                  for the description field on "other" conditions
   */
 sealed abstract class HealthCondition(
   override val value: Long,
@@ -21,7 +23,8 @@ sealed abstract class HealthCondition(
   val both: Option[String] = None,
   val cg: Option[String] = None,
   val dx: Option[String] = None,
-  val isOther: Boolean = false
+  val isOther: Boolean = false,
+  val descriptionSuffixOverride: Option[String] = None
 ) extends LongEnumEntry
 
 object HealthCondition extends LongEnum[HealthCondition] {
@@ -108,7 +111,26 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherSkin extends HealthCondition(498L, "Other skin condition", Skin, both = Some("other"), isOther = true)
 
   // Cardiac conditions.
-  // TODO
+  case object AS extends HealthCondition(501L, "Aortic/Subaortic stenosis", Cardiac, cg = Some("as"))
+  case object ASD extends HealthCondition(502L, "Atrial septal defects", Cardiac, cg = Some("asd"))
+  case object MitralDysplasia extends HealthCondition(503L, "Mitral dysplasia", Cardiac, cg = Some("mit_dys"))
+  case object Murmur extends HealthCondition(504L, "Murmur", Cardiac, cg = Some("murmur"), dx = Some("mur"))
+  case object PDA extends HealthCondition(505L, "Patent ductus arteriosus (PDA)", Cardiac, cg = Some("pda"))
+  case object PRAA extends HealthCondition(506L, "Persistent right aortic arch", Cardiac, cg = Some("praa"))
+  case object PulmonicStenosis extends HealthCondition(507L, "Pulmonic stenosis", Cardiac, cg = Some("p_steno"), dx = Some("ps"))
+  case object TricuspidDysplasia extends HealthCondition(508L, "Tricuspid dysplasia", Cardiac, cg = Some("tri_dys"))
+  case object VSD extends HealthCondition(509L, "Ventricular septal defects", Cardiac, cg = Some("vsd"))
+  case object Arrhythmia extends HealthCondition(510L, "Arrhythmia", Cardiac, dx = Some("arr"))
+  case object Cardiomyopathy extends HealthCondition(511L, "Cardiomyopathy", Cardiac, dx = Some("car"))
+  case object CHF extends HealthCondition(512L, "Congestive heart failure", Cardiac, dx = Some("chf"))
+  case object Endocarditis extends HealthCondition(513L, "Endocarditis", Cardiac, dx = Some("end"))
+  case object Hypertension extends HealthCondition(514L, "Hypertension (high blood pressure)", Cardiac, dx = Some("hbp"))
+  case object PericardialEffusion extends HealthCondition(515L, "Pericardial effusion", Cardiac, dx = Some("pe"))
+  case object PulmonaryHypertension extends HealthCondition(516L, "Pulmonary hypertension", Cardiac, dx = Some("ph"))
+  case object SubaorticStenosis extends HealthCondition(518L, "Subaortic stenosis", Cardiac, dx = Some("ss"))
+  case object ValveDisease
+      extends HealthCondition(519L, "Valve disease", Cardiac, dx = Some("vd"), isOther = true, descriptionSuffixOverride = Some("valve"))
+  case object OtherCardiac extends HealthCondition(598L, "Other", Cardiac, both = Some("other"), isOther = true)
 
   // Respiratory conditions.
   case object SNN extends HealthCondition(601L, "Stenotic/narrow nares", Respiratory, cg = Some("st_nares"), dx = Some("snn"))
