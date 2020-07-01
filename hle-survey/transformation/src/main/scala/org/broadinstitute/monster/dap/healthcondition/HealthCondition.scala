@@ -8,109 +8,104 @@ import enumeratum.values.{LongEnum, LongEnumEntry}
   * @param value raw value to store on a per-row basis in BQ
   * @param label string label to associate with the raw value in lookup tables
   * @param conditionType general category of the condition
-  * @param abbreviation short-hand used in RedCap to represent the condition
-  * @param hasCg true if the RedCap data might contain 'cg' data for the condition
-  * @param hasDx true if the RedCap data might contain 'dx' data for the condition
+  * @param both abbreviation used for both the 'cg' and 'dx' representations
+  *             of this condition, if one exists
+  * @param cg abbreviation used for the 'cg' representation of this condition, if one exists
+  * @param dx abbreviation used for the 'dx' representation of this condition, if one exists
   * @param isOther true if the condition has a '_spec' field for free-form user entry
-  * @param cgPrefixOverride if set, will override the auto-computed value used for
-  *                         the prefix of congenital data fields
-  * @param computeGate mapping function from `data prefix` => the name of the Y/N field
-  *                    marking if any data exists for the condition
   */
 sealed abstract class HealthCondition(
   override val value: Long,
   val label: String,
   val conditionType: HealthConditionType,
-  val abbreviation: String,
-  val hasCg: Boolean,
-  val hasDx: Boolean,
-  val isOther: Boolean = false,
-  val cgPrefixOverride: Option[String] = None,
-  val computeGate: String => String = identity
+  val both: Option[String] = None,
+  val cg: Option[String] = None,
+  val dx: Option[String] = None,
+  val isOther: Boolean = false
 ) extends LongEnumEntry
 
 object HealthCondition extends LongEnum[HealthCondition] {
   override val values = findValues
 
-  val cgValues = values.filter(_.hasCg)
-  val dxValues = values.filter(_.hasDx)
+  val cgValues = values.filter(c => c.both.isDefined || c.cg.isDefined)
+  val dxValues = values.filter(c => c.both.isDefined || c.dx.isDefined)
 
   import HealthConditionType.{findValues => _, _}
 
-  // scalafmt: { maxColumn = 140, newlines.topLevelStatements = [] }
+  // scalafmt: { maxColumn = 145, newlines.topLevelStatements = [] }
 
   // Eye conditions.
-  case object Blindness extends HealthCondition(101L, "Blindness", Eye, "blind", true, true)
-  case object Cataracts extends HealthCondition(102L, "Cataracts", Eye, "cat", true, true)
-  case object Glaucoma extends HealthCondition(103L, "Glaucoma", Eye, "glauc", true, true)
-  case object KCS extends HealthCondition(104L, "Keratoconjunctivitis sicca (KCS)", Eye, "kcs", true, true)
-  case object PPM extends HealthCondition(105L, "Persistent pupillary membrane (PPM)", Eye, "ppm", true, false)
-  case object MissingEye extends HealthCondition(106L, "Missing one or both eyes", Eye, "miss", true, false)
-  case object CherryEye extends HealthCondition(108L, "Third eyelid prolapse (cherry eye)", Eye, "ce", false, true)
-  case object Conjunctivitis extends HealthCondition(109L, "Conjunctivitis", Eye, "conj", false, true)
-  case object CornealUlcer extends HealthCondition(110L, "Corneal ulcer", Eye, "cu", false, true)
-  case object Distichia extends HealthCondition(111L, "Distichia", Eye, "dist", false, true)
-  case object Ectropion extends HealthCondition(112L, "Ectropion (eyelid rolled out)", Eye, "ectrop", false, true)
-  case object Entropion extends HealthCondition(113L, "Entropion (eyelid rolled in)", Eye, "entrop", false, true)
-  case object ILP extends HealthCondition(114L, "Imperforate lacrimal punctum", Eye, "ilp", false, true)
-  case object IrisCyst extends HealthCondition(115L, "Iris cyst", Eye, "ic", false, true)
-  case object JuvenileCataracts extends HealthCondition(116L, "Juvenile cataracts", Eye, "jcat", false, true)
-  case object NS extends HealthCondition(117L, "Nuclear sclerosis", Eye, "ns", false, true)
-  case object PU extends HealthCondition(118L, "Pigmentary uveitis", Eye, "pu", false, true)
-  case object PRA extends HealthCondition(119L, "Progressive retinal atrophy", Eye, "pra", false, true)
-  case object RD extends HealthCondition(120L, "Retinal detachment", Eye, "rd", false, true)
-  case object Uveitis extends HealthCondition(121L, "Uveitis", Eye, "uvei", false, true)
-  case object OtherEye extends HealthCondition(198L, "Other eye condition", Eye, "eye_other", true, true, true, Some("hs_cg_eye_other"))
+  case object Blindness extends HealthCondition(101L, "Blindness", Eye, both = Some("blind"))
+  case object Cataracts extends HealthCondition(102L, "Cataracts", Eye, both = Some("cat"))
+  case object Glaucoma extends HealthCondition(103L, "Glaucoma", Eye, both = Some("glauc"))
+  case object KCS extends HealthCondition(104L, "Keratoconjunctivitis sicca (KCS)", Eye, both = Some("kcs"))
+  case object PPM extends HealthCondition(105L, "Persistent pupillary membrane (PPM)", Eye, cg = Some("ppm"))
+  case object MissingEye extends HealthCondition(106L, "Missing one or both eyes", Eye, cg = Some("miss"))
+  case object CherryEye extends HealthCondition(107L, "Third eyelid prolapse (cherry eye)", Eye, dx = Some("ce"))
+  case object Conjunctivitis extends HealthCondition(108L, "Conjunctivitis", Eye, dx = Some("conj"))
+  case object CornealUlcer extends HealthCondition(109L, "Corneal ulcer", Eye, dx = Some("cu"))
+  case object Distichia extends HealthCondition(110L, "Distichia", Eye, dx = Some("dist"))
+  case object Ectropion extends HealthCondition(111L, "Ectropion (eyelid rolled out)", Eye, dx = Some("ectrop"))
+  case object Entropion extends HealthCondition(112L, "Entropion (eyelid rolled in)", Eye, dx = Some("entrop"))
+  case object ILP extends HealthCondition(113L, "Imperforate lacrimal punctum", Eye, dx = Some("ilp"))
+  case object IrisCyst extends HealthCondition(114L, "Iris cyst", Eye, dx = Some("ic"))
+  case object JuvenileCataracts extends HealthCondition(115L, "Juvenile cataracts", Eye, dx = Some("jcat"))
+  case object NS extends HealthCondition(116L, "Nuclear sclerosis", Eye, dx = Some("ns"))
+  case object PU extends HealthCondition(117L, "Pigmentary uveitis", Eye, dx = Some("pu"))
+  case object PRA extends HealthCondition(118L, "Progressive retinal atrophy", Eye, dx = Some("pra"))
+  case object RD extends HealthCondition(119L, "Retinal detachment", Eye, dx = Some("rd"))
+  case object Uveitis extends HealthCondition(120L, "Uveitis", Eye, dx = Some("uvei"))
+  case object OtherEye extends HealthCondition(198L, "Other eye condition", Eye, cg = Some("other"), dx = Some("eye_other"), isOther = true)
 
   // Ear conditions.
-  case object Deafness extends HealthCondition(201L, "Deafness", Ear, "deaf", true, true)
-  case object EarInfection extends HealthCondition(202L, "Ear Infection", Ear, "ei", false, true)
-  case object EarMites extends HealthCondition(203L, "Ear Mites", Ear, "em", false, true)
-  case object Epistaxis extends HealthCondition(204L, "Epistaxis (nose bleeds)", Ear, "epis", false, true)
-  case object HearingLoss extends HealthCondition(205L, "Hearing loss (incompletely deaf)", Ear, "hl", false, true)
-  case object Hematoma extends HealthCondition(206L, "Hematoma", Ear, "hemato", false, true)
-  case object Pharyngitis extends HealthCondition(207L, "Pharyngitis", Ear, "phary", false, true)
-  case object Rhinitis extends HealthCondition(208L, "Rhinitis", Ear, "rhini", false, true)
-  case object Tonsillitis extends HealthCondition(209L, "Tonsillitis", Ear, "tonsi", false, true)
-  case object OtherEar extends HealthCondition(298L, "Other ear condition", Ear, "other", true, true, true, Some("hs_cg_ear_other"))
+  case object Deafness extends HealthCondition(201L, "Deafness", Ear, both = Some("deaf"))
+  case object EarInfection extends HealthCondition(202L, "Ear Infection", Ear, dx = Some("ei"))
+  case object EarMites extends HealthCondition(203L, "Ear Mites", Ear, dx = Some("em"))
+  case object Epistaxis extends HealthCondition(204L, "Epistaxis (nose bleeds)", Ear, dx = Some("epis"))
+  case object HearingLoss extends HealthCondition(205L, "Hearing loss (incompletely deaf)", Ear, dx = Some("hl"))
+  case object Hematoma extends HealthCondition(206L, "Hematoma", Ear, dx = Some("hemato"))
+  case object Pharyngitis extends HealthCondition(207L, "Pharyngitis", Ear, dx = Some("phary"))
+  case object Rhinitis extends HealthCondition(208L, "Rhinitis", Ear, dx = Some("rhini"))
+  case object Tonsillitis extends HealthCondition(209L, "Tonsillitis", Ear, dx = Some("tonsi"))
+  case object OtherEar extends HealthCondition(298L, "Other ear condition", Ear, both = Some("other"), isOther = true)
 
   // Oral conditions.
   // TODO
 
   // Skin conditions.
-  case object DermoidCysts extends HealthCondition(401L, "Dermoid cysts", Skin, "dcysts", true, false)
-  case object SpinaBifida extends HealthCondition(402L, "Spina bifida", Skin, "sp_bif", true, false)
-  case object UmbilicalHernia extends HealthCondition(403L, "Umbilical hernia", Skin, "uh", true, false)
-  case object Alopecia extends HealthCondition(404L, "Alopecia (hair loss)", Skin, "alo", false, true)
-  case object AtopicDermatitis extends HealthCondition(405L, "Atopic dermatitis (atopy)", Skin, "ad", false, true)
-  case object ChronicHotSpots extends HealthCondition(406L, "Chronic or recurrent hot spots", Skin, "chs", false, true)
-  case object ChronicSkinInfections extends HealthCondition(407L, "Chronic or recurrent skin infections", Skin, "csi", false, true)
-  case object ContactDermatitis extends HealthCondition(408L, "Contact dermatitis", Skin, "cd", false, true)
-  case object DLE extends HealthCondition(409L, "Discoid lupus erythematosus (DLE)", Skin, "dle", false, true)
-  case object FAD extends HealthCondition(410L, "Flea allergy dermatitis", Skin, "fad", false, true)
-  case object Fleas extends HealthCondition(411L, "Fleas", Skin, "flea", false, true)
-  case object FMA extends HealthCondition(412L, "Food or medicine allergies that affect the skin", Skin, "fma", false, true)
-  case object Ichthyosis extends HealthCondition(413L, "Ichthyosis", Skin, "ich", false, true)
-  case object LickGranuloma extends HealthCondition(414L, "Lick granuloma", Skin, "lg", false, true)
-  case object NSD extends HealthCondition(415L, "Non-specific dermatosis", Skin, "nsd", false, true)
-  case object PPP extends HealthCondition(416L, "Panepidermal pustular pemphigus (PPP)", Skin, "ppp", false, true)
-  case object PNP extends HealthCondition(417L, "Paraneoplastic pemphigus (PNP)", Skin, "pnp", false, true)
-  case object PE extends HealthCondition(418L, "Pemphigus erythematosus (PE)", Skin, "pe", false, true)
-  case object PF extends HealthCondition(419L, "Pemphigus foliaceus (PF)", Skin, "pf", false, true)
-  case object PV extends HealthCondition(420L, "Pemphigus vulgaris (PV)", Skin, "pv", false, true)
-  case object Pododermatitis extends HealthCondition(421L, "Pododermatitis", Skin, "podo", false, true)
-  case object Polymyositis extends HealthCondition(422L, "Polymyositis", Skin, "poly", false, true)
-  case object Pruritis extends HealthCondition(423L, "Pruritis (itchy skin)", Skin, "pru", false, true)
-  case object Pyoderma extends HealthCondition(424L, "Pyoderma or bacterial dermatitis", Skin, "pyo", false, true)
-  case object SarcopticMange extends HealthCondition(425L, "Sarcoptic mange", Skin, "sm", false, true)
-  case object SeasonalAllergies extends HealthCondition(426L, "Seasonal allergies", Skin, "sall", false, true)
-  case object SebaceousAdenitis extends HealthCondition(427L, "Sebaceous adenitis", Skin, "sade", false, true)
-  case object SebaceousCysts extends HealthCondition(428L, "Sebaceous cysts", Skin, "scys", false, true)
-  case object Seborrhea extends HealthCondition(429L, "Seborrhea or seborrheic dermatitis (greasy skin)", Skin, "sd", false, true)
-  case object SDM extends HealthCondition(430L, "Systemic demodectic mange", Skin, "sdm", false, true)
-  case object SLE extends HealthCondition(431L, "Systemic lupus erythematosus (SLE)", Skin, "sle", false, true)
-  case object Ticks extends HealthCondition(432L, "Ticks", Skin, "tick", false, true)
-  case object OtherSkin extends HealthCondition(498L, "Other skin condition", Skin, "other", true, true, true, Some("hs_cg_skin_other"))
+  case object DermoidCysts extends HealthCondition(401L, "Dermoid cysts", Skin, cg = Some("dcysts"))
+  case object SpinaBifida extends HealthCondition(402L, "Spina bifida", Skin, cg = Some("sp_bif"))
+  case object UmbilicalHernia extends HealthCondition(403L, "Umbilical hernia", Skin, cg = Some("uh"))
+  case object Alopecia extends HealthCondition(404L, "Alopecia (hair loss)", Skin, dx = Some("alo"))
+  case object AtopicDermatitis extends HealthCondition(405L, "Atopic dermatitis (atopy)", Skin, dx = Some("ad"))
+  case object ChronicHotSpots extends HealthCondition(406L, "Chronic or recurrent hot spots", Skin, dx = Some("chs"))
+  case object ChronicSkinInfections extends HealthCondition(407L, "Chronic or recurrent skin infections", Skin, dx = Some("csi"))
+  case object ContactDermatitis extends HealthCondition(408L, "Contact dermatitis", Skin, dx = Some("cd"))
+  case object DLE extends HealthCondition(409L, "Discoid lupus erythematosus (DLE)", Skin, dx = Some("dle"))
+  case object FAD extends HealthCondition(410L, "Flea allergy dermatitis", Skin, dx = Some("fad"))
+  case object Fleas extends HealthCondition(411L, "Fleas", Skin, dx = Some("flea"))
+  case object FMA extends HealthCondition(412L, "Food or medicine allergies that affect the skin", Skin, dx = Some("fma"))
+  case object Ichthyosis extends HealthCondition(413L, "Ichthyosis", Skin, dx = Some("ich"))
+  case object LickGranuloma extends HealthCondition(414L, "Lick granuloma", Skin, dx = Some("lg"))
+  case object NSD extends HealthCondition(415L, "Non-specific dermatosis", Skin, dx = Some("nsd"))
+  case object PPP extends HealthCondition(416L, "Panepidermal pustular pemphigus (PPP)", Skin, dx = Some("ppp"))
+  case object PNP extends HealthCondition(417L, "Paraneoplastic pemphigus (PNP)", Skin, dx = Some("pnp"))
+  case object PE extends HealthCondition(418L, "Pemphigus erythematosus (PE)", Skin, dx = Some("pe"))
+  case object PF extends HealthCondition(419L, "Pemphigus foliaceus (PF)", Skin, dx = Some("pf"))
+  case object PV extends HealthCondition(420L, "Pemphigus vulgaris (PV)", Skin, dx = Some("pv"))
+  case object Pododermatitis extends HealthCondition(421L, "Pododermatitis", Skin, dx = Some("podo"))
+  case object Polymyositis extends HealthCondition(422L, "Polymyositis", Skin, dx = Some("poly"))
+  case object Pruritis extends HealthCondition(423L, "Pruritis (itchy skin)", Skin, dx = Some("pru"))
+  case object Pyoderma extends HealthCondition(424L, "Pyoderma or bacterial dermatitis", Skin, dx = Some("pyo"))
+  case object SarcopticMange extends HealthCondition(425L, "Sarcoptic mange", Skin, dx = Some("sm"))
+  case object SeasonalAllergies extends HealthCondition(426L, "Seasonal allergies", Skin, dx = Some("sall"))
+  case object SebaceousAdenitis extends HealthCondition(427L, "Sebaceous adenitis", Skin, dx = Some("sade"))
+  case object SebaceousCysts extends HealthCondition(428L, "Sebaceous cysts", Skin, dx = Some("scys"))
+  case object Seborrhea extends HealthCondition(429L, "Seborrhea or seborrheic dermatitis (greasy skin)", Skin, dx = Some("sd"))
+  case object SDM extends HealthCondition(430L, "Systemic demodectic mange", Skin, dx = Some("sdm"))
+  case object SLE extends HealthCondition(431L, "Systemic lupus erythematosus (SLE)", Skin, dx = Some("sle"))
+  case object Ticks extends HealthCondition(432L, "Ticks", Skin, dx = Some("tick"))
+  case object OtherSkin extends HealthCondition(498L, "Other skin condition", Skin, both = Some("other"), isOther = true)
 
   // Cardiac conditions.
   // TODO
@@ -119,7 +114,29 @@ object HealthCondition extends LongEnum[HealthCondition] {
   // TODO
 
   // Gastrointestinal conditions.
-  // TODO
+  case object Atresia extends HealthCondition(701L, "Atresia ani", Gastrointestinal, cg = Some("atresia"))
+  case object EA extends HealthCondition(702L, "Esophageal achalasia", Gastrointestinal, cg = Some("ea"))
+  case object Megaesophagus extends HealthCondition(703L, "Megaesophagus", Gastrointestinal, cg = Some("megaeso"), dx = Some("meg"))
+  case object UH extends HealthCondition(704L, "Umbilical hernia", Gastrointestinal, cg = Some("uh"))
+  case object ASI extends HealthCondition(705L, "Anal sac impaction", Gastrointestinal, dx = Some("asi"))
+  case object BVS extends HealthCondition(706L, "Bilious vomiting syndrome", Gastrointestinal, dx = Some("bvs"))
+  case object GDV extends HealthCondition(707L, "Bloat with torsion (GDV)", Gastrointestinal, dx = Some("gdv"))
+  case object CD extends HealthCondition(708L, "Chronic or recurrent diarrhea", Gastrointestinal, dx = Some("cd"))
+  case object CV extends HealthCondition(709L, "Chronic or recurrent vomiting", Gastrointestinal, dx = Some("cv"))
+  case object Constipation extends HealthCondition(710L, "Constipation", Gastrointestinal, dx = Some("con"))
+  case object FI extends HealthCondition(711L, "Fecal incontinence", Gastrointestinal, dx = Some("fi"))
+  case object FoodAllergy extends HealthCondition(712L, "Food or medicine allergies", Gastrointestinal, dx = Some("fma"))
+  case object FBIB extends HealthCondition(713L, "Foreign body ingestion or blockage", Gastrointestinal, dx = Some("fbib"))
+  case object HGE extends HealthCondition(714L, "Hemorrhagic gastroenteritis (HGE) or stress colitis (acute)", Gastrointestinal, dx = Some("hge"))
+  case object ICC extends HealthCondition(715L, "Idiopathic canine colitis (chronic)", Gastrointestinal, dx = Some("icc"))
+  case object IBS
+      extends HealthCondition(716L, "Irritable bowel syndrome (IBS) or inflammatory bowel disease (IBD)", Gastrointestinal, dx = Some("ibd"))
+  case object Lymphangiectasia extends HealthCondition(717L, "Lymphangiectasia", Gastrointestinal, dx = Some("lym"))
+  case object MD extends HealthCondition(718L, "Malabsorptive disorder", Gastrointestinal, dx = Some("md"))
+  case object OtherAllergy extends HealthCondition(719L, "Other allergies", Gastrointestinal, dx = Some("all"))
+  case object PLE extends HealthCondition(720L, "Protein-losing enteropathy (PLE)", Gastrointestinal, dx = Some("ple"))
+  case object PS extends HealthCondition(721L, "Pyloric stenosis", Gastrointestinal, dx = Some("ps"))
+  case object OtherGI extends HealthCondition(798L, "Other gastrointestinal condition", Gastrointestinal, both = Some("other"), isOther = true)
 
   // Liver conditions.
   // TODO
@@ -143,82 +160,70 @@ object HealthCondition extends LongEnum[HealthCondition] {
   // TODO
 
   // Other congenital conditions (annoying one-off case).
-  case object OtherCG
-      extends HealthCondition(
-        1598L,
-        "Other congenital disorder",
-        OtherCongenital,
-        "other",
-        true,
-        false,
-        true,
-        Some("hs_cg_other"),
-        prefix => s"${prefix}_yn"
-      )
+  case object OtherCG extends HealthCondition(1598L, "Other congenital disorder", OtherCongenital, cg = Some("other"), isOther = true)
 
   // Infections diseases.
-  case object Anaplasmosis extends HealthCondition(1601L, "Anaplasmosis", Infection, "anaplasmosis", false, true)
-  case object Aspergillosis extends HealthCondition(1602L, "Aspergillosis", Infection, "asperg", false, true)
-  case object Babesiosis extends HealthCondition(1603L, "Babesiosis", Infection, "babesio", false, true)
-  case object Blastomycosis extends HealthCondition(1604L, "Blastomycosis", Infection, "blastomy", false, true)
+  case object Anaplasmosis extends HealthCondition(1601L, "Anaplasmosis", Infection, dx = Some("anaplasmosis"))
+  case object Aspergillosis extends HealthCondition(1602L, "Aspergillosis", Infection, dx = Some("asperg"))
+  case object Babesiosis extends HealthCondition(1603L, "Babesiosis", Infection, dx = Some("babesio"))
+  case object Blastomycosis extends HealthCondition(1604L, "Blastomycosis", Infection, dx = Some("blastomy"))
   case object Bordetella
-      extends HealthCondition(1605L, """Bordetella and/or parainfluenza ("kennel cough")""", Infection, "bordetella", false, true)
-  case object Brucellosis extends HealthCondition(1606L, "Brucellosis", Infection, "brucellosis", false, true)
-  case object Campylobacteriosis extends HealthCondition(1607L, "Campylobacteriosis", Infection, "campylo", false, true)
-  case object Chagas extends HealthCondition(1608L, "Chagas disease (trypanosomiasis)", Infection, "chagas", false, true)
-  case object Coccidia extends HealthCondition(1609L, "Coccidia", Infection, "ccdia", false, true)
-  case object Coccidioidiomycosis extends HealthCondition(1610L, "Coccidioidiomycosis", Infection, "ccdio", false, true)
-  case object Cryptococcus extends HealthCondition(1611L, "Cryptococcus", Infection, "crypto", false, true)
-  case object Ringworm extends HealthCondition(1612L, """Dermatophytosis ("ringworm")""", Infection, "dermato", false, true)
-  case object Distemper extends HealthCondition(1613L, "Distemper", Infection, "dstmp", false, true)
-  case object Ehrlichiosis extends HealthCondition(1614L, "Ehrlichiosis", Infection, "ehrlich", false, true)
-  case object Fever extends HealthCondition(1615L, "Fever of unknown origin", Infection, "fever", false, true)
-  case object GastroParasites extends HealthCondition(1616L, "Gastrointestinal parasites", Infection, "gp", false, true)
-  case object Giardia extends HealthCondition(1617L, "Giardia", Infection, "giar", false, true)
-  case object Granuloma extends HealthCondition(1618L, "Granuloma", Infection, "granu", false, true)
-  case object Heartworms extends HealthCondition(1619L, "Heartworm infection", Infection, "hrtworm", false, true)
-  case object Histoplasmosis extends HealthCondition(1620L, "Histoplasmosis", Infection, "histo", false, true)
-  case object Hepatozoonosis extends HealthCondition(1621L, "Hepatozoonosis", Infection, "hepato", false, true)
-  case object Hookworms extends HealthCondition(1622L, "Hookworms", Infection, "hkworm", false, true)
-  case object Influenza extends HealthCondition(1623L, "Influenza", Infection, "influ", false, true)
-  case object Isospora extends HealthCondition(1624L, "Isospora", Infection, "isosp", false, true)
-  case object Leishmaniasis extends HealthCondition(1625L, "Leishmaniasis", Infection, "leish", false, true)
-  case object Leptospirosis extends HealthCondition(1626L, "Leptospirosis", Infection, "lepto", false, true)
-  case object Lyme extends HealthCondition(1627L, "Lyme disease", Infection, "lyme", false, true)
-  case object MRSA extends HealthCondition(1628L, "MRSA/MRSP", Infection, "mrsa", false, true)
-  case object Mycobacterium extends HealthCondition(1629L, "Mycobacterium", Infection, "mycob", false, true)
-  case object Parvovirus extends HealthCondition(1630L, "Parvovirus", Infection, "parvo", false, true)
-  case object Plague extends HealthCondition(1631L, "Plague (Yersinia pestis)", Infection, "plague", false, true)
-  case object Pythium extends HealthCondition(1632L, "Pythium", Infection, "pythium", false, true)
-  case object RMSF extends HealthCondition(1633L, "Rocky Mountain Spotted Fever (RMSF)", Infection, "rmsf", false, true)
-  case object Roundworms extends HealthCondition(1634L, "Roundworms", Infection, "rndworm", false, true)
-  case object Salmonellosis extends HealthCondition(1635L, "Salmonellosis", Infection, "slmosis", false, true)
-  case object SalmonPoison extends HealthCondition(1636L, "Salmon poisoning", Infection, "slmpois", false, true)
-  case object Tapeworms extends HealthCondition(1637L, "Tapeworms", Infection, "tpworm", false, true)
-  case object Toxoplasma extends HealthCondition(1638L, "Toxoplasma", Infection, "toxop", false, true)
-  case object Tularemia extends HealthCondition(1639L, "Tularemia", Infection, "tular", false, true)
-  case object Whipworms extends HealthCondition(1640L, "Whipworms", Infection, "whpworm", false, true)
-  case object OtherInfection
-      extends HealthCondition(1698L, "Other infectious disease", Infection, "infect_other", false, true, isOther = true)
+      extends HealthCondition(1605L, """Bordetella and/or parainfluenza ("kennel cough")""", Infection, dx = Some("bordetella"))
+  case object Brucellosis extends HealthCondition(1606L, "Brucellosis", Infection, dx = Some("brucellosis"))
+  case object Campylobacteriosis extends HealthCondition(1607L, "Campylobacteriosis", Infection, dx = Some("campylo"))
+  case object Chagas extends HealthCondition(1608L, "Chagas disease (trypanosomiasis)", Infection, dx = Some("chagas"))
+  case object Coccidia extends HealthCondition(1609L, "Coccidia", Infection, dx = Some("ccdia"))
+  case object Coccidioidiomycosis extends HealthCondition(1610L, "Coccidioidiomycosis", Infection, dx = Some("ccdio"))
+  case object Cryptococcus extends HealthCondition(1611L, "Cryptococcus", Infection, dx = Some("crypto"))
+  case object Ringworm extends HealthCondition(1612L, """Dermatophytosis ("ringworm")""", Infection, dx = Some("dermato"))
+  case object Distemper extends HealthCondition(1613L, "Distemper", Infection, dx = Some("dstmp"))
+  case object Ehrlichiosis extends HealthCondition(1614L, "Ehrlichiosis", Infection, dx = Some("ehrlich"))
+  case object Fever extends HealthCondition(1615L, "Fever of unknown origin", Infection, dx = Some("fever"))
+  case object GastroParasites extends HealthCondition(1616L, "Gastrointestinal parasites", Infection, dx = Some("gp"))
+  case object Giardia extends HealthCondition(1617L, "Giardia", Infection, dx = Some("giar"))
+  case object Granuloma extends HealthCondition(1618L, "Granuloma", Infection, dx = Some("granu"))
+  case object Heartworms extends HealthCondition(1619L, "Heartworm infection", Infection, dx = Some("hrtworm"))
+  case object Histoplasmosis extends HealthCondition(1620L, "Histoplasmosis", Infection, dx = Some("histo"))
+  case object Hepatozoonosis extends HealthCondition(1621L, "Hepatozoonosis", Infection, dx = Some("hepato"))
+  case object Hookworms extends HealthCondition(1622L, "Hookworms", Infection, dx = Some("hkworm"))
+  case object Influenza extends HealthCondition(1623L, "Influenza", Infection, dx = Some("influ"))
+  case object Isospora extends HealthCondition(1624L, "Isospora", Infection, dx = Some("isosp"))
+  case object Leishmaniasis extends HealthCondition(1625L, "Leishmaniasis", Infection, dx = Some("leish"))
+  case object Leptospirosis extends HealthCondition(1626L, "Leptospirosis", Infection, dx = Some("lepto"))
+  case object Lyme extends HealthCondition(1627L, "Lyme disease", Infection, dx = Some("lyme"))
+  case object MRSA extends HealthCondition(1628L, "MRSA/MRSP", Infection, dx = Some("mrsa"))
+  case object Mycobacterium extends HealthCondition(1629L, "Mycobacterium", Infection, dx = Some("mycob"))
+  case object Parvovirus extends HealthCondition(1630L, "Parvovirus", Infection, dx = Some("parvo"))
+  case object Plague extends HealthCondition(1631L, "Plague (Yersinia pestis)", Infection, dx = Some("plague"))
+  case object Pythium extends HealthCondition(1632L, "Pythium", Infection, dx = Some("pythium"))
+  case object RMSF extends HealthCondition(1633L, "Rocky Mountain Spotted Fever (RMSF)", Infection, dx = Some("rmsf"))
+  case object Roundworms extends HealthCondition(1634L, "Roundworms", Infection, dx = Some("rndworm"))
+  case object Salmonellosis extends HealthCondition(1635L, "Salmonellosis", Infection, dx = Some("slmosis"))
+  case object SalmonPoison extends HealthCondition(1636L, "Salmon poisoning", Infection, dx = Some("slmpois"))
+  case object Tapeworms extends HealthCondition(1637L, "Tapeworms", Infection, dx = Some("tpworm"))
+  case object Toxoplasma extends HealthCondition(1638L, "Toxoplasma", Infection, dx = Some("toxop"))
+  case object Tularemia extends HealthCondition(1639L, "Tularemia", Infection, dx = Some("tular"))
+  case object Whipworms extends HealthCondition(1640L, "Whipworms", Infection, dx = Some("whpworm"))
+  case object OtherInfection extends HealthCondition(1698L, "Other infectious disease", Infection, dx = Some("infect_other"), isOther = true)
 
   // Toxin consumption.
   // TODO
 
   // Trauma.
-  case object DogBite extends HealthCondition(1801L, "Dog bite", Trauma, "dogbite", false, true)
-  case object AnimalBite extends HealthCondition(1802L, "Bite wound from another animal", Trauma, "anibite", false, true)
-  case object Fall extends HealthCondition(1803L, "Fall from height", Trauma, "fall", false, true)
-  case object Fracture extends HealthCondition(1804L, "Fractured bone", Trauma, "frac", false, true)
-  case object Head extends HealthCondition(1805L, "Head trauma due to any cause", Trauma, "head", false, true)
-  case object Car extends HealthCondition(1806L, "Hit by car or other vehicle", Trauma, "car", false, true)
-  case object Kick extends HealthCondition(1807L, "Kicked by horse or other large animal", Trauma, "kick", false, true)
-  case object Laceration extends HealthCondition(1808L, "Laceration", Trauma, "lac", false, true)
-  case object PenetratingWound extends HealthCondition(1809L, "Penetrating wound (such as a stick)", Trauma, "pene", false, true)
-  case object Proptosis extends HealthCondition(1810L, "Proptosis (eye out of socket)", Trauma, "prop", false, true)
-  case object SnakeBite extends HealthCondition(1811L, "Snakebite", Trauma, "snake", false, true)
-  case object Tail extends HealthCondition(1812L, "Tail injury", Trauma, "tail", false, true)
-  case object Nail extends HealthCondition(1813L, "Torn or broken toenail", Trauma, "nail", false, true)
-  case object OtherTrauma extends HealthCondition(1898L, "Other trauma", Trauma, "other", false, true, true)
+  case object DogBite extends HealthCondition(1801L, "Dog bite", Trauma, dx = Some("dogbite"))
+  case object AnimalBite extends HealthCondition(1802L, "Bite wound from another animal", Trauma, dx = Some("anibite"))
+  case object Fall extends HealthCondition(1803L, "Fall from height", Trauma, dx = Some("fall"))
+  case object Fracture extends HealthCondition(1804L, "Fractured bone", Trauma, dx = Some("frac"))
+  case object Head extends HealthCondition(1805L, "Head trauma due to any cause", Trauma, dx = Some("head"))
+  case object Car extends HealthCondition(1806L, "Hit by car or other vehicle", Trauma, dx = Some("car"))
+  case object Kick extends HealthCondition(1807L, "Kicked by horse or other large animal", Trauma, dx = Some("kick"))
+  case object Laceration extends HealthCondition(1808L, "Laceration", Trauma, dx = Some("lac"))
+  case object PenetratingWound extends HealthCondition(1809L, "Penetrating wound (such as a stick)", Trauma, dx = Some("pene"))
+  case object Proptosis extends HealthCondition(1810L, "Proptosis (eye out of socket)", Trauma, dx = Some("prop"))
+  case object SnakeBite extends HealthCondition(1811L, "Snakebite", Trauma, dx = Some("snake"))
+  case object Tail extends HealthCondition(1812L, "Tail injury", Trauma, dx = Some("tail"))
+  case object Nail extends HealthCondition(1813L, "Torn or broken toenail", Trauma, dx = Some("nail"))
+  case object OtherTrauma extends HealthCondition(1898L, "Other trauma", Trauma, dx = Some("other"), isOther = true)
 
   // Immune conditions.
   // TODO
