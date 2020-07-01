@@ -111,7 +111,19 @@ object HealthCondition extends LongEnum[HealthCondition] {
   // TODO
 
   // Respiratory conditions.
-  // TODO
+  case object SNN extends HealthCondition(601L, "Stenotic/narrow nares", Respiratory, cg = Some("st_nares"), dx = Some("snn"))
+  case object TS extends HealthCondition(602L, "Tracheal stenosis (narrowing)", Respiratory, cg = Some("tr_steno"), dx = Some("ts"))
+  case object ARDS extends HealthCondition(603L, "Acquired or acute respiratory distress syndrome (ARDS)", Respiratory, dx = Some("ards"))
+  case object ChronicBronchitis extends HealthCondition(604L, "Chronic or recurrent bronchitis", Respiratory, dx = Some("cb"))
+  case object ChronicCough extends HealthCondition(605L, "Chronic or recurrent cough", Respiratory, dx = Some("cc"))
+  case object ChronicRhinitis extends HealthCondition(606L, "Chronic or recurrent rhinitis", Respiratory, dx = Some("cr"))
+  case object ESP extends HealthCondition(607L, "Elongated soft palate", Respiratory, dx = Some("esp"))
+  case object LP extends HealthCondition(608L, "Laryngeal paralysis", Respiratory, dx = Some("lp"))
+  case object LLT extends HealthCondition(609L, "Lung lobe torsion", Respiratory, dx = Some("llt"))
+  case object Pneumonia extends HealthCondition(610L, "Pneumonia", Respiratory, dx = Some("pn"))
+  case object PulmonaryBullae extends HealthCondition(611L, "Pulmonary bullae", Respiratory, dx = Some("pul"))
+  case object TrachealCollapse extends HealthCondition(612L, "Tracheal collapse", Respiratory, dx = Some("tc"))
+  case object OtherRespiratory extends HealthCondition(698L, "Other respiratory condition", Respiratory, both = Some("other"), isOther = true)
 
   // Gastrointestinal conditions.
   case object Atresia extends HealthCondition(701L, "Atresia ani", Gastrointestinal, cg = Some("atresia"))

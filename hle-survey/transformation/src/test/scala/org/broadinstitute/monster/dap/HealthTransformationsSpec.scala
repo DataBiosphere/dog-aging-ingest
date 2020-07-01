@@ -815,6 +815,95 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     output should contain theSameElementsAs truth
   }
 
+  it should "correctly map congenital respiratory disorders and non-congenital diseases when values are defined" in {
+    val multiple = Map[String, Array[String]](
+      "hs_congenital_yn" -> Array("1"),
+      "hs_cg_resp_disorders_yn" -> Array("1"),
+      "hs_cg_resp_st_nares" -> Array("1"),
+      "hs_cg_resp_st_nares_month" -> Array("2"),
+      "hs_cg_resp_st_nares_year" -> Array("2020"),
+      "hs_cg_resp_st_nares_surg" -> Array("3"),
+      "hs_cg_resp_st_nares_fu" -> Array("1"),
+      "hs_cg_resp_other" -> Array("1"),
+      "hs_cg_resp_other_spec" -> Array("olives"),
+      "hs_cg_resp_other_month" -> Array("2"),
+      "hs_cg_resp_other_year" -> Array("2020"),
+      "hs_cg_resp_other_surg" -> Array("3"),
+      "hs_cg_resp_other_fu" -> Array("0"),
+      "hs_dx_respire_yn" -> Array("1"),
+      "hs_dx_respire_ards" -> Array("1"),
+      "hs_dx_respire_ards_month" -> Array("2"),
+      "hs_dx_respire_ards_year" -> Array("2020"),
+      "hs_dx_respire_ards_surg" -> Array("3"),
+      "hs_dx_respire_ards_fu" -> Array("1"),
+      "hs_dx_respire_other" -> Array("1"),
+      "hs_dx_respire_other_spec" -> Array("ohno"),
+      "hs_dx_respire_other_month" -> Array("2"),
+      "hs_dx_respire_other_year" -> Array("2020"),
+      "hs_dx_respire_other_surg" -> Array("3"),
+      "hs_dx_respire_other_fu" -> Array("1")
+    )
+    val exampleRecord = RawRecord(id = 1, multiple)
+    val output = HealthTransformations.mapHealthConditions(exampleRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Respiratory.value,
+        hsCondition = HealthCondition.SNN.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Respiratory.value,
+        hsCondition = HealthCondition.OtherRespiratory.value,
+        hsConditionOtherDescription = Some("olives"),
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(false)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Respiratory.value,
+        hsCondition = HealthCondition.ARDS.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Respiratory.value,
+        hsCondition = HealthCondition.OtherRespiratory.value,
+        hsConditionOtherDescription = Some("ohno"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs (truth)
+  }
+
   it should "correctly map health status data when fields are null" in {
     val emptyRecord = RawRecord(1, Map.empty)
 
