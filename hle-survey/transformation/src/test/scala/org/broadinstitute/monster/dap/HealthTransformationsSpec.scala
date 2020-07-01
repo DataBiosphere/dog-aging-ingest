@@ -698,7 +698,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "correctly map congenital GI disorders when values are defined" in {
-    val multipleCongenitalSkinDisorder = Map[String, Array[String]](
+    val multipleCongenitalGIDisorder = Map[String, Array[String]](
       "hs_congenital_yn" -> Array("1"),
       "hs_cg_gastro_disorders_yn" -> Array("1"),
       "hs_cg_gastro_megaeso" -> Array("1"),
@@ -713,8 +713,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       "hs_cg_gastro_other_surg" -> Array("3"),
       "hs_cg_gastro_other_fu" -> Array("0")
     )
-    val exampleSkinDisorderRecord = RawRecord(id = 1, multipleCongenitalSkinDisorder)
-    val output = HealthTransformations.mapHealthConditions(exampleSkinDisorderRecord)
+    val exampleGIDisorderRecord = RawRecord(id = 1, multipleCongenitalGIDisorder)
+    val output = HealthTransformations.mapHealthConditions(exampleGIDisorderRecord)
 
     val truth = List(
       HlesHealthCondition(
@@ -749,7 +749,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
   }
 
   it should "correctly map GI disease values when values are defined" in {
-    val multipleEarDisease = Map[String, Array[String]](
+    val multipleGIDisease = Map[String, Array[String]](
       "hs_dx_gi_yn" -> Array("1"),
       "hs_dx_gi_meg" -> Array("1"),
       "hs_dx_gi_meg_month" -> Array("2"),
@@ -768,8 +768,8 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       "hs_dx_gi_other_surg" -> Array("3"),
       "hs_dx_gi_other_fu" -> Array("1")
     )
-    val exampleEarDiseaseRecord = RawRecord(id = 1, multipleEarDisease)
-    val output = HealthTransformations.mapHealthConditions(exampleEarDiseaseRecord)
+    val exampleGIDiseaseRecord = RawRecord(id = 1, multipleGIDisease)
+    val output = HealthTransformations.mapHealthConditions(exampleGIDiseaseRecord)
     val truth = List(
       HlesHealthCondition(
         dogId = 1L,
