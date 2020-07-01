@@ -226,7 +226,7 @@ object RoutineEnvironmentTransformations {
         deRoutineToysIncludeMetal = rawRecord.getOptionalNumber("de_toy_metal"),
         deRoutineToysIncludeAnimalProducts = rawRecord.getOptionalNumber("de_toy_animal"),
         deRoutineToysIncludeLatex = rawRecord.getOptionalNumber("de_toy_latex"),
-        deRoutineToysIncludeRope = rawRecord.getOptionalNumber("de_toy_rope"), //FIXME NEW
+        deRoutineToysIncludeRope = rawRecord.getOptionalNumber("de_toy_rope"),
         deRoutineToysIncludeTennisBalls = rawRecord.getOptionalNumber("de_toy_tennis_ball"),
         deRoutineToysIncludeSticks = rawRecord.getOptionalNumber("de_toy_sticks"),
         deRoutineToysIncludeOther = otherToys,
