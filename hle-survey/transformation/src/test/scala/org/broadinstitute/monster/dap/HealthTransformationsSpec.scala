@@ -906,7 +906,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
         dogId = 1L,
         hsConditionType = HealthConditionType.Cardiac.value,
         hsCondition = HealthCondition.ValveDisease.value,
-        hsConditionOtherDescription = Some("pesto"), // currently None
+        hsConditionOtherDescription = Some("pesto"),
         hsConditionIsCongenital = false,
         hsConditionCause = None,
         hsConditionCauseOtherDescription = None,
