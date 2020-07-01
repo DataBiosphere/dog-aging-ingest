@@ -295,13 +295,12 @@ object RoutineEnvironmentTransformations {
         deRecentToxinsOrHazardsIngestedClothing = toxinsIngested.map(_.contains("8")),
         deRecentToxinsOrHazardsIngestedOther = recentToxinsOrHazardsIngestedOther,
         //de_ingest_bad is deprecated, check it first, then check de_ingest_bad_what_other
-        //FIXME SHOULD THIS FIELD BE FILLED EVEN WITHOUT THE OTHER (BOOL) ABOVE BEING TRUE?
         deRecentToxinsOrHazardsIngestedOtherDescription =
           if (toxinsDescription.exists(_.trim.nonEmpty)) toxinsDescription
           // ONLY if: de_ingest_bad_what(98) = 1
           else if (recentToxinsOrHazardsIngestedOther.get)
             rawRecord.getOptional("de_ingest_bad_what_other")
-          else None, //FIXME CAN THIS BE REFACTORED NEATLY ... USE GETORELSE?
+          else None,
         deRecentToxinsOrHazardsIngestedRequiredVet =
           rawRecord.getOptionalBoolean("de_ingest_bad_er_yn")
       )

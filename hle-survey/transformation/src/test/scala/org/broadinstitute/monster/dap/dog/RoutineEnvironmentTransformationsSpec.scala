@@ -218,20 +218,12 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output3.deWorkTravelTimeMinutes shouldBe None
   }
 
-  // FIXME how can I separate the different test cases (try different sets of arrays)
-  // FIXME how to change the unit test structure to be better organized for that?
-  // FIXME ex... should the last case be separated into a diff "it should" block?
-  // FIXME I guess I could create much larger examples that span multiple mapping pieces (dogpark + rec spaces + work)
-  // FIXME but since I split them into groups that make more sense conceptually, I can unit test them that way anyways
-  // FIXME don't see a benefit in unit testing multiple functions ? maybe one large example at the end?
-
   it should "map Sitter fields when available" in {
     // de_sitter_yn = 1, de_sitter_how = "Walk", "Drive", "Public Transport"
     val example1 = Map[String, Array[String]](
       "de_sitter_yn" -> Array("1"),
       "de_sitter_how" -> Array("1", "2", "4"),
       "de_sitter_freq" -> Array("5"),
-      //"de_sitter_how_other" -> Array(""), // FIXME does this even need to be included here?
       "de_sitter_hr" -> Array("4"),
       "de_sitter_min" -> Array("30")
     )
@@ -273,14 +265,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
 
     // de_sitter_yn = '0'
     val example3 = Map[String, Array[String]](
-      "de_sitter_yn" -> Array("0"),
-      //FIXME do i need all these values here cause they shouldn't get processed if the above value is 0?
-      //FIXME should i fill them with empty/0?
-      "de_sitter_how" -> Array("1"),
-      "de_sitter_freq" -> Array("0"),
-      "de_sitter_how_other" -> Array(""),
-      "de_sitter_hr" -> Array(""),
-      "de_sitter_min" -> Array("")
+      "de_sitter_yn" -> Array("0")
     )
 
     val output3 =
@@ -328,9 +313,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
       "de_eat_grass" -> Array("0"),
       "de_eat_feces_yn" -> Array("1"),
       "de_eat_feces_type" -> Array("2", "4", "6"),
-      //"de_eat_feces_type_other" -> Array(""), //FIXME remove?
       "de_water_outdoor_yn" -> Array("0")
-      //"de_water_outdoor_freq" -> Array("0") //FIXME remove?
     )
     val output2 =
       RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example2))
@@ -352,8 +335,6 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     val example3 = Map[String, Array[String]](
       "de_eat_grass" -> Array("1"),
       "de_eat_feces_yn" -> Array("0"),
-      //"de_eat_feces_type" -> Array("2", "4", "6"),//FIXME remove?
-      //"de_eat_feces_type_other" -> Array(""), //FIXME remove?
       "de_water_outdoor_yn" -> Array("1"),
       "de_water_outdoor_freq" -> Array("2")
     )
@@ -448,7 +429,6 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
       "de_toy_tennis_ball" -> Array("0"),
       "de_toy_sticks" -> Array("1"),
       "de_toy_other_yn" -> Array("0"),
-      "de_toy_other" -> Array("Softball"), //FIXME necessary?
       "de_toys_amt" -> Array("2"),
       "de_chew_other_yn" -> Array("0")
     )
@@ -482,7 +462,6 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output3.deRoutineToys.value shouldBe false
     output3.deLicksChewsOrPlaysWithNonToys.value shouldBe true
 
-    //FIXME is this case useful at all?
     // de_toys_yn = '0', de_chew_other_yn = '0'
     val example4 = Map[String, Array[String]](
       "de_toys_yn" -> Array("0"),
