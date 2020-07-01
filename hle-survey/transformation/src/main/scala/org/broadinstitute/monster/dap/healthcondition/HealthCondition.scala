@@ -173,7 +173,16 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherGI extends HealthCondition(798L, "Other gastrointestinal condition", Gastrointestinal, both = Some("other"), isOther = true)
 
   // Liver conditions.
-  // TODO
+  case object LiverPS extends HealthCondition(801L, "Portosystemic shunt", Liver, both = Some("ps"))
+  case object BO extends HealthCondition(802L, "Biliary obstruction", Liver, dx = Some("bo"))
+  case object CILD extends HealthCondition(803L, "Chronic inflammatory liver disease", Liver, dx = Some("cild"))
+  case object EPI extends HealthCondition(804L, "Exocrine pancreatic insufficiency (EPI)", Liver, dx = Some("epi"))
+  case object GBM extends HealthCondition(805L, "Gall bladder mucocele", Liver, dx = Some("gbm"))
+  case object GBR extends HealthCondition(806L, "Gall bladder rupture", Liver, dx = Some("gbr"))
+  case object GBS extends HealthCondition(807L, "Gall bladder surgery", Liver, dx = Some("gbs"))
+  case object LiverMD extends HealthCondition(808L, "Microvascular dysplasia (portal vein hypoplasia)", Liver, dx = Some("md"))
+  case object Pancreatitis extends HealthCondition(809L, "Pancreatitis", Liver, dx = Some("pan"))
+  case object OtherLiver extends HealthCondition(898L, "Other liver condition", Liver, both = Some("other"), isOther = true)
 
   // Kidney conditions.
   // TODO
