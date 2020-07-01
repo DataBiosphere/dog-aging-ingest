@@ -65,10 +65,10 @@ object HealthStatusTransformations {
 
       (congenital, diagnosed) match {
         case (None, None)             => None
-        case (Some(true), Some(true)) => Some(3L)
-        case (Some(true), _)          => Some(1L)
-        case (_, Some(true))          => Some(2L)
-        case _                        => Some(0L)
+        case (Some(true), Some(true)) => Some(HealthConditionSummary.Both.value)
+        case (Some(true), _)          => Some(HealthConditionSummary.Congenital.value)
+        case (_, Some(true))          => Some(HealthConditionSummary.Diagnosed.value)
+        case _                        => Some(HealthConditionSummary.None.value)
       }
     }
 

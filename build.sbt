@@ -1,3 +1,4 @@
+val enumeratumVersion = "1.6.1"
 val okhttpVersion = "4.4.1"
 val vaultDriverVersion = "5.1.0"
 
@@ -27,3 +28,6 @@ lazy val `dog-aging-hle-transformation` = project
   .in(file("hle-survey/transformation"))
   .enablePlugins(MonsterScioPipelinePlugin)
   .dependsOn(`dog-aging-schema`)
+  .settings(
+    libraryDependencies += "com.beachape" %% "enumeratum" % enumeratumVersion
+  )
