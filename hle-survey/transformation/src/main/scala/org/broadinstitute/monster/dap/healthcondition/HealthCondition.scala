@@ -8,14 +8,13 @@ import enumeratum.values.{LongEnum, LongEnumEntry}
   * @param value raw value to store on a per-row basis in BQ
   * @param label string label to associate with the raw value in lookup tables
   * @param conditionType general category of the condition
-  * @param both TODO
-  * @param cg TODO
-  * @param dx TODO
+  * @param both abbreviation used for both the 'cg' and 'dx' representations
+  *             of this condition, if one exists
+  * @param cg abbreviation used for the 'cg' representation of this condition, if one exists
+  * @param dx abbreviation used for the 'dx' representation of this condition, if one exists
   * @param isOther true if the condition has a '_spec' field for free-form user entry
   * @param descriptionSuffixOverride if set, will override the auto-computed field name
   *                                  for the description field on "other" conditions
-  * @param computeGate mapping function from `data prefix` => the name of the Y/N field
-  *                    marking if any data exists for the condition
   */
 sealed abstract class HealthCondition(
   override val value: Long,
@@ -25,8 +24,7 @@ sealed abstract class HealthCondition(
   val cg: Option[String] = None,
   val dx: Option[String] = None,
   val isOther: Boolean = false,
-  val descriptionSuffixOverride: Option[String] = None,
-  val computeGate: String => String = identity
+  val descriptionSuffixOverride: Option[String] = None
 ) extends LongEnumEntry
 
 object HealthCondition extends LongEnum[HealthCondition] {
@@ -46,20 +44,20 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object KCS extends HealthCondition(104L, "Keratoconjunctivitis sicca (KCS)", Eye, both = Some("kcs"))
   case object PPM extends HealthCondition(105L, "Persistent pupillary membrane (PPM)", Eye, cg = Some("ppm"))
   case object MissingEye extends HealthCondition(106L, "Missing one or both eyes", Eye, cg = Some("miss"))
-  case object CherryEye extends HealthCondition(108L, "Third eyelid prolapse (cherry eye)", Eye, dx = Some("ce"))
-  case object Conjunctivitis extends HealthCondition(109L, "Conjunctivitis", Eye, dx = Some("conj"))
-  case object CornealUlcer extends HealthCondition(110L, "Corneal ulcer", Eye, dx = Some("cu"))
-  case object Distichia extends HealthCondition(111L, "Distichia", Eye, dx = Some("dist"))
-  case object Ectropion extends HealthCondition(112L, "Ectropion (eyelid rolled out)", Eye, dx = Some("ectrop"))
-  case object Entropion extends HealthCondition(113L, "Entropion (eyelid rolled in)", Eye, dx = Some("entrop"))
-  case object ILP extends HealthCondition(114L, "Imperforate lacrimal punctum", Eye, dx = Some("ilp"))
-  case object IrisCyst extends HealthCondition(115L, "Iris cyst", Eye, dx = Some("ic"))
-  case object JuvenileCataracts extends HealthCondition(116L, "Juvenile cataracts", Eye, dx = Some("jcat"))
-  case object NS extends HealthCondition(117L, "Nuclear sclerosis", Eye, dx = Some("ns"))
-  case object PU extends HealthCondition(118L, "Pigmentary uveitis", Eye, dx = Some("pu"))
-  case object PRA extends HealthCondition(119L, "Progressive retinal atrophy", Eye, dx = Some("pra"))
-  case object RD extends HealthCondition(120L, "Retinal detachment", Eye, dx = Some("rd"))
-  case object Uveitis extends HealthCondition(121L, "Uveitis", Eye, dx = Some("uvei"))
+  case object CherryEye extends HealthCondition(107L, "Third eyelid prolapse (cherry eye)", Eye, dx = Some("ce"))
+  case object Conjunctivitis extends HealthCondition(108L, "Conjunctivitis", Eye, dx = Some("conj"))
+  case object CornealUlcer extends HealthCondition(109L, "Corneal ulcer", Eye, dx = Some("cu"))
+  case object Distichia extends HealthCondition(110L, "Distichia", Eye, dx = Some("dist"))
+  case object Ectropion extends HealthCondition(111L, "Ectropion (eyelid rolled out)", Eye, dx = Some("ectrop"))
+  case object Entropion extends HealthCondition(112L, "Entropion (eyelid rolled in)", Eye, dx = Some("entrop"))
+  case object ILP extends HealthCondition(113L, "Imperforate lacrimal punctum", Eye, dx = Some("ilp"))
+  case object IrisCyst extends HealthCondition(114L, "Iris cyst", Eye, dx = Some("ic"))
+  case object JuvenileCataracts extends HealthCondition(115L, "Juvenile cataracts", Eye, dx = Some("jcat"))
+  case object NS extends HealthCondition(116L, "Nuclear sclerosis", Eye, dx = Some("ns"))
+  case object PU extends HealthCondition(117L, "Pigmentary uveitis", Eye, dx = Some("pu"))
+  case object PRA extends HealthCondition(118L, "Progressive retinal atrophy", Eye, dx = Some("pra"))
+  case object RD extends HealthCondition(119L, "Retinal detachment", Eye, dx = Some("rd"))
+  case object Uveitis extends HealthCondition(120L, "Uveitis", Eye, dx = Some("uvei"))
   case object OtherEye extends HealthCondition(198L, "Other eye condition", Eye, cg = Some("other"), dx = Some("eye_other"), isOther = true)
 
   // Ear conditions.
