@@ -214,7 +214,7 @@ object RoutineEnvironmentTransformations {
     val toys = rawRecord.getOptionalBoolean("de_toys_yn")
     val nonToys = rawRecord.getOptionalBoolean("de_chew_other_yn")
     // ONLY if: de_toys_yn = 1
-    if (toys.contains(true)) { //FIXME
+    if (toys.contains(true)) {
       val otherToys = rawRecord.getOptionalNumber("de_toy_other_yn")
       dog.copy(
         deRoutineToys = toys,
@@ -254,19 +254,20 @@ object RoutineEnvironmentTransformations {
     // ONLY if: de_sleep_day_yn = 1
     val daytimeSleepLocation =
       if (daySleep.contains(true)) rawRecord.getOptionalNumber("de_sleep_location_day") else None
+    // ONLY if: de_sleep_location_day = 98
+    val daytimeSleepLocationOtherDescription =
+      if (daytimeSleepLocation.contains(98L)) rawRecord.getOptional("de_sleep_loc_day_other")
+      else None
     dog.copy(
       deNighttimeSleepLocation = nighttimeSleepLocation,
       // ONLY if: de_sleep_location = '98'
       deNighttimeSleepLocationOtherDescription =
-        if (nighttimeSleepLocation.contains(98L)) rawRecord.getOptional("de_primary_heat_other")
+        if (nighttimeSleepLocation.contains(98L)) rawRecord.getOptional("de_sleep_location_other")
         else None,
       deNighttimeSleepAvgHours = rawRecord.getOptionalNumber("de_sleep_amt_night"),
       deDaytimeSleepLocationDifferent = daySleep,
       deDaytimeSleepLocation = daytimeSleepLocation,
-      // ONLY if: de_sleep_location_day = 98
-      deDaytimeSleepLocationOtherDescription =
-        if (daytimeSleepLocation.contains(98L)) rawRecord.getOptional("de_sleep_loc_day_other")
-        else None,
+      deDaytimeSleepLocationOtherDescription = daytimeSleepLocationOtherDescription,
       deDaytimeSleepAvgHours = rawRecord.getOptionalNumber("de_sleep_amt_day")
     )
   }
@@ -331,6 +332,7 @@ object RoutineEnvironmentTransformations {
         deOtherPresentAnimalsFish = rawRecord.getOptionalBoolean("de_other_fish"),
         deOtherPresentAnimalsWildlife = rawRecord.getOptionalBoolean("de_other_wildlife"),
         deOtherPresentAnimalsOther = otherPresentAnimalsOther,
+        //ONLY if: de_other_other_yn = "1"
         deOtherPresentAnimalsOtherDescription =
           if (otherPresentAnimalsOther.contains(true)) rawRecord.getOptional("de_other_other")
           else None,

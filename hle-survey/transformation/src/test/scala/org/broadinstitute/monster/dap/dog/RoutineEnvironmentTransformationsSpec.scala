@@ -81,7 +81,6 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output3.deDogparkTravelTimeMinutes shouldBe None
   }
 
-
   it should "map recreational spaces when available" in {
 
     // de_spaces_yn = '1' AND de_spaces_get_to(98) = ("Walk", "Drive", "Bike")
@@ -298,7 +297,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output3.deSitterOrDaycareTravelTimeMinutes shouldBe None
   }
 
-  it should "map EatsFeces fields when available" in {
+  it should "map Eats Feces fields when available" in {
     // de_eat_feces_yn = '1', de_eat_feces_type = "Dog (own)", "Cat", "Cattle", "Other", de_water_outdoor_yn = 1
     val example1 = Map[String, Array[String]](
       "de_eat_grass" -> Array("1"),
@@ -330,7 +329,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
       "de_eat_feces_yn" -> Array("1"),
       "de_eat_feces_type" -> Array("2", "4", "6"),
       //"de_eat_feces_type_other" -> Array(""), //FIXME remove?
-      "de_water_outdoor_yn" -> Array("0"),
+      "de_water_outdoor_yn" -> Array("0")
       //"de_water_outdoor_freq" -> Array("0") //FIXME remove?
     )
     val output2 =
@@ -394,42 +393,8 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output4.deEatsFecesOther shouldBe None
     output4.deEatsFecesOtherDescription shouldBe None
     output4.deDrinksOutdoorWater.value shouldBe false
-    output4.deDrinksOutdoorWaterFrequency shoudlBe None
+    output4.deDrinksOutdoorWaterFrequency shouldBe None
   }
-
-  //de_toys_yn = 1
-  deRoutineToys
-  deRoutineToysIncludePlastic
-  deRoutineToysIncludeStuffedFabric
-  deRoutineToysIncludeUnstuffedFabric
-  deRoutineToysIncludeRubber
-  deRoutineToysIncludeMetal
-  deRoutineToysIncludeAnimalProducts
-  deRoutineToysIncludeLatex
-  deRoutineToysIncludeRope
-  deRoutineToysIncludeTennisBalls
-  deRoutineToysIncludeSticks
-  deRoutineToysIncludeOther
-  //de_toy_other_yn = '1'
-  deRoutineToysOtherDescription
-  deRoutineToysHoursPerDay
-  deLicksChewsOrPlaysWithNonToys
-  deRoutineToys
-  deLicksChewsOrPlaysWithNonToys
-
-  //de_toys_yn = 0
-  deRoutineToys
-  deLicksChewsOrPlaysWithNonToys
-
-  //CASES
-  // de_toys_yn = '1', de_toy_other_yn = '1',
-  // de_toys_yn = '1', de_toy_other_yn = '0'
-  // de_toys_yn = 0
-
-
-
-
-
 
   it should "map Toys fields when available" in {
     // de_toys_yn = '1', de_toy_other_yn = '1', de_chew_other_yn = '1'
@@ -467,7 +432,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output1.deRoutineToysIncludeOther.value shouldBe 1
     output1.deRoutineToysOtherDescription.value shouldBe "Soccer Ball"
     output1.deRoutineToysHoursPerDay.value shouldBe 3
-    output1.deLicksChewsOrPlaysWithNonToys.value true
+    output1.deLicksChewsOrPlaysWithNonToys.value shouldBe true
 
     // de_toys_yn = '1', de_toy_other_yn = '0', de_chew_other_yn = '0'
     val example2 = Map[String, Array[String]](
@@ -504,7 +469,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output2.deRoutineToysIncludeOther.value shouldBe 0
     output2.deRoutineToysOtherDescription shouldBe None
     output2.deRoutineToysHoursPerDay.value shouldBe 2
-    output2.deLicksChewsOrPlaysWithNonToys.value false
+    output2.deLicksChewsOrPlaysWithNonToys.value shouldBe false
 
     // de_toys_yn = '0', de_chew_other_yn = '1'
     val example3 = Map[String, Array[String]](
@@ -515,7 +480,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
       RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example3))
 
     output3.deRoutineToys.value shouldBe false
-    output3.deLicksChewsOrPlaysWithNonToys.value true
+    output3.deLicksChewsOrPlaysWithNonToys.value shouldBe true
 
     //FIXME is this case useful at all?
     // de_toys_yn = '0', de_chew_other_yn = '0'
@@ -527,72 +492,236 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
       RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example4))
 
     output4.deRoutineToys.value shouldBe false
-    output4.deLicksChewsOrPlaysWithNonToys.value false
+    output4.deLicksChewsOrPlaysWithNonToys.value shouldBe false
   }
 
-
-
-
-
-
-
-
-  it should "map SleepLocation fields when available" in {
-    // if CONDITION
+  it should "map Sleep Location fields when available" in {
+    // de_sleep_location = '1', de_sleep_day_yn = '0'
     val example1 = Map[String, Array[String]](
+      "de_sleep_location" -> Array("1"),
+      "de_sleep_location_other" -> Array(""),
+      "de_sleep_amt_night" -> Array("10"),
+      "de_sleep_day_yn" -> Array("0")
     )
     val output1 =
       RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example1))
 
-    output1.FIELD.value shouldBe false
-    output1.FIELD should be None
+    output1.deNighttimeSleepLocation.value shouldBe 1
+    output1.deNighttimeSleepLocationOtherDescription shouldBe None
+    output1.deNighttimeSleepAvgHours.value shouldBe 10
+    output1.deDaytimeSleepLocationDifferent.value shouldBe false
+    output1.deDaytimeSleepLocation shouldBe None
+    output1.deDaytimeSleepLocationOtherDescription shouldBe None
+    output1.deDaytimeSleepAvgHours.value shouldBe 0
+
+    // de_sleep_location = '98', de_sleep_day_yn = '1', de_sleep_location_day = '1'
+    val example2 = Map[String, Array[String]](
+      "de_sleep_location" -> Array("98"),
+      "de_sleep_location_other" -> Array("Attic"),
+      "de_sleep_amt_night" -> Array("3"),
+      "de_sleep_day_yn" -> Array("1"),
+      "de_sleep_location_day" -> Array("1"),
+      "de_sleep_amt_day" -> Array("5")
+    )
+    val output2 =
+      RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example2))
+
+    output2.deNighttimeSleepLocation.value shouldBe 98
+    output2.deNighttimeSleepLocationOtherDescription.value shouldBe "Attic"
+    output2.deNighttimeSleepAvgHours.value shouldBe 3
+    output2.deDaytimeSleepLocationDifferent.value shouldBe true
+    output2.deDaytimeSleepLocation.value shouldBe 1
+    output2.deDaytimeSleepLocationOtherDescription shouldBe None
+    output2.deDaytimeSleepAvgHours.value shouldBe 5
+
+    // de_sleep_location = '3', de_sleep_day_yn = '1', de_sleep_location_day = '98'
+    val example3 = Map[String, Array[String]](
+      "de_sleep_location" -> Array("3"),
+      "de_sleep_amt_night" -> Array("4"),
+      "de_sleep_day_yn" -> Array("1"),
+      "de_sleep_location_day" -> Array("98"),
+      "de_sleep_loc_day_other" -> Array("Basement"),
+      "de_sleep_amt_day" -> Array("5")
+    )
+
+    val output3 =
+      RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example3))
+
+    output3.deNighttimeSleepLocation.value shouldBe 3
+    output3.deNighttimeSleepLocationOtherDescription shouldBe None
+    output3.deNighttimeSleepAvgHours.value shouldBe 4
+    output3.deDaytimeSleepLocationDifferent.value shouldBe true
+    output3.deDaytimeSleepLocation.value shouldBe 98
+    output3.deDaytimeSleepLocationOtherDescription.value shouldBe "Basement"
+    output3.deDaytimeSleepAvgHours.value shouldBe 5
   }
 
-
-
-
-  it should "map ToxinsIngested fields when available" in {
-    // if CONDITION
+  it should "map Toxins Ingested fields when available" in {
+    // de_ingest_bad_amt = "1" + de_ingest_bad_what = "1", "2", "3", "4", "5" + de_ingest_bad_er_yn = "1"
     val example1 = Map[String, Array[String]](
-      //EXAMPLE DATA
+      "de_ingest_bad_amt" -> Array("1"),
+      "de_ingest_bad" -> Array("Some nasty stuff"),
+      "de_ingest_bad_what" -> Array("1", "2", "3", "4", "5"),
+      "de_ingest_bad_er_yn" -> Array("1")
     )
     val output1 =
       RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example1))
 
-    output1.FIELD.value shouldBe false
-    output1.FIELD should be None
+    output1.deRecentToxinsOrHazardsIngestedFrequency.value shouldBe 1
+    output1.deRecentToxinsOrHazardsIngestedChocolate.value shouldBe true
+    output1.deRecentToxinsOrHazardsIngestedPoison.value shouldBe true
+    output1.deRecentToxinsOrHazardsIngestedHumanMedication.value shouldBe true
+    output1.deRecentToxinsOrHazardsIngestedPetMedication.value shouldBe true
+    output1.deRecentToxinsOrHazardsIngestedGarbageOrFood.value shouldBe true
+    output1.deRecentToxinsOrHazardsIngestedDeadAnimal.value shouldBe false
+    output1.deRecentToxinsOrHazardsIngestedToys.value shouldBe false
+    output1.deRecentToxinsOrHazardsIngestedClothing.value shouldBe false
+    output1.deRecentToxinsOrHazardsIngestedOther.value shouldBe false
+    output1.deRecentToxinsOrHazardsIngestedOtherDescription shouldBe None
+    output1.deRecentToxinsOrHazardsIngestedRequiredVet.value shouldBe true
+
+    // de_ingest_bad_amt = "2" + de_ingest_bad_what = "6", "7", "8", "98" + de_ingest_bad_er_yn = "1"
+    val example2 = Map[String, Array[String]](
+      "de_ingest_bad_amt" -> Array("2"),
+      "de_ingest_bad" -> Array("Toothpaste"),
+      "de_ingest_bad_what" -> Array("6", "7", "8", "98"),
+      "de_ingest_bad_what_other" -> Array("Colgate Toothpaste"),
+      "de_ingest_bad_er_yn" -> Array("0")
+    )
+    val output2 =
+      RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example2))
+
+    output2.deRecentToxinsOrHazardsIngestedFrequency.value shouldBe 2
+    output2.deRecentToxinsOrHazardsIngestedChocolate.value shouldBe false
+    output2.deRecentToxinsOrHazardsIngestedPoison.value shouldBe false
+    output2.deRecentToxinsOrHazardsIngestedHumanMedication.value shouldBe false
+    output2.deRecentToxinsOrHazardsIngestedPetMedication.value shouldBe false
+    output2.deRecentToxinsOrHazardsIngestedGarbageOrFood.value shouldBe false
+    output2.deRecentToxinsOrHazardsIngestedDeadAnimal.value shouldBe true
+    output2.deRecentToxinsOrHazardsIngestedToys.value shouldBe true
+    output2.deRecentToxinsOrHazardsIngestedClothing.value shouldBe true
+    output2.deRecentToxinsOrHazardsIngestedOther.value shouldBe true
+    output2.deRecentToxinsOrHazardsIngestedOtherDescription.value shouldBe "Toothpaste" //FIXME check what's being output
+    output2.deRecentToxinsOrHazardsIngestedRequiredVet.value shouldBe false
+
+    // de_ingest_bad_amt = 0
+    val example3 = Map[String, Array[String]](
+      "de_ingest_bad_amt" -> Array("0")
+    )
+    val output3 =
+      RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example3))
+
+    output3.deRecentToxinsOrHazardsIngestedFrequency.value shouldBe 0
+    output3.deRecentToxinsOrHazardsIngestedChocolate shouldBe None
+    output3.deRecentToxinsOrHazardsIngestedPoison shouldBe None
+    output3.deRecentToxinsOrHazardsIngestedHumanMedication shouldBe None
+    output3.deRecentToxinsOrHazardsIngestedPetMedication shouldBe None
+    output3.deRecentToxinsOrHazardsIngestedGarbageOrFood shouldBe None
+    output3.deRecentToxinsOrHazardsIngestedDeadAnimal shouldBe None
+    output3.deRecentToxinsOrHazardsIngestedToys shouldBe None
+    output3.deRecentToxinsOrHazardsIngestedClothing shouldBe None
+    output3.deRecentToxinsOrHazardsIngestedOther shouldBe None
+    output3.deRecentToxinsOrHazardsIngestedOtherDescription shouldBe None
+    output3.deRecentToxinsOrHazardsIngestedRequiredVet shouldBe None
   }
 
-
-
-
-  it should "map OtherAnimals fields when available" in {
-    // if CONDITION
+  it should "map Other Animals fields when available" in {
+    // de_other_animals_yn = "1", de_other_other_yn = "0"
     val example1 = Map[String, Array[String]](
-      //EXAMPLE DATA
+      "de_other_animals_yn" -> Array("1"),
+      "de_other_dogs" -> Array("1"),
+      "de_other_cats" -> Array("0"),
+      "de_other_birds" -> Array("1"),
+      "de_other_reptiles" -> Array("0"),
+      "de_other_livestock" -> Array("1"),
+      "de_other_horses" -> Array("0"),
+      "de_other_rodents" -> Array("1"),
+      "de_other_fish" -> Array("0"),
+      "de_other_wildlife" -> Array("1"),
+      "de_other_other_yn" -> Array("0"),
+      "de_other_other" -> Array("Insects"),
+      "de_other_inside_nbr" -> Array("3"),
+      "de_other_outside_nbr" -> Array("10"),
+      "de_other_interact_yn" -> Array("1")
     )
     val output1 =
       RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example1))
 
-    output1.FIELD.value shouldBe false
-    output1.FIELD should be None
+    output1.deOtherPresentAnimals.value shouldBe true
+    output1.deOtherPresentAnimalsDogs.value shouldBe true
+    output1.deOtherPresentAnimalsCats.value shouldBe false
+    output1.deOtherPresentAnimalsBirds.value shouldBe true
+    output1.deOtherPresentAnimalsReptiles.value shouldBe false
+    output1.deOtherPresentAnimalsLivestock.value shouldBe true
+    output1.deOtherPresentAnimalsHorses.value shouldBe false
+    output1.deOtherPresentAnimalsRodents.value shouldBe true
+    output1.deOtherPresentAnimalsFish.value shouldBe false
+    output1.deOtherPresentAnimalsWildlife.value shouldBe true
+    output1.deOtherPresentAnimalsOther.value shouldBe false
+    output1.deOtherPresentAnimalsOtherDescription shouldBe None
+    output1.deOtherPresentAnimalsIndoorCount.value shouldBe 3
+    output1.deOtherPresentAnimalsOutdoorCount.value shouldBe 10
+    output1.deOtherPresentAnimalsInteractWithDog.value shouldBe true
+
+    // de_other_animals_yn = "1", de_other_other_yn = "1"
+    val example2 = Map[String, Array[String]](
+      "de_other_animals_yn" -> Array("1"),
+      "de_other_dogs" -> Array("0"),
+      "de_other_cats" -> Array("1"),
+      "de_other_birds" -> Array("0"),
+      "de_other_reptiles" -> Array("1"),
+      "de_other_livestock" -> Array("0"),
+      "de_other_horses" -> Array("1"),
+      "de_other_rodents" -> Array("0"),
+      "de_other_fish" -> Array("1"),
+      "de_other_wildlife" -> Array("0"),
+      "de_other_other_yn" -> Array("1"),
+      "de_other_other" -> Array("Insects"),
+      "de_other_inside_nbr" -> Array("11"),
+      "de_other_outside_nbr" -> Array("1"),
+      "de_other_interact_yn" -> Array("0")
+    )
+
+    val output2 =
+      RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example2))
+
+    output2.deOtherPresentAnimals.value shouldBe true
+    output2.deOtherPresentAnimalsDogs.value shouldBe false
+    output2.deOtherPresentAnimalsCats.value shouldBe true
+    output2.deOtherPresentAnimalsBirds.value shouldBe false
+    output2.deOtherPresentAnimalsReptiles.value shouldBe true
+    output2.deOtherPresentAnimalsLivestock.value shouldBe false
+    output2.deOtherPresentAnimalsHorses.value shouldBe true
+    output2.deOtherPresentAnimalsRodents.value shouldBe false
+    output2.deOtherPresentAnimalsFish.value shouldBe true
+    output2.deOtherPresentAnimalsWildlife.value shouldBe false
+    output2.deOtherPresentAnimalsOther.value shouldBe true
+    output2.deOtherPresentAnimalsOtherDescription.value shouldBe "Insects"
+    output2.deOtherPresentAnimalsIndoorCount.value shouldBe 11
+    output2.deOtherPresentAnimalsOutdoorCount.value shouldBe 1
+    output2.deOtherPresentAnimalsInteractWithDog.value shouldBe false
+
+    // de_other_animals_yn = "0"
+    val example3 = Map[String, Array[String]](
+      "de_other_animals_yn" -> Array("0"),
+      "de_other_other_yn" -> Array("1"),
+      "de_other_other" -> Array("Insects"),
+      "de_other_inside_nbr" -> Array("11"),
+      "de_other_outside_nbr" -> Array("1")
+    )
+
+    val output3 =
+      RoutineEnvironmentTransformations.mapRoutineEnvironment(RawRecord(1, example3))
+
+    output3.deOtherPresentAnimals.value shouldBe false
+    output3.deOtherPresentAnimalsDogs shouldBe None
+    output3.deOtherPresentAnimalsOther shouldBe None
+    output3.deOtherPresentAnimalsOtherDescription shouldBe None
+    output3.deOtherPresentAnimalsIndoorCount shouldBe None
+    output3.deOtherPresentAnimalsOutdoorCount shouldBe None
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  it should "map GeneralRoutine fields when available" in {
+  it should "map General Routine fields when available" in {
     val example1 = Map[String, Array[String]](
       "de_routine_consistent" -> Array("1"),
       "de_amt_crate" -> Array("1"),
