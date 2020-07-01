@@ -72,7 +72,10 @@ object HealthTransformations {
             }
           )
         } else if (healthCondition.isOther) {
-          base.copy(hsConditionOtherDescription = rawRecord.getOptional(s"${prefix}_spec"))
+          val descriptionFieldName = healthCondition.descriptionSuffixOverride
+            .map(suffix => s"${healthCondition.conditionType.dxKey}_$suffix")
+            .getOrElse(s"${prefix}_spec")
+          base.copy(hsConditionOtherDescription = rawRecord.getOptional(descriptionFieldName))
         } else {
           base
         }
