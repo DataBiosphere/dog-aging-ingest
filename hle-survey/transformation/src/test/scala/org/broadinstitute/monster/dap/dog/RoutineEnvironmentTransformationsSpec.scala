@@ -32,7 +32,8 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output1.deDogparkTravelPublicTransportation.value shouldBe false
     output1.deDogparkTravelOther.value shouldBe true
     output1.deDogparkTravelOtherDescription shouldBe Some("Helicopter Shuttle")
-    output1.deDogparkTravelTimeMinutes.value shouldBe 330
+    output1.deDogparkTravelTimeHours.value shouldBe 5
+    output1.deDogparkTravelTimeMinutes.value shouldBe 30
 
     // de_dogpark_get_to = ('Drive' , 'Public Transport')
     val example2 = Map[String, Array[String]](
@@ -55,7 +56,8 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output2.deDogparkTravelPublicTransportation.value shouldBe true
     output2.deDogparkTravelOther.value shouldBe false
     output2.deDogparkTravelOtherDescription shouldBe None
-    output2.deDogparkTravelTimeMinutes.value shouldBe 615
+    output2.deDogparkTravelTimeHours.value shouldBe 10
+    output2.deDogparkTravelTimeMinutes.value shouldBe 15
 
     // de_dogpark_yn = '0'
     val example3 = Map[String, Array[String]](
@@ -78,6 +80,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output3.deDogparkTravelPublicTransportation shouldBe None
     output3.deDogparkTravelOther shouldBe None
     output3.deDogparkTravelOtherDescription shouldBe None
+    output3.deDogparkTravelTimeHours shouldBe None
     output3.deDogparkTravelTimeMinutes shouldBe None
   }
 
@@ -103,7 +106,8 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output1.deRecreationalSpacesTravelPublicTransportation.value shouldBe false
     output1.deRecreationalSpacesTravelOther.value shouldBe false
     output1.deRecreationalSpacesTravelOtherDescription shouldBe None
-    output1.deRecreationalSpacesTravelTimeMinutes.value shouldBe 80
+    output1.deRecreationalSpacesTravelTimeHours.value shouldBe 1
+    output1.deRecreationalSpacesTravelTimeMinutes.value shouldBe 20
 
     // de_spaces_yn = '1' AND de_spaces_get_to(98) = ("Public Transport", "Other")
     val example2 = Map[String, Array[String]](
@@ -125,7 +129,8 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output2.deRecreationalSpacesTravelPublicTransportation.value shouldBe true
     output2.deRecreationalSpacesTravelOther.value shouldBe true
     output2.deRecreationalSpacesTravelOtherDescription.value shouldBe "Jetpack"
-    output2.deRecreationalSpacesTravelTimeMinutes.value shouldBe 150
+    output2.deRecreationalSpacesTravelTimeHours.value shouldBe 2
+    output2.deRecreationalSpacesTravelTimeMinutes.value shouldBe 30
 
     // de_spaces_yn = 0
     val example3 = Map[String, Array[String]](
@@ -147,6 +152,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output3.deRecreationalSpacesTravelPublicTransportation shouldBe None
     output3.deRecreationalSpacesTravelOther shouldBe None
     output3.deRecreationalSpacesTravelOtherDescription shouldBe None
+    output3.deRecreationalSpacesTravelTimeHours shouldBe None
     output3.deRecreationalSpacesTravelTimeMinutes shouldBe None
   }
 
@@ -171,7 +177,8 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output1.deWorkTravelPublicTransportation.value shouldBe false
     output1.deWorkTravelOther.value shouldBe false
     output1.deWorkTravelOtherDescription shouldBe None
-    output1.deWorkTravelTimeMinutes.value shouldBe 60
+    output1.deWorkTravelTimeHours.value shouldBe 1
+    output1.deWorkTravelTimeMinutes.value shouldBe 0
 
     // de_dog_to_work = 1, de_dog_to_work_how = "Public Transportation", "Other"
     val example2 = Map[String, Array[String]](
@@ -193,7 +200,8 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output2.deWorkTravelPublicTransportation.value shouldBe true
     output2.deWorkTravelOther.value shouldBe true
     output2.deWorkTravelOtherDescription.value shouldBe "Submarine"
-    output2.deWorkTravelTimeMinutes.value shouldBe 190
+    output2.deWorkTravelTimeHours.value shouldBe 3
+    output2.deWorkTravelTimeMinutes.value shouldBe 10
 
     // de_dog_to_work = 0, de_dog_to_work_how = "Other"
     val example3 = Map[String, Array[String]](
@@ -215,6 +223,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output3.deWorkTravelPublicTransportation shouldBe None
     output3.deWorkTravelOther shouldBe None
     output3.deWorkTravelOtherDescription shouldBe None
+    output3.deWorkTravelTimeHours shouldBe None
     output3.deWorkTravelTimeMinutes shouldBe None
   }
 
@@ -239,7 +248,8 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output1.deSitterOrDaycareTravelPublicTransportation.value shouldBe true
     output1.deSitterOrDaycareTravelOther.value shouldBe false
     output1.deSitterOrDaycareTravelOtherDescription shouldBe None
-    output1.deSitterOrDaycareTravelTimeMinutes.value shouldBe 270
+    output1.deSitterOrDaycareTravelTimeHours.value shouldBe 4
+    output1.deSitterOrDaycareTravelTimeMinutes.value shouldBe 30
 
     // de_sitter_yn = 1, de_sitter_how = "Bike", "Other"
     val example2 = Map[String, Array[String]](
@@ -261,7 +271,8 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output2.deSitterOrDaycareTravelPublicTransportation.value shouldBe false
     output2.deSitterOrDaycareTravelOther.value shouldBe true
     output2.deSitterOrDaycareTravelOtherDescription.value shouldBe "Hot Air Balloon"
-    output2.deSitterOrDaycareTravelTimeMinutes.value shouldBe 610
+    output2.deSitterOrDaycareTravelTimeHours.value shouldBe 10
+    output2.deSitterOrDaycareTravelTimeMinutes.value shouldBe 10
 
     // de_sitter_yn = '0'
     val example3 = Map[String, Array[String]](
@@ -279,6 +290,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output3.deSitterOrDaycareTravelPublicTransportation shouldBe None
     output3.deSitterOrDaycareTravelOther shouldBe None
     output3.deSitterOrDaycareTravelOtherDescription shouldBe None
+    output3.deSitterOrDaycareTravelTimeHours shouldBe None
     output3.deSitterOrDaycareTravelTimeMinutes shouldBe None
   }
 
@@ -563,7 +575,6 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     //de_ingest_bad = "Toothpaste" + de_ingest_bad_what_other = "Colgate Toothpaste"
     val example2 = Map[String, Array[String]](
       "de_ingest_bad_amt" -> Array("2"),
-      "de_ingest_bad" -> Array("Toothpaste"),
       "de_ingest_bad_what" -> Array("6", "7", "8", "98"),
       "de_ingest_bad_what_other" -> Array("Colgate Toothpaste"),
       "de_ingest_bad_er_yn" -> Array("0")
@@ -581,14 +592,13 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     output2.deRecentToxinsOrHazardsIngestedToys.value shouldBe true
     output2.deRecentToxinsOrHazardsIngestedClothing.value shouldBe true
     output2.deRecentToxinsOrHazardsIngestedOther.value shouldBe true
-    output2.deRecentToxinsOrHazardsIngestedOtherDescription.value shouldBe "Toothpaste"
+    output2.deRecentToxinsOrHazardsIngestedOtherDescription.value shouldBe "Colgate Toothpaste"
     output2.deRecentToxinsOrHazardsIngestedRequiredVet.value shouldBe false
 
     // de_ingest_bad_amt = "1" + de_ingest_bad_what = "98"
     // de_ingest_bad = "" + de_ingest_bad_what_other = "Colgate Toothpaste"
     val example3 = Map[String, Array[String]](
       "de_ingest_bad_amt" -> Array("1"),
-      "de_ingest_bad" -> Array(""),
       "de_ingest_bad_what" -> Array("98"),
       "de_ingest_bad_what_other" -> Array("Colgate Toothpaste")
     )
@@ -613,7 +623,6 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     val example4 = Map[String, Array[String]](
       "de_ingest_bad_amt" -> Array("1"),
       "de_ingest_bad_what" -> Array("1"),
-      "de_ingest_bad_what_other" -> Array("Colgate Toothpaste"),
       "de_ingest_bad_er_yn" -> Array("1")
     )
     val output4 =

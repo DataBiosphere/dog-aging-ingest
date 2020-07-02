@@ -28,18 +28,6 @@ object RoutineEnvironmentTransformations {
     transformations.foldLeft(init)((acc, f) => f(rawRecord, acc))
   }
 
-  def calculateTotalTime(
-    hoursInput: Option[Long],
-    minutesInput: Option[Long]
-  ): Option[Long] = {
-    for {
-      hours <- hoursInput
-      minutes <- minutesInput
-    } yield {
-      hours * 60 + minutes
-    }
-  }
-
   /* Dog Parks */
   def mapDogparks(
     rawRecord: RawRecord,
@@ -62,17 +50,8 @@ object RoutineEnvironmentTransformations {
         deDogparkTravelOtherDescription = if (dogparkTravelOther.contains(true)) {
           rawRecord.getOptional("de_dogpark_get_to_other")
         } else None,
-        // Compute using hour & min columns, Multiply hours by 60 to get minutes
-        deDogparkTravelTimeMinutes = for {
-          hours <- rawRecord.getOptionalNumber("de_dogpark_hr")
-          minutes <- rawRecord.getOptionalNumber("de_dogpark_min")
-        } yield {
-          hours * 60 + minutes
-        }
-        //deDogparkTravelTimeMinutes = calculateTotalTime(
-        //  rawRecord.getOptionalNumber("de_dogpark_hr"),
-        //  rawRecord.getOptionalNumber("de_dogpark_min")
-        //)
+        deDogparkTravelTimeHours = rawRecord.getOptionalNumber("de_dogpark_hr"),
+        deDogparkTravelTimeMinutes = rawRecord.getOptionalNumber("de_dogpark_min")
       )
     } else {
       dog.copy(
@@ -103,17 +82,8 @@ object RoutineEnvironmentTransformations {
         deRecreationalSpacesTravelOtherDescription = if (dogRecSpacesTravelOther.contains(true)) {
           rawRecord.getOptional("de_spaces_get_to_other")
         } else None,
-        // Compute using hour & min columns, Multiply hours by 60 to get minutes
-        deRecreationalSpacesTravelTimeMinutes = for {
-          hours <- rawRecord.getOptionalNumber("de_spaces_hr")
-          minutes <- rawRecord.getOptionalNumber("de_spaces_min")
-        } yield {
-          hours * 60 + minutes
-        }
-        //deRecreationalSpacesTravelTimeMinutes = calculateTotalTime(
-        //  rawRecord.getOptionalNumber("de_dogpark_hr"),
-        //  rawRecord.getOptionalNumber("de_dogpark_min")
-        //)
+        deRecreationalSpacesTravelTimeHours = rawRecord.getOptionalNumber("de_spaces_hr"),
+        deRecreationalSpacesTravelTimeMinutes = rawRecord.getOptionalNumber("de_spaces_min")
       )
     } else {
       dog.copy(
@@ -141,16 +111,8 @@ object RoutineEnvironmentTransformations {
         deWorkTravelOtherDescription = if (dogWorkTravelOther.contains(true)) {
           rawRecord.getOptional("de_dog_to_work_how_other")
         } else None,
-        // Compute using hour & min columns, Multiply hours by 60 to get minutes
-        deWorkTravelTimeMinutes = for {
-          hours <- rawRecord.getOptionalNumber("de_dog_to_work_hr")
-          minutes <- rawRecord.getOptionalNumber("de_dog_to_work_min")
-        } yield {
-          hours * 60 + minutes
-        }
-        //deWorkTravelTimeMinutes = calculateTotalTime(
-        //  rawRecord.getOptionalNumber("de_dog_to_work_hr"),
-        //  rawRecord.getOptionalNumber("de_dog_to_work_min")
+        deWorkTravelTimeHours = rawRecord.getOptionalNumber("de_dog_to_work_hr"),
+        deWorkTravelTimeMinutes = rawRecord.getOptionalNumber("de_dog_to_work_min")
       )
     } else {
       dog.copy(
@@ -179,15 +141,8 @@ object RoutineEnvironmentTransformations {
           rawRecord.getOptional("de_sitter_how_other")
         } else None,
         //Compute using hour & min columns, Multiply hours by 60 to get minutes
-        deSitterOrDaycareTravelTimeMinutes = for {
-          hours <- rawRecord.getOptionalNumber("de_sitter_hr")
-          minutes <- rawRecord.getOptionalNumber("de_sitter_min")
-        } yield {
-          hours * 60 + minutes
-        }
-        //deSitterOrDaycareTravelTimeMinutes = calculateTotalTime(
-        //  rawRecord.getOptionalNumber("de_sitter_hr"),
-        //  rawRecord.getOptionalNumber("de_sitter_min")
+        deSitterOrDaycareTravelTimeHours = rawRecord.getOptionalNumber("de_sitter_hr"),
+        deSitterOrDaycareTravelTimeMinutes = rawRecord.getOptionalNumber("de_sitter_min")
       )
     } else {
       dog.copy(
@@ -316,7 +271,6 @@ object RoutineEnvironmentTransformations {
     val toxinsAmount = rawRecord.getOptionalNumber("de_ingest_bad_amt")
     //ONLY if: de_ingest_bad_amt = 1 OR de_ingest_bad_amt = 2
     if (toxinsAmount.exists(_ > 0)) {
-      //val toxinsDescription = rawRecord.getOptional("de_ingest_bad") //FIXME REMOVE
       val toxinsDescription = rawRecord.getOptional("de_ingest_bad").map(_.trim).filter(_.nonEmpty)
       val toxinsIngested = rawRecord.get("de_ingest_bad_what")
       val recentToxinsOrHazardsIngestedOther = toxinsIngested.map(_.contains("98"))
@@ -333,17 +287,11 @@ object RoutineEnvironmentTransformations {
         deRecentToxinsOrHazardsIngestedOther = recentToxinsOrHazardsIngestedOther,
         //de_ingest_bad is deprecated, check it first, then check de_ingest_bad_what_other
         deRecentToxinsOrHazardsIngestedOtherDescription =
-          //  if (toxinsDescription.exists(_.trim.nonEmpty)) {
-          //    toxinsDescription
-          //    // ONLY if: de_ingest_bad_what(98) = 1
-          //  } else if (recentToxinsOrHazardsIngestedOther.get) {
-          //    rawRecord.getOptional("de_ingest_bad_what_other")
-          //  } else None,
           // ONLY if: de_ingest_bad_what(98) = 1
           recentToxinsOrHazardsIngestedOther.fold(toxinsDescription) {
             if (_) {
               rawRecord.getOptional("de_ingest_bad_what_other")
-            } else None
+            } else toxinsDescription
           },
         deRecentToxinsOrHazardsIngestedRequiredVet =
           rawRecord.getOptionalBoolean("de_ingest_bad_er_yn")

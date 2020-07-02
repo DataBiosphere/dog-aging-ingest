@@ -34,6 +34,10 @@
       "datatype": "string"
     },
     {
+      "name": "de_dogpark_travel_time_hours",
+      "datatype": "integer"
+    },
+    {
       "name": "de_dogpark_travel_time_minutes",
       "datatype": "integer"
     },
@@ -68,6 +72,10 @@
     {
       "name": "de_recreational_spaces_travel_other_description",
       "datatype": "string"
+    },
+    {
+      "name": "de_recreational_spaces_travel_time_hours",
+      "datatype": "integer"
     },
     {
       "name": "de_recreational_spaces_travel_time_minutes",
@@ -106,6 +114,10 @@
       "datatype": "string"
     },
     {
+      "name": "de_work_travel_time_hours",
+      "datatype": "integer"
+    },
+    {
       "name": "de_work_travel_time_minutes",
       "datatype": "integer"
     },
@@ -140,6 +152,10 @@
     {
       "name": "de_sitter_or_daycare_travel_other_description",
       "datatype": "string"
+    },
+    {
+      "name": "de_sitter_or_daycare_travel_time_hours",
+      "datatype": "integer"
     },
     {
       "name": "de_sitter_or_daycare_travel_time_minutes",
