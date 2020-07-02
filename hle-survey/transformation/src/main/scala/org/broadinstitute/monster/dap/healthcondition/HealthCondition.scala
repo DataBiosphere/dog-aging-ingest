@@ -306,7 +306,7 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object ImmuneDLE extends HealthCondition(1902L, "Discoid lupus erythematosus (DLE)", Immune, dx = Some("dle"))
   case object IMT extends HealthCondition(1903L, "Idiopathic immune-mediated thrombocytopenia (IMT/ITP)", Immune, dx = Some("imt"))
   case object IMHA
-    extends HealthCondition(1904L, "Immune-mediated hemolytic anemia (IMHA) or autoimmune hemolytic anemia (AIHA)", Immune, dx = Some("imha"))
+      extends HealthCondition(1904L, "Immune-mediated hemolytic anemia (IMHA) or autoimmune hemolytic anemia (AIHA)", Immune, dx = Some("imha"))
   case object IMPA extends HealthCondition(1905L, "Immune-mediated polyarthritis (IMPA)", Immune, dx = Some("impa"))
   case object ImmunePPP extends HealthCondition(1906L, "Panepidermal pustular pemphigus (PPP)", Immune, dx = Some("ppp"))
   case object ImmunePNP extends HealthCondition(1907L, "Paraneoplastic pemphigus (PNP)", Immune, dx = Some("pnp"))
