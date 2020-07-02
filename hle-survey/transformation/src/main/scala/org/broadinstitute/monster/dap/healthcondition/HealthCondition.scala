@@ -223,7 +223,6 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object Vaginitis extends HealthCondition(1017L, "Vaginitis", Reproductive, dx = Some("vag"))
   case object OtherReproductive extends HealthCondition(1098L, "Other reproductive condition", Reproductive, both = Some("other"), isOther = true)
 
-
   // Orthopedic conditions.
   // TODO
 
