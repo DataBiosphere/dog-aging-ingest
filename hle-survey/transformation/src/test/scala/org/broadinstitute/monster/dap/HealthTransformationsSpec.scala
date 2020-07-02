@@ -1381,6 +1381,56 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     output should contain theSameElementsAs (truth)
   }
 
+  it should "correctly map immune diseases when values are defined" in {
+    val multiple = Map[String, Array[String]](
+      "hs_dx_immune_yn" -> Array("1"),
+      "hs_dx_immune_at" -> Array("1"),
+      "hs_dx_immune_at_month" -> Array("2"),
+      "hs_dx_immune_at_year" -> Array("2020"),
+      "hs_dx_immune_at_surg" -> Array("3"),
+      "hs_dx_immune_at_fu" -> Array("1"),
+      "hs_dx_immune_other" -> Array("1"),
+      "hs_dx_immune_other_spec" -> Array("sriracha"),
+      "hs_dx_immune_other_month" -> Array("2"),
+      "hs_dx_immune_other_year" -> Array("2020"),
+      "hs_dx_immune_other_surg" -> Array("3"),
+      "hs_dx_immune_other_fu" -> Array("1")
+    )
+    val exampleRecord = RawRecord(id = 1, multiple)
+    val output = HealthTransformations.mapHealthConditions(exampleRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Immune.value,
+        hsCondition = HealthCondition.AutoimmuneThyroiditis.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Immune.value,
+        hsCondition = HealthCondition.OtherImmune.value,
+        hsConditionOtherDescription = Some("sriracha"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs truth
+  }
+
   it should "correctly map health status data when fields are null" in {
     val emptyRecord = RawRecord(1, Map.empty)
 
