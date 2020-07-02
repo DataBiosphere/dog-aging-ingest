@@ -49,7 +49,9 @@ object RoutineEnvironmentTransformations {
         //ONLY if: de_dogpark_get_to(98) = '1'
         deDogparkTravelOtherDescription = if (dogparkTravelOther.contains(true)) {
           rawRecord.getOptional("de_dogpark_get_to_other")
-        } else None,
+        } else {
+          None
+        },
         deDogparkTravelTimeHours = rawRecord.getOptionalNumber("de_dogpark_hr"),
         deDogparkTravelTimeMinutes = rawRecord.getOptionalNumber("de_dogpark_min")
       )
@@ -81,7 +83,9 @@ object RoutineEnvironmentTransformations {
         //ONLY if: de_spaces_get_to(98) = '1'
         deRecreationalSpacesTravelOtherDescription = if (dogRecSpacesTravelOther.contains(true)) {
           rawRecord.getOptional("de_spaces_get_to_other")
-        } else None,
+        } else {
+          None
+        },
         deRecreationalSpacesTravelTimeHours = rawRecord.getOptionalNumber("de_spaces_hr"),
         deRecreationalSpacesTravelTimeMinutes = rawRecord.getOptionalNumber("de_spaces_min")
       )
@@ -110,7 +114,9 @@ object RoutineEnvironmentTransformations {
         // ONLY if: de_dog_to_work_how(98) = '1'
         deWorkTravelOtherDescription = if (dogWorkTravelOther.contains(true)) {
           rawRecord.getOptional("de_dog_to_work_how_other")
-        } else None,
+        } else {
+          None
+        },
         deWorkTravelTimeHours = rawRecord.getOptionalNumber("de_dog_to_work_hr"),
         deWorkTravelTimeMinutes = rawRecord.getOptionalNumber("de_dog_to_work_min")
       )
@@ -139,8 +145,9 @@ object RoutineEnvironmentTransformations {
         // ONLY if: de_sitter_how(98) = '1'
         deSitterOrDaycareTravelOtherDescription = if (dogSitterTravelOther.contains(true)) {
           rawRecord.getOptional("de_sitter_how_other")
-        } else None,
-        //Compute using hour & min columns, Multiply hours by 60 to get minutes
+        } else {
+          None
+        },
         deSitterOrDaycareTravelTimeHours = rawRecord.getOptionalNumber("de_sitter_hr"),
         deSitterOrDaycareTravelTimeMinutes = rawRecord.getOptionalNumber("de_sitter_min")
       )
@@ -163,7 +170,9 @@ object RoutineEnvironmentTransformations {
     val drinksOutdoorWaterFrequency = drinksOutdoorWater.flatMap {
       if (_) {
         rawRecord.getOptionalNumber("de_water_outdoor_freq")
-      } else None
+      } else {
+        None
+      }
     }
     // ONLY if: de_eat_feces_yn = 1
     if (eatsFeces.contains(1L)) {
@@ -182,7 +191,9 @@ object RoutineEnvironmentTransformations {
         // ONLY if: de_eat_feces_type(98) = '1'
         deEatsFecesOtherDescription = if (eatsFecesOther.contains(true)) {
           rawRecord.getOptional("de_eat_feces_type_other")
-        } else None,
+        } else {
+          None
+        },
         deDrinksOutdoorWater = drinksOutdoorWater,
         deDrinksOutdoorWaterFrequency = drinksOutdoorWaterFrequency
       )
@@ -220,7 +231,9 @@ object RoutineEnvironmentTransformations {
         // ONLY if: de_toy_other_yn = '1'
         deRoutineToysOtherDescription = if (otherToys.contains(1L)) {
           rawRecord.getOptional("de_toy_other")
-        } else None,
+        } else {
+          None
+        },
         deRoutineToysHoursPerDay = rawRecord.getOptionalNumber("de_toys_amt"),
         deLicksChewsOrPlaysWithNonToys = nonToys
       )
@@ -243,18 +256,24 @@ object RoutineEnvironmentTransformations {
     val daytimeSleepLocation =
       if (daySleep.contains(true)) {
         rawRecord.getOptionalNumber("de_sleep_location_day")
-      } else None
+      } else {
+        None
+      }
     // ONLY if: de_sleep_location_day = 98
     val daytimeSleepLocationOtherDescription =
       if (daytimeSleepLocation.contains(98L)) {
         rawRecord.getOptional("de_sleep_loc_day_other")
-      } else None
+      } else {
+        None
+      }
     dog.copy(
       deNighttimeSleepLocation = nighttimeSleepLocation,
       // ONLY if: de_sleep_location = '98'
       deNighttimeSleepLocationOtherDescription = if (nighttimeSleepLocation.contains(98L)) {
         rawRecord.getOptional("de_sleep_location_other")
-      } else None,
+      } else {
+        None
+      },
       deNighttimeSleepAvgHours = rawRecord.getOptionalNumber("de_sleep_amt_night"),
       deDaytimeSleepLocationDifferent = daySleep,
       deDaytimeSleepLocation = daytimeSleepLocation,
@@ -291,7 +310,9 @@ object RoutineEnvironmentTransformations {
           recentToxinsOrHazardsIngestedOther.fold(toxinsDescription) {
             if (_) {
               rawRecord.getOptional("de_ingest_bad_what_other")
-            } else toxinsDescription
+            } else {
+              toxinsDescription
+            }
           },
         deRecentToxinsOrHazardsIngestedRequiredVet =
           rawRecord.getOptionalBoolean("de_ingest_bad_er_yn")
@@ -327,7 +348,9 @@ object RoutineEnvironmentTransformations {
         //ONLY if: de_other_other_yn = "1"
         deOtherPresentAnimalsOtherDescription = if (otherPresentAnimalsOther.contains(true)) {
           rawRecord.getOptional("de_other_other")
-        } else None,
+        } else {
+          None
+        },
         deOtherPresentAnimalsIndoorCount = rawRecord.getOptionalNumber("de_other_inside_nbr"),
         deOtherPresentAnimalsOutdoorCount = rawRecord.getOptionalNumber("de_other_outside_nbr"),
         deOtherPresentAnimalsInteractWithDog = rawRecord.getOptionalBoolean("de_other_interact_yn")
