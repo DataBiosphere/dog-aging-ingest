@@ -302,5 +302,19 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherTrauma extends HealthCondition(1898L, "Other trauma", Trauma, dx = Some("other"), isOther = true)
 
   // Immune conditions.
-  // TODO
+  case object AutoimmuneThyroiditis extends HealthCondition(1900L, "Autoimmune thyroiditis", Immune, dx = Some("immune_at"))
+  case object DLE extends HealthCondition(1900L, "Discoid lupus erythematosus (DLE)", Immune, dx = Some("dle"))
+  case object IMT extends HealthCondition(1900L, "Idiopathic immune-mediated thrombocytopenia (IMT/ITP)", Immune, dx = Some("imt"))
+  case object IMHA extends
+    HealthCondition(1900L, "Immune-mediated hemolytic anemia (IMHA) or autoimmune hemolytic anemia (AIHA)", Immune, dx = Some("imha"))
+  case object IMPA extends HealthCondition(1900L, "Immune-mediated polyarthritis (IMPA)", Immune, dx = Some("impa"))
+  case object PPP extends HealthCondition(1900L, "Panepidermal pustular pemphigus (PPP)", Immune, dx = Some("ppp"))
+  case object ParaneoplasticPemphigus extends HealthCondition(1900L, "Paraneoplastic pemphigus (PNP)", Immune, dx = Some("pnp"))
+  case object PemphigusErythematosus extends HealthCondition(1900L, "Pemphigus erythematosus (PE)", Immune, dx = Some("pe"))
+  case object PemphigusFoliaceus extends HealthCondition(1900L, "Pemphigus foliaceus (PF)", Immune, dx = Some("pf"))
+  case object PemphigusVulgaris extends HealthCondition(1900L, "Pemphigus vulgaris (PV)", Immune, dx = Some("pv"))
+  case object Polymyositis extends HealthCondition(1900L, "Polymyositis", Immune, dx = Some("pm"))
+  case object SLE extends HealthCondition(1900L, "Systemic lupus erythematosus (SLE)", Immune, dx = Some("sle"))
+  case object Other extends HealthCondition(1900L, "Other", Immune, dx = Some("other"), isOther = true)
+  // TODO Test: other & something else
 }
