@@ -185,7 +185,23 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherLiver extends HealthCondition(898L, "Other liver condition", Liver, both = Some("other"), isOther = true)
 
   // Kidney conditions.
-  // TODO
+  case object OneKidney extends HealthCondition(901L, "Born with one kidney", Kidney, cg = Some("one_kid"))
+  case object EctopicUreter extends HealthCondition(902L, "Ectopic ureter", Kidney, both = Some("eu"))
+  case object PatentUrachus extends HealthCondition(903L, "Patent urachus", Kidney, cg = Some("pu"))
+  case object RenalCysts extends HealthCondition(904L, "Renal cysts", Kidney, cg = Some("rc"))
+  case object RenalDysplasia extends HealthCondition(905L, "Renal dysplasia", Kidney, both = Some("rd"))
+  case object AKF extends HealthCondition(906L, "Acute kidney failure", Kidney, dx = Some("akf"))
+  case object BladderProlapse extends HealthCondition(907L, "Bladder prolapse", Kidney, dx = Some("bp"))
+  case object CKD extends HealthCondition(908L, "Chronic kidney disease", Kidney, dx = Some("ckd"))
+  case object Pyelonephritis extends HealthCondition(909L, "Pyelonephritis (kidney infection)", Kidney, dx = Some("ki"))
+  case object KidneyStones extends HealthCondition(910L, "Kidney stones", Kidney, dx = Some("ks"))
+  case object Proteinuria extends HealthCondition(911L, "Proteinuria", Kidney, dx = Some("pro"))
+  case object TubularDisorder extends HealthCondition(912L, "Tubular disorder (such as Fanconi syndrome)", Kidney, dx = Some("td"))
+  case object UrethralProlapse extends HealthCondition(913L, "Urethral prolapse", Kidney, dx = Some("up"))
+  case object UrinaryCrystals extends HealthCondition(914L, "Urinary crystals or stones in bladder or urethra", Kidney, dx = Some("ub"))
+  case object UrinaryIncontinence extends HealthCondition(915L, "Urinary incontinence", Kidney, dx = Some("ui"))
+  case object UTI extends HealthCondition(916L, "Urinary tract infection (chronic or recurrent)", Kidney, dx = Some("uti"))
+  case object OtherKidney extends HealthCondition(998L, "Other kidney condition", Kidney, both = Some("other"), isOther = true)
 
   // Reproductive conditions.
   // TODO
