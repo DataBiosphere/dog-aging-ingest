@@ -204,7 +204,24 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherKidney extends HealthCondition(998L, "Other kidney condition", Kidney, both = Some("other"), isOther = true)
 
   // Reproductive conditions.
-  // TODO
+  case object Cryptorchid extends HealthCondition(1001L, "Cryptorchid", Reproductive, cg = Some("crypto"))
+  case object Hermaphroditism extends HealthCondition(1002L, "Hermaphroditism", Reproductive, cg = Some("herma"))
+  case object Hypospadias extends HealthCondition(1003L, "Hypospadias", Reproductive, cg = Some("hypo"))
+  case object Phimosis extends HealthCondition(1004L, "Phimosis", Reproductive, cg = Some("phimo"))
+  case object BPH extends HealthCondition(1005L, "Benign prostatic hyperplasia", Reproductive, dx = Some("bph"))
+  case object Dystocia extends HealthCondition(1006L, "Dystocia", Reproductive, dx = Some("dys"))
+  case object IHC extends HealthCondition(1007L, "Irregular heat cycle", Reproductive, dx = Some("ihc"))
+  case object Mastitis extends HealthCondition(1008L, "Mastitis", Reproductive, dx = Some("mas"))
+  case object Papilloma extends HealthCondition(1009L, "Papilloma (genital warts)", Reproductive, dx = Some("pgw"))
+  case object Paraphimosis extends HealthCondition(1010L, "Paraphimosis", Reproductive, dx = Some("para"))
+  case object Prostatitis extends HealthCondition(1011L, "Prostatitis", Reproductive, dx = Some("pros"))
+  case object PreputialInfection extends HealthCondition(1012L, "Preputial infection", Reproductive, dx = Some("pi"))
+  case object Pseudopregnancy extends HealthCondition(1013L, "Pseudopregnancy", Reproductive, dx = Some("pse"))
+  case object Pyometra extends HealthCondition(1014L, "Pyometra", Reproductive, dx = Some("pyo"))
+  case object RecessedVulva extends HealthCondition(1015L, "Recessed vulva", Reproductive, dx = Some("rv"))
+  case object TesticularAtrophy extends HealthCondition(1016L, "Testicular atrophy", Reproductive, dx = Some("ta"))
+  case object Vaginitis extends HealthCondition(1017L, "Vaginitis", Reproductive, dx = Some("vag"))
+  case object OtherReproductive extends HealthCondition(1098L, "Other reproductive condition", Reproductive, both = Some("other"), isOther = true)
 
   // Orthopedic conditions.
   // TODO
