@@ -33,7 +33,10 @@ object HealthTransformations {
             isCongenital = true
           )
           if (healthCondition.isOther) {
-            base.copy(hsConditionOtherDescription = rawRecord.getOptional(s"${prefix}_spec"))
+            val descriptionFieldName = healthCondition.descriptionSuffixOverride
+              .map(suffix => s"${cgKey.dataPrefix}_$suffix")
+              .getOrElse(s"${prefix}_spec")
+            base.copy(hsConditionOtherDescription = rawRecord.getOptional(descriptionFieldName))
           } else {
             base
           }
@@ -71,8 +74,17 @@ object HealthTransformations {
               None
             }
           )
+        } else if (healthCondition == HealthCondition.UrinaryIncontinence) {
+          val isCauseKnown = rawRecord.getBoolean("hs_dx_kidney_ui_fu_cause")
+          base.copy(
+            hsConditionCauseOtherDescription =
+              if (isCauseKnown) rawRecord.getOptional("hs_dx_kidney_ui_fu_why") else None
+          )
         } else if (healthCondition.isOther) {
-          base.copy(hsConditionOtherDescription = rawRecord.getOptional(s"${prefix}_spec"))
+          val descriptionFieldName = healthCondition.descriptionSuffixOverride
+            .map(suffix => s"${dxKey.dataPrefix}_$suffix")
+            .getOrElse(s"${prefix}_spec")
+          base.copy(hsConditionOtherDescription = rawRecord.getOptional(descriptionFieldName))
         } else {
           base
         }

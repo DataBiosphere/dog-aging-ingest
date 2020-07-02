@@ -13,6 +13,8 @@ import enumeratum.values.{LongEnum, LongEnumEntry}
   * @param cg abbreviation used for the 'cg' representation of this condition, if one exists
   * @param dx abbreviation used for the 'dx' representation of this condition, if one exists
   * @param isOther true if the condition has a '_spec' field for free-form user entry
+  * @param descriptionSuffixOverride if set, will override the auto-computed field name
+  *                                  for the description field on "other" conditions
   */
 sealed abstract class HealthCondition(
   override val value: Long,
@@ -21,7 +23,8 @@ sealed abstract class HealthCondition(
   val both: Option[String] = None,
   val cg: Option[String] = None,
   val dx: Option[String] = None,
-  val isOther: Boolean = false
+  val isOther: Boolean = false,
+  val descriptionSuffixOverride: Option[String] = None
 ) extends LongEnumEntry
 
 object HealthCondition extends LongEnum[HealthCondition] {
@@ -108,10 +111,41 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherSkin extends HealthCondition(498L, "Other skin condition", Skin, both = Some("other"), isOther = true)
 
   // Cardiac conditions.
-  // TODO
+  case object AS extends HealthCondition(501L, "Aortic/Subaortic stenosis", Cardiac, cg = Some("as"))
+  case object ASD extends HealthCondition(502L, "Atrial septal defects", Cardiac, cg = Some("asd"))
+  case object MitralDysplasia extends HealthCondition(503L, "Mitral dysplasia", Cardiac, cg = Some("mit_dys"))
+  case object Murmur extends HealthCondition(504L, "Murmur", Cardiac, cg = Some("murmur"), dx = Some("mur"))
+  case object PDA extends HealthCondition(505L, "Patent ductus arteriosus (PDA)", Cardiac, cg = Some("pda"))
+  case object PRAA extends HealthCondition(506L, "Persistent right aortic arch", Cardiac, cg = Some("praa"))
+  case object PulmonicStenosis extends HealthCondition(507L, "Pulmonic stenosis", Cardiac, cg = Some("p_steno"), dx = Some("ps"))
+  case object TricuspidDysplasia extends HealthCondition(508L, "Tricuspid dysplasia", Cardiac, cg = Some("tri_dys"))
+  case object VSD extends HealthCondition(509L, "Ventricular septal defects", Cardiac, cg = Some("vsd"))
+  case object Arrhythmia extends HealthCondition(510L, "Arrhythmia", Cardiac, dx = Some("arr"))
+  case object Cardiomyopathy extends HealthCondition(511L, "Cardiomyopathy", Cardiac, dx = Some("car"))
+  case object CHF extends HealthCondition(512L, "Congestive heart failure", Cardiac, dx = Some("chf"))
+  case object Endocarditis extends HealthCondition(513L, "Endocarditis", Cardiac, dx = Some("end"))
+  case object Hypertension extends HealthCondition(514L, "Hypertension (high blood pressure)", Cardiac, dx = Some("hbp"))
+  case object PericardialEffusion extends HealthCondition(515L, "Pericardial effusion", Cardiac, dx = Some("pe"))
+  case object PulmonaryHypertension extends HealthCondition(516L, "Pulmonary hypertension", Cardiac, dx = Some("ph"))
+  case object SubaorticStenosis extends HealthCondition(518L, "Subaortic stenosis", Cardiac, dx = Some("ss"))
+  case object ValveDisease
+      extends HealthCondition(519L, "Valve disease", Cardiac, dx = Some("vd"), isOther = true, descriptionSuffixOverride = Some("valve"))
+  case object OtherCardiac extends HealthCondition(598L, "Other", Cardiac, both = Some("other"), isOther = true)
 
   // Respiratory conditions.
-  // TODO
+  case object SNN extends HealthCondition(601L, "Stenotic/narrow nares", Respiratory, cg = Some("st_nares"), dx = Some("snn"))
+  case object TS extends HealthCondition(602L, "Tracheal stenosis (narrowing)", Respiratory, cg = Some("tr_steno"), dx = Some("ts"))
+  case object ARDS extends HealthCondition(603L, "Acquired or acute respiratory distress syndrome (ARDS)", Respiratory, dx = Some("ards"))
+  case object ChronicBronchitis extends HealthCondition(604L, "Chronic or recurrent bronchitis", Respiratory, dx = Some("cb"))
+  case object ChronicCough extends HealthCondition(605L, "Chronic or recurrent cough", Respiratory, dx = Some("cc"))
+  case object ChronicRhinitis extends HealthCondition(606L, "Chronic or recurrent rhinitis", Respiratory, dx = Some("cr"))
+  case object ESP extends HealthCondition(607L, "Elongated soft palate", Respiratory, dx = Some("esp"))
+  case object LP extends HealthCondition(608L, "Laryngeal paralysis", Respiratory, dx = Some("lp"))
+  case object LLT extends HealthCondition(609L, "Lung lobe torsion", Respiratory, dx = Some("llt"))
+  case object Pneumonia extends HealthCondition(610L, "Pneumonia", Respiratory, dx = Some("pn"))
+  case object PulmonaryBullae extends HealthCondition(611L, "Pulmonary bullae", Respiratory, dx = Some("pul"))
+  case object TrachealCollapse extends HealthCondition(612L, "Tracheal collapse", Respiratory, dx = Some("tc"))
+  case object OtherRespiratory extends HealthCondition(698L, "Other respiratory condition", Respiratory, both = Some("other"), isOther = true)
 
   // Gastrointestinal conditions.
   case object Atresia extends HealthCondition(701L, "Atresia ani", Gastrointestinal, cg = Some("atresia"))
@@ -139,10 +173,35 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherGI extends HealthCondition(798L, "Other gastrointestinal condition", Gastrointestinal, both = Some("other"), isOther = true)
 
   // Liver conditions.
-  // TODO
+  case object LiverPS extends HealthCondition(801L, "Portosystemic shunt", Liver, both = Some("ps"))
+  case object BO extends HealthCondition(802L, "Biliary obstruction", Liver, dx = Some("bo"))
+  case object CILD extends HealthCondition(803L, "Chronic inflammatory liver disease", Liver, dx = Some("cild"))
+  case object EPI extends HealthCondition(804L, "Exocrine pancreatic insufficiency (EPI)", Liver, dx = Some("epi"))
+  case object GBM extends HealthCondition(805L, "Gall bladder mucocele", Liver, dx = Some("gbm"))
+  case object GBR extends HealthCondition(806L, "Gall bladder rupture", Liver, dx = Some("gbr"))
+  case object GBS extends HealthCondition(807L, "Gall bladder surgery", Liver, dx = Some("gbs"))
+  case object LiverMD extends HealthCondition(808L, "Microvascular dysplasia (portal vein hypoplasia)", Liver, dx = Some("md"))
+  case object Pancreatitis extends HealthCondition(809L, "Pancreatitis", Liver, dx = Some("pan"))
+  case object OtherLiver extends HealthCondition(898L, "Other liver condition", Liver, both = Some("other"), isOther = true)
 
   // Kidney conditions.
-  // TODO
+  case object OneKidney extends HealthCondition(901L, "Born with one kidney", Kidney, cg = Some("one_kid"))
+  case object EctopicUreter extends HealthCondition(902L, "Ectopic ureter", Kidney, both = Some("eu"))
+  case object PatentUrachus extends HealthCondition(903L, "Patent urachus", Kidney, cg = Some("pu"))
+  case object RenalCysts extends HealthCondition(904L, "Renal cysts", Kidney, cg = Some("rc"))
+  case object RenalDysplasia extends HealthCondition(905L, "Renal dysplasia", Kidney, both = Some("rd"))
+  case object AKF extends HealthCondition(906L, "Acute kidney failure", Kidney, dx = Some("akf"))
+  case object BladderProlapse extends HealthCondition(907L, "Bladder prolapse", Kidney, dx = Some("bp"))
+  case object CKD extends HealthCondition(908L, "Chronic kidney disease", Kidney, dx = Some("ckd"))
+  case object Pyelonephritis extends HealthCondition(909L, "Pyelonephritis (kidney infection)", Kidney, dx = Some("ki"))
+  case object KidneyStones extends HealthCondition(910L, "Kidney stones", Kidney, dx = Some("ks"))
+  case object Proteinuria extends HealthCondition(911L, "Proteinuria", Kidney, dx = Some("pro"))
+  case object TubularDisorder extends HealthCondition(912L, "Tubular disorder (such as Fanconi syndrome)", Kidney, dx = Some("td"))
+  case object UrethralProlapse extends HealthCondition(913L, "Urethral prolapse", Kidney, dx = Some("up"))
+  case object UrinaryCrystals extends HealthCondition(914L, "Urinary crystals or stones in bladder or urethra", Kidney, dx = Some("ub"))
+  case object UrinaryIncontinence extends HealthCondition(915L, "Urinary incontinence", Kidney, dx = Some("ui"))
+  case object UTI extends HealthCondition(916L, "Urinary tract infection (chronic or recurrent)", Kidney, dx = Some("uti"))
+  case object OtherKidney extends HealthCondition(998L, "Other kidney condition", Kidney, both = Some("other"), isOther = true)
 
   // Reproductive conditions.
   // TODO
