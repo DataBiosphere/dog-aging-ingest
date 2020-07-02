@@ -1140,6 +1140,158 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     output should contain theSameElementsAs truth
   }
 
+  it should "correctly map congenital kidney disorders and non-congenital diseases when values are defined" in {
+    val multiple = Map[String, Array[String]](
+      "hs_congenital_yn" -> Array("1"),
+      "hs_cg_kidney_disorders_yn" -> Array("1"),
+      "hs_cg_kidney_eu" -> Array("1"),
+      "hs_cg_kidney_eu_month" -> Array("2"),
+      "hs_cg_kidney_eu_year" -> Array("2020"),
+      "hs_cg_kidney_eu_surg" -> Array("3"),
+      "hs_cg_kidney_eu_fu" -> Array("1"),
+      "hs_cg_kidney_other" -> Array("1"),
+      "hs_cg_kidney_other_spec" -> Array("olives"),
+      "hs_cg_kidney_other_month" -> Array("2"),
+      "hs_cg_kidney_other_year" -> Array("2020"),
+      "hs_cg_kidney_other_surg" -> Array("3"),
+      "hs_cg_kidney_other_fu" -> Array("0"),
+      "hs_dx_kidney_yn" -> Array("1"),
+      "hs_dx_kidney_akf" -> Array("1"),
+      "hs_dx_kidney_akf_month" -> Array("2"),
+      "hs_dx_kidney_akf_year" -> Array("2020"),
+      "hs_dx_kidney_akf_surg" -> Array("3"),
+      "hs_dx_kidney_akf_fu" -> Array("1"),
+      "hs_dx_kidney_other" -> Array("1"),
+      "hs_dx_kidney_other_spec" -> Array("ohno"),
+      "hs_dx_kidney_other_month" -> Array("2"),
+      "hs_dx_kidney_other_year" -> Array("2020"),
+      "hs_dx_kidney_other_surg" -> Array("3"),
+      "hs_dx_kidney_other_fu" -> Array("1")
+    )
+    val exampleRecord = RawRecord(id = 1, multiple)
+    val output = HealthTransformations.mapHealthConditions(exampleRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Kidney.value,
+        hsCondition = HealthCondition.EctopicUreter.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Kidney.value,
+        hsCondition = HealthCondition.OtherKidney.value,
+        hsConditionOtherDescription = Some("olives"),
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(false)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Kidney.value,
+        hsCondition = HealthCondition.AKF.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Kidney.value,
+        hsCondition = HealthCondition.OtherKidney.value,
+        hsConditionOtherDescription = Some("ohno"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs (truth)
+  }
+
+  it should "correctly map the kidney disease of urinary incontinence when the cause is not known" in {
+    val specialCase = Map[String, Array[String]](
+      "hs_dx_kidney_yn" -> Array("1"),
+      "hs_dx_kidney_ui" -> Array("1"),
+      "hs_dx_kidney_ui_month" -> Array("2"),
+      "hs_dx_kidney_ui_year" -> Array("2020"),
+      "hs_dx_kidney_ui_surg" -> Array("3"),
+      "hs_dx_kidney_ui_fu" -> Array("1"),
+      "hs_dx_kidney_ui_fu_cause" -> Array("0")
+    )
+    val exampleRecord = RawRecord(id = 1, specialCase)
+    val output = HealthTransformations.mapHealthConditions(exampleRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Kidney.value,
+        hsCondition = HealthCondition.UrinaryIncontinence.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+    output should contain theSameElementsAs (truth)
+  }
+
+  it should "correctly map the kidney disease of urinary incontinence when the cause is known" in {
+    val specialCase = Map[String, Array[String]](
+      "hs_dx_kidney_yn" -> Array("1"),
+      "hs_dx_kidney_ui" -> Array("1"),
+      "hs_dx_kidney_ui_month" -> Array("2"),
+      "hs_dx_kidney_ui_year" -> Array("2020"),
+      "hs_dx_kidney_ui_surg" -> Array("3"),
+      "hs_dx_kidney_ui_fu" -> Array("1"),
+      "hs_dx_kidney_ui_fu_cause" -> Array("1"),
+      "hs_dx_kidney_ui_fu_why" -> Array("funfunfun")
+    )
+    val exampleRecord = RawRecord(id = 1, specialCase)
+    val output = HealthTransformations.mapHealthConditions(exampleRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Kidney.value,
+        hsCondition = HealthCondition.UrinaryIncontinence.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = Some("funfunfun"),
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+    output should contain theSameElementsAs (truth)
+  }
+
   it should "correctly map health status data when fields are null" in {
     val emptyRecord = RawRecord(1, Map.empty)
 
