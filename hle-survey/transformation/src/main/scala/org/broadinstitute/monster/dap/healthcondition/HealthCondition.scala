@@ -234,7 +234,7 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object ElbowDysplasia extends HealthCondition(1108L, "Elbow dysplasia", Orthopedic, dx = Some("ed"))
   case object GrowthDeformity extends HealthCondition(1109L, "Growth deformity", Orthopedic, dx = Some("gd"))
   case object HipDysplasia extends HealthCondition(1110L, "Hip dysplasia", Orthopedic, dx = Some("hd"))
-  case object IVDD extends HealthCondition(1111L, "Intervertebral disc disease (IVDD)", Orthopedic, dx = Some("ivdd"))
+  case object OrthoIVDD extends HealthCondition(1111L, "Intervertebral disc disease (IVDD)", Orthopedic, dx = Some("ivdd"))
   case object Lameness extends HealthCondition(1112L, "Lameness (chronic or recurrent)", Orthopedic, dx = Some("lame"))
   case object Osteoarthritis extends HealthCondition(1113L, "Osteoarthritis", Orthopedic, dx = Some("oa"))
   case object OCD extends HealthCondition(1114L, "Osteochondritis dissecans (OCD)", Orthopedic, dx = Some("ocd"))
