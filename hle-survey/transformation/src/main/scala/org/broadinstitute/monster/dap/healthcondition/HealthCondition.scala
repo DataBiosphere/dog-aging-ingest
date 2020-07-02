@@ -210,7 +210,23 @@ object HealthCondition extends LongEnum[HealthCondition] {
   // TODO
 
   // Neurologic conditions.
-  // TODO
+  case object CerebellarHypoplasia extends HealthCondition(1201L, "Cerebellar hypoplasia", Neurologic, cg = Some("cereb"))
+  case object Hydrocephalus extends HealthCondition(1202L, "Hydrocephalus", Neurologic, cg = Some("hydroc"))
+  case object CES extends HealthCondition(1203L, "Cauda equina syndrome", Neurologic, dx = Some("ces"))
+  case object DegenerativeMyelopathy extends HealthCondition(1204L, "Degenerative myelopathy", Neurologic, dx = Some("dm"))
+  case object Dementia extends HealthCondition(1205L, "Dementia or senility", Neurologic, dx = Some("ds"))
+  case object Diskospondylitis extends HealthCondition(1206L, "Diskospondylitis", Neurologic, dx = Some("di"))
+  case object Dysautonomia extends HealthCondition(1207L, "Dysautonomia", Neurologic, dx = Some("dy"))
+  case object FCE extends HealthCondition(1208L, "Fibrocartilaginous embolism (FCE)", Neurologic, dx = Some("fce"))
+  case object Horners extends HealthCondition(1209L, "Horner's syndrome", Neurologic, dx = Some("hs"))
+  case object NeuroIVDD extends HealthCondition(1210L, "Intervertebral disc disease (IVDD)", Neurologic, dx = Some("ivdd"))
+  case object LaryngealParalysis extends HealthCondition(1211L, "Laryngeal paralysis", Neurologic, dx = Some("laryp"))
+  case object LimbParalysis extends HealthCondition(1212L, "Limb paralysis", Neurologic, dx = Some("limbp"))
+  case object MyastheniaGravis extends HealthCondition(1213L, "Myasthenia gravis", Neurologic, dx = Some("mg"))
+  case object Polyneuropathy extends HealthCondition(1214L, "Polyneuropathy", Neurologic, dx = Some("poly"))
+  case object Seizures extends HealthCondition(1215L, "Seizures (including epilepsy)", Neurologic, dx = Some("seiz"))
+  case object VestibularDisease extends HealthCondition(1216L, "Vestibular disease", Neurologic, dx = Some("vd"))
+  case object OtherNeurologic extends HealthCondition(1298L, "Other neurologic condition", Neurologic, both = Some("other"), isOther = true)
 
   // Endocrine conditions.
   // TODO
