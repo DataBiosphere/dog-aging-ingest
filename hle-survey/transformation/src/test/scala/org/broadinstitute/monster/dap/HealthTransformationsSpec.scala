@@ -1292,6 +1292,96 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     output should contain theSameElementsAs (truth)
   }
 
+  it should "correctly map congenital hematopoietic disorders and non-congenital diseases when values are defined" in {
+    // cg: cd + other, dx: ane + other
+    val multiple = Map[String, Array[String]](
+      "hs_congenital_yn" -> Array("1"),
+      "hs_cg_blood_disorders_yn" -> Array("1"),
+      "hs_cg_blood_cd" -> Array("1"),
+      "hs_cg_blood_cd_month" -> Array("2"),
+      "hs_cg_blood_cd_year" -> Array("2020"),
+      "hs_cg_blood_cd_surg" -> Array("3"),
+      "hs_cg_blood_cd_fu" -> Array("1"),
+      "hs_cg_blood_other" -> Array("1"),
+      "hs_cg_blood_other_spec" -> Array("potatoes"),
+      "hs_cg_blood_other_month" -> Array("2"),
+      "hs_cg_blood_other_year" -> Array("2020"),
+      "hs_cg_blood_other_surg" -> Array("3"),
+      "hs_cg_blood_other_fu" -> Array("0"),
+      "hs_dx_hema_yn" -> Array("1"),
+      "hs_dx_hema_ane" -> Array("1"),
+      "hs_dx_hema_ane_month" -> Array("2"),
+      "hs_dx_hema_ane_year" -> Array("2020"),
+      "hs_dx_hema_ane_surg" -> Array("3"),
+      "hs_dx_hema_ane_fu" -> Array("1"),
+      "hs_dx_hema_other" -> Array("1"),
+      "hs_dx_hema_other_spec" -> Array("yams"),
+      "hs_dx_hema_other_month" -> Array("2"),
+      "hs_dx_hema_other_year" -> Array("2020"),
+      "hs_dx_hema_other_surg" -> Array("3"),
+      "hs_dx_hema_other_fu" -> Array("1")
+    )
+    val exampleRecord = RawRecord(id = 1, multiple)
+    val output = HealthTransformations.mapHealthConditions(exampleRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Hematopoietic.value,
+        hsCondition = HealthCondition.Dyserythropoiesis.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Hematopoietic.value,
+        hsCondition = HealthCondition.OtherHematopoietic.value,
+        hsConditionOtherDescription = Some("potatoes"),
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(false)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Hematopoietic.value,
+        hsCondition = HealthCondition.Anemia.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Hematopoietic.value,
+        hsCondition = HealthCondition.OtherHematopoietic.value,
+        hsConditionOtherDescription = Some("yams"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs (truth)
+  }
+
   it should "correctly map congenital reproductive disorders and non-congenital diseases when values are defined" in {
     val multiple = Map[String, Array[String]](
       "hs_congenital_yn" -> Array("1"),

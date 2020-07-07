@@ -252,7 +252,23 @@ object HealthCondition extends LongEnum[HealthCondition] {
   // TODO
 
   // Hematopoietic conditions.
-  // TODO
+  case object Dyserythropoiesis extends HealthCondition(1401L, "Congenital dyserythropoiesis", Hematopoietic, cg = Some("cd"))
+  case object Macrothrombocytopenia extends HealthCondition(1402L, "Macrothrombocytopenia", Hematopoietic, cg = Some("macrot"))
+  case object MOM extends HealthCondition(1403L, "Microcytosis or macrocytosis", Hematopoietic, cg = Some("mom"))
+  case object PelgerHuetAnomaly extends HealthCondition(1404L, "Pelger-Huet anomaly", Hematopoietic, cg = Some("pha"))
+  case object PFKDeficiency extends HealthCondition(1405L, "Phosphofructokinase (PFK) deficiency", Hematopoietic, cg = Some("pfkd"))
+  case object PKDeficiency extends HealthCondition(1406L, "Pyruvate kinase (PK) deficiency", Hematopoietic, cg = Some("pkd"))
+  case object Anemia extends HealthCondition(1407L, "Anemia", Hematopoietic, dx = Some("ane"))
+  case object FactorIDeficiency extends HealthCondition(1408L, "Factor I deficiency", Hematopoietic, dx = Some("fid"))
+  case object Hemophilia extends HealthCondition(1409L, "Hemophilia", Hematopoietic, dx = Some("hp"))
+  case object Polycythemia extends HealthCondition(1410L, "Polycythemia", Hematopoietic, dx = Some("pc"))
+  case object SID extends HealthCondition(1411L, "Selective IgM deficiency", Hematopoietic, dx = Some("sid"))
+  case object SplenicHematoma extends HealthCondition(1412L, "Splenic hematoma", Hematopoietic, dx = Some("sh"))
+  case object SplenicTorsion extends HealthCondition(1413L, "Splenic torsion", Hematopoietic, dx = Some("st"))
+  case object TNIM extends HealthCondition(1414L, "Thrombocytopenia (not immune-mediated)", Hematopoietic, dx = Some("tnim"))
+  case object Thromboembolism extends HealthCondition(1415L, "Thromboembolism", Hematopoietic, dx = Some("te"))
+  case object VonWillebrands extends HealthCondition(1416L, "Von Willebrand's disease", Hematopoietic, dx = Some("vwd"))
+  case object OtherHematopoietic extends HealthCondition(1498L, "Other", Hematopoietic, both = Some("other"), isOther = true)
 
   // Other congenital conditions (annoying one-off case).
   case object OtherCG extends HealthCondition(1598L, "Other congenital disorder", OtherCongenital, cg = Some("other"), isOther = true)
