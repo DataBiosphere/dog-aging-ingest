@@ -80,6 +80,8 @@ object HealthTransformations {
             hsConditionCauseOtherDescription =
               if (isCauseKnown) rawRecord.getOptional("hs_dx_kidney_ui_fu_why") else None
           )
+        } else if (healthCondition == HealthCondition.VestibularDisease) {
+          base.copy(hsConditionCauseOtherDescription = rawRecord.getOptional("hs_dx_neuro_vd_type"))
         } else if (healthCondition.isOther) {
           val descriptionFieldName = healthCondition.descriptionSuffixOverride
             .map(suffix => s"${dxKey.dataPrefix}_$suffix")
