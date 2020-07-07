@@ -262,6 +262,7 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object Polyneuropathy extends HealthCondition(1214L, "Polyneuropathy", Neurologic, dx = Some("poly"))
   case object Seizures extends HealthCondition(1215L, "Seizures (including epilepsy)", Neurologic, dx = Some("seiz"))
   case object VestibularDisease extends HealthCondition(1216L, "Vestibular disease", Neurologic, dx = Some("vd"))
+  case object WobblerSyndrome extends HealthCondition(1217L, "Wobbler syndrome", Neurologic, dx = Some("ws"))
   case object OtherNeurologic extends HealthCondition(1298L, "Other neurologic condition", Neurologic, both = Some("other"), isOther = true)
 
   // Endocrine conditions.
