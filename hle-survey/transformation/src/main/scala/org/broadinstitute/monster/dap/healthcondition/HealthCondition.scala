@@ -302,7 +302,17 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherInfection extends HealthCondition(1698L, "Other infectious disease", Infection, dx = Some("infect_other"), isOther = true)
 
   // Toxin consumption.
-  // TODO
+  case object Chocolate extends HealthCondition(1701L, "Chocolate", ToxinConsumption, dx = Some("choc"))
+  case object Antifreeze extends HealthCondition(1702L, "Ethylene glycol (antifreeze)", ToxinConsumption, dx = Some("antifreeze"))
+  case object Grapes extends HealthCondition(1703L, "Grapes or raisins", ToxinConsumption, dx = Some("gr"))
+  case object HumanMedications
+      extends HealthCondition(1704L, "Ingestion of human medications", ToxinConsumption, dx = Some("rx_human"), isOther = true)
+  case object RecreationalDrugs
+      extends HealthCondition(1705L, "Ingestion of recreational drugs", ToxinConsumption, dx = Some("rec"), isOther = true)
+  case object RatPoison extends HealthCondition(1706L, "Mouse or rat bait/poison", ToxinConsumption, dx = Some("rat"), isOther = true)
+  case object Overdose
+      extends HealthCondition(1707L, "Overdose of medications prescribed to the dog", ToxinConsumption, dx = Some("rx_dog_od"), isOther = true)
+  case object OtherToxin extends HealthCondition(1708L, "Other", ToxinConsumption, dx = Some("other"), isOther = true)
 
   // Trauma.
   case object DogBite extends HealthCondition(1801L, "Dog bite", Trauma, dx = Some("dogbite"))
