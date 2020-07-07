@@ -73,23 +73,20 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherEar extends HealthCondition(298L, "Other ear condition", Ear, both = Some("other"), isOther = true)
 
   // Oral conditions.
-  //hs_cg_oral_disorders_yn
-  case object CleftLip extends HealthConditionType(302L, "Cleft lip", Oral, cg = Some("cl_lip"))
-  case object CleftPalate extends HealthConditionType(303L, "Cleft palate", Oral, cg = Some("cl_pal"))
-  case object MissingTeeth extends HealthConditionType(304L, "Missing teeth", Oral, cg = Some("teeth"))
-  case object DentalCalculus extends HealthConditionType(305L, "Dental calculus (yellow build-up on teeth)", Oral, dx = Some("dc"))
-  case object ExtractedTeeth extends HealthConditionType(306L, "Extracted teeth", Oral, dx = Some("et"))
-  case object FracturedTeeth extends HealthConditionType(307L, "Fractured teeth", Oral, dx = Some("ft"))
-  case object Gingivitis extends HealthConditionType(308L, "Gingivitis (red, puffy gums)", Oral, dx = Some("ging"))
-  case object MasticatoryMyositis extends HealthConditionType(309L, "Masticatory myositis", Oral, dx = Some("mm"))
-  case object OronasalFistula extends HealthConditionType(310L, "Oronasal fistula", Oral, dx = Some("of"))
-  case object Overbite extends HealthConditionType(311L, "Overbite", Oral, dx = Some("ob"))
-  case object RetainedDeciduousTeeth extends HealthConditionType(312L, "Retained deciduous (baby) teeth", Oral, dx = Some("rd"))
-  case object Sialocele extends HealthConditionType(313L, "Sialocele", Oral, dx = Some("si"))
-  case object Underbite extends HealthConditionType(314L, "Underbite", Oral, dx = Some("ub"))
-  case object OtherOral extends HealthConditionType(398L, "Other oral condition", Oral, both = Some("other"), isOther = true)
-
-
+  case object CleftLip extends HealthCondition(302L, "Cleft lip", Oral, cg = Some("cl_lip"))
+  case object CleftPalate extends HealthCondition(303L, "Cleft palate", Oral, cg = Some("cl_pal"))
+  case object MissingTeeth extends HealthCondition(304L, "Missing teeth", Oral, cg = Some("teeth"))
+  case object DentalCalculus extends HealthCondition(305L, "Dental calculus (yellow build-up on teeth)", Oral, dx = Some("dc"))
+  case object ExtractedTeeth extends HealthCondition(306L, "Extracted teeth", Oral, dx = Some("et"))
+  case object FracturedTeeth extends HealthCondition(307L, "Fractured teeth", Oral, dx = Some("ft"))
+  case object Gingivitis extends HealthCondition(308L, "Gingivitis (red, puffy gums)", Oral, dx = Some("ging"))
+  case object MasticatoryMyositis extends HealthCondition(309L, "Masticatory myositis", Oral, dx = Some("mm"))
+  case object OronasalFistula extends HealthCondition(310L, "Oronasal fistula", Oral, dx = Some("of"))
+  case object Overbite extends HealthCondition(311L, "Overbite", Oral, dx = Some("ob"))
+  case object RetainedDeciduousTeeth extends HealthCondition(312L, "Retained deciduous (baby) teeth", Oral, dx = Some("rd"))
+  case object Sialocele extends HealthCondition(313L, "Sialocele", Oral, dx = Some("si"))
+  case object Underbite extends HealthCondition(314L, "Underbite", Oral, dx = Some("ub"))
+  case object OtherOral extends HealthCondition(398L, "Other oral condition", Oral, both = Some("other"), isOther = true)
 
   // Skin conditions.
   case object DermoidCysts extends HealthCondition(401L, "Dermoid cysts", Skin, cg = Some("dcysts"))
