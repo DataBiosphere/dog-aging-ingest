@@ -1292,6 +1292,184 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     output should contain theSameElementsAs (truth)
   }
 
+  it should "correctly map congenital reproductive disorders and non-congenital diseases when values are defined" in {
+    val multiple = Map[String, Array[String]](
+      "hs_congenital_yn" -> Array("1"),
+      "hs_cg_repro_disorders_yn" -> Array("1"),
+      "hs_cg_repro_crypto" -> Array("1"),
+      "hs_cg_repro_crypto_month" -> Array("2"),
+      "hs_cg_repro_crypto_year" -> Array("2020"),
+      "hs_cg_repro_crypto_surg" -> Array("3"),
+      "hs_cg_repro_crypto_fu" -> Array("1"),
+      "hs_cg_repro_other" -> Array("1"),
+      "hs_cg_repro_other_spec" -> Array("olives"),
+      "hs_cg_repro_other_month" -> Array("2"),
+      "hs_cg_repro_other_year" -> Array("2020"),
+      "hs_cg_repro_other_surg" -> Array("3"),
+      "hs_cg_repro_other_fu" -> Array("0"),
+      "hs_dx_repro_yn" -> Array("1"),
+      "hs_dx_repro_bph" -> Array("1"),
+      "hs_dx_repro_bph_month" -> Array("2"),
+      "hs_dx_repro_bph_year" -> Array("2020"),
+      "hs_dx_repro_bph_surg" -> Array("3"),
+      "hs_dx_repro_bph_fu" -> Array("1"),
+      "hs_dx_repro_other" -> Array("1"),
+      "hs_dx_repro_other_spec" -> Array("ohno"),
+      "hs_dx_repro_other_month" -> Array("2"),
+      "hs_dx_repro_other_year" -> Array("2020"),
+      "hs_dx_repro_other_surg" -> Array("3"),
+      "hs_dx_repro_other_fu" -> Array("1")
+    )
+    val exampleRecord = RawRecord(id = 1, multiple)
+    val output = HealthTransformations.mapHealthConditions(exampleRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Reproductive.value,
+        hsCondition = HealthCondition.Cryptorchid.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Reproductive.value,
+        hsCondition = HealthCondition.OtherReproductive.value,
+        hsConditionOtherDescription = Some("olives"),
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(false)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Reproductive.value,
+        hsCondition = HealthCondition.BPH.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Reproductive.value,
+        hsCondition = HealthCondition.OtherReproductive.value,
+        hsConditionOtherDescription = Some("ohno"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs (truth)
+  }
+
+  it should "correctly map congenital orthopedic disorders and non-congenital diseases when values are defined" in {
+    val multiple = Map[String, Array[String]](
+      "hs_congenital_yn" -> Array("1"),
+      "hs_cg_bones_disorders_yn" -> Array("1"),
+      "hs_cg_bones_limb" -> Array("1"),
+      "hs_cg_bones_limb_month" -> Array("2"),
+      "hs_cg_bones_limb_year" -> Array("2020"),
+      "hs_cg_bones_limb_surg" -> Array("3"),
+      "hs_cg_bones_limb_fu" -> Array("1"),
+      "hs_cg_bones_other" -> Array("1"),
+      "hs_cg_bones_other_spec" -> Array("olives"),
+      "hs_cg_bones_other_month" -> Array("2"),
+      "hs_cg_bones_other_year" -> Array("2020"),
+      "hs_cg_bones_other_surg" -> Array("3"),
+      "hs_cg_bones_other_fu" -> Array("0"),
+      "hs_dx_ortho_yn" -> Array("1"),
+      "hs_dx_ortho_css" -> Array("1"),
+      "hs_dx_ortho_css_month" -> Array("2"),
+      "hs_dx_ortho_css_year" -> Array("2020"),
+      "hs_dx_ortho_css_surg" -> Array("3"),
+      "hs_dx_ortho_css_fu" -> Array("1"),
+      "hs_dx_ortho_other" -> Array("1"),
+      "hs_dx_ortho_other_spec" -> Array("ohno"),
+      "hs_dx_ortho_other_month" -> Array("2"),
+      "hs_dx_ortho_other_year" -> Array("2020"),
+      "hs_dx_ortho_other_surg" -> Array("3"),
+      "hs_dx_ortho_other_fu" -> Array("1")
+    )
+    val exampleRecord = RawRecord(id = 1, multiple)
+    val output = HealthTransformations.mapHealthConditions(exampleRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Orthopedic.value,
+        hsCondition = HealthCondition.MissingLimb.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Orthopedic.value,
+        hsCondition = HealthCondition.OtherOrthopedic.value,
+        hsConditionOtherDescription = Some("olives"),
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(false)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Orthopedic.value,
+        hsCondition = HealthCondition.CSS.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Orthopedic.value,
+        hsCondition = HealthCondition.OtherOrthopedic.value,
+        hsConditionOtherDescription = Some("ohno"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs (truth)
+  }
+
   it should "correctly map health status data when fields are null" in {
     val emptyRecord = RawRecord(1, Map.empty)
 

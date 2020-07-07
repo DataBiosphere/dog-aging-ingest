@@ -204,10 +204,46 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherKidney extends HealthCondition(998L, "Other kidney condition", Kidney, both = Some("other"), isOther = true)
 
   // Reproductive conditions.
-  // TODO
+  case object Cryptorchid extends HealthCondition(1001L, "Cryptorchid", Reproductive, cg = Some("crypto"))
+  case object Hermaphroditism extends HealthCondition(1002L, "Hermaphroditism", Reproductive, cg = Some("herma"))
+  case object Hypospadias extends HealthCondition(1003L, "Hypospadias", Reproductive, cg = Some("hypo"))
+  case object Phimosis extends HealthCondition(1004L, "Phimosis", Reproductive, cg = Some("phimo"))
+  case object BPH extends HealthCondition(1005L, "Benign prostatic hyperplasia", Reproductive, dx = Some("bph"))
+  case object Dystocia extends HealthCondition(1006L, "Dystocia", Reproductive, dx = Some("dys"))
+  case object IHC extends HealthCondition(1007L, "Irregular heat cycle", Reproductive, dx = Some("ihc"))
+  case object Mastitis extends HealthCondition(1008L, "Mastitis", Reproductive, dx = Some("mas"))
+  case object Papilloma extends HealthCondition(1009L, "Papilloma (genital warts)", Reproductive, dx = Some("pgw"))
+  case object Paraphimosis extends HealthCondition(1010L, "Paraphimosis", Reproductive, dx = Some("para"))
+  case object Prostatitis extends HealthCondition(1011L, "Prostatitis", Reproductive, dx = Some("pros"))
+  case object PreputialInfection extends HealthCondition(1012L, "Preputial infection", Reproductive, dx = Some("pi"))
+  case object Pseudopregnancy extends HealthCondition(1013L, "Pseudopregnancy", Reproductive, dx = Some("pse"))
+  case object Pyometra extends HealthCondition(1014L, "Pyometra", Reproductive, dx = Some("pyo"))
+  case object RecessedVulva extends HealthCondition(1015L, "Recessed vulva", Reproductive, dx = Some("rv"))
+  case object TesticularAtrophy extends HealthCondition(1016L, "Testicular atrophy", Reproductive, dx = Some("ta"))
+  case object Vaginitis extends HealthCondition(1017L, "Vaginitis", Reproductive, dx = Some("vag"))
+  case object OtherReproductive extends HealthCondition(1098L, "Other reproductive condition", Reproductive, both = Some("other"), isOther = true)
 
   // Orthopedic conditions.
-  // TODO
+  case object MissingLimb extends HealthCondition(1101L, "Missing a limb or part of a limb", Orthopedic, cg = Some("limb"))
+  case object ValgusDeformity extends HealthCondition(1102L, "Valgus deformity", Orthopedic, cg = Some("valgus"))
+  case object VarusDeformity extends HealthCondition(1103L, "Varus deformity", Orthopedic, cg = Some("varus"))
+  case object CSS extends HealthCondition(1104L, "Carpal subluxation syndrome", Orthopedic, dx = Some("css"))
+  case object CLR extends HealthCondition(1105L, "Cruciate ligament rupture", Orthopedic, dx = Some("clr"))
+  case object DJD extends HealthCondition(1106L, "Degenerative joint disease", Orthopedic, dx = Some("djd"))
+  case object Dwarfism extends HealthCondition(1107L, "Dwarfism", Orthopedic, dx = Some("dwa"))
+  case object ElbowDysplasia extends HealthCondition(1108L, "Elbow dysplasia", Orthopedic, dx = Some("ed"))
+  case object GrowthDeformity extends HealthCondition(1109L, "Growth deformity", Orthopedic, dx = Some("gd"))
+  case object HipDysplasia extends HealthCondition(1110L, "Hip dysplasia", Orthopedic, dx = Some("hd"))
+  case object OrthoIVDD extends HealthCondition(1111L, "Intervertebral disc disease (IVDD)", Orthopedic, dx = Some("ivdd"))
+  case object Lameness extends HealthCondition(1112L, "Lameness (chronic or recurrent)", Orthopedic, dx = Some("lame"))
+  case object Osteoarthritis extends HealthCondition(1113L, "Osteoarthritis", Orthopedic, dx = Some("oa"))
+  case object OCD extends HealthCondition(1114L, "Osteochondritis dissecans (OCD)", Orthopedic, dx = Some("ocd"))
+  case object Osteomyelitis extends HealthCondition(1115L, "Osteomyelitis", Orthopedic, dx = Some("om"))
+  case object Panosteitis extends HealthCondition(1116L, "Panosteitis", Orthopedic, dx = Some("pano"))
+  case object PatellarLuxation extends HealthCondition(1117L, "Patellar luxation", Orthopedic, dx = Some("pl"))
+  case object RheumatoidArthritis extends HealthCondition(1118L, "Rheumatoid arthritis", Orthopedic, dx = Some("ra"))
+  case object Spondylosis extends HealthCondition(1119L, "Spondylosis", Orthopedic, dx = Some("spo"))
+  case object OtherOrthopedic extends HealthCondition(1198L, "Other orthopedic condition", Orthopedic, both = Some("other"), isOther = true)
 
   // Neurologic conditions.
   case object CerebellarHypoplasia extends HealthCondition(1201L, "Cerebellar hypoplasia", Neurologic, cg = Some("cereb"))
