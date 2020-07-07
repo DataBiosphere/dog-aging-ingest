@@ -310,7 +310,7 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object RecreationalDrugs
       extends HealthCondition(1705L, "Ingestion of recreational drugs", ToxinConsumption, dx = Some("rec"), isOther = true)
   case object RatPoison extends HealthCondition(1706L, "Mouse or rat bait/poison", ToxinConsumption, dx = Some("rat"), isOther = true)
-  case object Overdose
+  case object DogMedications
       extends HealthCondition(1707L, "Overdose of medications prescribed to the dog", ToxinConsumption, dx = Some("rx_dog_od"), isOther = true)
   case object OtherToxin extends HealthCondition(1708L, "Other", ToxinConsumption, dx = Some("other"), isOther = true)
 
