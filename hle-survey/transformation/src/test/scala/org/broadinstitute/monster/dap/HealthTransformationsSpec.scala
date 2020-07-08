@@ -1471,6 +1471,76 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     output should contain theSameElementsAs (truth)
   }
 
+  it should "correctly map toxin consumption when values are defined" in {
+    val multiple = Map[String, Array[String]](
+      "hs_dx_tox_yn" -> Array("1"),
+      "hs_dx_tox_rx_human" -> Array("1"),
+      "hs_dx_tox_rx_human_spec" -> Array("mentos"),
+      "hs_dx_tox_rx_human_month" -> Array("2"),
+      "hs_dx_tox_rx_human_year" -> Array("2020"),
+      "hs_dx_tox_rx_human_surg" -> Array("3"),
+      "hs_dx_tox_rx_human_fu" -> Array("1"),
+      "hs_dx_tox_rec" -> Array("1"),
+      "hs_dx_tox_rec_spec" -> Array("oregano"),
+      "hs_dx_tox_rec_month" -> Array("2"),
+      "hs_dx_tox_rec_year" -> Array("2020"),
+      "hs_dx_tox_rec_surg" -> Array("3"),
+      "hs_dx_tox_rec_fu" -> Array("1"),
+      "hs_dx_tox_other" -> Array("1"),
+      "hs_dx_tox_other_spec" -> Array("other tasty looking things"),
+      "hs_dx_tox_other_month" -> Array("2"),
+      "hs_dx_tox_other_year" -> Array("2020"),
+      "hs_dx_tox_other_surg" -> Array("3"),
+      "hs_dx_tox_other_fu" -> Array("1")
+    )
+    val exampleRecord = RawRecord(id = 1, multiple)
+    val output = HealthTransformations.mapHealthConditions(exampleRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.ToxinConsumption.value,
+        hsCondition = HealthCondition.HumanMedications.value,
+        hsConditionOtherDescription = Some("mentos"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.ToxinConsumption.value,
+        hsCondition = HealthCondition.RecreationalDrugs.value,
+        hsConditionOtherDescription = Some("oregano"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.ToxinConsumption.value,
+        hsCondition = HealthCondition.OtherToxin.value,
+        hsConditionOtherDescription = Some("other tasty looking things"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs (truth)
+  }
+
   it should "correctly map congenital orthopedic disorders and non-congenital diseases when values are defined" in {
     val multiple = Map[String, Array[String]](
       "hs_congenital_yn" -> Array("1"),
