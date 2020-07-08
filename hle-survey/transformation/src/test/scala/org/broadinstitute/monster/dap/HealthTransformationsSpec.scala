@@ -530,6 +530,303 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     output should contain theSameElementsAs truth
   }
 
+  it should "correctly map congenital oral disorders when values are defined" in {
+    val multipleCongenitalOralDisorder = Map[String, Array[String]](
+      "hs_congenital_yn" -> Array("1"),
+      "hs_cg_oral_disorders_yn" -> Array("1"),
+      "hs_cg_oral_cl_lip" -> Array("1"),
+      "hs_cg_oral_cl_lip_month" -> Array("2"),
+      "hs_cg_oral_cl_lip_year" -> Array("2020"),
+      "hs_cg_oral_cl_lip_surg" -> Array("3"),
+      "hs_cg_oral_cl_lip_fu" -> Array("1"),
+      "hs_cg_oral_cl_pal" -> Array("1"),
+      "hs_cg_oral_cl_pal_month" -> Array("2"),
+      "hs_cg_oral_cl_pal_year" -> Array("2020"),
+      "hs_cg_oral_cl_pal_surg" -> Array("3"),
+      "hs_cg_oral_cl_pal_fu" -> Array("1"),
+      "hs_cg_oral_teeth" -> Array("1"),
+      "hs_cg_oral_teeth_month" -> Array("2"),
+      "hs_cg_oral_teeth_year" -> Array("2020"),
+      "hs_cg_oral_teeth_surg" -> Array("3"),
+      "hs_cg_oral_teeth_fu" -> Array("1"),
+      "hs_cg_oral_other" -> Array("1"),
+      "hs_cg_oral_other_spec" -> Array("wisdom teeth"),
+      "hs_cg_oral_other_month" -> Array("2"),
+      "hs_cg_oral_other_year" -> Array("2020"),
+      "hs_cg_oral_other_surg" -> Array("3"),
+      "hs_cg_oral_other_fu" -> Array("1")
+    )
+    val exampleCongenitalOralDisorder = RawRecord(id = 1, multipleCongenitalOralDisorder)
+    val output = HealthTransformations.mapHealthConditions(exampleCongenitalOralDisorder)
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.CleftLip.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.CleftPalate.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.MissingTeeth.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.OtherOral.value,
+        hsConditionOtherDescription = Some("wisdom teeth"),
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs truth
+  }
+
+  it should "correctly map oral disease values when values are defined" in {
+    val multipleOralDisease = Map[String, Array[String]](
+      "hs_dx_oral_yn" -> Array("1"),
+      "hs_dx_oral_dc" -> Array("1"),
+      "hs_dx_oral_dc_month" -> Array("2"),
+      "hs_dx_oral_dc_year" -> Array("2020"),
+      "hs_dx_oral_dc_surg" -> Array("3"),
+      "hs_dx_oral_dc_fu" -> Array("1"),
+      "hs_dx_oral_et" -> Array("1"),
+      "hs_dx_oral_et_month" -> Array("2"),
+      "hs_dx_oral_et_year" -> Array("2020"),
+      "hs_dx_oral_et_surg" -> Array("3"),
+      "hs_dx_oral_et_fu" -> Array("1"),
+      "hs_dx_oral_ft" -> Array("1"),
+      "hs_dx_oral_ft_month" -> Array("2"),
+      "hs_dx_oral_ft_year" -> Array("2020"),
+      "hs_dx_oral_ft_surg" -> Array("3"),
+      "hs_dx_oral_ft_fu" -> Array("1"),
+      "hs_dx_oral_ging" -> Array("1"),
+      "hs_dx_oral_ging_month" -> Array("2"),
+      "hs_dx_oral_ging_year" -> Array("2020"),
+      "hs_dx_oral_ging_surg" -> Array("3"),
+      "hs_dx_oral_ging_fu" -> Array("1"),
+      "hs_dx_oral_mm" -> Array("1"),
+      "hs_dx_oral_mm_month" -> Array("2"),
+      "hs_dx_oral_mm_year" -> Array("2020"),
+      "hs_dx_oral_mm_surg" -> Array("3"),
+      "hs_dx_oral_mm_fu" -> Array("1"),
+      "hs_dx_oral_of" -> Array("1"),
+      "hs_dx_oral_of_month" -> Array("2"),
+      "hs_dx_oral_of_year" -> Array("2020"),
+      "hs_dx_oral_of_surg" -> Array("3"),
+      "hs_dx_oral_of_fu" -> Array("1"),
+      "hs_dx_oral_ob" -> Array("1"),
+      "hs_dx_oral_ob_month" -> Array("2"),
+      "hs_dx_oral_ob_year" -> Array("2020"),
+      "hs_dx_oral_ob_surg" -> Array("3"),
+      "hs_dx_oral_ob_fu" -> Array("1"),
+      "hs_dx_oral_rd" -> Array("1"),
+      "hs_dx_oral_rd_month" -> Array("2"),
+      "hs_dx_oral_rd_year" -> Array("2020"),
+      "hs_dx_oral_rd_surg" -> Array("3"),
+      "hs_dx_oral_rd_fu" -> Array("1"),
+      "hs_dx_oral_si" -> Array("1"),
+      "hs_dx_oral_si_month" -> Array("2"),
+      "hs_dx_oral_si_year" -> Array("2020"),
+      "hs_dx_oral_si_surg" -> Array("3"),
+      "hs_dx_oral_si_fu" -> Array("1"),
+      "hs_dx_oral_ub" -> Array("1"),
+      "hs_dx_oral_ub_month" -> Array("2"),
+      "hs_dx_oral_ub_year" -> Array("2020"),
+      "hs_dx_oral_ub_surg" -> Array("3"),
+      "hs_dx_oral_ub_fu" -> Array("1"),
+      "hs_dx_oral_other" -> Array("1"),
+      "hs_dx_oral_other_spec" -> Array("cavities"),
+      "hs_dx_oral_other_month" -> Array("2"),
+      "hs_dx_oral_other_year" -> Array("2020"),
+      "hs_dx_oral_other_surg" -> Array("3"),
+      "hs_dx_oral_other_fu" -> Array("1")
+    )
+    val exampleOralDisease = RawRecord(id = 1, multipleOralDisease)
+    val output = HealthTransformations.mapHealthConditions(exampleOralDisease)
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.DentalCalculus.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.ExtractedTeeth.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.FracturedTeeth.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.Gingivitis.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.MasticatoryMyositis.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.OronasalFistula.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.Overbite.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.RetainedDeciduousTeeth.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.Sialocele.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.Underbite.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Oral.value,
+        hsCondition = HealthCondition.OtherOral.value,
+        hsConditionOtherDescription = Some("cavities"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs truth
+  }
+
   it should "correctly map trauma values when values are defined" in {
     val multipleTrauma = Map[String, Array[String]](
       "hs_dx_trauma_yn" -> Array("1"),
