@@ -266,7 +266,19 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object OtherNeurologic extends HealthCondition(1298L, "Other neurologic condition", Neurologic, both = Some("other"), isOther = true)
 
   // Endocrine conditions.
-  // TODO
+  case object CongenitalHypothyroidism extends HealthCondition(1301L, "Congenital hypothyroidism", Endocrine, cg = Some("ch"))
+  case object JuvenileHypoglycemia extends HealthCondition(1302L, "Juvenile hypoglycemia", Endocrine, cg = Some("jh"))
+  case object PituitaryDwarfism extends HealthCondition(1303L, "Pituitary dwarfism", Endocrine, cg = Some("pd"))
+  case object AddisonsDisease extends HealthCondition(1304L, "Addison's disease (hypoadrenocorticism; low adrenal function)", Endocrine, dx = Some("ad"))
+  case object CushingsDisease extends HealthCondition(1305L, "Cushing's disease (hyperadrenocorticism; excess adrenal function)", Endocrine, dx = Some("cd"))
+  case object DiabetesInsipidus extends HealthCondition(1306L, "Diabetes insipidus (rare diabetes which causes water balance problems)", Endocrine, dx = Some("di"))
+  case object DiabetesMellitus extends HealthCondition(1307L, "Diabetes mellitus (common diabetes which causes high blood sugar)", Endocrine, dx = Some("dm"))
+  case object Hypercalcemia extends HealthCondition(1308L, "Hypercalcemia (excess calcium in the blood)", Endocrine, dx = Some("hc"))
+  case object Hyperparathyroidism extends HealthCondition(1309L, "Hyperparathyroidism (excess parathyroid function causing high calcium)", Endocrine, dx = Some("hep"))
+  case object Hypoparathyroidism extends HealthCondition(1310L, "Hypoparathyroidism (low parathyroid function causing low calcium)", Endocrine, dx = Some("hop"))
+  case object Hyperthyroidism extends HealthCondition(1311L, "Hyperthyroidism (excess thyroid function)", Endocrine, dx = Some("het"))
+  case object Hypothyroidism extends HealthCondition(1312L, "Hypothyroidism (low thyroid function)", Endocrine, dx = Some("hot"))
+  case object OtherEndocrine extends HealthCondition(1398L, "Other endocrine condition", Endocrine, both = Some("other"), isOther = true)
 
   // Hematopoietic conditions.
   case object Dyserythropoiesis extends HealthCondition(1401L, "Congenital dyserythropoiesis", Hematopoietic, cg = Some("cd"))
