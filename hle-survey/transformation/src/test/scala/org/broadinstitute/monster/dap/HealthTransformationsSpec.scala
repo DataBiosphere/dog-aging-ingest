@@ -2017,6 +2017,95 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
     output should contain theSameElementsAs (truth)
   }
 
+  it should "correctly map congenital endocrine disorders and non-congenital diseases when values are defined" in {
+    val multiple = Map[String, Array[String]](
+      "hs_congenital_yn" -> Array("1"),
+      "hs_cg_endocr_disorders_yn" -> Array("1"),
+      "hs_cg_endocr_ch" -> Array("1"),
+      "hs_cg_endocr_ch_month" -> Array("2"),
+      "hs_cg_endocr_ch_year" -> Array("2020"),
+      "hs_cg_endocr_ch_surg" -> Array("3"),
+      "hs_cg_endocr_ch_fu" -> Array("1"),
+      "hs_cg_endocr_other" -> Array("1"),
+      "hs_cg_endocr_other_spec" -> Array("olives"),
+      "hs_cg_endocr_other_month" -> Array("2"),
+      "hs_cg_endocr_other_year" -> Array("2020"),
+      "hs_cg_endocr_other_surg" -> Array("3"),
+      "hs_cg_endocr_other_fu" -> Array("0"),
+      "hs_dx_endo_yn" -> Array("1"),
+      "hs_dx_endo_ad" -> Array("1"),
+      "hs_dx_endo_ad_month" -> Array("2"),
+      "hs_dx_endo_ad_year" -> Array("2020"),
+      "hs_dx_endo_ad_surg" -> Array("3"),
+      "hs_dx_endo_ad_fu" -> Array("1"),
+      "hs_dx_endo_other" -> Array("1"),
+      "hs_dx_endo_other_spec" -> Array("ohno"),
+      "hs_dx_endo_other_month" -> Array("2"),
+      "hs_dx_endo_other_year" -> Array("2020"),
+      "hs_dx_endo_other_surg" -> Array("3"),
+      "hs_dx_endo_other_fu" -> Array("1")
+    )
+    val exampleRecord = RawRecord(id = 1, multiple)
+    val output = HealthTransformations.mapHealthConditions(exampleRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Endocrine.value,
+        hsCondition = HealthCondition.CongenitalHypothyroidism.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Endocrine.value,
+        hsCondition = HealthCondition.OtherEndocrine.value,
+        hsConditionOtherDescription = Some("olives"),
+        hsConditionIsCongenital = true,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(false)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Endocrine.value,
+        hsCondition = HealthCondition.AddisonsDisease.value,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Endocrine.value,
+        hsCondition = HealthCondition.OtherEndocrine.value,
+        hsConditionOtherDescription = Some("ohno"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2020),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      )
+    )
+
+    output should contain theSameElementsAs (truth)
+  }
+
   it should "correctly map immune diseases when values are defined" in {
     val multiple = Map[String, Array[String]](
       "hs_dx_immune_yn" -> Array("1"),
