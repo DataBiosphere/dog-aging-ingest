@@ -6,10 +6,10 @@ import java.time.format.DateTimeParseException
 import caseapp.core.Error.MalformedValue
 import caseapp.core.argparser.{ArgParser, SimpleArgParser}
 import caseapp.{AppName, AppVersion, HelpMessage, ProgName}
-import org.broadinstitute.monster.buildinfo.DogAgingHleExtractionBuildInfo
+import org.broadinstitute.monster.buildinfo.DogAgingHlesExtractionBuildInfo
 
 @AppName("DAP HLE extraction pipeline")
-@AppVersion(DogAgingHleExtractionBuildInfo.version)
+@AppVersion(DogAgingHlesExtractionBuildInfo.version)
 @ProgName("org.broadinstitute.monster.dap.HLESurveyExtractionPipeline")
 case class Args(
   @HelpMessage("API token to use when querying RedCap")
