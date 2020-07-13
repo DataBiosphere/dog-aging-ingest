@@ -4,7 +4,7 @@ val vaultDriverVersion = "5.1.0"
 
 lazy val `dog-aging-ingest` = project
   .in(file("."))
-  .aggregate(`dog-aging-schema`, `dog-aging-hle-extraction`, `dog-aging-hle-transformation`)
+  .aggregate(`dog-aging-schema`, `dog-aging-hles-extraction`, `dog-aging-hles-transformation`)
   .settings(publish / skip := true)
 
 lazy val `dog-aging-schema` = project
@@ -16,16 +16,16 @@ lazy val `dog-aging-schema` = project
     jadeStructPackage := "org.broadinstitute.monster.dogaging.jadeschema.struct"
   )
 
-lazy val `dog-aging-hle-extraction` = project
-  .in(file("hle-survey/extraction"))
+lazy val `dog-aging-hles-extraction` = project
+  .in(file("hles/extraction"))
   .enablePlugins(MonsterScioPipelinePlugin)
   .settings(
     libraryDependencies += "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
     libraryDependencies += "com.bettercloud" % "vault-java-driver" % vaultDriverVersion % IntegrationTest
   )
 
-lazy val `dog-aging-hle-transformation` = project
-  .in(file("hle-survey/transformation"))
+lazy val `dog-aging-hles-transformation` = project
+  .in(file("hles/transformation"))
   .enablePlugins(MonsterScioPipelinePlugin)
   .dependsOn(`dog-aging-schema`)
   .settings(
