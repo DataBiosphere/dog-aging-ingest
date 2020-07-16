@@ -1,0 +1,94 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: ingest-dog-aging
+spec:
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: gcs-prefix
+          {{- $gcsPrefix := "{{inputs.parameters.gcs-prefix}}" }}
+      dag:
+        tasks:
+          - name: run-extraction
+            template: run-extraction-pipeline
+            arguments:
+              parameters:
+                - name: output-prefix
+                  value: '{{ printf "%s/raw" $gcsPrefix }}'
+          - name: run-transformation
+            dependencies: [run-extraction]
+            template: run-transformation-pipeline
+            arguments:
+              parameters:
+                - name: input-prefix
+                  value: '{{ printf "%s/raw" $gcsPrefix }}'
+                - name: output-prefix
+                  value: '{{ printf "%s/processed" $gcsPrefix }}'
+
+
+    {{- /* Version used for both Dataflow docker images. */}}
+    {{- $version := default "latest" .Chart.AppVersion }}
+    {{- $bucket := .Values.gcs.bucketName }}
+    {{- with .Values.dataflow }}
+    ##
+    ## Template used to launch a Dataflow processing job that pulls
+    ## all relevant metadata from REDCap.
+    ##
+    - name: run-extraction-pipeline
+      inputs:
+        parameters:
+          - name: output-prefix
+          {{- $outputPrefix := "{{inputs.parameters.output-prefix}}" }}
+          # TODO check if there are other parameters needed
+      container:
+        image: us.gcr.io/broad-dsp-gcr-public/dog-aging-extraction-pipeline:{{ $version }}
+        command: []
+        args:
+          - --runner=dataflow
+          - --outputDir=gs://{{ $bucket }}/{{ $outputPrefix }}
+          - --project={{ .project }}
+          - --region={{ .region }}
+          - --tempLocation=gs://{{ .tmpBucketName }}/dataflow
+          - --subnetwork=regions/{{ .region }}/subnetworks/{{ .subnetName }}
+          - --serviceAccount={{ .workerAccount }}
+          - --workerMachineType={{ .workerMachineType }}
+          {{- with .autoscaling }}
+          - --autoscalingAlgorithm=THROUGHPUT_BASED
+          - --numWorkers={{ .minWorkers }}
+          - --maxNumWorkers={{ .maxWorkers }}
+          {{- end }}
+          - --experiments=shuffle_mode=service
+    ##
+    ## Template used to launch a Dataflow processing job that transforms
+    ## extracted metadata into our target schema.
+    ##
+    - name: run-transformation-pipeline
+      inputs:
+        parameters:
+          - name: input-prefix
+          {{- $inputPrefix := "{{inputs.parameters.input-prefix}}" }}
+          - name: output-prefix
+          {{- $outputPrefix := "{{inputs.parameters.output-prefix}}" }}
+          # TODO check if there are other parameters needed
+      container:
+        image: us.gcr.io/broad-dsp-gcr-public/dog-aging-transformation-pipeline:{{ $version }}
+        command: []
+        args:
+          - --runner=dataflow
+          - --inputPrefix=gs://{{ $bucket }}/{{ $inputPrefix }}
+          - --outputPrefix=gs://{{ $bucket }}/{{ $outputPrefix }}
+          - --project={{ .project }}
+          - --region={{ .region }}
+          - --tempLocation=gs://{{ .tmpBucketName }}/dataflow
+          - --subnetwork=regions/{{ .region }}/subnetworks/{{ .subnetName }}
+          - --serviceAccount={{ .workerAccount }}
+          - --workerMachineType={{ .workerMachineType }}
+          {{- with .autoscaling }}
+          - --autoscalingAlgorithm=THROUGHPUT_BASED
+          - --numWorkers={{ .minWorkers }}
+          - --maxNumWorkers={{ .maxWorkers }}
+          {{- end }}
+          - --experiments=shuffle_mode=service
+    {{- end }}
