@@ -1,3 +1,5 @@
+import _root_.io.circe.Json
+
 val enumeratumVersion = "1.6.1"
 val okhttpVersion = "4.4.1"
 val vaultDriverVersion = "5.1.0"
@@ -30,4 +32,24 @@ lazy val `dog-aging-hles-transformation` = project
   .dependsOn(`dog-aging-schema`)
   .settings(
     libraryDependencies += "com.beachape" %% "enumeratum" % enumeratumVersion
+  )
+
+lazy val `dog-aging-orchestration-workflow` = project
+  .in(file("orchestration"))
+  .enablePlugins(MonsterHelmPlugin)
+  .settings(
+    helmChartOrganization := "DataBiosphere",
+    helmChartRepository := "dog-aging-ingest",
+    helmInjectVersionValues := { (baseValues, version) =>
+      val jsonVersion = Json.fromString(version)
+      val schemaVersionValues = Json.obj(
+        "version" -> jsonVersion,
+        "argoTemplates" -> Json.obj(
+          "diffBQTable" -> Json.obj(
+            "schemaImageVersion" -> jsonVersion
+          )
+        )
+      )
+      baseValues.deepMerge(schemaVersionValues)
+    }
   )
