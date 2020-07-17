@@ -16,7 +16,7 @@ spec:
             arguments:
               parameters:
                 - name: api-token
-                  value: '{{  }}'
+                  value: {{ .Values.redcap.apiKey }}
                 - name: output-prefix
                   value: '{{ printf "%s/raw" $gcsPrefix }}'
           - name: run-transformation

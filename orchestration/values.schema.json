@@ -55,5 +55,12 @@
         "autoscaling"]
     }
   },
-  "required": ["gcs", "serviceAccount", "cron", "dataflow"]
+  "redcap": {
+    "type": "object",
+    "properties": {
+      "apiKey": { "type": "string" }
+    },
+    "required": ["apiKey"]
+  },
+  "required": ["gcs", "serviceAccount", "cron", "dataflow", "redcap"]
 }
