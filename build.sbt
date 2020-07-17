@@ -6,7 +6,7 @@ val vaultDriverVersion = "5.1.0"
 
 lazy val `dog-aging-ingest` = project
   .in(file("."))
-  .aggregate(`dog-aging-schema`, `dog-aging-hles-extraction`, `dog-aging-hles-transformation`)
+  .aggregate(`dog-aging-schema`, `dog-aging-hles-extraction`, `dog-aging-hles-transformation`, `dog-aging-orchestration-workflow`)
   .settings(publish / skip := true)
 
 lazy val `dog-aging-schema` = project

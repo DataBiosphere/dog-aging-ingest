@@ -15,6 +15,8 @@ spec:
             template: run-extraction-pipeline
             arguments:
               parameters:
+                - name: api-token
+                  value: '{{  }}'
                 - name: output-prefix
                   value: '{{ printf "%s/raw" $gcsPrefix }}'
           - name: run-transformation
@@ -39,15 +41,17 @@ spec:
     - name: run-extraction-pipeline
       inputs:
         parameters:
+          - name: api-token
+          {{- $apiToken := "{{inputs.parameters.api-token}}" }}
           - name: output-prefix
           {{- $outputPrefix := "{{inputs.parameters.output-prefix}}" }}
-          # TODO check if there are other parameters needed
       container:
         image: us.gcr.io/broad-dsp-gcr-public/dog-aging-extraction-pipeline:{{ $version }}
         command: []
         args:
           - --runner=dataflow
           - --outputDir=gs://{{ $bucket }}/{{ $outputPrefix }}
+          - --apiToken={{ $apiToken }}
           - --project={{ .project }}
           - --region={{ .region }}
           - --tempLocation=gs://{{ .tmpBucketName }}/dataflow
@@ -71,7 +75,6 @@ spec:
           {{- $inputPrefix := "{{inputs.parameters.input-prefix}}" }}
           - name: output-prefix
           {{- $outputPrefix := "{{inputs.parameters.output-prefix}}" }}
-          # TODO check if there are other parameters needed
       container:
         image: us.gcr.io/broad-dsp-gcr-public/dog-aging-transformation-pipeline:{{ $version }}
         command: []
