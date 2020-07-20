@@ -15,8 +15,6 @@ spec:
             template: run-extraction-pipeline
             arguments:
               parameters:
-                - name: api-token
-                  value: {{ .Values.redcap.apiKey }}
                 - name: output-prefix
                   value: '{{ printf "%s/raw" $gcsPrefix }}'
           - name: run-transformation
@@ -33,7 +31,6 @@ spec:
     {{- /* Version used for both Dataflow docker images. */}}
     {{- $version := default "latest" .Chart.AppVersion }}
     {{- $bucket := .Values.gcs.bucketName }}
-    {{- with .Values.dataflow }}
     ##
     ## Template used to launch a Dataflow processing job that pulls
     ## all relevant metadata from REDCap.
@@ -41,17 +38,22 @@ spec:
     - name: run-extraction-pipeline
       inputs:
         parameters:
-          - name: api-token
-          {{- $apiToken := "{{inputs.parameters.api-token}}" }}
           - name: output-prefix
           {{- $outputPrefix := "{{inputs.parameters.output-prefix}}" }}
       container:
         image: us.gcr.io/broad-dsp-gcr-public/dog-aging-extraction-pipeline:{{ $version }}
+        env:
+          - name: API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.redcap.apiToken.secretName }}
+                key: {{ .Values.redcap.apiToken.secretKey }}
         command: []
         args:
           - --runner=dataflow
           - --outputDir=gs://{{ $bucket }}/{{ $outputPrefix }}
-          - --apiToken={{ $apiToken }}
+          - --apiToken=$(API_TOKEN)
+          {{- with .Values.dataflow }}
           - --project={{ .project }}
           - --region={{ .region }}
           - --tempLocation=gs://{{ .tmpBucketName }}/dataflow
@@ -62,6 +64,7 @@ spec:
           - --autoscalingAlgorithm=THROUGHPUT_BASED
           - --numWorkers={{ .minWorkers }}
           - --maxNumWorkers={{ .maxWorkers }}
+          {{- end }}
           {{- end }}
           - --experiments=shuffle_mode=service
     ##
@@ -82,6 +85,7 @@ spec:
           - --runner=dataflow
           - --inputPrefix=gs://{{ $bucket }}/{{ $inputPrefix }}
           - --outputPrefix=gs://{{ $bucket }}/{{ $outputPrefix }}
+          {{- with .Values.dataflow }}
           - --project={{ .project }}
           - --region={{ .region }}
           - --tempLocation=gs://{{ .tmpBucketName }}/dataflow
@@ -94,4 +98,4 @@ spec:
           - --maxNumWorkers={{ .maxWorkers }}
           {{- end }}
           - --experiments=shuffle_mode=service
-    {{- end }}
+          {{- end }}

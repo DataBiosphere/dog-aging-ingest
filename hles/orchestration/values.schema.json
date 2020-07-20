@@ -53,14 +53,21 @@
       "required": ["project", "region", "tmpBucketName",
         "subnetName", "workerAccount", "workerMachineType",
         "autoscaling"]
-    }
-  },
-  "redcap": {
-    "type": "object",
-    "properties": {
-      "apiKey": { "type": "string" }
     },
-    "required": ["apiKey"]
+    "redcap": {
+      "type": "object",
+      "properties": {
+        "apiToken": {
+          "type": "object",
+          "properties": {
+            "secretName": {"type": "string"},
+            "secretKey": {"type": "string"}
+          },
+          "required": ["secretName", "secretKey"]
+        }
+      },
+      "required": ["apiToken"]
+    }
   },
   "required": ["gcs", "serviceAccount", "cron", "dataflow", "redcap"]
 }

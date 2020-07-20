@@ -14,4 +14,6 @@ dataflow:
     minWorkers: 1
     maxWorkers: 2
 redcap:
-  apiKey: shhhhh
+  apiToken:
+    secretName: s
+    secretKey: k
