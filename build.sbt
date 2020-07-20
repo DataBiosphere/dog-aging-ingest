@@ -6,7 +6,7 @@ val vaultDriverVersion = "5.1.0"
 
 lazy val `dog-aging-ingest` = project
   .in(file("."))
-  .aggregate(`dog-aging-schema`, `dog-aging-hles-extraction`, `dog-aging-hles-transformation`, `dog-aging-orchestration-workflow`)
+  .aggregate(`dog-aging-schema`, `dog-aging-hles-extraction`, `dog-aging-hles-transformation`, `dog-aging-hles-orchestration`)
   .settings(publish / skip := true)
 
 lazy val `dog-aging-schema` = project
@@ -34,8 +34,8 @@ lazy val `dog-aging-hles-transformation` = project
     libraryDependencies += "com.beachape" %% "enumeratum" % enumeratumVersion
   )
 
-lazy val `dog-aging-orchestration-workflow` = project
-  .in(file("orchestration"))
+lazy val `dog-aging-hles-orchestration` = project
+  .in(file("hles/orchestration"))
   .enablePlugins(MonsterHelmPlugin)
   .settings(
     helmChartOrganization := "DataBiosphere",
