@@ -23,7 +23,7 @@ spec:
         steps:
           - - name: run-main-template
               templateRef:
-                name: ingest-dog-aging
+                name: ingest-hles-baseline
                 template: main
               arguments:
                 parameters:
