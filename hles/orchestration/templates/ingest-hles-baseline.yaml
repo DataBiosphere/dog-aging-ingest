@@ -41,7 +41,7 @@ spec:
           - name: output-prefix
           {{- $outputPrefix := "{{inputs.parameters.output-prefix}}" }}
       container:
-        image: us.gcr.io/broad-dsp-gcr-public/dog-aging-extraction-pipeline:{{ $version }}
+        image: us.gcr.io/broad-dsp-gcr-public/dog-aging-extraction:{{ $version }}
         env:
           - name: API_TOKEN
             valueFrom:
@@ -79,7 +79,7 @@ spec:
           - name: output-prefix
           {{- $outputPrefix := "{{inputs.parameters.output-prefix}}" }}
       container:
-        image: us.gcr.io/broad-dsp-gcr-public/dog-aging-transformation-pipeline:{{ $version }}
+        image: us.gcr.io/broad-dsp-gcr-public/dog-aging-transformation:{{ $version }}
         command: []
         args:
           - --runner=dataflow
