@@ -7,10 +7,9 @@ from math import ceil
 # CLI args
 if (len(sys.argv) < 3):
     printd("Please provide the input directory and output directory as arguments!")
-
 input_dir = sys.argv[1]
 output_dir = sys.argv[2]
-# optional debug arg
+# optional debug arg, pass any string as the third arg
 try:
     debug = sys.argv[3]
 except IndexError:
@@ -25,18 +24,17 @@ def printd(x):
         print("[DEBUG] "+x)
     else:
         pass
-
-
+# Process the known (hardcoded) tables
 for table_name in table_names:
     print ("\nPROCESSING {0}".format(table_name))
     # get the set of files in the directory
     full_input_directory = input_dir + '/' + table_name
     # ingore hidden files and sort files alphabetically
-    input_files = sorted([f for f in listdir(full_input_directory) if not f.startswith('.')])
-
+    input_files = sorted([f for f in listdir(full_input_directory) 
+                         if not f.startswith('.')])
+    # set to hold all columns for this table, list to hold all the rows
     column_set = set()
     row_list = []
-
     # read json data    
     for json_file_name in input_files:
         print("...Opening {0}".format(full_input_directory+'/'+json_file_name))
@@ -63,11 +61,21 @@ for table_name in table_names:
                     # store data
                     column_set.update(row.keys())
                     row_list.append(row)
-                # hles_health_condition: read + copy dog_id and hs_condition
+                # hles_health_condition: read + copy dog_id and hs_condition and hs_condition_is_congenital
                 # concatenate and write out as pk_name
                 elif (table_name == "hles_health_condition"):
                     entity_name = pk_prefix + table_name + '_id'
-                    row[entity_name] = ('%s-%s' % (row.get('dog_id'), row.get('hs_condition')))
+                    # grab the congenital flag and convert to int
+                    congenital_flag = row.get('hs_condition_is_congenital')
+                    if congenital_flag == True:
+                        congenital_flag = 1
+                    elif congenital_flag == False:
+                        congenital_flag = 0
+                    else:
+                        print ("Error, 'hs_condition_is_congenital' is not populated in {0}"
+                            .format(table_name))
+                    row[entity_name] = ('%s-%s-%s' % 
+                        (row.get('dog_id'), row.get('hs_condition'), congenital_flag))
                     # store data
                     column_set.update(row.keys())
                     row_list.append(row)
@@ -79,11 +87,10 @@ for table_name in table_names:
     column_set.remove(entity_name)
     sorted_column_set = sorted(list(column_set))    
     sorted_column_set.insert(0, entity_name)
-
+    # provide some stats
     col_count = len(sorted_column_set)
-    print("...%s contains %s rows and %s columns" % (table_name, row_count, col_count))
-
-
+    print("...%s contains %s rows and %s columns" % 
+        (table_name, row_count, col_count))
     # output to tsv
     # 512 column max limit per request (upload to workspace) 
     if (col_count > 512):
@@ -96,7 +103,8 @@ for table_name in table_names:
         for chunk in range(1, chunks+1):
             # Incremented outfile name
             output_location = output_dir + '/' + table_name+'_%s' % chunk + '.tsv'
-            print("...Processing Split #{0} to {1}".format(chunk, output_location))
+            print("...Processing Split #{0} to {1}"
+                  .format(chunk, output_location))
             with open(output_location, 'w') as output_file:
                 split_column_set = set()
                 # add 511 columns
@@ -106,16 +114,18 @@ for table_name in table_names:
                         # add column to split
                         split_column_set.add(col)
                         col_counter = len(split_column_set)
-                        printd("......adding {0} to split_column_set ({1}) ...{2} columns left".format(col, col_counter, len(column_set)))
+                        printd("......adding {0} to split_column_set ({1}) ...{2} columns left"
+                               .format(col, col_counter, len(column_set)))
                 # remove the split_column_set from column_set
-                column_set = [x for x in column_set if x not in split_column_set]
+                column_set = [x for x in column_set 
+                             if x not in split_column_set]
                 split_column_list = sorted(list(split_column_set))
                 # add PK to each split as first column                
                 split_column_list.insert(0, entity_name)
-                print("......Split #{0} now contains {1} columns".format(chunk, len(split_column_list)))
+                print("......Split #{0} now contains {1} columns"
+                      .format(chunk, len(split_column_list)))
                 printd("cols in split: {0}".format(len(split_column_list)))
                 printd("cols left to split: {0}".format(len(column_set)))
-                
                 # split rows
                 split_row_dict_list = list()
                 # iterate through every row looking for every column for this split
@@ -128,13 +138,16 @@ for table_name in table_names:
                             split_row_dict[col] = (dict(row).get(col))
                         else:
                             pass
+                    # add the row to the list of rows for this
                     split_row_dict_list.append(split_row_dict)
                 # output to tsv
                 dw = csv.DictWriter(output_file, split_column_list, delimiter='\t')
                 dw.writeheader()
                 dw.writerows(split_row_dict_list)
-            print("......{0} Split #{1} was successfully written to {2}".format(table_name, chunk, output_location))
+            print("......{0} Split #{1} was successfully written to {2}"
+                .format(table_name, chunk, output_location))
     else:
+        # this thread is executed for any tables with 512 cols or less
         print("...No need to split files for {0}".format(table_name))
         output_location = output_dir + '/' + table_name + '.tsv'
         print("...Writing {0} to {1}".format(table_name, output_location))
