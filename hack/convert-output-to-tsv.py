@@ -24,6 +24,7 @@ def printd(x):
         print("[DEBUG] "+x)
     else:
         pass
+
 # Process the known (hardcoded) tables
 for table_name in table_names:
     print ("\nPROCESSING {0}".format(table_name))
@@ -87,6 +88,7 @@ for table_name in table_names:
     column_set.remove(entity_name)
     sorted_column_set = sorted(list(column_set))    
     sorted_column_set.insert(0, entity_name)
+
     # provide some stats
     col_count = len(sorted_column_set)
     print("...%s contains %s rows and %s columns" % 
@@ -135,7 +137,11 @@ for table_name in table_names:
                         # if a whitelisted col exists in this row
                         if (col in dict(row).keys()):
                             # add the col to the split list
-                            split_row_dict[col] = (dict(row).get(col))
+                            # clean up whitespace
+                            try:
+                                split_row_dict[col] = (dict(row).get(col)).replace('\r\n',' ').strip()
+                            except AttributeError:
+                                split_row_dict[col] = (dict(row).get(col))
                         else:
                             pass
                     # add the row to the list of rows for this
