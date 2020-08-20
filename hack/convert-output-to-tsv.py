@@ -27,7 +27,7 @@ def printd(x):
 
 # Process the known (hardcoded) tables
 for table_name in table_names:
-    print ("\nPROCESSING {0}".format(table_name))
+    print (f"\nPROCESSING {table_name}")
     # get the set of files in the directory
     full_input_directory = input_dir + '/' + table_name
     # ingore hidden files and sort files alphabetically
@@ -38,7 +38,7 @@ for table_name in table_names:
     row_list = []
     # read json data    
     for json_file_name in input_files:
-        print("...Opening {0}".format(full_input_directory+'/'+json_file_name))
+        print(f"...Opening {full_input_directory+'/'+json_file_name}")
         with open(full_input_directory + '/' + json_file_name, 'r') as json_file:
             row_count = 0
             for jsonObj in json_file:
@@ -73,15 +73,14 @@ for table_name in table_names:
                     elif congenital_flag == False:
                         congenital_flag = 0
                     else:
-                        print ("Error, 'hs_condition_is_congenital' is not populated in {0}"
-                            .format(table_name))
+                        print (f"Error, 'hs_condition_is_congenital' is not populated in {table_name}")
                     row[entity_name] = ('%s-%s-%s' % 
                         (row.get('dog_id'), row.get('hs_condition'), congenital_flag))
                     # store data
                     column_set.update(row.keys())
                     row_list.append(row)
                 else:
-                    print("Unrecognized table: %s" % table_name)
+                    print(f"Unrecognized table: {table_name}")
 
     # make sure pk is the first column
     # pop out the PK, will be splitting this set out later
@@ -91,22 +90,20 @@ for table_name in table_names:
 
     # provide some stats
     col_count = len(sorted_column_set)
-    print("...%s contains %s rows and %s columns" % 
-        (table_name, row_count, col_count))
+    print(f"...{table_name} contains {row_count} rows and {col_count} columns")
     # output to tsv
     # 512 column max limit per request (upload to workspace) 
     if (col_count > 512):
         # calculate chunks needed - each table requires the PK
         total_col_count = ceil(col_count/512)+col_count-1
         chunks = ceil(total_col_count/512)
-        print("...Splitting %s into %s files" % (table_name, chunks))
-        print("...{0} cols in init list".format(len(column_set)))
+        print(f"...Splitting {table_name} into {chunks} files")
+        print(f"...{len(column_set)} cols in init list")
         # FOR EACH SPLIT
         for chunk in range(1, chunks+1):
             # Incremented outfile name
             output_location = output_dir + '/' + table_name+'_%s' % chunk + '.tsv'
-            print("...Processing Split #{0} to {1}"
-                  .format(chunk, output_location))
+            print(f"...Processing Split #{chunk} to {output_location}")
             with open(output_location, 'w') as output_file:
                 split_column_set = set()
                 # add 511 columns
@@ -116,18 +113,16 @@ for table_name in table_names:
                         # add column to split
                         split_column_set.add(col)
                         col_counter = len(split_column_set)
-                        printd("......adding {0} to split_column_set ({1}) ...{2} columns left"
-                               .format(col, col_counter, len(column_set)))
+                        printd(f"......adding {col} to split_column_set ({col_counter}) ...{len(column_set)} columns left")
                 # remove the split_column_set from column_set
                 column_set = [x for x in column_set 
                              if x not in split_column_set]
                 split_column_list = sorted(list(split_column_set))
                 # add PK to each split as first column                
                 split_column_list.insert(0, entity_name)
-                print("......Split #{0} now contains {1} columns"
-                      .format(chunk, len(split_column_list)))
-                printd("cols in split: {0}".format(len(split_column_list)))
-                printd("cols left to split: {0}".format(len(column_set)))
+                print(f"......Split #{chunk} now contains {len(split_column_list)} columns")
+                printd(f"cols in split: {len(split_column_list)}")
+                printd(f"cols left to split: {len(column_set)}")
                 # split rows
                 split_row_dict_list = list()
                 # iterate through every row looking for every column for this split
@@ -150,15 +145,14 @@ for table_name in table_names:
                 dw = csv.DictWriter(output_file, split_column_list, delimiter='\t')
                 dw.writeheader()
                 dw.writerows(split_row_dict_list)
-            print("......{0} Split #{1} was successfully written to {2}"
-                .format(table_name, chunk, output_location))
+            print(f"......{table_name} Split #{chunk} was successfully written to {output_location}")
     else:
         # this thread is executed for any tables with 512 cols or less
-        print("...No need to split files for {0}".format(table_name))
+        print(f"...No need to split files for {table_name}")
         output_location = output_dir + '/' + table_name + '.tsv'
-        print("...Writing {0} to {1}".format(table_name, output_location))
+        print(f"...Writing {table_name} to {output_location}")
         with open(output_location, 'w') as output_file:
             dw = csv.DictWriter(output_file, sorted_column_set, delimiter='\t')
             dw.writeheader()
             dw.writerows(row_list)
-        print("...{0} was successfully written to {1}".format(table_name, output_location))
+        print(f"...{table_name} was successfully written to {output_location}")
