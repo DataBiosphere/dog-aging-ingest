@@ -1,0 +1,18 @@
+{
+  "name": "hles_label_mapping",
+  "columns": [
+    {
+      "name": "column_name",
+      "datatype": "string"
+    },
+    {
+      "name": "raw_value",
+      "datatype": "integer",
+      "type": "primary_key"
+    },
+    {
+      "name": "label",
+      "datatype": "string"
+    }
+  ]
+}
