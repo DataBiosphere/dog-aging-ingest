@@ -22,8 +22,6 @@ object OwnerTransformations {
 
   /** Parse all owner-related fields out of a raw RedCap record. */
   def mapOwner(rawRecord: RawRecord): HlesOwner = {
-    val education = rawRecord.getOptionalNumber("od_education")
-
     val raceValues = rawRecord.fields.get("od_race")
     val otherRace = raceValues.map(_.contains("98"))
 
@@ -36,12 +34,7 @@ object OwnerTransformations {
     HlesOwner(
       ownerId = rawRecord.getRequired("st_owner_id").toLong,
       odAgeRangeYears = rawRecord.getOptionalNumber("od_age"),
-      odMaxEducation = education,
-      odMaxEducationOtherDescription = if (education.contains(98)) {
-        rawRecord.getOptional("od_education_other")
-      } else {
-        None
-      },
+      odMaxEducation = rawRecord.getOptionalNumber("od_education"),
       odRaceWhite = raceValues.map(_.contains("1")),
       odRaceBlackOrAfricanAmerican = raceValues.map(_.contains("2")),
       odRaceAsian = raceValues.map(_.contains("3")),

@@ -10,8 +10,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
   private val exampleOwnerFields = Map[String, Array[String]](
     "st_owner_id" -> Array("10"),
     "od_age" -> Array("5"),
-    "od_education" -> Array("98"),
-    "od_education_other" -> Array("other education"),
+    "od_education" -> Array("2"),
     "od_race" -> Array("1", "4", "98"),
     "od_race_other" -> Array("some description"),
     "od_hispanic_yn" -> Array("1"),
@@ -39,8 +38,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     output.ownerId shouldBe 10
     // owner demographic info
     output.odAgeRangeYears shouldBe Some(5)
-    output.odMaxEducation shouldBe Some(98)
-    output.odMaxEducationOtherDescription shouldBe Some("other education")
+    output.odMaxEducation shouldBe Some(2)
     output.odRaceWhite shouldBe Some(true)
     output.odRaceBlackOrAfricanAmerican shouldBe Some(false)
     output.odRaceAsian shouldBe Some(false)
