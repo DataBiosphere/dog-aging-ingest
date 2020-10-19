@@ -10,6 +10,10 @@
         <appender-ref ref="STDOUT" />
     </logger>
 
+    <logger name="org.broadinstitute" level="ERROR" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+
     <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>

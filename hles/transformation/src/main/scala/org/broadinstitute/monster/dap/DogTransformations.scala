@@ -11,7 +11,7 @@ object DogTransformations {
 
     rawRecord.getOptional("st_owner_id") match {
       case None =>
-        MissingOwnerId(s"Record $dog_id has more/less than 1 value for field st_owner_id")
+        MissingOwnerId(s"Record $dog_id has more/less than 1 value for field st_owner_id").log()
         None
       case Some(ownerId) =>
         Some(
