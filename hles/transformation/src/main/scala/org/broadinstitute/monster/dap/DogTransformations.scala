@@ -11,13 +11,13 @@ object DogTransformations {
 
     rawRecord.getOptional("st_owner_id") match {
       case None =>
-        MissingOwnerId(s"Record $dog_id has more/less than 1 value for field st_owner_id").log()
+        MissingOwnerId(s"Record $dog_id has more/less than 1 value for field st_owner_id")
         None
-      case Some(ownerId) =>
+      case Some(owner_id) =>
         Some(
           HlesDog(
             dogId = dog_id,
-            ownerId = ownerId.toLong,
+            ownerId = owner_id.toLong,
             hlesDogStudyStatus = Some(StudyStatusTransformations.mapStudyStatus(rawRecord)),
             hlesDogDemographics = Some(DemographicsTransformations.mapDemographics(rawRecord)),
             hlesDogResidences = Some(DogResidenceTransformations.mapDogResidences(rawRecord)),
