@@ -30,7 +30,7 @@ class DogTransformationsSpec extends AnyFlatSpec with Matchers with OptionValues
     )
   }
 
-  it should "verifies that None is returned when st_owner_id is missing" in {
+  it should "should not map dog when st_owner_id is missing" in {
     val mapped = DogTransformations.mapDog(RawRecord(1, Map()))
     mapped shouldBe None
   }

@@ -1,7 +1,7 @@
 package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesOwner
-import org.scalactic.Fail
+import org.scalatest.FailedStatus
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -82,7 +82,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     val output = OwnerTransformations.mapOwner(exampleOwnerRecord)
 
     output match {
-      case None => Fail
+      case None => FailedStatus
       case Some(owner) =>
         owner.ocSecondaryResidenceState shouldBe None
         owner.ocSecondaryResidenceZip shouldBe None
@@ -95,5 +95,11 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     val emptyRecord = RawRecord(id = 1, Map[String, Array[String]]("st_owner_id" -> Array("5")))
 
     OwnerTransformations.mapOwner(emptyRecord) shouldBe Some(HlesOwner.init(ownerId = 5))
+  }
+
+  it should "should not map owner when st_owner_id is missing" in {
+    val emptyRecord = RawRecord(id = 2, Map())
+
+    OwnerTransformations.mapOwner(emptyRecord) shouldBe None
   }
 }

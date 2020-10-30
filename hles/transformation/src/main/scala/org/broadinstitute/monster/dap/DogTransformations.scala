@@ -2,6 +2,7 @@ package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.dap.dog._
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
+import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
 
 object DogTransformations {
 
@@ -11,7 +12,7 @@ object DogTransformations {
 
     rawRecord.getOptional("st_owner_id") match {
       case None =>
-        MissingOwnerId(s"Record $dog_id has more/less than 1 value for field st_owner_id")
+        MissingOwnerIdError(s"Record $dog_id has more/less than 1 value for field st_owner_id").log
         None
       case Some(owner_id) =>
         Some(

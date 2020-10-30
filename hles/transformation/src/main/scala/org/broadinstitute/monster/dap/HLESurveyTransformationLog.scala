@@ -27,4 +27,4 @@ class HLESurveyTransformationError(msg: String) extends HLESurveyTransformationL
 }
 
 // case classes for all the different actual warnings and errors we want to raise during the workflow
-case class MissingOwnerId(msg: String) extends HLESurveyTransformationError(msg)
+case class MissingOwnerIdError(msg: String) extends HLESurveyTransformationError(msg)
