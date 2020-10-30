@@ -2,17 +2,45 @@
   "name": "hles_label_mapping",
   "columns": [
     {
-      "name": "column_name",
-      "datatype": "string"
-    },
-    {
-      "name": "raw_value",
+      "name": "label_mapping_id",
       "datatype": "integer",
       "type": "primary_key"
     },
     {
-      "name": "label",
+      "name": "tdr_column_name",
+      "datatype": "string",
+    },
+    {
+      "name": "tdr_variable_type",
+      "datatype": "string",
+    },
+    {
+      "name": "tdr_raw_value",
+      "datatype": "string",
+    },
+    {
+      "name": "tdr_table_name",
+      "datatype": "string",
+    },
+    {
+      "name": "tdr_value_labels",
       "datatype": "string"
+    },
+    {
+      "name": "rc_survey_question_text",
+      "datatype": "string",
+    },
+    {
+      "name": "rc_variable_name",
+      "datatype": "string",
+    },
+    {
+      "name": "rc_variable_type",
+      "datatype": "string",
+    },
+    {
+      "name": "transformation_variable_name",
+      "datatype": "string",
     }
   ]
 }
