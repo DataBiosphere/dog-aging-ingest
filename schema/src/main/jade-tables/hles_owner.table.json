@@ -15,10 +15,6 @@
       "datatype": "integer"
     },
     {
-      "name": "od_max_education_other_description",
-      "datatype": "string"
-    },
-    {
       "name": "od_race_white",
       "datatype": "boolean"
     },
