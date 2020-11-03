@@ -8,19 +8,19 @@
     },
     {
       "name": "tdr_column_name",
-      "datatype": "string",
+      "datatype": "string"
     },
     {
       "name": "tdr_variable_type",
-      "datatype": "string",
+      "datatype": "string"
     },
     {
       "name": "tdr_raw_value",
-      "datatype": "string",
+      "datatype": "string"
     },
     {
       "name": "tdr_table_name",
-      "datatype": "string",
+      "datatype": "string"
     },
     {
       "name": "tdr_value_labels",
@@ -28,19 +28,19 @@
     },
     {
       "name": "rc_survey_question_text",
-      "datatype": "string",
+      "datatype": "string"
     },
     {
       "name": "rc_variable_name",
-      "datatype": "string",
+      "datatype": "string"
     },
     {
       "name": "rc_variable_type",
-      "datatype": "string",
+      "datatype": "string"
     },
     {
-      "name": "transformation_variable_name",
-      "datatype": "string",
+      "name": "rc_required_field",
+      "datatype": "string"
     }
   ]
 }

@@ -5,6 +5,7 @@ import com.spotify.scio.values.SCollection
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.common.msg._
 import org.slf4j.{Logger, LoggerFactory}
+import org.broadinstitute.monster.dogaging.jadeschema.table.HlesLabelMapping
 
 object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
   /**
@@ -20,6 +21,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
 
     val rawRecords = readRecords(ctx, args)
+    val dataDictionaries = readMetadata(ctx, args)
     val dogs = rawRecords.transform("Map Dogs")(_.map(DogTransformations.mapDog))
     val owners = rawRecords.transform("Map Owners")(_.map(OwnerTransformations.mapOwner))
     val cancer_conditions =
@@ -30,7 +32,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
       _.flatMap(HealthTransformations.mapHealthConditions)
     )
     val label_mappings = rawRecords.transform("Map label mappings")(
-      _.flatMap(LabelMappings.mapLabelMappings)
+      _.flatMap(LabelMappings.mapLabels)
     )
 
     StorageIO.writeJsonLists(dogs, "Dogs", s"${args.outputPrefix}/hles_dog")
@@ -76,5 +78,49 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
             }
           RawRecord(id.toLong, fields)
       }
+  }
+
+  /** Read in metadata */
+  def readMetadata(ctx: ScioContext, args: Args): SCollection[RawRecord] = {
+    val rawMetadata = StorageIO
+      .readJsonLists(
+        ctx,
+        "RedCap Fields",
+        s"${args.inputPrefix}/data_dictionaries/*.json"
+      )
+
+    //TODO NEED AN OBJECT THAT I CAN QUERY (SIMILAR TO A RAWRECORD)
+    val tdrRawValue = rawMetadata.getOptional("select_choices_or_calculations")
+    val tdrValueLabels = rawMetadata.getOptional("select_choices_or_calculations"),
+    val rcSurveyQuestionText = rawMetadata.getOptional("field_label"),
+    val rcVariableName = rawMetadata.getOptional("field_name"),
+    val rcVariableType = rawMetadata.getOptional("field_type"),
+    val rcRequiredField = rawMetadata.getOptional("required_field")
+
+    
+    // Write an entry to the label mapping table
+    Some(
+      HlesLabelMapping(
+        //TODO AUTOINCREMENTING KEY
+        labelMappingId = ,
+
+        //TODO MATCH ON rcVariableName and pull from TRANSFORM CODE???
+        tdrColumnName = ,
+
+        //TODO MATCH ON tdrColumnName and pull from SCHEMA
+        tdrVariableType = ,
+
+        tdrRawValue = rawMetadata.getOptional("select_choices_or_calculations"),
+
+        //TODO MATCH ON tdrColumnName and pull from SCHEMA
+        tdrTableName = ,
+        tdrValueLabels = rawMetadata.getOptional("select_choices_or_calculations"),
+        rcSurveyQuestionText = rawMetadata.getOptional("field_label"),
+        rcVariableName = rawMetadata.getOptional("field_name"),
+        rcVariableType = rawMetadata.getOptional("field_type"),
+        rcRequiredField = rawMetadata.getOptional("required_field")
+      )
+    )
+    RawRecord(0, fields)
   }
 }
