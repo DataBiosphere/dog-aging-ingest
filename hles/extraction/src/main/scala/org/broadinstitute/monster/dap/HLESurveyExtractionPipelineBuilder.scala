@@ -30,6 +30,8 @@ object HLESurveyExtractionPipelineBuilder {
   )
 
   val ExtractionFilters: Map[String, String] = ExtractedForms
+    .filter(_ == "st_dap_pack_count") // DAP Pack members should have a count
+    .filter(_ == "st_dap_pack_date") // DAP Pack members sh
     .filterNot(_ == "study_status") // For some reason, study_status is never marked as completed.
     .map(form => s"${form}_complete" -> "2") // Magic marker for "completed".
     .toMap + ("co_consent" -> "1")
