@@ -26,7 +26,8 @@ object HLESurveyExtractionPipelineBuilder {
     "meds_and_preventives",
     "health_status",
     "additional_studies",
-    "study_status"
+    "study_status",
+    "canine_social_and_learned_behavior"
   )
 
   val ExtractionFilters: Map[String, String] = ExtractedForms
