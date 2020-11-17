@@ -29,7 +29,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     val health_conditions = rawRecords.transform("Map health conditions")(
       _.flatMap(HealthTransformations.mapHealthConditions)
     )
-
+    // foo the bar
     StorageIO.writeJsonLists(dogs, "Dogs", s"${args.outputPrefix}/hles_dog")
     StorageIO.writeJsonLists(owners, "Owners", s"${args.outputPrefix}/hles_owner")
     StorageIO.writeJsonLists(
