@@ -1,5 +1,5 @@
 {
-  "name": "hles_cslb",
+  "name": "cslb",
   "columns": [
     {
       "name": "dog_id",

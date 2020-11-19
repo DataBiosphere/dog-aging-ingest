@@ -3,7 +3,7 @@ package org.broadinstitute.monster.dap
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
 
-import org.broadinstitute.monster.dogaging.jadeschema.table.HlesCslb
+import org.broadinstitute.monster.dogaging.jadeschema.table.Cslb
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
@@ -70,7 +70,7 @@ class CslbTransformationSpec extends AnyFlatSpec {
       RawRecord(id = 1, Map("study_id" -> Array("1234"), "cslb_date" -> Array("2020-11-19")))
     val output = CslbTransformations.mapCslbData(emptyRecord).get
     output shouldBe
-      HlesCslb(
+      Cslb(
         1234,
         LocalDate.parse("2020-11-19"),
         None,

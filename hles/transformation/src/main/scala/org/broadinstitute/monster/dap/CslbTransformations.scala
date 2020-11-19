@@ -1,14 +1,14 @@
 package org.broadinstitute.monster.dap
 
-import org.broadinstitute.monster.dogaging.jadeschema.table.HlesCslb
+import org.broadinstitute.monster.dogaging.jadeschema.table.Cslb
 
 object CslbTransformations {
 
-  def mapCslbData(rawRecord: RawRecord): Option[HlesCslb] =
+  def mapCslbData(rawRecord: RawRecord): Option[Cslb] =
     rawRecord.getOptionalDate("cslb_date") match {
       case Some(cslbDate) =>
         Some(
-          HlesCslb(
+          Cslb(
             dogId = rawRecord.getRequired("study_id").toLong,
             cslbDate = cslbDate,
             cslbPace = rawRecord.getOptionalNumber("cslb_pace"),
