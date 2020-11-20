@@ -9,7 +9,6 @@ import upack._
 import scala.collection.mutable
 
 object ExtractionPipelineBuilderSpec {
-
   val token = "pls-let-me-in"
   val start = OffsetDateTime.now()
   val end = start.plusDays(3).plusHours(10).minusSeconds(100)
@@ -81,7 +80,7 @@ class ExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
       getClient = () => mockClient
     )
 
-  behavior of "HLESurveyExtractionPipelineBuilder"
+  behavior of "ExtractionPipelineBuilder"
 
   it should "query RedCap for records correctly" in {
     mockClient.recordedRequests.toSet should contain allElementsOf (Set(initQuery)
