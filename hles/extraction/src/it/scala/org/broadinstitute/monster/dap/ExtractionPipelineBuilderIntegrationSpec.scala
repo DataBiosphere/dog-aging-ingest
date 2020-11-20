@@ -7,7 +7,7 @@ import com.bettercloud.vault.{SslConfig, Vault, VaultConfig}
 import org.broadinstitute.monster.common.PipelineBuilderSpec
 import org.broadinstitute.monster.common.msg.JsonParser
 
-class HLESurveyExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
+class ExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
   import org.broadinstitute.monster.common.msg.MsgOps
 
   val outputDir = File.newTemporaryDirectory()
@@ -57,7 +57,7 @@ class HLESurveyExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderS
 
   it should "only download records that have completed all HLES instruments" in {
     readMsgs(outputDir, "records/*.json").foreach { record =>
-      HLESurveyExtractionPipelineBuilder.ExtractionFilters
+      HLESurveyExtractionPipeline.HLESExtractionFilters
         .get(record.read[String]("field_name"))
         .foreach(expected => record.read[String]("value") shouldBe expected)
     }

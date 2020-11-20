@@ -8,8 +8,8 @@ import upack._
 
 import scala.collection.mutable
 
-object HLESurveyExtractionPipelineBuilderSpec {
-  import HLESurveyExtractionPipelineBuilder._
+object ExtractionPipelineBuilderSpec {
+  import ExtractionPipelineBuilder._
 
   val token = "pls-let-me-in"
   val start = OffsetDateTime.now()
@@ -57,8 +57,8 @@ object HLESurveyExtractionPipelineBuilderSpec {
   )
 }
 
-class HLESurveyExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
-  import HLESurveyExtractionPipelineBuilderSpec._
+class ExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
+  import ExtractionPipelineBuilderSpec._
 
   val outputDir = File.newTemporaryDirectory()
   override def afterAll(): Unit = outputDir.delete()
@@ -71,7 +71,7 @@ class HLESurveyExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
   )
 
   override val builder =
-    new HLESurveyExtractionPipelineBuilder(idBatchSize = 1, getClient = () => mockClient)
+    new ExtractionPipelineBuilder(idBatchSize = 1, getClient = () => mockClient)
 
   behavior of "HLESurveyExtractionPipelineBuilder"
 

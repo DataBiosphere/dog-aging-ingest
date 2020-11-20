@@ -8,8 +8,29 @@ import Args._
 /** Entry-point for the HLE extraction pipeline. */
 object HLESurveyExtractionPipeline extends ScioApp[Args] {
 
+  /** Names of all forms we want to extract as part of HLE ingest. */
+  val HLESForms = List(
+    "recruitment_fields",
+    "owner_contact",
+    "owner_demographics",
+    "dog_demographics",
+    "environment",
+    "physical_activity",
+    "behavior",
+    "diet",
+    "meds_and_preventives",
+    "health_status",
+    "additional_studies",
+    "study_status"
+  )
+
+  val HLESExtractionFilters: Map[String, String] = HLESForms
+    .filterNot(_ == "study_status") // For some reason, study_status is never marked as completed.
+    .map(form => s"${form}_complete" -> "2") // Magic marker for "completed".
+    .toMap + ("co_consent" -> "1")
+
   override def pipelineBuilder: PipelineBuilder[Args] =
     // Use a batch size of 100 because it seems to work well enough.
     // We might need to revisit this as more dogs are consented.
-    new HLESurveyExtractionPipelineBuilder(100, RedCapClient.apply)
+    new ExtractionPipelineBuilder(HLESForms, HLESExtractionFilters, 100, RedCapClient.apply)
 }
