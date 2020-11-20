@@ -41,10 +41,10 @@ object ExtractionPipelineBuilderSpec {
   }
 
   val downloadDataDictionary =
-    HLESurveyExtractionPipeline.forms.map(instrument => GetDataDictionary(instrument): RedcapRequest)
+    forms.map(instrument => GetDataDictionary(instrument): RedcapRequest)
 
   val expectedDataDictionary =
-    HLESurveyExtractionPipeline.forms.map(i => Obj(Str("value") -> Str(i)): Msg)
+    forms.map(i => Obj(Str("value") -> Str(i)): Msg)
 
   val mockClient = new MockRedCapClient(
     token,
@@ -62,6 +62,7 @@ class ExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
   import ExtractionPipelineBuilderSpec._
 
   val outputDir = File.newTemporaryDirectory()
+
   override def afterAll(): Unit = outputDir.delete()
 
   override val testArgs = Args(
@@ -75,7 +76,7 @@ class ExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
     new ExtractionPipelineBuilder(
       forms,
       filters,
-      "fake_job_tag",
+      "",
       idBatchSize = 1,
       getClient = () => mockClient
     )
