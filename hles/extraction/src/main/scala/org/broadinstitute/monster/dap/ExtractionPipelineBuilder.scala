@@ -29,6 +29,8 @@ object ExtractionPipelineBuilder {
   * @param formsForExtraction List of forms to be pulled from RedCap
   * @param extractionFilters Map of filters to be applied whenn pulling RedCap
   *                          data
+  * @param subDir: Sub directory name where data from this pipeline should be
+  *                written
   * @param idBatchSize max number of IDs to include per batch when
   *                    downloading record data
   * @param getClient function that will produce a client which can
@@ -37,7 +39,7 @@ object ExtractionPipelineBuilder {
 class ExtractionPipelineBuilder(
   formsForExtraction: List[String],
   extractionFilters: Map[String, String],
-  jobTag: String,
+  subDir: String,
   idBatchSize: Int,
   getClient: () => RedCapClient
 ) extends PipelineBuilder[Args]
@@ -104,12 +106,12 @@ class ExtractionPipelineBuilder(
     StorageIO.writeJsonLists(
       extractedRecords,
       "HLE Records",
-      s"${args.outputPrefix}/${jobTag}/records"
+      s"${args.outputPrefix}/${subDir}/records"
     )
     StorageIO.writeJsonLists(
       extractedDataDictionaries,
       "HLE Data Dictionaries",
-      s"${args.outputPrefix}/${jobTag}/data_dictionaries"
+      s"${args.outputPrefix}/${subDir}/data_dictionaries"
     )
     ()
   }

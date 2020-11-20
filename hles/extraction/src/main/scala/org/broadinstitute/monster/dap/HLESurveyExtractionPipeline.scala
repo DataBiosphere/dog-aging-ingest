@@ -29,10 +29,10 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
     .map(form => s"${form}_complete" -> "2") // Magic marker for "completed".
     .toMap + ("co_consent" -> "1")
 
-  val jobTag = "hles"
+  val subdir = "hles"
 
   override def pipelineBuilder: PipelineBuilder[Args] =
     // Use a batch size of 100 because it seems to work well enough.
     // We might need to revisit this as more dogs are consented.
-    new ExtractionPipelineBuilder(forms, extractionFilters, jobTag, 100, RedCapClient.apply)
+    new ExtractionPipelineBuilder(forms, extractionFilters, subdir, 100, RedCapClient.apply)
 }
