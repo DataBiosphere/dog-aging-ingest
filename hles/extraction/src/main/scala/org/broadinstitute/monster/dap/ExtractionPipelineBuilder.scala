@@ -37,6 +37,7 @@ object ExtractionPipelineBuilder {
 class ExtractionPipelineBuilder(
   formsForExtraction: List[String],
   extractionFilters: Map[String, String],
+  jobTag: String,
   idBatchSize: Int,
   getClient: () => RedCapClient
 ) extends PipelineBuilder[Args]
@@ -56,9 +57,7 @@ class ExtractionPipelineBuilder(
           client.get(args.apiToken, input)
       }
 
-    // Start by pulling the IDs of all records that:
-    //  1. Have consented to participate in HLES
-    //  2. Have completed all the HLES forms we care about
+    // Start by pulling the IDs that match the supplied filtering criteria
     val initRequest = GetRecords(
       fields = List("study_id"),
       start = args.startTime,
@@ -105,12 +104,12 @@ class ExtractionPipelineBuilder(
     StorageIO.writeJsonLists(
       extractedRecords,
       "HLE Records",
-      s"${args.outputPrefix}/records"
+      s"${args.outputPrefix}/${jobTag}/records"
     )
     StorageIO.writeJsonLists(
       extractedDataDictionaries,
       "HLE Data Dictionaries",
-      s"${args.outputPrefix}/data_dictionaries"
+      s"${args.outputPrefix}/${jobTag}/data_dictionaries"
     )
     ()
   }

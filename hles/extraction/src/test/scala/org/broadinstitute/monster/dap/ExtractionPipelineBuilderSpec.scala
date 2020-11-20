@@ -16,18 +16,20 @@ object ExtractionPipelineBuilderSpec {
   val end = start.plusDays(3).plusHours(10).minusSeconds(100)
 
   val fakeIds = 1 to 50
+  val forms = List("fake_form_1", "fake_form_2")
+  val filters = Map("foo" -> "Bar")
 
   val initQuery = GetRecords(
     start = Some(start),
     end = Some(end),
     fields = List("study_id"),
-    filters = ExtractionFilters
+    filters = filters
   ): RedcapRequest
 
   val downloadRecords = fakeIds.map { i =>
     GetRecords(
       ids = List(i.toString),
-      forms = ExtractedForms,
+      forms = forms,
       fields = List("co_consent")
     ): RedcapRequest
   }
@@ -41,9 +43,10 @@ object ExtractionPipelineBuilderSpec {
   }
 
   val downloadDataDictionary =
-    ExtractedForms.map(instrument => GetDataDictionary(instrument): RedcapRequest)
+    HLESurveyExtractionPipeline.forms.map(instrument => GetDataDictionary(instrument): RedcapRequest)
 
-  val expectedDataDictionary = ExtractedForms.map(i => Obj(Str("value") -> Str(i)): Msg)
+  val expectedDataDictionary =
+    HLESurveyExtractionPipeline.forms.map(i => Obj(Str("value") -> Str(i)): Msg)
 
   val mockClient = new MockRedCapClient(
     token,
@@ -71,7 +74,13 @@ class ExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
   )
 
   override val builder =
-    new ExtractionPipelineBuilder(idBatchSize = 1, getClient = () => mockClient)
+    new ExtractionPipelineBuilder(
+      forms,
+      filters,
+      "fake_job_tag",
+      idBatchSize = 1,
+      getClient = () => mockClient
+    )
 
   behavior of "HLESurveyExtractionPipelineBuilder"
 
