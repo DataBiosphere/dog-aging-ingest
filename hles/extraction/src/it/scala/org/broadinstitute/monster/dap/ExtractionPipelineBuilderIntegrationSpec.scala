@@ -57,7 +57,7 @@ class ExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args]
 
   it should "only download records that have completed all HLES instruments" in {
     readMsgs(outputDir, "records/*.json").foreach { record =>
-      HLESurveyExtractionPipeline.HLESExtractionFilters
+      HLESurveyExtractionPipeline.extractionFilters
         .get(record.read[String]("field_name"))
         .foreach(expected => record.read[String]("value") shouldBe expected)
     }
