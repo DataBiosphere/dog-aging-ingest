@@ -26,7 +26,12 @@ object HLESurveyExtractionPipelineBuilder {
     "meds_and_preventives",
     "health_status",
     "additional_studies",
-    "study_status"
+    "study_status",
+    "geocoding_metadata",
+    "census_variables",
+    "pollutant_variables",
+    "temperature_and_precipitation_variables",
+    "walkability_variables"
   )
 
   val ExtractionFilters: Map[String, String] = ExtractedForms

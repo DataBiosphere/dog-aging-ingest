@@ -1,0 +1,29 @@
+{
+  "name": "environment_walkability",
+  "columns": [
+    {
+      "name": "wv_walkscore",
+      "datatype": "float"
+    },
+    {
+      "name": "wv_walkscore_descrip",
+      "datatype": "integer"
+    },
+    {
+      "name": "wv_walkscore_date",
+      "datatype": "float"
+    },
+    {
+      "name": "wv_housing_units",
+      "datatype": "float"
+    },
+    {
+      "name": "wv_res_density",
+      "datatype": "float"
+    },
+    {
+      "name": "wv_density_data_year",
+      "datatype": "integer"
+    }
+  ]
+}

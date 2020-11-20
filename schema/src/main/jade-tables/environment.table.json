@@ -1,0 +1,28 @@
+{
+  "name": "environment",
+  "columns": [
+    {
+      "name": "dog_id",
+      "datatype": "integer",
+      "type": "primary_key",
+      "links": [
+        {
+          "table_name": "hles_dog",
+          "column_name": "dog_id"
+        }
+      ]
+    },
+    {
+      "name": "address_month_year",
+      "datatype": "string",
+      "type": "required"
+    }
+  ],
+  "table_fragments": [
+    "environment_geocoding",
+    "environment_census",
+    "environment_pollutants",
+    "environment_temperature_precipitation",
+    "environment_walkability"
+  ]
+}
