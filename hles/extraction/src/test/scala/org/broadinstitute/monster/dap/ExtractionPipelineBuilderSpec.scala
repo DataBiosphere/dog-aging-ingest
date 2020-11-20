@@ -9,7 +9,6 @@ import upack._
 import scala.collection.mutable
 
 object ExtractionPipelineBuilderSpec {
-  import ExtractionPipelineBuilder._
 
   val token = "pls-let-me-in"
   val start = OffsetDateTime.now()
