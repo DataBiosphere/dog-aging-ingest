@@ -10,7 +10,7 @@ import org.broadinstitute.monster.buildinfo.DogAgingHlesExtractionBuildInfo
 
 @AppName("DAP HLE extraction pipeline")
 @AppVersion(DogAgingHlesExtractionBuildInfo.version)
-@ProgName("org.broadinstitute.monster.dap.CslbExtractionPipeline")
+@ProgName("dog-aging-ingest")
 case class Args(
   @HelpMessage("API token to use when querying RedCap")
   apiToken: String,
