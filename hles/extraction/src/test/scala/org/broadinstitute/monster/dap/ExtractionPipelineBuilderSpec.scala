@@ -8,26 +8,26 @@ import upack._
 
 import scala.collection.mutable
 
-object HLESurveyExtractionPipelineBuilderSpec {
-  import HLESurveyExtractionPipelineBuilder._
-
+object ExtractionPipelineBuilderSpec {
   val token = "pls-let-me-in"
   val start = OffsetDateTime.now()
   val end = start.plusDays(3).plusHours(10).minusSeconds(100)
 
   val fakeIds = 1 to 50
+  val forms = List("fake_form_1", "fake_form_2")
+  val filters = Map("foo" -> "Bar")
 
   val initQuery = GetRecords(
     start = Some(start),
     end = Some(end),
     fields = List("study_id"),
-    filters = ExtractionFilters
+    filters = filters
   ): RedcapRequest
 
   val downloadRecords = fakeIds.map { i =>
     GetRecords(
       ids = List(i.toString),
-      forms = ExtractedForms,
+      forms = forms,
       fields = List("co_consent")
     ): RedcapRequest
   }
@@ -41,9 +41,10 @@ object HLESurveyExtractionPipelineBuilderSpec {
   }
 
   val downloadDataDictionary =
-    ExtractedForms.map(instrument => GetDataDictionary(instrument): RedcapRequest)
+    forms.map(instrument => GetDataDictionary(instrument): RedcapRequest)
 
-  val expectedDataDictionary = ExtractedForms.map(i => Obj(Str("value") -> Str(i)): Msg)
+  val expectedDataDictionary =
+    forms.map(i => Obj(Str("value") -> Str(i)): Msg)
 
   val mockClient = new MockRedCapClient(
     token,
@@ -57,10 +58,11 @@ object HLESurveyExtractionPipelineBuilderSpec {
   )
 }
 
-class HLESurveyExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
-  import HLESurveyExtractionPipelineBuilderSpec._
+class ExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
+  import ExtractionPipelineBuilderSpec._
 
   val outputDir = File.newTemporaryDirectory()
+
   override def afterAll(): Unit = outputDir.delete()
 
   override val testArgs = Args(
@@ -71,9 +73,15 @@ class HLESurveyExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
   )
 
   override val builder =
-    new HLESurveyExtractionPipelineBuilder(idBatchSize = 1, getClient = () => mockClient)
+    new ExtractionPipelineBuilder(
+      forms,
+      filters,
+      "",
+      idBatchSize = 1,
+      getClient = () => mockClient
+    )
 
-  behavior of "HLESurveyExtractionPipelineBuilder"
+  behavior of "ExtractionPipelineBuilder"
 
   it should "query RedCap for records correctly" in {
     mockClient.recordedRequests.toSet should contain allElementsOf (Set(initQuery)

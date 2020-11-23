@@ -11,39 +11,13 @@ import upack.Msg
 import scala.concurrent.Future
 import scala.collection.JavaConverters._
 
-object HLESurveyExtractionPipelineBuilder {
-
-  /** Names of all forms we want to extract as part of HLE ingest. */
-  val ExtractedForms = List(
-    "recruitment_fields",
-    "owner_contact",
-    "owner_demographics",
-    "dog_demographics",
-    "environment",
-    "physical_activity",
-    "behavior",
-    "diet",
-    "meds_and_preventives",
-    "health_status",
-    "additional_studies",
-    "study_status",
-    "geocoding_metadata",
-    "census_variables",
-    "pollutant_variables",
-    "temperature_and_precipitation_variables",
-    "walkability_variables"
-  )
-
-  val ExtractionFilters: Map[String, String] = ExtractedForms
-    .filterNot(_ == "study_status") // For some reason, study_status is never marked as completed.
-    .map(form => s"${form}_complete" -> "2") // Magic marker for "completed".
-    .toMap + ("co_consent" -> "1")
+object ExtractionPipelineBuilder {
 
   val MaxConcurrentRequests = 8
 }
 
 /**
-  * Builder for the HLE extraction pipeline.
+  * Builder for an extraction pipeline.
   *
   * Sets up the pipeline to:
   *   1. Query the study IDs of all dogs, possibly within a fixed
@@ -52,12 +26,20 @@ object HLESurveyExtractionPipelineBuilder {
   *   3. Download the values of all HLE forms for each batch of IDs
   *   4. Write the downloaded forms to storage
   *
+  * @param formsForExtraction List of forms to be pulled from RedCap
+  * @param extractionFilters Map of filters to be applied whenn pulling RedCap
+  *                          data
+  * @param subDir: Sub directory name where data from this pipeline should be
+  *                written
   * @param idBatchSize max number of IDs to include per batch when
   *                    downloading record data
   * @param getClient function that will produce a client which can
   *                  interact with a RedCap API
   */
-class HLESurveyExtractionPipelineBuilder(
+class ExtractionPipelineBuilder(
+  formsForExtraction: List[String],
+  extractionFilters: Map[String, String],
+  subDir: String,
   idBatchSize: Int,
   getClient: () => RedCapClient
 ) extends PipelineBuilder[Args]
@@ -65,7 +47,7 @@ class HLESurveyExtractionPipelineBuilder(
 
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
     import org.broadinstitute.monster.common.msg.MsgOps
-    import HLESurveyExtractionPipelineBuilder._
+    import ExtractionPipelineBuilder._
 
     val lookupFn =
       new ScalaAsyncLookupDoFn[RedcapRequest, Msg, RedCapClient](MaxConcurrentRequests) {
@@ -77,14 +59,12 @@ class HLESurveyExtractionPipelineBuilder(
           client.get(args.apiToken, input)
       }
 
-    // Start by pulling the IDs of all records that:
-    //  1. Have consented to participate in HLES
-    //  2. Have completed all the HLES forms we care about
+    // Start by pulling the IDs that match the supplied filtering criteria
     val initRequest = GetRecords(
       fields = List("study_id"),
       start = args.startTime,
       end = args.endTime,
-      filters = ExtractionFilters
+      filters = extractionFilters
     )
     val idsToExtract = ctx
       .parallelize(Iterable(initRequest))
@@ -104,7 +84,7 @@ class HLESurveyExtractionPipelineBuilder(
       .map { ids =>
         GetRecords(
           ids = ids.getValue.asScala.toList,
-          forms = ExtractedForms,
+          forms = formsForExtraction,
           // Pull the consent field so we can QC that the filter is working properly.
           fields = List("co_consent")
         )
@@ -117,7 +97,7 @@ class HLESurveyExtractionPipelineBuilder(
 
     // Download the data dictionary for every form.
     val extractedDataDictionaries = ctx
-      .parallelize(ExtractedForms)
+      .parallelize(formsForExtraction)
       .map(instrument => GetDataDictionary(instrument))
       .transform("Get data dictionary") {
         _.applyKvTransform(ParDo.of(lookupFn)).flatMap(kv => kv.getValue.fold(throw _, _.arr))
@@ -126,12 +106,12 @@ class HLESurveyExtractionPipelineBuilder(
     StorageIO.writeJsonLists(
       extractedRecords,
       "HLE Records",
-      s"${args.outputPrefix}/records"
+      s"${args.outputPrefix}/${subDir}/records"
     )
     StorageIO.writeJsonLists(
       extractedDataDictionaries,
       "HLE Data Dictionaries",
-      s"${args.outputPrefix}/data_dictionaries"
+      s"${args.outputPrefix}/${subDir}/data_dictionaries"
     )
     ()
   }
