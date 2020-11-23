@@ -14,7 +14,15 @@ object CslbExtractionPipeline extends ScioApp[Args] {
     .toMap
 
   val subdir = "cslb"
+  val arm = "annual_2020_arm_1"
 
   override def pipelineBuilder: PipelineBuilder[Args] =
-    new ExtractionPipelineBuilder(forms, extractionFilters, subdir, 100, RedCapClient.apply)
+    new ExtractionPipelineBuilder(
+      forms,
+      extractionFilters,
+      arm,
+      subdir,
+      100,
+      RedCapClient.apply
+    )
 }

@@ -12,6 +12,7 @@ object ExtractionPipelineBuilderSpec {
   val token = "pls-let-me-in"
   val start = OffsetDateTime.now()
   val end = start.plusDays(3).plusHours(10).minusSeconds(100)
+  val event = "fake_event_1"
 
   val fakeIds = 1 to 50
   val forms = List("fake_form_1", "fake_form_2")
@@ -76,9 +77,10 @@ class ExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
     new ExtractionPipelineBuilder(
       forms,
       filters,
+      event,
       "",
       idBatchSize = 1,
-      getClient = () => mockClient
+      getClient = _ => mockClient
     )
 
   behavior of "ExtractionPipelineBuilder"

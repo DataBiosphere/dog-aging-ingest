@@ -30,9 +30,17 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
     .toMap + ("co_consent" -> "1")
 
   val subdir = "hles"
+  val arm = "baseline_arm_1"
 
   override def pipelineBuilder: PipelineBuilder[Args] =
     // Use a batch size of 100 because it seems to work well enough.
     // We might need to revisit this as more dogs are consented.
-    new ExtractionPipelineBuilder(forms, extractionFilters, subdir, 100, RedCapClient.apply)
+    new ExtractionPipelineBuilder(
+      forms,
+      extractionFilters,
+      arm,
+      subdir,
+      100,
+      RedCapClient.apply
+    )
 }
