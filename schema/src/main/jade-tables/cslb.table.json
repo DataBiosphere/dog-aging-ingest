@@ -1,0 +1,75 @@
+{
+  "name": "cslb",
+  "columns": [
+    {
+      "name": "dog_id",
+      "datatype": "integer",
+      "type": "primary_key"
+    },
+    {
+      "name": "cslb_date",
+      "datatype": "date",
+      "type": "primary_key"
+    },
+    {
+      "name": "cslb_pace",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_stare",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_stuck",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_recognize",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_walk_walls",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_avoid",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_find_food",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_pace_6mo",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_stare_6mo",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_defecate_6mo",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_food_6mo",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_recognize_6mo",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_active_6mo",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_score",
+      "datatype": "integer"
+    },
+    {
+      "name": "cslb_other_changes",
+      "datatype": "string"
+    }
+  ]
+}
