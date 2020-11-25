@@ -39,9 +39,10 @@ object ExtractionPipelineBuilder {
 class ExtractionPipelineBuilder(
   formsForExtraction: List[String],
   extractionFilters: Map[String, String],
+  arm: String,
   subDir: String,
   idBatchSize: Int,
-  getClient: () => RedCapClient
+  getClient: String => RedCapClient
 ) extends PipelineBuilder[Args]
     with Serializable {
 
@@ -51,7 +52,7 @@ class ExtractionPipelineBuilder(
 
     val lookupFn =
       new ScalaAsyncLookupDoFn[RedcapRequest, Msg, RedCapClient](MaxConcurrentRequests) {
-        override def newClient(): RedCapClient = getClient()
+        override def newClient(): RedCapClient = getClient(arm)
         override def asyncLookup(
           client: RedCapClient,
           input: RedcapRequest
@@ -91,7 +92,7 @@ class ExtractionPipelineBuilder(
       }
 
     // Download the form data for each batch of records.
-    val extractedRecords = batchedIds.transform("Get HLE records") {
+    val extractedRecords = batchedIds.transform("Get records") {
       _.applyKvTransform(ParDo.of(lookupFn)).flatMap(kv => kv.getValue.fold(throw _, _.arr))
     }
 
@@ -105,12 +106,12 @@ class ExtractionPipelineBuilder(
 
     StorageIO.writeJsonLists(
       extractedRecords,
-      "HLE Records",
+      "Write records",
       s"${args.outputPrefix}/${subDir}/records"
     )
     StorageIO.writeJsonLists(
       extractedDataDictionaries,
-      "HLE Data Dictionaries",
+      "Write data dictionaries",
       s"${args.outputPrefix}/${subDir}/data_dictionaries"
     )
     ()

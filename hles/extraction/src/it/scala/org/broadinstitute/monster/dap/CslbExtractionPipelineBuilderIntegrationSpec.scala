@@ -7,11 +7,11 @@ import com.bettercloud.vault.{SslConfig, Vault, VaultConfig}
 import org.broadinstitute.monster.common.PipelineBuilderSpec
 import org.broadinstitute.monster.common.msg.JsonParser
 
-class ExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
+class CslbExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
   import org.broadinstitute.monster.common.msg.MsgOps
 
   val outputDir = File.newTemporaryDirectory()
-  val hlesOutputDir = File(outputDir, HLESurveyExtractionPipeline.subdir)
+  val cslbOutputDir = File(outputDir, CslbExtractionPipeline.subdir)
   override def afterAll(): Unit = outputDir.delete()
 
   val apiToken = {
@@ -42,34 +42,34 @@ class ExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args]
   // We know that some records were updated in this time range, so it should
   // be fine to pull consistently without worrying about changes in data size.
   val start =
-    OffsetDateTime.of(LocalDate.of(2020, 2, 1), LocalTime.MIDNIGHT, ZoneOffset.UTC)
+    OffsetDateTime.of(LocalDate.of(2020, 11, 15), LocalTime.MIDNIGHT, ZoneOffset.UTC)
 
   val end =
-    OffsetDateTime.of(LocalDate.of(2020, 2, 2), LocalTime.MIDNIGHT, ZoneOffset.UTC)
+    OffsetDateTime.of(LocalDate.of(2020, 11, 16), LocalTime.MIDNIGHT, ZoneOffset.UTC)
 
   override val testArgs = Args(apiToken, Some(start), Some(end), outputDir.pathAsString)
-  override val builder = HLESurveyExtractionPipeline.pipelineBuilder
+  override val builder = CslbExtractionPipeline.pipelineBuilder
 
-  behavior of "HLESurveyExtractionPipelineBuilder"
+  behavior of "CslbSurveyExtractionPipelineBuilder"
 
   it should "successfully download records from RedCap" in {
-    readMsgs(hlesOutputDir, "records/*.json") shouldNot be(empty)
+    readMsgs(cslbOutputDir, "records/*.json") shouldNot be(empty)
   }
 
-  it should "only download records that have completed all HLES instruments" in {
-    readMsgs(hlesOutputDir, "records/*.json").foreach { record =>
-      HLESurveyExtractionPipeline.extractionFilters
+  it should "only download records that have completed all CSLB instruments" in {
+    readMsgs(cslbOutputDir, "records/*.json").foreach { record =>
+      CslbExtractionPipeline.extractionFilters
         .get(record.read[String]("field_name"))
         .foreach(expected => record.read[String]("value") shouldBe expected)
     }
   }
 
   it should "successfully download data dictionaries from RedCap" in {
-    readMsgs(hlesOutputDir, "data_dictionaries/*.json") shouldNot be(empty)
+    readMsgs(cslbOutputDir, "data_dictionaries/*.json") shouldNot be(empty)
   }
 
   it should "not download data dictionaries multiple times" in {
-    val lines = hlesOutputDir
+    val lines = cslbOutputDir
       .glob("data_dictionaries/*.json")
       .flatMap(_.lineIterator)
       .map(JsonParser.parseEncodedJson)

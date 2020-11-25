@@ -40,7 +40,7 @@ object RedCapClient {
   private val timeout = Duration.ofSeconds(60)
 
   /** Construct a client instance backed by the production RedCap instance. */
-  def apply(): RedCapClient = {
+  def apply(arm: String): RedCapClient = {
     val logger = LoggerFactory.getLogger(getClass)
 
     val client = new OkHttpClient.Builder()
@@ -65,7 +65,7 @@ object RedCapClient {
           val formBuilder = new FormBody.Builder()
             .add("token", apiToken)
             // Limit to the initial HLE event.
-            .add("events[0]", "baseline_arm_1")
+            .add("events[0]", arm)
             // Export individual survey records as JSON.
             .add("content", "record")
             .add("format", "json")
