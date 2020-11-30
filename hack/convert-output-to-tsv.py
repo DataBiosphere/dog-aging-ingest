@@ -15,7 +15,7 @@ try:
 except IndexError:
     debug = None
 
-table_names = ['hles_cancer_condition', 'hles_dog', 'hles_health_condition', 'hles_owner']
+table_names = ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition', 'hles_owner']
 pk_prefix = 'entity:'
 
 # debug printer
@@ -46,7 +46,7 @@ for table_name in table_names:
                 row = json.loads(jsonObj)
                 # rename primary key column to the format 'entity:{entity name}_id'
                 # pop existing primary keys out and push them back in
-                if (table_name == "hles_owner" or table_name == "hles_dog"):
+                if table_name == "hles_owner" or table_name == "hles_dog":
                     # remove 'hles_' from the table_name
                     pk_name = table_name[5:] + '_id'
                     entity_name = pk_prefix + pk_name
@@ -54,8 +54,14 @@ for table_name in table_names:
                     # store data
                     column_set.update(row.keys())
                     row_list.append(row)
+                # cslb
+                elif table_name == 'cslb':
+                    entity_name = pk_prefix + table_name + '_id'
+                    row[entity_name] = row.get('dog_id')
+                    column_set.update(row.keys())
+                    row_list.append(row)
                 # hles_cancer_condition: read dog_id, copy and write out as pk_name
-                elif (table_name == "hles_cancer_condition"):
+                elif table_name == "hles_cancer_condition":
                     entity_name = pk_prefix + table_name + '_id'
                     # copy the dog_id
                     row[entity_name] = row.get('dog_id')
@@ -64,7 +70,7 @@ for table_name in table_names:
                     row_list.append(row)
                 # hles_health_condition: read + copy dog_id and hs_condition and hs_condition_is_congenital
                 # concatenate and write out as pk_name
-                elif (table_name == "hles_health_condition"):
+                elif table_name == "hles_health_condition":
                     entity_name = pk_prefix + table_name + '_id'
                     # grab the congenital flag and convert to int
                     congenital_flag = row.get('hs_condition_is_congenital')
