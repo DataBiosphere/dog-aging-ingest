@@ -46,7 +46,7 @@ for table_name in table_names:
                 row = json.loads(jsonObj)
                 # rename primary key column to the format 'entity:{entity name}_id'
                 # pop existing primary keys out and push them back in
-                if table_name == "hles_owner" or table_name == "hles_dog":
+                if table_name in {"hles_owner", "hles_dog"}:
                     # remove 'hles_' from the table_name
                     pk_name = table_name[5:] + '_id'
                     entity_name = pk_prefix + pk_name
