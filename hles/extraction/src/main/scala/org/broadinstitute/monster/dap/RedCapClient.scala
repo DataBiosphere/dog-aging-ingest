@@ -58,7 +58,7 @@ object RedCapClient {
             s"forms: [${forms.mkString(",")}]",
             s"start: [$start]",
             s"end: [$end]",
-            s"filters: [${filters.map { case (k, v) => s"$k=$v" }.mkString(",")}]"
+            s"filters: [${filters.map(directive => s"${directive.field}${directive.operation.op}${directive.comparand}").mkString(",")}]"
           )
           logger.debug(s"Querying RedCap for records: ${logPieces.mkString(",")}")
 
@@ -94,7 +94,9 @@ object RedCapClient {
           if (filters.nonEmpty) {
             formBuilder.add(
               "filterLogic",
-              filters.map { case (k, v) => s"[$k]=$v" }.mkString(" and ")
+              filters.map { directive =>
+                s"[${directive.field}]${directive.operation.op}${directive.comparand}"
+              }.mkString(" and ")
             )
           }
           formBuilder

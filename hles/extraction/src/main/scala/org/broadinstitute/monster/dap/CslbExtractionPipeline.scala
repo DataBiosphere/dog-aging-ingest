@@ -13,8 +13,8 @@ object CslbExtractionPipeline extends ScioApp[Args] {
   // Magic marker for "completed".
   // NB: We are purposefully excluding the recruitment_fields_complete -> 2
   // mapping, as that conflicts with the CSLB data
-  val extractionFilters: Map[String, String] = Map(
-    s"canine_social_and_learned_behavior_complete" -> "2"
+  val extractionFilters: List[FilterDirective] = List(
+    FilterDirective("canine_social_and_learned_behavior_complete", FilterOps.==, "2")
   )
 
   val subdir = "cslb"

@@ -38,7 +38,7 @@ object ExtractionPipelineBuilder {
   */
 class ExtractionPipelineBuilder(
   formsForExtraction: List[String],
-  extractionFilters: Map[String, String],
+  extractionFilters: List[FilterDirective],
   arm: String,
   subDir: String,
   idBatchSize: Int,
