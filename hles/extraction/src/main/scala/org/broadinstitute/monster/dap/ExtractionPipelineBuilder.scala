@@ -104,12 +104,12 @@ class ExtractionPipelineBuilder(
         _.applyKvTransform(ParDo.of(lookupFn)).flatMap(kv => kv.getValue.fold(throw _, _.arr))
       }
 
-    StorageIO.writeJsonLists(
+    StorageIO.writeJsonListsGeneric(
       extractedRecords,
       "Write records",
       s"${args.outputPrefix}/${subDir}/records"
     )
-    StorageIO.writeJsonLists(
+    StorageIO.writeJsonListsGeneric(
       extractedDataDictionaries,
       "Write data dictionaries",
       s"${args.outputPrefix}/${subDir}/data_dictionaries"

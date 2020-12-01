@@ -124,8 +124,14 @@ object RedCapClient {
         .enqueue(new Callback {
           override def onFailure(call: Call, e: IOException): Unit =
             p.failure(e)
-          override def onResponse(call: Call, response: Response): Unit =
-            p.success(JsonParser.parseEncodedJson(response.body().string()))
+          override def onResponse(call: Call, response: Response): Unit = {
+            val maybeResult = JsonParser.parseWithTry(response.body().string())
+            maybeResult match {
+              case Right(result) => p.success(result)
+              case Left(err)     => p.failure(err)
+            }
+
+          }
         })
       p.future
     }
