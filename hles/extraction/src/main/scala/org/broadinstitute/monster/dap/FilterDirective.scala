@@ -5,6 +5,7 @@ sealed trait FilterOp {
 }
 
 object FilterOps {
+
   case object == extends FilterOp {
     def op: String = "="
   }
