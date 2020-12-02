@@ -8,17 +8,17 @@ object DogTransformations {
 
   /** Parse all dog-related fields out of a raw RedCap record. */
   def mapDog(rawRecord: RawRecord): Option[HlesDog] = {
-    val dog_id = rawRecord.id
+    val dogId = rawRecord.id
 
     rawRecord.getOptional("st_owner_id") match {
       case None =>
-        MissingOwnerIdError(s"Record $dog_id has more/less than 1 value for field st_owner_id").log
+        MissingOwnerIdError(s"Record $dogId has less than 1 value for field st_owner_id").log
         None
-      case Some(owner_id) =>
+      case Some(ownerId) =>
         Some(
           HlesDog(
-            dogId = dog_id,
-            ownerId = owner_id.toLong,
+            dogId = dogId,
+            ownerId = ownerId.toLong,
             hlesDogStudyStatus = Some(StudyStatusTransformations.mapStudyStatus(rawRecord)),
             hlesDogDemographics = Some(DemographicsTransformations.mapDemographics(rawRecord)),
             hlesDogResidences = Some(DogResidenceTransformations.mapDogResidences(rawRecord)),
