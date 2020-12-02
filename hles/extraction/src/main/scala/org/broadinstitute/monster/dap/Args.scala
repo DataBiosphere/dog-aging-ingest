@@ -19,7 +19,12 @@ case class Args(
   @HelpMessage("Only extract records created/updated before or at this time")
   endTime: Option[OffsetDateTime],
   @HelpMessage("Path where extracted JSON should be written")
-  outputPrefix: String
+  outputPrefix: String,
+  /** data dictionary pulls are optional;
+    * the REDCap API is extremely flaky when pulling this data down
+    */
+  @HelpMessage("Extract data dictionaries")
+  pullDataDictionaries: Boolean
 )
 
 object Args {

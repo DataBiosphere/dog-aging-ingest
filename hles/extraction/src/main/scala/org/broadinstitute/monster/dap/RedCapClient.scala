@@ -4,7 +4,7 @@ import java.io.IOException
 import java.time.Duration
 import java.time.format.DateTimeFormatter
 
-import okhttp3.{Call, Callback, FormBody, OkHttpClient, Request, Response}
+import okhttp3._
 import org.broadinstitute.monster.common.msg.JsonParser
 import org.slf4j.LoggerFactory
 import upack.Msg
@@ -124,8 +124,14 @@ object RedCapClient {
         .enqueue(new Callback {
           override def onFailure(call: Call, e: IOException): Unit =
             p.failure(e)
-          override def onResponse(call: Call, response: Response): Unit =
-            p.success(JsonParser.parseEncodedJson(response.body().string()))
+          override def onResponse(call: Call, response: Response): Unit = {
+            val maybeResult =
+              JsonParser.parseEncodedJsonReturningFailure(response.body().string())
+            maybeResult match {
+              case Right(result) => p.success(result)
+              case Left(err)     => p.failure(err)
+            }
+          }
         })
       p.future
     }

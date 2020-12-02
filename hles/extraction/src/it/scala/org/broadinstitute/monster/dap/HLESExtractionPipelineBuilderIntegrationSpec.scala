@@ -5,7 +5,6 @@ import java.time.{LocalDate, LocalTime, OffsetDateTime, ZoneOffset}
 import better.files.File
 import com.bettercloud.vault.{SslConfig, Vault, VaultConfig}
 import org.broadinstitute.monster.common.PipelineBuilderSpec
-import org.broadinstitute.monster.common.msg.JsonParser
 
 class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
   import org.broadinstitute.monster.common.msg.MsgOps
@@ -47,7 +46,8 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
   val end =
     OffsetDateTime.of(LocalDate.of(2020, 2, 2), LocalTime.MIDNIGHT, ZoneOffset.UTC)
 
-  override val testArgs = Args(apiToken, Some(start), Some(end), outputDir.pathAsString)
+  override val testArgs =
+    Args(apiToken, Some(start), Some(end), outputDir.pathAsString, pullDataDictionaries = false)
   override val builder = HLESurveyExtractionPipeline.pipelineBuilder
 
   behavior of "HLESurveyExtractionPipelineBuilder"
@@ -62,19 +62,5 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
         .get(record.read[String]("field_name"))
         .foreach(expected => record.read[String]("value") shouldBe expected)
     }
-  }
-
-  it should "successfully download data dictionaries from RedCap" in {
-    readMsgs(hlesOutputDir, "data_dictionaries/*.json") shouldNot be(empty)
-  }
-
-  it should "not download data dictionaries multiple times" in {
-    val lines = hlesOutputDir
-      .glob("data_dictionaries/*.json")
-      .flatMap(_.lineIterator)
-      .map(JsonParser.parseEncodedJson)
-      .toList
-
-    lines.length shouldBe lines.toSet.size
   }
 }

@@ -23,7 +23,8 @@ lazy val `dog-aging-hles-extraction` = project
   .enablePlugins(MonsterScioPipelinePlugin)
   .settings(
     libraryDependencies += "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
-    libraryDependencies += "com.bettercloud" % "vault-java-driver" % vaultDriverVersion % IntegrationTest
+    libraryDependencies += "com.bettercloud" % "vault-java-driver" % vaultDriverVersion % IntegrationTest,
+    IntegrationTest / parallelExecution := false
   )
 
 lazy val `dog-aging-hles-transformation` = project

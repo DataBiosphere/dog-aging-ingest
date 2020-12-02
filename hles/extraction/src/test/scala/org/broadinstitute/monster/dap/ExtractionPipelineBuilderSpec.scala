@@ -70,7 +70,8 @@ class ExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
     apiToken = token,
     startTime = Some(start),
     endTime = Some(end),
-    outputPrefix = outputDir.pathAsString
+    outputPrefix = outputDir.pathAsString,
+    pullDataDictionaries = true
   )
 
   override val builder =
