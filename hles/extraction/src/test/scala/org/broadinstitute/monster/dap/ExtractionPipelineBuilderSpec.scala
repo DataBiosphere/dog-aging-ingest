@@ -71,7 +71,7 @@ class ExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
     startTime = Some(start),
     endTime = Some(end),
     outputPrefix = outputDir.pathAsString,
-    pullDataDictionaries = false
+    pullDataDictionaries = true
   )
 
   override val builder =
