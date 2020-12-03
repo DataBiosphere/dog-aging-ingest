@@ -9,6 +9,8 @@ import Args._
 object HLESurveyExtractionPipeline extends ScioApp[Args] {
 
   /** Names of all forms we want to extract as part of HLE ingest. */
+  val HLESEpoch = "2018-01-01"
+
   val forms = List(
     "recruitment_fields",
     "owner_contact",
@@ -24,10 +26,13 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
     "study_status"
   )
 
-  val extractionFilters: Map[String, String] = forms
+  val extractionFilters: List[FilterDirective] = forms
     .filterNot(_ == "study_status") // For some reason, study_status is never marked as completed.
-    .map(form => s"${form}_complete" -> "2") // Magic marker for "completed".
-    .toMap + ("co_consent" -> "1")
+    .map(form => FilterDirective(s"${form}_complete", FilterOps.==, "2")) ++ List(
+    FilterDirective("co_consent", FilterOps.==, "1"),
+    FilterDirective("st_dap_pack_count", FilterOps.>, "0"),
+    FilterDirective("st_dap_pack_date", FilterOps.>, HLESEpoch)
+  ) // Magic marker for "completed".
 
   val subdir = "hles"
   val arm = "baseline_arm_1"

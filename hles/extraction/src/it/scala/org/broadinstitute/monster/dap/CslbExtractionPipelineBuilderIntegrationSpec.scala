@@ -59,8 +59,8 @@ class CslbExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
   it should "only download records that have completed all CSLB instruments" in {
     readMsgs(cslbOutputDir, "records/*.json").foreach { record =>
       CslbExtractionPipeline.extractionFilters
-        .get(record.read[String]("field_name"))
-        .foreach(expected => record.read[String]("value") shouldBe expected)
+        .find(directive => directive.field == record.read[String]("field_name"))
+        .foreach(expected => record.read[String]("value") shouldBe expected.field)
     }
   }
 }

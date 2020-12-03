@@ -16,7 +16,7 @@ object ExtractionPipelineBuilderSpec {
 
   val fakeIds = 1 to 50
   val forms = List("fake_form_1", "fake_form_2")
-  val filters = Map("foo" -> "Bar")
+  val filters = List(FilterDirective("foo", FilterOps.==, "Bar"))
 
   val initQuery = GetRecords(
     start = Some(start),
