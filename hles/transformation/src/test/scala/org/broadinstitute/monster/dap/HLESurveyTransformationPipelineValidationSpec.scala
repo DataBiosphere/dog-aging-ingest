@@ -41,7 +41,7 @@ class HLESurveyTransformationPipelineValidationSpec
           outputDir.pathAsString
         )
       )
-    ).waitUntilDone()
+    ).waitUntilFinish()
   }
 
   def getParsedErrorJsonFromLog(
