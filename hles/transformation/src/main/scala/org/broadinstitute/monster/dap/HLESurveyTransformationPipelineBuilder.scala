@@ -31,6 +31,8 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     )
     val environment =
       rawRecords.transform("Map Environment")(_.map(EnvironmentTransformations.mapEnvironment))
+    val cslb_transformations =
+      rawRecords.transform("CSLB data")(_.flatMap(CslbTransformations.mapCslbData))
 
     StorageIO.writeJsonLists(dogs, "Dogs", s"${args.outputPrefix}/hles_dog")
     StorageIO.writeJsonLists(owners, "Owners", s"${args.outputPrefix}/hles_owner")
@@ -48,6 +50,11 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
       environment,
       "Environmental data",
       s"{args.outputPrefix}/environment"
+    )
+    StorageIO.writeJsonLists(
+      cslb_transformations,
+      "CSLB data",
+      s"${args.outputPrefix}/cslb"
     )
     ()
   }

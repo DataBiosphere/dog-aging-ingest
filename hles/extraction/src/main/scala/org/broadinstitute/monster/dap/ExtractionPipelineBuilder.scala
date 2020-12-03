@@ -96,24 +96,27 @@ class ExtractionPipelineBuilder(
       _.applyKvTransform(ParDo.of(lookupFn)).flatMap(kv => kv.getValue.fold(throw _, _.arr))
     }
 
-    // Download the data dictionary for every form.
-    val extractedDataDictionaries = ctx
-      .parallelize(formsForExtraction)
-      .map(instrument => GetDataDictionary(instrument))
-      .transform("Get data dictionary") {
-        _.applyKvTransform(ParDo.of(lookupFn)).flatMap(kv => kv.getValue.fold(throw _, _.arr))
-      }
+    if (args.pullDataDictionaries) {
+      // Download the data dictionary for every form.
+      val extractedDataDictionaries = ctx
+        .parallelize(formsForExtraction)
+        .map(instrument => GetDataDictionary(instrument))
+        .transform("Get data dictionary") {
+          _.applyKvTransform(ParDo.of(lookupFn)).flatMap(kv => kv.getValue.fold(throw _, _.arr))
+        }
+      StorageIO.writeJsonListsGeneric(
+        extractedDataDictionaries,
+        "Write data dictionaries",
+        s"${args.outputPrefix}/${subDir}/data_dictionaries"
+      )
+    }
 
-    StorageIO.writeJsonLists(
+    StorageIO.writeJsonListsGeneric(
       extractedRecords,
       "Write records",
       s"${args.outputPrefix}/${subDir}/records"
     )
-    StorageIO.writeJsonLists(
-      extractedDataDictionaries,
-      "Write data dictionaries",
-      s"${args.outputPrefix}/${subDir}/data_dictionaries"
-    )
+
     ()
   }
 }

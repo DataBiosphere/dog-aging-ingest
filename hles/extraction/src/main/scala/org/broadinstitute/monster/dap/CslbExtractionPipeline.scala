@@ -6,12 +6,16 @@ import Args._
 object CslbExtractionPipeline extends ScioApp[Args] {
 
   val forms = List(
+    "recruitment_fields",
     "canine_social_and_learned_behavior"
   )
 
-  val extractionFilters: Map[String, String] = forms
-    .map(form => s"${form}_complete" -> "2") // Magic marker for "completed".
-    .toMap
+  // Magic marker for "completed".
+  // NB: We are purposefully excluding the recruitment_fields_complete -> 2
+  // mapping, as that conflicts with the CSLB data
+  val extractionFilters: Map[String, String] = Map(
+    s"canine_social_and_learned_behavior_complete" -> "2"
+  )
 
   val subdir = "cslb"
   val arm = "annual_2020_arm_1"
