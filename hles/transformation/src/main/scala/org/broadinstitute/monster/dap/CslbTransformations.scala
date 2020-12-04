@@ -9,7 +9,7 @@ object CslbTransformations {
       case Some(cslbDate) =>
         Some(
           Cslb(
-            dogId = rawRecord.getRequired("study_id").toLong,
+            dogId = rawRecord.id,
             cslbDate = cslbDate,
             cslbPace = rawRecord.getOptionalNumber("cslb_pace"),
             cslbStare = rawRecord.getOptionalNumber("cslb_stare"),

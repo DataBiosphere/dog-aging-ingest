@@ -22,7 +22,7 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     */
   def getRequired(field: String): String = {
     val values = fields.getOrElse(field, Array.empty)
-    if (values.length != 1) {
+    if (values.toSet.size != 1) {
       throw new IllegalStateException(s"Record $id has more/less than 1 value for field $field")
     } else {
       values.head
@@ -36,7 +36,7 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     */
   def getOptional(field: String): Option[String] = {
     val values = fields.getOrElse(field, Array.empty)
-    if (values.length > 1) {
+    if (values.toSet.size > 1) {
       throw new IllegalStateException(s"Record $id has multiple values for field $field")
     } else {
       values.headOption
