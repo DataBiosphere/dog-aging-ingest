@@ -2,7 +2,6 @@ package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesOwner
 import scala.util.matching.Regex
-import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
 
 object OwnerTransformations {
 
@@ -23,7 +22,6 @@ object OwnerTransformations {
 
   /** Parse all owner-related fields out of a raw RedCap record. */
   def mapOwner(rawRecord: RawRecord): Option[HlesOwner] = {
-    val dog_id = rawRecord.id
     val raceValues = rawRecord.fields.get("od_race")
     val otherRace = raceValues.map(_.contains("98"))
 
@@ -35,7 +33,7 @@ object OwnerTransformations {
 
     rawRecord.getOptional("st_owner_id") match {
       case None =>
-        MissingOwnerIdError(s"Record $dog_id has less than 1 value for field st_owner_id").log
+        // we log an error for missing st_owner_id during dog transformation, so we just skip the record here.
         None
       case Some(owner_id) =>
         Some(
