@@ -12,7 +12,7 @@ object CensusTransformations {
   def mapCensusVariables(rawRecord: RawRecord): EnvironmentCensus = {
     EnvironmentCensus(
       cvPopulationEstimate = rawRecord.getOptionalNumber("cv_summary_est"),
-      cvAreaSqmi = rawRecord.getOptional("cv_area_sqmi").map(_.toDouble),
+      cvAreaSqmi = rawRecord.getOptional("cv_areasqmi").map(_.toDouble),
       cvPopulationDensity = rawRecord.getOptional("cv_popdensity").map(_.toDouble),
       cvPctNothispanicWhite = rawRecord.getOptional("cv_pctnothispanicwhite").map(_.toDouble),
       cvPctNothispanicBlack = rawRecord.getOptional("cv_pctnothispanicblack").map(_.toDouble),
