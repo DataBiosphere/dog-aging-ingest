@@ -22,13 +22,14 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
   )
 
   val subdir = "environment"
+  val arm = List.empty
   val fieldList = List("baseline_complete")
 
   override def pipelineBuilder: PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
       forms,
       extractionFilters,
-      List.empty,
+      arm,
       fieldList,
       subdir,
       100,

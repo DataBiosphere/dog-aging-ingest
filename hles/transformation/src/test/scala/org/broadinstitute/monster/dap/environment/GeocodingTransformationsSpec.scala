@@ -27,7 +27,7 @@ class GeocodingTransformationsSpec extends AnyFlatSpec with Matchers with Option
     // output of the example record's geocoding transformations
     geocodingDataMapped.gmAddressType.value shouldBe 2L
     geocodingDataMapped.gmMatchType.value shouldBe 1L
-    geocodingDataMapped.gmStateFips.value shouldBe Some("53")
+    geocodingDataMapped.gmStateFips shouldBe Some("53")
     geocodingDataMapped.gmGeocoder.value shouldBe 1L
     geocodingDataMapped.gmEntryType.value shouldBe 1L
     geocodingDataMapped.gmComplete.value shouldBe 2L

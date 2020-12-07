@@ -14,7 +14,8 @@ class WalkabilityTransformationsSpec extends AnyFlatSpec with Matchers with Opti
     val walkabilityData = Map(
       "wv_walkscore" -> Array("76"),
       "wv_walkscore_descrip" -> Array("2"),
-      "wv_walkscore_date" -> Array("2020-07-14 19:56:29.131646"), //todo:This is clearly gonna fail
+      // todo: CHECK THIS - CONFIRM WITH DAP ON TYPE
+      "wv_walkscore_date" -> Array("2020-07-14 19:56:29.131646"),
       "wv_housing_units" -> Array("1532"),
       "wv_res_density" -> Array("2556.02391460212"),
       "wv_density_data_year" -> Array("1")
@@ -25,13 +26,12 @@ class WalkabilityTransformationsSpec extends AnyFlatSpec with Matchers with Opti
     )
 
     // output of the example record's walkability transformations
-    walkabilityDataMapped.wvWalkscore.value shouldBe Some("76")
+    walkabilityDataMapped.wvWalkscore shouldBe Some(76.0)
     walkabilityDataMapped.wvWalkscoreDescrip.value shouldBe 2L
-    walkabilityDataMapped.wvWalkscoreDate.value shouldBe Some(
-      "2020-07-14 19:56:29.131646"
-    ) //todo:This is clearly gonna fail
-    walkabilityDataMapped.wvHousingUnits.value shouldBe Some(1532)
-    walkabilityDataMapped.wvResDensity.value shouldBe Some(2556.02391460212)
+    // todo: CHECK THIS - CONFIRM WITH DAP ON TYPE
+    walkabilityDataMapped.wvWalkscoreDate shouldBe Some("2020-07-14 19:56:29.131646")
+    walkabilityDataMapped.wvHousingUnits shouldBe Some(1532.0)
+    walkabilityDataMapped.wvResDensity shouldBe Some(2556.02391460212)
     walkabilityDataMapped.wvDensityDataYear.value shouldBe 1L
   }
 }

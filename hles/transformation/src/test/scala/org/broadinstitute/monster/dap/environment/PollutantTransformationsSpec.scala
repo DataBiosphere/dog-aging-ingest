@@ -28,12 +28,12 @@ class PollutantTransformationsSpec extends AnyFlatSpec with Matchers with Option
 
     // output of the example record's pollutant transformations
     pollutantDataMapped.pvDataYear.value shouldBe 1L
-    pollutantDataMapped.pvCo.value shouldBe Some(0.281453079)
-    pollutantDataMapped.pvNo2.value shouldBe Some(9.261036847)
-    pollutantDataMapped.pvO3.value shouldBe Some(38.25333854)
-    pollutantDataMapped.pvPm10.value shouldBe Some(13.63006549)
-    pollutantDataMapped.pvPm25.value shouldBe Some(6.196086383)
-    pollutantDataMapped.pvSo2.value shouldBe Some(0.70759654)
+    pollutantDataMapped.pvCo shouldBe Some(0.281453079)
+    pollutantDataMapped.pvNo2 shouldBe Some(9.261036847)
+    pollutantDataMapped.pvO3 shouldBe Some(38.25333854)
+    pollutantDataMapped.pvPm10 shouldBe Some(13.63006549)
+    pollutantDataMapped.pvPm25 shouldBe Some(6.196086383)
+    pollutantDataMapped.pvSo2 shouldBe Some(0.70759654)
     pollutantDataMapped.pvComplete.value shouldBe 2L
   }
 }
