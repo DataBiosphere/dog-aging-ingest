@@ -79,7 +79,7 @@ object RedCapClient {
             .add("exportDataAccessGroups", "false")
           // Parameterized arm
           if (arm.nonEmpty) {
-            formBuilder.add("events[0]", arm.mkString(","))
+            formBuilder.add("events", arm.mkString(","))
           }
 
           ids.zipWithIndex.foreach {
