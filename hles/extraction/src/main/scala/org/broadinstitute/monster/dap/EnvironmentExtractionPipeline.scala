@@ -22,13 +22,16 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
   )
 
   val subdir = "environment"
+  //todo: need to query for all arms and work through arms serially
+  val arm =
+    List("baseline_arm_1", "dec2019_arm_1", "jan2020_arm_1")
   val fieldList = List("baseline_complete")
 
   override def pipelineBuilder: PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
       forms,
       extractionFilters,
-      List.empty,
+      arm,
       fieldList,
       subdir,
       100,

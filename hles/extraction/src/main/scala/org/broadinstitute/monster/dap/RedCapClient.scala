@@ -64,7 +64,6 @@ object RedCapClient {
 
           val formBuilder = new FormBody.Builder()
             .add("token", apiToken)
-            // Parameterized arm
             // Export individual survey records as JSON.
             .add("content", "record")
             .add("format", "json")
@@ -78,9 +77,9 @@ object RedCapClient {
             // Honestly not sure what these do, haven't seen the need to make them 'true'.
             .add("exportSurveyFields", "false")
             .add("exportDataAccessGroups", "false")
-
+          // Parameterized arm
           if (arm.nonEmpty) {
-            formBuilder.add("events[0]", arm.mkString(","))
+            formBuilder.add("events", arm.mkString(","))
           }
 
           ids.zipWithIndex.foreach {
