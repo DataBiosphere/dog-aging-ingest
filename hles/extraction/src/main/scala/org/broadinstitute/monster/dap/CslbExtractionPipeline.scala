@@ -1,6 +1,8 @@
 package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.common.{PipelineBuilder, ScioApp}
+
+// Ignore IntelliJ, this is used to make the implicit parser compile.
 import Args._
 
 object CslbExtractionPipeline extends ScioApp[Args] {
@@ -18,13 +20,15 @@ object CslbExtractionPipeline extends ScioApp[Args] {
   )
 
   val subdir = "cslb"
-  val arm = "annual_2020_arm_1"
+  val arm = List("annual_2020_arm_1")
+  val fieldList = List("co_consent")
 
   override def pipelineBuilder: PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
       forms,
       extractionFilters,
       arm,
+      fieldList,
       subdir,
       100,
       RedCapClient.apply
