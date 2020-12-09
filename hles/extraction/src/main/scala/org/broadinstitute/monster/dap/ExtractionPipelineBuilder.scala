@@ -39,11 +39,10 @@ object ExtractionPipelineBuilder {
 class ExtractionPipelineBuilder(
   formsForExtraction: List[String],
   extractionFilters: List[FilterDirective],
-  arm: List[String],
-  fieldList: List[String],
+  arm: String,
   subDir: String,
   idBatchSize: Int,
-  getClient: List[String] => RedCapClient
+  getClient: String => RedCapClient
 ) extends PipelineBuilder[Args]
     with Serializable {
 
@@ -88,7 +87,7 @@ class ExtractionPipelineBuilder(
           ids = ids.getValue.asScala.toList,
           forms = formsForExtraction,
           // Pull the consent field so we can QC that the filter is working properly.
-          fields = fieldList
+          fields = List("co_consent")
         )
       }
 

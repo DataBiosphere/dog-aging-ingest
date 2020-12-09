@@ -12,12 +12,11 @@ object ExtractionPipelineBuilderSpec {
   val token = "pls-let-me-in"
   val start = OffsetDateTime.now()
   val end = start.plusDays(3).plusHours(10).minusSeconds(100)
-  val event = List("fake_event_1")
+  val event = "fake_event_1"
 
   val fakeIds = 1 to 50
   val forms = List("fake_form_1", "fake_form_2")
   val filters = List(FilterDirective("foo", FilterOps.==, "Bar"))
-  val fields = List("co_consent")
 
   val initQuery = GetRecords(
     start = Some(start),
@@ -80,7 +79,6 @@ class ExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
       forms,
       filters,
       event,
-      fields,
       "",
       idBatchSize = 1,
       getClient = _ => mockClient
