@@ -11,7 +11,7 @@
     },
     {
       "name": "wv_walkscore_date",
-      "datatype": "float"
+      "datatype": "string"
     },
     {
       "name": "wv_housing_units",

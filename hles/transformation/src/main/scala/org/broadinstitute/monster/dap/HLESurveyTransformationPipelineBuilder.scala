@@ -5,6 +5,7 @@ import com.spotify.scio.values.SCollection
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.common.msg._
 import org.slf4j.{Logger, LoggerFactory}
+import upack.Msg
 
 object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
   /**
@@ -49,7 +50,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     StorageIO.writeJsonLists(
       environment,
       "Environmental data",
-      s"{args.outputPrefix}/environment"
+      s"${args.outputPrefix}/environment"
     )
     StorageIO.writeJsonLists(
       cslb_transformations,
@@ -61,7 +62,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
 
   /** Read in records and group by study Id, with field name subgroups. */
   def readRecords(ctx: ScioContext, args: Args): SCollection[RawRecord] = {
-    val rawRecords = StorageIO
+    val rawRecords: SCollection[Msg] = StorageIO
       .readJsonLists(
         ctx,
         "Raw Records",
@@ -70,17 +71,22 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
 
     // Group by study ID (record number) and field name
     // to get the format: (studyId, Iterable((fieldName, Iterable(value))))
+    // (study_id, arm_id, iterable())
     rawRecords
-      .groupBy(_.read[String]("record"))
+      .groupBy(foo => {
+        (foo.read[String]("record"), foo.read[String]("redcap_event_name"))
+      })
+      //.groupBy(read[String]("redcap_event_name"))
       .map {
-        case (id, rawRecordValues) =>
-          val fields = rawRecordValues
+        case ((id, eventName), rawRecordValues) =>
+          val fields: Map[String, Array[String]] = rawRecordValues
             .groupBy(_.read[String]("field_name"))
             .map {
               case (fieldName, rawValues) =>
                 (fieldName, rawValues.map(_.read[String]("value")).toArray.sorted)
             }
-          RawRecord(id.toLong, fields)
+          val bar = fields + ("redcap_event_name" -> Array(eventName))
+          RawRecord(id.toLong, bar)
       }
   }
 }

@@ -14,7 +14,7 @@ object TemperaturePrecipitationTransformations {
   ): EnvironmentTemperaturePrecipitation = {
     EnvironmentTemperaturePrecipitation(
       tpDataYear = rawRecord.getOptionalNumber("tp_data_year"),
-      tpPcpnAnnual01 = rawRecord.getOptionalNumber("tp_pcpn_annual_01").map(_.toDouble),
+      tpPcpnAnnual01 = rawRecord.getOptional("tp_pcpn_annual_01").map(_.toDouble),
       tpPcpnAnnual02 = rawRecord.getOptional("tp_pcpn_annual_02").map(_.toDouble),
       tpPcpnAnnual03 = rawRecord.getOptional("tp_pcpn_annual_03").map(_.toDouble),
       tpPcpnAnnual04 = rawRecord.getOptional("tp_pcpn_annual_04").map(_.toDouble),

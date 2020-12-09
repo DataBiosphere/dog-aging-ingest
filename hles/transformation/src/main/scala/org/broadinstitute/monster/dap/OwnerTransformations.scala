@@ -1,6 +1,7 @@
 package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesOwner
+
 import scala.util.matching.Regex
 import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
 
