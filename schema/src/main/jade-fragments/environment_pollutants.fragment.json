@@ -1,0 +1,37 @@
+{
+  "name": "environment_pollutants",
+  "columns": [
+    {
+      "name": "pv_data_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "pv_co",
+      "datatype": "float"
+    },
+    {
+      "name": "pv_no2",
+      "datatype": "float"
+    },
+    {
+      "name": "pv_o3",
+      "datatype": "float"
+    },
+    {
+      "name": "pv_pm10",
+      "datatype": "float"
+    },
+    {
+      "name": "pv_pm25",
+      "datatype": "float"
+    },
+    {
+      "name": "pv_so2",
+      "datatype": "float"
+    },
+    {
+      "name": "pv_complete",
+      "datatype": "integer"
+    }
+  ]
+}
