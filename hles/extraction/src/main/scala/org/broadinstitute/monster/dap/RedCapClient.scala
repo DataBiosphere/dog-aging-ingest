@@ -24,9 +24,9 @@ trait RedCapClient extends Serializable {
     * @param request ADT capturing the various parameters for a request to a particular endpoint
     */
   def get(
-    apiToken: String,
-    request: RedcapRequest
-  ): Future[Msg]
+           apiToken: String,
+           request: RedcapRequest
+         ): Future[Msg]
 }
 
 object RedCapClient {
@@ -40,13 +40,8 @@ object RedCapClient {
   private val timeout = Duration.ofSeconds(60)
 
   /** Construct a client instance backed by the production RedCap instance. */
-  def apply(arm: List[String]): RedCapClient = {
+  def apply(arm: List[String], client: HttpWrapper): RedCapClient = {
     val logger = LoggerFactory.getLogger(getClass)
-
-    val client = new OkHttpClient.Builder()
-      .connectTimeout(timeout)
-      .readTimeout(timeout)
-      .build()
 
     (apiToken, redcapRequest) => {
 
@@ -117,27 +112,12 @@ object RedCapClient {
             .add("forms[0]", instrument)
       }
 
-      val request = new Request.Builder()
+      val request: Request = new Request.Builder()
         .url(apiRoute)
         .post(formBuilder.build())
         .build()
 
-      val p = Promise[Msg]()
-      client
-        .newCall(request)
-        .enqueue(new Callback {
-          override def onFailure(call: Call, e: IOException): Unit =
-            p.failure(e)
-          override def onResponse(call: Call, response: Response): Unit = {
-            val maybeResult =
-              JsonParser.parseEncodedJsonReturningFailure(response.body().string())
-            maybeResult match {
-              case Right(result) => p.success(result)
-              case Left(err)     => p.failure(err)
-            }
-          }
-        })
-      p.future
+      client.makeRequest(request)
     }
   }
 }
