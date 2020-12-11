@@ -1,0 +1,31 @@
+package org.broadinstitute.monster.dap
+
+import org.broadinstitute.monster.dogaging.jadeschema.fragment._
+import org.broadinstitute.monster.dogaging.jadeschema.table.Environment
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.OptionValues
+
+class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with OptionValues {
+  behavior of "EnvironmentTransformations"
+
+  it should "map required environmental fields when complete" in {
+    val mapped = EnvironmentTransformations.mapEnvironment(
+      RawRecord(
+        1,
+        Map("redcap_event_name" -> Array("baseline_arm_1"), "baseline_complete" -> Array("2"))
+      )
+    )
+    mapped shouldBe Some(
+      Environment(
+        dogId = 1L,
+        addressMonthYear = "baseline_arm_1",
+        environmentGeocoding = Some(EnvironmentGeocoding.init()),
+        environmentCensus = Some(EnvironmentCensus.init()),
+        environmentPollutants = Some(EnvironmentPollutants.init()),
+        environmentTemperaturePrecipitation = Some(EnvironmentTemperaturePrecipitation.init()),
+        environmentWalkability = Some(EnvironmentWalkability.init())
+      )
+    )
+  }
+}
