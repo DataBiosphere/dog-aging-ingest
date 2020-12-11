@@ -21,7 +21,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
 
     val rawRecords = readRecords(ctx, args)
-    val rawEnvRecords = readEnvRecords(ctx,args)
+    val rawEnvRecords = readEnvRecords(ctx, args)
 
     val dogs = rawRecords.transform("Map Dogs")(_.map(DogTransformations.mapDog))
     val owners = rawRecords.transform("Map Owners")(_.map(OwnerTransformations.mapOwner))
