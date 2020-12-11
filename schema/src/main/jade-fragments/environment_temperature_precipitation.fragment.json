@@ -1,0 +1,397 @@
+{
+  "name": "environment_temperature_precipitation",
+  "columns": [
+    {
+      "name": "tp_data_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "tp_pcpn_annual_01",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_annual_02",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_annual_03",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_annual_04",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_annual_05",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_annual_06",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_annual_07",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_annual_08",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_annual_09",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_annual_10",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_annual_11",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_annual_12",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_annual_01",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_annual_02",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_annual_03",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_annual_04",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_annual_05",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_annual_06",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_annual_07",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_annual_08",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_annual_09",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_annual_10",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_annual_11",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_annual_12",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_annual_01",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_annual_02",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_annual_03",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_annual_04",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_annual_05",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_annual_06",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_annual_07",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_annual_08",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_annual_09",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_annual_10",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_annual_11",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_annual_12",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_annual_01",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_annual_02",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_annual_03",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_annual_04",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_annual_05",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_annual_06",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_annual_07",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_annual_08",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_annual_09",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_annual_10",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_annual_11",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_annual_12",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_norm_data_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "tp_pcpn_norm_01",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_norm_02",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_norm_03",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_norm_04",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_norm_05",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_norm_06",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_norm_07",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_norm_08",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_norm_09",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_norm_10",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_norm_11",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_pcpn_norm_12",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_norm_01",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_norm_02",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_norm_03",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_norm_04",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_norm_05",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_norm_06",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_norm_07",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_norm_08",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_norm_09",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_norm_10",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_norm_11",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmpc_norm_12",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_norm_01",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_norm_02",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_norm_03",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_norm_04",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_norm_05",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_norm_06",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_norm_07",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_norm_08",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_norm_09",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_norm_10",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_norm_11",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmax_norm_12",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_norm_01",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_norm_02",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_norm_03",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_norm_04",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_norm_05",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_norm_06",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_norm_07",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_norm_08",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_norm_09",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_norm_10",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_norm_11",
+      "datatype": "float"
+    },
+    {
+      "name": "tp_tmin_norm_12",
+      "datatype": "float"
+    }
+  ]
+}

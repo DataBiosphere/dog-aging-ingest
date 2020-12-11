@@ -1,0 +1,105 @@
+{
+  "name": "environment_census",
+  "columns": [
+    {
+      "name": "cv_population_estimate",
+      "datatype": "integer"
+    },
+    {
+      "name": "cv_area_sqmi",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_population_density",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_nothispanic_white",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_nothispanic_black",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_nothispanica_ian",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_nothispanic_asian",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_nothispanicn_hpi",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_nothispanic_other",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_nothispanic_two_or_more",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_hispanic",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_female",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_median_income",
+      "datatype": "integer"
+    },
+    {
+      "name": "cv_gini_index",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_below_125povline",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_jobless16to64mf",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_famsownchild_female_led",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_less_than_ba_degree",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_less_than_100k",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_disadvantage_index",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_same_house_1yrago",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_owner_occupied",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_pct_us_born",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_stability_index",
+      "datatype": "float"
+    },
+    {
+      "name": "cv_data_year",
+      "datatype": "integer"
+    }
+  ]
+}
