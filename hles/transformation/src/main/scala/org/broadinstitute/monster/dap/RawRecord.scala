@@ -22,7 +22,7 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     */
   def getRequired(field: String): String = {
     val values = fields.getOrElse(field, Array.empty)
-    if (values.length != 1) {
+    if (values.toSet.size != 1) {
       throw new IllegalStateException(s"Record $id has more/less than 1 value for field $field")
     } else {
       values.head
@@ -36,7 +36,7 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     */
   def getOptional(field: String): Option[String] = {
     val values = fields.getOrElse(field, Array.empty)
-    if (values.length > 1) {
+    if (values.toSet.size > 1) {
       throw new IllegalStateException(s"Record $id has multiple values for field $field")
     } else {
       values.headOption
@@ -56,10 +56,20 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   def getOptionalDate(field: String): Option[LocalDate] =
     getOptional(field).map(LocalDate.parse(_, RawRecord.DateFormatter))
 
+  def getOptionalDateTime(field: String): Option[LocalDate] =
+    getOptional(field) match {
+      case Some("NA")     => None
+      case Some(datetime) => Some(LocalDate.parse(datetime, RawRecord.DAPDateTimeFormatter))
+      case _              => None
+    }
+
   /** Get every value for an attribute in this record. */
   def getArray(field: String): Array[String] = fields.getOrElse(field, Array.empty)
 }
 
 object RawRecord {
   val DateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+  val DAPDateTimeFormatter: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss[.SSSSSS]")
 }
