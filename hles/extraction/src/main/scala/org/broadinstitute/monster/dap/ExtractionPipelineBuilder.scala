@@ -88,7 +88,7 @@ class ExtractionPipelineBuilder(
         GetRecords(
           ids = ids.getValue.asScala.toList,
           forms = formsForExtraction,
-          // Pull the consent field so we can QC that the filter is working properly.
+          // List of fields to pull out of the data for us to filter on
           fields = fieldList
         )
       }
