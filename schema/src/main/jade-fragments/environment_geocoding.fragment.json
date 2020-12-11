@@ -1,0 +1,29 @@
+{
+  "name": "environment_geocoding",
+  "columns": [
+    {
+      "name": "gm_address_type",
+      "datatype": "integer"
+    },
+    {
+      "name": "gm_match_type",
+      "datatype": "integer"
+    },
+    {
+      "name": "gm_state_fips",
+      "datatype": "string"
+    },
+    {
+      "name": "gm_geocoder",
+      "datatype": "integer"
+    },
+    {
+      "name": "gm_entry_type",
+      "datatype": "integer"
+    },
+    {
+      "name": "gm_complete",
+      "datatype": "integer"
+    }
+  ]
+}
