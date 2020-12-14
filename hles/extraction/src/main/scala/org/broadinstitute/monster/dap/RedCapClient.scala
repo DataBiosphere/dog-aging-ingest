@@ -40,7 +40,7 @@ object RedCapClient {
   private val timeout = Duration.ofSeconds(60)
 
   /** Construct a client instance backed by the production RedCap instance. */
-  def apply(arm: String): RedCapClient = {
+  def apply(arm: List[String]): RedCapClient = {
     val logger = LoggerFactory.getLogger(getClass)
 
     val client = new OkHttpClient.Builder()
@@ -64,8 +64,6 @@ object RedCapClient {
 
           val formBuilder = new FormBody.Builder()
             .add("token", apiToken)
-            // Limit to the initial HLE event.
-            .add("events[0]", arm)
             // Export individual survey records as JSON.
             .add("content", "record")
             .add("format", "json")
@@ -79,6 +77,10 @@ object RedCapClient {
             // Honestly not sure what these do, haven't seen the need to make them 'true'.
             .add("exportSurveyFields", "false")
             .add("exportDataAccessGroups", "false")
+          // Parameterized arm
+          if (arm.nonEmpty) {
+            formBuilder.add("events", arm.mkString(","))
+          }
 
           ids.zipWithIndex.foreach {
             case (id, i) => formBuilder.add(s"records[$i]", id)
