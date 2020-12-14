@@ -35,7 +35,9 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
   ) // Magic marker for "completed".
 
   val subdir = "hles"
-  val arm = "baseline_arm_1"
+  // Limit to the initial HLE event.
+  val arm = List("baseline_arm_1")
+  val fieldList = List("co_consent")
 
   override def pipelineBuilder: PipelineBuilder[Args] =
     // Use a batch size of 100 because it seems to work well enough.
@@ -44,6 +46,7 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
       forms,
       extractionFilters,
       arm,
+      fieldList,
       subdir,
       100,
       RedCapClient.apply

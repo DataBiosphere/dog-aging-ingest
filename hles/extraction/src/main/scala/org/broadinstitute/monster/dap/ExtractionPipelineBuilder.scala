@@ -27,10 +27,11 @@ object ExtractionPipelineBuilder {
   *   4. Write the downloaded forms to storage
   *
   * @param formsForExtraction List of forms to be pulled from RedCap
-  * @param extractionFilters Map of filters to be applied whenn pulling RedCap
-  *                          data
-  * @param subDir: Sub directory name where data from this pipeline should be
-  *                written
+  * @param extractionFilters  Map of filters to be applied whenn pulling RedCap data
+  * @param arm List of event arms to be pulled from RedCap (optional)
+  * @param fieldList List of event arms to be pulled from RedCap (optional)
+  * @param subDir             : Sub directory name where data from this pipeline should be
+  *                           written
   * @param idBatchSize max number of IDs to include per batch when
   *                    downloading record data
   * @param getClient function that will produce a client which can
@@ -39,10 +40,11 @@ object ExtractionPipelineBuilder {
 class ExtractionPipelineBuilder(
   formsForExtraction: List[String],
   extractionFilters: List[FilterDirective],
-  arm: String,
+  arm: List[String],
+  fieldList: List[String],
   subDir: String,
   idBatchSize: Int,
-  getClient: String => RedCapClient
+  getClient: List[String] => RedCapClient
 ) extends PipelineBuilder[Args]
     with Serializable {
 
@@ -86,8 +88,8 @@ class ExtractionPipelineBuilder(
         GetRecords(
           ids = ids.getValue.asScala.toList,
           forms = formsForExtraction,
-          // Pull the consent field so we can QC that the filter is working properly.
-          fields = List("co_consent")
+          // List of fields to pull out of the data for us to filter on
+          fields = fieldList
         )
       }
 
