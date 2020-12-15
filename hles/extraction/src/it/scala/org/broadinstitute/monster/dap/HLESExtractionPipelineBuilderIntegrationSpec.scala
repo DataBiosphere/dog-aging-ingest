@@ -60,7 +60,7 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
     readMsgs(hlesOutputDir, "records/*.json").foreach { record =>
       HLESurveyExtractionPipeline.extractionFilters
         .find(directive => directive.field == record.read[String]("field_name"))
-        .foreach(expected => record.read[String]("value") shouldBe expected.field)
+        .foreach(expected => record.read[String]("value") shouldBe expected.comparand)
     }
   }
 }
