@@ -5,7 +5,6 @@ import java.time.Duration
 
 import okhttp3.{Call, Callback, OkHttpClient, Request, Response}
 import org.broadinstitute.monster.common.msg.JsonParser
-import org.broadinstitute.monster.dap.RedCapClient.timeout
 import upack.Msg
 
 import scala.concurrent.{Future, Promise}
@@ -20,7 +19,7 @@ class OkWrapper extends HttpWrapper {
     .readTimeout(timeout)
     .build()
 
-  def makeRequest(request: Request):  Future[Msg] = {
+  def makeRequest(request: Request): Future[Msg] = {
     val p = Promise[Msg]()
     client
       .newCall(request)
@@ -38,4 +37,6 @@ class OkWrapper extends HttpWrapper {
       })
     p.future
   }
+
+  override def toString = "OkHTTP wrapper class"
 }

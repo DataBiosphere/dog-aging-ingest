@@ -38,15 +38,15 @@ object ExtractionPipelineBuilder {
   *                  interact with a RedCap API
   */
 class ExtractionPipelineBuilder(
-                                 formsForExtraction: List[String],
-                                 extractionFilters: List[FilterDirective],
-                                 arm: List[String],
-                                 fieldList: List[String],
-                                 subDir: String,
-                                 idBatchSize: Int,
-                                 getClient: (List[String], HttpWrapper) => RedCapClient
-                               ) extends PipelineBuilder[Args]
-  with Serializable {
+  formsForExtraction: List[String],
+  extractionFilters: List[FilterDirective],
+  arm: List[String],
+  fieldList: List[String],
+  subDir: String,
+  idBatchSize: Int,
+  getClient: (List[String]) => RedCapClient
+) extends PipelineBuilder[Args]
+    with Serializable {
 
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
     import org.broadinstitute.monster.common.msg.MsgOps
@@ -56,11 +56,10 @@ class ExtractionPipelineBuilder(
       new ScalaAsyncLookupDoFn[RedcapRequest, Msg, RedCapClient](MaxConcurrentRequests) {
         override def newClient(): RedCapClient = getClient(arm)
         override def asyncLookup(
-                                  client: RedCapClient,
-                                  input: RedcapRequest
-                                ): Future[Msg] =
-          // todo pass in a client here?
-          client.get(args.apiToken, input, httpClient)
+          client: RedCapClient,
+          input: RedcapRequest
+        ): Future[Msg] =
+          client.get(args.apiToken, input)
       }
 
     // Start by pulling the IDs that match the supplied filtering criteria
@@ -71,7 +70,7 @@ class ExtractionPipelineBuilder(
       filters = extractionFilters
     )
     val idsToExtract = ctx
-      // massaging data to get back an SCollection[]
+    // massaging data to get back an SCollection[]
       .parallelize(Iterable(initRequest))
       .transform("Get study IDs") {
         // Passing the lookup function (RedCap Future[Msg]) and applying the transform across
@@ -86,8 +85,8 @@ class ExtractionPipelineBuilder(
     // NOTE: This logic is replicated from the encode-ingest pipeline,
     // we should consider moving it to scio-utils.
     val batchedIds = idsToExtract
-      // static initializer for this kv
-      // message serialization into uPack Msg
+    // static initializer for this kv
+    // message serialization into uPack Msg
       .map(KV.of("", _))
       .setCoder(KvCoder.of(StringUtf8Coder.of(), StringUtf8Coder.of()))
       .applyKvTransform(GroupIntoBatches.ofSize(idBatchSize.toLong))
