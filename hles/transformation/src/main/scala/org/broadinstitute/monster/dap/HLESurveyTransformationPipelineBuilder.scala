@@ -92,7 +92,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     val rawRecords: SCollection[Msg] = StorageIO
       .readJsonLists(
         ctx,
-        "Raw Records",
+        "Raw Environment Records",
         s"${args.inputPrefix}/records/*.json"
       )
 
@@ -100,10 +100,9 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     // to get the format: (studyId, arm_id, Iterable((fieldName, Iterable(value))))
     // (study_id, arm_id, iterable())
     rawRecords
-      .groupBy(foo => {
-        (foo.read[String]("record"), foo.read[String]("redcap_event_name"))
+      .groupBy(record => {
+        (record.read[String]("record"), record.read[String]("redcap_event_name"))
       })
-      //.groupBy(read[String]("redcap_event_name"))
       .map {
         case ((id, eventName), rawRecordValues) =>
           val fields: Map[String, Array[String]] = rawRecordValues
@@ -112,8 +111,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
               case (fieldName, rawValues) =>
                 (fieldName, rawValues.map(_.read[String]("value")).toArray.sorted)
             }
-          val bar = fields + ("redcap_event_name" -> Array(eventName))
-          RawRecord(id.toLong, bar)
+          RawRecord(id.toLong, fields + ("redcap_event_name" -> Array(eventName)))
       }
   }
 }
