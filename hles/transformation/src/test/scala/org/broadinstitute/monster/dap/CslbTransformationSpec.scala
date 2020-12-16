@@ -2,6 +2,7 @@ package org.broadinstitute.monster.dap
 
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
+
 import org.broadinstitute.monster.dogaging.jadeschema.table.Cslb
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
@@ -36,14 +37,14 @@ class CslbTransformationSpec extends AnyFlatSpec {
   }
 
   it should "raise when date is invalid" in {
-    val invalidDateRecord = RawRecord(id = 12345, Map("cslb_date" -> Array("2020-142-124")))
+    val invalidDateRecord = RawRecord(id = 1, Map("cslb_date" -> Array("2020-142-124")))
     assertThrows[DateTimeParseException] {
       CslbTransformations.mapCslbData(invalidDateRecord)
     }
   }
 
   it should "correctly maps cslb values" in {
-    val exampleCslbRecord = RawRecord(id = 12345, exampleCslbFields)
+    val exampleCslbRecord = RawRecord(id = 1, exampleCslbFields)
     val output = CslbTransformations.mapCslbData(exampleCslbRecord).get
     output.dogId shouldBe 12345L
     output.cslbDate shouldBe LocalDate.parse("2020-11-19")
@@ -66,11 +67,11 @@ class CslbTransformationSpec extends AnyFlatSpec {
 
   it should "correctly map data when optional fields are null" in {
     val emptyRecord =
-      RawRecord(id = 12345, Map("study_id" -> Array("1234"), "cslb_date" -> Array("2020-11-19")))
+      RawRecord(id = 1, Map("study_id" -> Array("1234"), "cslb_date" -> Array("2020-11-19")))
     val output = CslbTransformations.mapCslbData(emptyRecord).get
     output shouldBe
       Cslb(
-        12345,
+        1234,
         LocalDate.parse("2020-11-19"),
         None,
         None,
