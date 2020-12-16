@@ -115,7 +115,6 @@ object RedCapClient {
       .build()
   }
 
-  /** Construct a client instance backed by the production RedCap instance. */
   def apply(arm: List[String], client: HttpWrapper): RedCapClient = { (apiToken, redcapRequest) =>
     {
       val request = buildRequest(RedcapRequestGeneratorParams(apiToken, arm, redcapRequest))

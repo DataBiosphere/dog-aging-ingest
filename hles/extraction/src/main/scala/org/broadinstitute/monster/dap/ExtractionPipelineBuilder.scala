@@ -44,7 +44,7 @@ class ExtractionPipelineBuilder(
   fieldList: List[String],
   subDir: String,
   idBatchSize: Int,
-  getClient: (List[String]) => RedCapClient
+  getClient: List[String] => RedCapClient
 ) extends PipelineBuilder[Args]
     with Serializable {
 

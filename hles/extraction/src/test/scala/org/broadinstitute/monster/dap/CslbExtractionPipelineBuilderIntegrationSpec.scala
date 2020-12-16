@@ -10,8 +10,6 @@ class CslbExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
   val cslbOutputDir = File(outputDir, CslbExtractionPipeline.subdir)
   override def afterAll(): Unit = outputDir.delete()
 
-  // We know that some records were updated in this time range, so it should
-  // be fine to pull consistently without worrying about changes in data size.
   val start =
     OffsetDateTime.of(LocalDate.of(2020, 11, 15), LocalTime.MIDNIGHT, ZoneOffset.UTC)
 

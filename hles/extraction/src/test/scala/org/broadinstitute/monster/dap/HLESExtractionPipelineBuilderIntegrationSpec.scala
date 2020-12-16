@@ -10,8 +10,6 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
   val hlesOutputDir = File(outputDir, HLESurveyExtractionPipeline.subdir)
   override def afterAll(): Unit = outputDir.delete()
 
-  // We know that some records were updated in this time range, so it should
-  // be fine to pull consistently without worrying about changes in data size.
   val start =
     OffsetDateTime.of(LocalDate.of(2020, 2, 1), LocalTime.MIDNIGHT, ZoneOffset.UTC)
 
