@@ -28,4 +28,28 @@ class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with Opti
       )
     )
   }
+
+  // Testing the deduping behavior of getRequired
+  it should "collapse duplicate rows when encountered" in {
+    val mapped = EnvironmentTransformations.mapEnvironment(
+      RawRecord(
+        1,
+        Map(
+          "redcap_event_name" -> Array("dec2019_arm_1", "dec2019_arm_1"),
+          "baseline_complete" -> Array("2")
+        )
+      )
+    )
+    mapped shouldBe Some(
+      Environment(
+        dogId = 1L,
+        addressMonthYear = "dec2019_arm_1",
+        environmentGeocoding = Some(EnvironmentGeocoding.init()),
+        environmentCensus = Some(EnvironmentCensus.init()),
+        environmentPollutants = Some(EnvironmentPollutants.init()),
+        environmentTemperaturePrecipitation = Some(EnvironmentTemperaturePrecipitation.init()),
+        environmentWalkability = Some(EnvironmentWalkability.init())
+      )
+    )
+  }
 }

@@ -19,6 +19,10 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     *
     * Raises an error if the attribute has no value in this record, or
     * if it has multiple values.
+    *
+    * Adding some conditional logic here to collapse duplicate fields to a set
+    * If the values are unique, it would error in the same manner it did before
+    * If the recurring field contains the same value, the head of the set is used
     */
   def getRequired(field: String): String = {
     val values = fields.getOrElse(field, Array.empty)
@@ -33,6 +37,9 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     * Get the singleton value for an attribute in this record, if one exists.
     *
     * Raises an error if the attribute has multiple values.
+    *
+    * Only unique duplicates will throw an error
+    * If we receive multiple fields with the same value, the head of the set is used
     */
   def getOptional(field: String): Option[String] = {
     val values = fields.getOrElse(field, Array.empty)
