@@ -9,10 +9,10 @@ object EnvironmentTransformations {
     * The schema for environment variables has been separated into 5 jade-fragments.
     */
   def mapEnvironment(rawRecord: RawRecord): Option[Environment] = {
-    val dog_id = rawRecord.id
+    val dogId = rawRecord.id
     Some(
       Environment(
-        dogId = dog_id,
+        dogId = dogId,
         addressMonthYear = rawRecord.getRequired("redcap_event_name"),
         environmentGeocoding = Some(GeocodingTransformations.mapGeocodingMetadata(rawRecord)),
         environmentCensus = Some(CensusTransformations.mapCensusVariables(rawRecord)),
