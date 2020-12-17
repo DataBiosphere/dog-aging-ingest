@@ -85,8 +85,8 @@ class ExtractionPipelineBuilder(
     // NOTE: This logic is replicated from the encode-ingest pipeline,
     // we should consider moving it to scio-utils.
     val batchedIds = idsToExtract
-      // Pack up the IDs into dummy objects so beam knows how to handle them,
-      // then encode them into UTF8 so they make consistent JSON.
+    // Pack up the IDs into dummy objects so beam knows how to handle them,
+    // then encode them into UTF8 so they make consistent JSON.
       .map(KV.of("", _))
       .setCoder(KvCoder.of(StringUtf8Coder.of(), StringUtf8Coder.of()))
       // Batch up the IDs

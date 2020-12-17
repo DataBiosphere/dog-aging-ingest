@@ -3,6 +3,7 @@ package org.broadinstitute.monster.dap
 import upack._
 
 object RedcapMsgGenerator {
+
   // Input records can simply be a list of maps from field names to their values
   //   e.g. List(Map("a" -> "b"))
   // This code will convert them to redcap format (and to upack data structures)
