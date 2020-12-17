@@ -50,12 +50,12 @@ class CslbExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
 
   val mockWrapper = new MockOkWrapper(
     Map(
-      studyIdsRequest -> RedcapMsgGenerator.redcapifyRecords(expectedStudyIds.map { i =>
+      studyIdsRequest -> RedcapMsgGenerator.toRedcapFormat(expectedStudyIds.map { i =>
         Map(
           "study_id" -> i.toString
         )
       }),
-      followUpRecords -> RedcapMsgGenerator.redcapifyRecords(expectedStudyIds.map { _ =>
+      followUpRecords -> RedcapMsgGenerator.toRedcapFormat(expectedStudyIds.map { _ =>
         Map(
           "canine_social_and_learned_behavior_complete" -> "2"
         )

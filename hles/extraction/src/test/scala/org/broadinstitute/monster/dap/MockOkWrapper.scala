@@ -49,6 +49,4 @@ class MockOkWrapper(
 
     p.future
   }
-
-  override def toString = "MOCK OkHTTP wrapper class FOR TESTING ONLY"
 }

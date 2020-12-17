@@ -8,7 +8,7 @@ object RedcapMsgGenerator {
   //   e.g. List(Map("a" -> "b"))
   // This code will convert them to redcap format (and to upack data structures)
   //   e.g. Arr(Obj(Str("record") -> Str("1"), Str("field_name") -> Str("a"), Str("value") -> Str("b")))
-  def redcapifyRecords(records: List[Map[String, String]]): Arr = {
+  def toRedcapFormat(records: List[Map[String, String]]): Arr = {
     Arr(records.zipWithIndex.flatMap {
       case (record, i) =>
         record.map {

@@ -37,6 +37,4 @@ class OkWrapper extends HttpWrapper {
       })
     p.future
   }
-
-  override def toString = "OkHTTP wrapper class"
 }

@@ -50,10 +50,10 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
 
   val mockWrapper = new MockOkWrapper(
     Map(
-      studyIdsRequest -> RedcapMsgGenerator.redcapifyRecords(expectedStudyIds.map { i =>
+      studyIdsRequest -> RedcapMsgGenerator.toRedcapFormat(expectedStudyIds.map { i =>
         Map("study_id" -> i.toString)
       }),
-      followUpRecords -> RedcapMsgGenerator.redcapifyRecords(expectedStudyIds.map { _ =>
+      followUpRecords -> RedcapMsgGenerator.toRedcapFormat(expectedStudyIds.map { _ =>
         Map(
           "st_dap_pack_count" -> "2",
           "co_consent" -> "1",
