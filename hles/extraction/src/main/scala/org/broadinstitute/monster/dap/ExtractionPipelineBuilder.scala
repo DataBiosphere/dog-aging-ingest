@@ -62,7 +62,7 @@ class ExtractionPipelineBuilder(
           client.get(args.apiToken, input)
       }
 
-    // Start by pulling the IDs that match the supplied filtering criteria
+    // build a request to grab all study IDs for the data type we've specified in the given time windows
     val initRequest = GetRecords(
       fields = List("study_id"),
       start = args.startTime,
@@ -73,9 +73,9 @@ class ExtractionPipelineBuilder(
     // massaging data to get back an SCollection[]
       .parallelize(Iterable(initRequest))
       .transform("Get study IDs") {
-        // Passing the lookup function (RedCap Future[Msg]) and applying the transform across
-        // Defining a transformation for a key value pair (study_id, value) (Steve's understanding)
-        // get back a list of obj each of which has a key called "value" (FLATTENING the object)
+        // ParDo.of(lookupFn) runs the query to redcap via Beam and returns the results in batches,
+        // this transform digs through each batch to yank out the values (the study IDs) and flattens
+        // them into a single list
         _.applyKvTransform(ParDo.of(lookupFn)).flatMap { kv =>
           kv.getValue.fold(throw _, _.arr.map(_.read[String]("value")))
         }
@@ -85,27 +85,28 @@ class ExtractionPipelineBuilder(
     // NOTE: This logic is replicated from the encode-ingest pipeline,
     // we should consider moving it to scio-utils.
     val batchedIds = idsToExtract
-    // static initializer for this kv
-    // message serialization into uPack Msg
+      // Pack up the IDs into dummy objects so beam knows how to handle them,
+      // then encode them into UTF8 so they make consistent JSON.
       .map(KV.of("", _))
       .setCoder(KvCoder.of(StringUtf8Coder.of(), StringUtf8Coder.of()))
+      // Batch up the IDs
       .applyKvTransform(GroupIntoBatches.ofSize(idBatchSize.toLong))
       .map { ids =>
+        // Construct a query to grab the full records for each batch of study IDs
         GetRecords(
           ids = ids.getValue.asScala.toList,
           forms = formsForExtraction,
-          // List of fields to pull out of the data for us to filter on
           fields = fieldList
         )
       }
 
-    // Download the form data for each batch of records.
+    // Flatten the batches of results into a single, massive list once they've come back
     val extractedRecords = batchedIds.transform("Get records") {
       _.applyKvTransform(ParDo.of(lookupFn)).flatMap(kv => kv.getValue.fold(throw _, _.arr))
     }
 
     if (args.pullDataDictionaries) {
-      // Download the data dictionary for every form.
+      // Download the data dictionary for every form we requested.
       val extractedDataDictionaries = ctx
         .parallelize(formsForExtraction)
         .map(instrument => GetDataDictionary(instrument))
