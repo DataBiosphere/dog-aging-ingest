@@ -41,7 +41,7 @@ object DietTransformations {
       },
       dfEverMalnourished = rawRecord.getOptionalNumber("df_malnourished"),
       dfEverUnderweight = rawRecord.getOptionalNumber("df_underweight"),
-      dfEverOverweight = rawRecord.getOptionalNumber("df_overweight"),
+      dfEverOverweight = rawRecord.getOptionalNumber("df_overrweight"),
       dfWeightChangeLastYear = weightChange.flatMap {
         case 1L    => Some(0L)
         case 0L    => rawRecord.getOptionalNumber("df_weight_change_how")
