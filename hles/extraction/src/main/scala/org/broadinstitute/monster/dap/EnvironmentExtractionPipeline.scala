@@ -22,6 +22,7 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
   )
 
   val subdir = "environment"
+
   //todo: need to query for all arms and work through arms serially
   val arm =
     List(

@@ -42,9 +42,15 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     * If we receive multiple fields with the same value, the head of the set is used
     */
   def getOptional(field: String): Option[String] = {
-    val values = fields.getOrElse(field, Array.empty)
-    if (values.toSet.size > 1) {
-      throw new IllegalStateException(s"Record $id has multiple values for field $field")
+    val values = fields.getOrElse(field, Array.empty).toSet
+    // If there are multiple values
+    if (values.size > 1) {
+      // Filtering out "NA"
+      if (values.--(Array("NA")).size > 1) {
+        throw new IllegalStateException(s"Record $id has multiple values for field $field")
+      } else {
+        values.headOption
+      }
     } else {
       values.headOption
     }
