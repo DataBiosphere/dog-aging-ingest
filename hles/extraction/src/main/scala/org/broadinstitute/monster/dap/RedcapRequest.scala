@@ -28,7 +28,8 @@ case class GetRecords(
   forms: List[String] = Nil,
   start: Option[OffsetDateTime] = None,
   end: Option[OffsetDateTime] = None,
-  filters: List[FilterDirective] = List.empty
+  filters: List[FilterDirective] = List.empty,
+  arm: Seq[String] = List.empty
 ) extends RedcapRequest
 
 /**
