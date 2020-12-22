@@ -37,10 +37,10 @@ object RedCapClient {
   private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
   /** Timeout to use for all requests to production RedCap. */
-  private val timeout = Duration.ofSeconds(60)
+  private val timeout = Duration.ofSeconds(120)
 
   /** Construct a client instance backed by the production RedCap instance. */
-  def apply(arm: List[String]): RedCapClient = {
+  def apply(): RedCapClient = {
     val logger = LoggerFactory.getLogger(getClass)
 
     val client = new OkHttpClient.Builder()
@@ -51,7 +51,7 @@ object RedCapClient {
     (apiToken, redcapRequest) => {
 
       val formBuilder = redcapRequest match {
-        case GetRecords(ids, fields, forms, start, end, filters) =>
+        case GetRecords(ids, fields, forms, start, end, filters, arm) =>
           val logPieces = List(
             s"ids: [${ids.mkString(",")}]",
             s"fields: [${fields.mkString(",")}]",
