@@ -3,8 +3,9 @@ package org.broadinstitute.monster.dap
 import java.io.IOException
 import java.time.Duration
 import java.time.format.DateTimeFormatter
-
 import okhttp3._
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.{Level, Logger}
 import org.broadinstitute.monster.common.msg.JsonParser
 import org.slf4j.LoggerFactory
 import upack.Msg
@@ -46,6 +47,11 @@ object RedCapClient {
     val client = new OkHttpClient.Builder()
       .connectTimeout(timeout)
       .readTimeout(timeout)
+      .addInterceptor(new HttpLoggingInterceptor(new Logger() {
+        override def log(s: String): Unit = {
+          logger.info(s)
+        }
+      }).setLevel(Level.BASIC))
       .build()
 
     (apiToken, redcapRequest) => {
@@ -129,11 +135,15 @@ object RedCapClient {
           override def onFailure(call: Call, e: IOException): Unit =
             p.failure(e)
           override def onResponse(call: Call, response: Response): Unit = {
+            val responseBody = response.body().string()
             val maybeResult =
-              JsonParser.parseEncodedJsonReturningFailure(response.body().string())
+              JsonParser.parseEncodedJsonReturningFailure(responseBody)
             maybeResult match {
               case Right(result) => p.success(result)
-              case Left(err)     => p.failure(err)
+              case Left(err) => {
+                logger.error(s"Error in RedCAP response body: ${responseBody}")
+                p.failure(err)
+              }
             }
           }
         })
