@@ -1,5 +1,7 @@
 package org.broadinstitute.monster.dap
 
+import org.broadinstitute.monster.dap.RawRecord.DAPDateTimeFormatter
+
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -69,12 +71,20 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   def getOptionalDate(field: String): Option[LocalDate] =
     getOptional(field).map(LocalDate.parse(_, RawRecord.DateFormatter))
 
-  def getOptionalDateTime(field: String): Option[LocalDate] =
-    getOptional(field) match {
-      case Some("NA")     => None
-      case Some(datetime) => Some(LocalDate.parse(datetime, RawRecord.DAPDateTimeFormatter))
-      case _              => None
+  def getOptionalDateTime(field: String): Option[LocalDate] = {
+    get(field) match {
+      case Some(datetimes) => {
+        val dates: Array[LocalDate] = datetimes.map { dt =>
+          LocalDate.parse(dt, DAPDateTimeFormatter)
+        }
+        if (dates.toSet.size > 1) {
+          throw new RuntimeException(s"More than one date time for field ${field}")
+        }
+        Some(dates(0))
+      }
+      case None => None
     }
+  }
 
   /** Get every value for an attribute in this record. */
   def getArray(field: String): Array[String] = fields.getOrElse(field, Array.empty)
