@@ -66,7 +66,9 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
             // don't log this error message until after we've successfully converted the string to a long.
             // this avoids us logging this message erroneously if we were unable to parse the value,
             // e.g. because it was garbled nonsense
-            TruncatedDecimalError("Record $id has an unexpected decimal value in field $field, truncated to integer").log
+            TruncatedDecimalError(
+              "Record $id has an unexpected decimal value in field $field, truncated to integer"
+            ).log
 
             truncatedValue
           } else {
