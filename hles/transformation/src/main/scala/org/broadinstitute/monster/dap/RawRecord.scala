@@ -4,6 +4,8 @@ import java.lang.NumberFormatException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
+
 /**
   * Container for the raw properties pulled from RedCap for a single dog.
   *
@@ -51,7 +53,7 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   def getOptionalBoolean(field: String): Option[Boolean] = getOptional(field).map(_ == "1")
 
   /** Get the singleton value for an attribute in this record, parsed as a long. */
-  def getOptionalNumber(field: String, truncateDecimals: Boolean = false): Option[Long] =
+  def getOptionalNumber(field: String, truncateDecimals: Boolean = true): Option[Long] =
     getOptional(field).map(value => {
       try {
         value.toLong
@@ -59,7 +61,14 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
         case e: NumberFormatException => {
           if (truncateDecimals) {
             // parse the value as a float first, then cast it to a long to throw away the decimal precision
-            value.toFloat.toLong
+            val truncatedValue: Long = value.toFloat.toLong
+
+            // don't log this error message until after we've successfully converted the string to a long.
+            // this avoids us logging this message erroneously if we were unable to parse the value,
+            // e.g. because it was garbled nonsense
+            TruncatedDecimalError("Record $id has an unexpected decimal value in field $field, truncated to integer").log
+
+            truncatedValue
           } else {
             throw e
           }
