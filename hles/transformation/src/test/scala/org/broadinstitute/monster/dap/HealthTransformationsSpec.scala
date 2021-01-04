@@ -835,6 +835,12 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       "hs_dx_trauma_dogbite_year" -> Array("2020"),
       "hs_dx_trauma_dogbite_surg" -> Array("3"),
       "hs_dx_trauma_dogbite_fu" -> Array("1"),
+      "hs_dx_trauma_frac" -> Array("1"),
+      "hs_dx_trauma_frac_month" -> Array("2"),
+      "hs_dx_trauma_frac_year" -> Array("2019"),
+      "hs_dx_trauma_frac_surg" -> Array("2"),
+      "hs_dx_trauma_frac_fu" -> Array("1"),
+      "hs_dx_trauma_frac_spec" -> Array("speccity"),
       "hs_dx_trauma_other" -> Array("1"),
       "hs_dx_trauma_other_spec" -> Array("ohno"),
       "hs_dx_trauma_other_month" -> Array("2"),
@@ -856,6 +862,19 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
         hsDiagnosisYear = Some(2020),
         hsDiagnosisMonth = Some(2),
         hsRequiredSurgeryOrHospitalization = Some(3),
+        hsFollowUpOngoing = Some(true)
+      ),
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Trauma.value,
+        hsCondition = HealthCondition.Fracture.value,
+        hsConditionOtherDescription = Some("speccity"),
+        hsConditionIsCongenital = false,
+        hsConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsDiagnosisYear = Some(2019),
+        hsDiagnosisMonth = Some(2),
+        hsRequiredSurgeryOrHospitalization = Some(2),
         hsFollowUpOngoing = Some(true)
       ),
       HlesHealthCondition(
