@@ -1,5 +1,6 @@
 package org.broadinstitute.monster.dap
 
+import java.lang.NumberFormatException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -50,7 +51,21 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   def getOptionalBoolean(field: String): Option[Boolean] = getOptional(field).map(_ == "1")
 
   /** Get the singleton value for an attribute in this record, parsed as a long. */
-  def getOptionalNumber(field: String): Option[Long] = getOptional(field).map(_.toLong)
+  def getOptionalNumber(field: String, truncateDecimals: Boolean = false): Option[Long] =
+    getOptional(field).map(value => {
+      try {
+        value.toLong
+      } catch {
+        case e: NumberFormatException => {
+          if (truncateDecimals) {
+            // parse the value as a float first, then cast it to a long to throw away the decimal precision
+            value.toFloat.toLong
+          } else {
+            throw e
+          }
+        }
+      }
+    })
 
   /** Get the singleton value for an attribute in this record if one exists, parsed as a date. */
   def getOptionalDate(field: String): Option[LocalDate] =

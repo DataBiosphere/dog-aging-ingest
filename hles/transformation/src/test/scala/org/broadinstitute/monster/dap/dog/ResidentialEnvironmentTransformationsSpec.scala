@@ -119,6 +119,17 @@ class ResidentialEnvironmentTransformationsSpec
     output.deHomeSquareFootage.value shouldBe 1000
   }
 
+  it should "handle floating points in home area" in {
+    val floatingPointDogField = Map[String, Array[String]](
+      "de_home_area" -> Array("1000.34")
+    )
+    val output =
+      ResidentialEnvironmentTransformations.mapResidentialEnvironment(
+        RawRecord(id = 1, floatingPointDogField)
+      )
+    output.deHomeSquareFootage.value shouldBe 1000L
+  }
+
   it should "map all heating-related fields" in {
     val exampleDogFields = Map[String, Array[String]](
       "de_primary_heat" -> Array("98"),
