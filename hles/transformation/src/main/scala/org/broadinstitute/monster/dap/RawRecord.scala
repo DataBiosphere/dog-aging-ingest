@@ -1,6 +1,5 @@
 package org.broadinstitute.monster.dap
 
-import java.lang.NumberFormatException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
