@@ -41,6 +41,7 @@ object DietTransformations {
       },
       dfEverMalnourished = rawRecord.getOptionalNumber("df_malnourished"),
       dfEverUnderweight = rawRecord.getOptionalNumber("df_underweight"),
+      // Note: "df_overrweight" raw field name is misspelled in RedCap
       dfEverOverweight = rawRecord.getOptionalNumber("df_overrweight"),
       dfWeightChangeLastYear = weightChange.flatMap {
         case 1L    => Some(0L)
