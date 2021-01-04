@@ -1,5 +1,6 @@
 package org.broadinstitute.monster.dap
 
+import java.lang.NumberFormatException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -54,20 +55,25 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   /** Get the singleton value for an attribute in this record, parsed as a long. */
   def getOptionalNumber(field: String, truncateDecimals: Boolean = true): Option[Long] =
     getOptional(field).map(value => {
-      // we can presume the string represents a positive integer if all of its characters are decimal digits
-      if (truncateDecimals && !value.forall(Character.isDigit)) {
-        val truncatedValue: Long = value.toFloat.toLong
-
-        // don't log this error message until after we've successfully converted the string to a long.
-        // this avoids us logging this message erroneously if we were unable to parse the value,
-        // e.g. because it was garbled nonsense
-        TruncatedDecimalError(
-          s"Record $id has an unexpected decimal value in field $field, truncated to integer"
-        ).log
-
-        truncatedValue
-      } else {
+      try {
         value.toLong
+      } catch {
+        case e: NumberFormatException => {
+          if (truncateDecimals) {
+            val truncatedValue: Long = value.toFloat.toLong
+
+            // don't log this error message until after we've successfully converted the string to a long.
+            // this avoids us logging this message erroneously if we were unable to parse the value,
+            // e.g. because it was garbled nonsense
+            TruncatedDecimalError(
+              s"Record $id has an unexpected decimal value in field $field, truncated to integer"
+            ).log
+
+            truncatedValue
+          } else {
+            throw e
+          }
+        }
       }
     })
 
