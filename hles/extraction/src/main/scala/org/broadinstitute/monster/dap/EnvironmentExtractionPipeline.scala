@@ -44,14 +44,16 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
     )
   val fieldList = List("baseline_complete")
 
-  override def pipelineBuilder: PipelineBuilder[Args] =
+  def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
       forms,
       extractionFilters,
       arm,
       fieldList,
       subdir,
-      10,
-      RedCapClient.apply
+      100,
+      RedCapClient.apply(_: List[String], wrapper)
     )
+
+  override def pipelineBuilder: PipelineBuilder[Args] = buildPipelineWithWrapper(new OkWrapper())
 }

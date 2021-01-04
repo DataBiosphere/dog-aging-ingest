@@ -382,7 +382,7 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object DogBite extends HealthCondition(1801L, "Dog bite", Trauma, dx = Some("dogbite"))
   case object AnimalBite extends HealthCondition(1802L, "Bite wound from another animal", Trauma, dx = Some("anibite"))
   case object Fall extends HealthCondition(1803L, "Fall from height", Trauma, dx = Some("fall"))
-  case object Fracture extends HealthCondition(1804L, "Fractured bone", Trauma, dx = Some("frac"))
+  case object Fracture extends HealthCondition(1804L, "Fractured bone", Trauma, dx = Some("frac"), isOther = true)
   case object Head extends HealthCondition(1805L, "Head trauma due to any cause", Trauma, dx = Some("head"))
   case object Car extends HealthCondition(1806L, "Hit by car or other vehicle", Trauma, dx = Some("car"))
   case object Kick extends HealthCondition(1807L, "Kicked by horse or other large animal", Trauma, dx = Some("kick"))
