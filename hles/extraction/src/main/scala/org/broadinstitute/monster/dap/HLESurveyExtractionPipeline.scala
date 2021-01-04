@@ -8,9 +8,9 @@ import Args._
 /** Entry-point for the HLE extraction pipeline. */
 object HLESurveyExtractionPipeline extends ScioApp[Args] {
 
-  /** Names of all forms we want to extract as part of HLE ingest. */
   val HLESEpoch = "2018-01-01"
 
+  /** Names of all forms we want to extract as part of HLE ingest. */
   val forms = List(
     "recruitment_fields",
     "owner_contact",
@@ -39,7 +39,7 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
   val arm = List("baseline_arm_1")
   val fieldList = List("co_consent")
 
-  override def pipelineBuilder: PipelineBuilder[Args] =
+  def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
     // Use a batch size of 100 because it seems to work well enough.
     // We might need to revisit this as more dogs are consented.
     new ExtractionPipelineBuilder(
@@ -49,6 +49,8 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
       fieldList,
       subdir,
       100,
-      RedCapClient.apply
+      RedCapClient.apply(_: List[String], wrapper)
     )
+
+  override def pipelineBuilder: PipelineBuilder[Args] = buildPipelineWithWrapper(new OkWrapper())
 }

@@ -23,7 +23,7 @@ object CslbExtractionPipeline extends ScioApp[Args] {
   val arm = List("annual_2020_arm_1")
   val fieldList = List("co_consent")
 
-  override def pipelineBuilder: PipelineBuilder[Args] =
+  def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
       forms,
       extractionFilters,
@@ -31,6 +31,8 @@ object CslbExtractionPipeline extends ScioApp[Args] {
       fieldList,
       subdir,
       100,
-      RedCapClient.apply
+      RedCapClient.apply(_: List[String], wrapper)
     )
+
+  override def pipelineBuilder: PipelineBuilder[Args] = buildPipelineWithWrapper(new OkWrapper())
 }
