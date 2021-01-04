@@ -14,10 +14,11 @@ class OkWrapper extends HttpWrapper {
   private val timeout = Duration.ofSeconds(60)
 
   /** Construct a client instance backed by the production RedCap instance. */
-  val client = new OkHttpClient.Builder()
-    .connectTimeout(timeout)
-    .readTimeout(timeout)
-    .build()
+  def client =
+    new OkHttpClient.Builder()
+      .connectTimeout(timeout)
+      .readTimeout(timeout)
+      .build()
 
   def makeRequest(request: Request): Future[Msg] = {
     val p = Promise[Msg]()
