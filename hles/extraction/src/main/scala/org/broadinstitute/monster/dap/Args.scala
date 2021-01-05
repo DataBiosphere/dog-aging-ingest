@@ -20,9 +20,6 @@ case class Args(
   endTime: Option[OffsetDateTime],
   @HelpMessage("Path where extracted JSON should be written")
   outputPrefix: String,
-  /** data dictionary pulls are optional;
-    * the REDCap API is extremely flaky when pulling this data down
-    */
   @HelpMessage("Extract data dictionaries")
   pullDataDictionaries: Boolean
 )
