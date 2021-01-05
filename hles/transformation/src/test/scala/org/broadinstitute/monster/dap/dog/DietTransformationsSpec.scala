@@ -18,7 +18,7 @@ class DietTransformationsSpec extends AnyFlatSpec with Matchers with OptionValue
       "df_app_change" -> Array("1"),
       "df_malnourished" -> Array("0"),
       "df_underweight" -> Array("1"),
-      "df_overweight" -> Array("99"),
+      "df_overrweight" -> Array("99"),
       "df_weight_change" -> Array("99"),
       "df_weight_change_how" -> Array("3")
     )
@@ -31,7 +31,7 @@ class DietTransformationsSpec extends AnyFlatSpec with Matchers with OptionValue
       "df_app_change_how" -> Array("4"),
       "df_malnourished" -> Array("0"),
       "df_underweight" -> Array("99"),
-      "df_overweight" -> Array("1"),
+      "df_overrweight" -> Array("1"),
       "df_weight_change" -> Array("1"),
       "df_weight_change_how" -> Array("10")
     )
@@ -43,7 +43,7 @@ class DietTransformationsSpec extends AnyFlatSpec with Matchers with OptionValue
       "df_app_change_how" -> Array("1"),
       "df_malnourished" -> Array("99"),
       "df_underweight" -> Array("1"),
-      "df_overweight" -> Array("0"),
+      "df_overrweight" -> Array("0"),
       "df_weight_change" -> Array("0"),
       "df_weight_change_how" -> Array("2")
     )
