@@ -70,4 +70,17 @@ class CensusTransformationsSpec extends AnyFlatSpec with Matchers with OptionVal
     censusDataMapped.cvStabilityIndex shouldBe Some(-0.1)
     censusDataMapped.cvDataYear.value shouldBe 1L
   }
+
+  it should "parse scientific notation properly" in {
+    val censusData = Map(
+      "cv_medianincomee" -> Array("1e+05")
+    )
+
+    val censusDataMapped = CensusTransformations.mapCensusVariables(
+      RawRecord(1, censusData)
+    )
+
+    // output of the example record's census transformations
+    censusDataMapped.cvMedianIncome.value shouldBe 100000L
+  }
 }

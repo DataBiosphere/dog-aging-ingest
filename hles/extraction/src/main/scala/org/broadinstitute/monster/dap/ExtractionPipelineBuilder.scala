@@ -2,7 +2,6 @@ package org.broadinstitute.monster.dap
 
 import com.spotify.scio.ScioContext
 import com.spotify.scio.transforms.ScalaAsyncLookupDoFn
-import com.spotify.scio.values.SCollection
 import org.apache.beam.sdk.coders.{KvCoder, StringUtf8Coder}
 import org.apache.beam.sdk.transforms.{GroupIntoBatches, ParDo}
 import org.apache.beam.sdk.values.KV
@@ -30,8 +29,8 @@ object ExtractionPipelineBuilder {
   *
   * @param formsForExtraction List of forms to be pulled from RedCap
   * @param extractionFilters  Map of filters to be applied whenn pulling RedCap data
-  * @param arms List of event arms to be pulled from RedCap (optional)
-  * @param fieldList List of event arms to be pulled from RedCap (optional)
+  * @param arm List of event arms to be pulled from RedCap (optional)
+  * @param fieldList List of fields be pulled from RedCap (optional)
   * @param subDir             : Sub directory name where data from this pipeline should be
   *                           written
   * @param idBatchSize max number of IDs to include per batch when
@@ -42,11 +41,11 @@ object ExtractionPipelineBuilder {
 class ExtractionPipelineBuilder(
   formsForExtraction: List[String],
   extractionFilters: List[FilterDirective],
-  arms: List[String],
+  arm: List[String],
   fieldList: List[String],
   subDir: String,
   idBatchSize: Int,
-  getClient: () => RedCapClient
+  getClient: List[String] => RedCapClient
 ) extends PipelineBuilder[Args]
     with Serializable {
 
@@ -57,7 +56,7 @@ class ExtractionPipelineBuilder(
 
     val lookupFn =
       new ScalaAsyncLookupDoFn[RedcapRequest, Msg, RedCapClient](MaxConcurrentRequests) {
-        override def newClient(): RedCapClient = getClient()
+        override def newClient(): RedCapClient = getClient(arm)
         override def asyncLookup(
           client: RedCapClient,
           input: RedcapRequest

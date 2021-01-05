@@ -23,7 +23,6 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
 
   val subdir = "environment"
 
-  //todo: need to query for all arms and work through arms serially
   val arm =
     List(
       "baseline_arm_1",
@@ -40,7 +39,19 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
       "may2020_arm_1",
       "may2020_secondary_arm_1",
       "june2020_arm_1",
-      "june2020_secondary_arm_1"
+      "june2020_secondary_arm_1",
+      "july2020_arm_1",
+      "july2020_secondary_arm_1",
+      "aug2020_arm_1",
+      "aug2020_secondary_arm_1",
+      "sept2020_arm_1",
+      "sept2020_secondary_arm_1",
+      "oct2020_arm_1",
+      "oct2020_secondary_arm_1",
+      "nov2020_arm_1",
+      "nov2020_secondary_arm_1",
+      "dec2020_arm_1",
+      "dec2020_secondary_arm_1"
     )
   val fieldList = List("baseline_complete")
 

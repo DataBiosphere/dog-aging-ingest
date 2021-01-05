@@ -68,7 +68,7 @@ class WalkabilityTransformationsSpec extends AnyFlatSpec with Matchers with Opti
     )
 
     // output of the example record's walkability transformations
-    walkabilityDataMapped2.wvWalkscoreDate shouldBe None
+    walkabilityDataMapped2.wvWalkscoreDate shouldBe Some(LocalDate.parse("2020-07-14"))
 
     // Case 3: Array("[DateTime]", "NA")
     val walkabilityData3 = Map(

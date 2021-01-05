@@ -394,7 +394,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     val example1 = Map[String, Array[String]](
       "de_toys_yn" -> Array("1"),
       "de_toy_plastic" -> Array("1"),
-      "de_toy_stuffed_fabric" -> Array("0"),
+      "de_toy_fabric_stuffed" -> Array("0"),
       "de_toy_fabric_unstuffed" -> Array("1"),
       "de_toy_rubber" -> Array("0"),
       "de_toy_metal" -> Array("1"),
@@ -431,7 +431,7 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
     val example2 = Map[String, Array[String]](
       "de_toys_yn" -> Array("1"),
       "de_toy_plastic" -> Array("0"),
-      "de_toy_stuffed_fabric" -> Array("1"),
+      "de_toy_fabric_stuffed" -> Array("1"),
       "de_toy_fabric_unstuffed" -> Array("0"),
       "de_toy_rubber" -> Array("1"),
       "de_toy_metal" -> Array("0"),

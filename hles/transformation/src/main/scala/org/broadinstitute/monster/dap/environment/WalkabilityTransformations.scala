@@ -19,12 +19,11 @@ object WalkabilityTransformations {
       walkscore = rawRecord.getOptional("wv_walkscore").map(_.toDouble)
     }
     // We observed instances of "NA" in data returned from RedCap
-    // We are checking to see if there is an array (>0 values)
-    if (rawRecord.getArray("wv_walkscore_date").nonEmpty) {
-      // If there is an array and its first item is NOT "NA"
-      if (!rawRecord.getArray("wv_walkscore_date")(0).contains("NA")) {
-        walkscoreDate = rawRecord.getOptionalDateTime("wv_walkscore_date")
-      }
+    // Get all values for walkscore date into an array, remove "NA"
+    // "NA" values are removed from arrays within RawRecord.scala
+    val walkscoreDateArray = rawRecord.getArray("wv_walkscore_date").toSet.--(Array("NA"))
+    if (walkscoreDateArray.nonEmpty) {
+      walkscoreDate = rawRecord.getOptionalDateTime("wv_walkscore_date")
     }
 
     EnvironmentWalkability(

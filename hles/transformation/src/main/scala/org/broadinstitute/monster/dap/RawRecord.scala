@@ -64,8 +64,10 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   /** Get the singleton value for an attribute in this record if one exists, parsed as a boolean. */
   def getOptionalBoolean(field: String): Option[Boolean] = getOptional(field).map(_ == "1")
 
-  /** Get the singleton value for an attribute in this record, parsed as a long. */
-  def getOptionalNumber(field: String): Option[Long] = getOptional(field).map(_.toLong)
+  /** Get the singleton value for an attribute in this record, parsed as a long.
+    * The conversion to double and then long is to handle scientific notation
+    */
+  def getOptionalNumber(field: String): Option[Long] = getOptional(field).map(_.toDouble.toLong)
 
   /** Get the singleton value for an attribute in this record if one exists, parsed as a date. */
   def getOptionalDate(field: String): Option[LocalDate] =
@@ -74,7 +76,8 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   def getOptionalDateTime(field: String): Option[LocalDate] = {
     get(field) match {
       case Some(datetimes) => {
-        val dates: Array[LocalDate] = datetimes.map { dt =>
+        val filtered = datetimes.filter(!_.equals("NA"))
+        val dates: Array[LocalDate] = filtered.map { dt =>
           LocalDate.parse(dt, DAPDateTimeFormatter)
         }
         if (dates.toSet.size > 1) {
