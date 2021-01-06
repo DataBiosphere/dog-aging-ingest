@@ -62,7 +62,7 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
       arm,
       fieldList,
       subdir,
-      100,
+      10,
       RedCapClient.apply(_: List[String], wrapper)
     )
 
