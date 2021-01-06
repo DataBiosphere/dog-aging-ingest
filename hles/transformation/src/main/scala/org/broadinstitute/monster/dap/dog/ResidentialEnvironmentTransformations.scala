@@ -102,7 +102,7 @@ object ResidentialEnvironmentTransformations {
       deHomeTypeOtherDescription = rawRecord.getOptional("he_type_home_other"),
       deHomeConstructionDecade = rawRecord.getOptionalNumber("de_home_age"),
       deHomeYearsLivedIn = rawRecord.getOptionalNumber("de_home_lived_years"),
-      deHomeSquareFootage = rawRecord.getOptionalNumber("de_home_area")
+      deHomeSquareFootage = rawRecord.getOptionalNumber("de_home_area", truncateDecimals = true)
     )
 
   /**

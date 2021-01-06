@@ -2,8 +2,11 @@ package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.dap.RawRecord.DAPDateTimeFormatter
 
+import java.lang.NumberFormatException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+
+import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
 
 /**
   * Container for the raw properties pulled from RedCap for a single dog.
@@ -67,7 +70,29 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   /** Get the singleton value for an attribute in this record, parsed as a long.
     * The conversion to double and then long is to handle scientific notation
     */
-  def getOptionalNumber(field: String): Option[Long] = getOptional(field).map(_.toDouble.toLong)
+  def getOptionalNumber(field: String, truncateDecimals: Boolean = true): Option[Long] =
+    getOptional(field).map(value => {
+      try {
+        value.toDouble.toLong
+      } catch {
+        case e: NumberFormatException => {
+          if (truncateDecimals) {
+            val truncatedValue: Long = value.toFloat.toLong
+
+            // don't log this error message until after we've successfully converted the string to a long.
+            // this avoids us logging this message erroneously if we were unable to parse the value,
+            // e.g. because it was garbled nonsense
+            TruncatedDecimalError(
+              s"Record $id has an unexpected decimal value in field $field, truncated to integer"
+            ).log
+
+            truncatedValue
+          } else {
+            throw e
+          }
+        }
+      }
+    })
 
   /** Get the singleton value for an attribute in this record if one exists, parsed as a date. */
   def getOptionalDate(field: String): Option[LocalDate] =
