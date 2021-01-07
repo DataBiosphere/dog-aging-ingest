@@ -23,7 +23,8 @@ object ExtractionPipelineBuilderSpec {
     start = Some(start),
     end = Some(end),
     fields = List("study_id"),
-    filters = filters
+    filters = filters,
+    arm = event
   ): RedcapRequest
 
   val downloadRecords = fakeIds.map { i =>
