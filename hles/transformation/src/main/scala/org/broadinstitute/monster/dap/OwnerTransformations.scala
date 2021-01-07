@@ -63,7 +63,6 @@ object OwnerTransformations {
               rawRecord.getOptional("oc_address1_division").flatMap {
                 getCensusDivision(_)
               },
-            ocPrimaryResidenceZip = rawRecord.getOptional("oc_address1_zip"),
             ocPrimaryResidenceOwnership = primaryAddressOwnership,
             ocPrimaryResidenceOwnershipOtherDescription =
               if (primaryAddressOwnership.contains(98)) {
@@ -74,9 +73,6 @@ object OwnerTransformations {
             ocSecondaryResidence = secondaryAddress,
             ocSecondaryResidenceState = secondaryAddress.flatMap {
               if (_) rawRecord.getOptional("oc_address2_state") else None
-            },
-            ocSecondaryResidenceZip = secondaryAddress.flatMap {
-              if (_) rawRecord.getOptional("oc_address2_zip") else None
             },
             ocSecondaryResidenceOwnership = secondaryAddressOwnership,
             ocSecondaryResidenceOwnershipOtherDescription =

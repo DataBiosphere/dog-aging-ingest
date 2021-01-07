@@ -10,10 +10,6 @@
       "datatype": "integer"
     },
     {
-      "name": "oc_primary_residence_zip",
-      "datatype": "string"
-    },
-    {
       "name": "oc_primary_residence_ownership",
       "datatype": "integer"
     },
@@ -31,10 +27,6 @@
     },
     {
       "name": "oc_secondary_residence_state",
-      "datatype": "string"
-    },
-    {
-      "name": "oc_secondary_residence_zip",
       "datatype": "string"
     },
     {
@@ -58,19 +50,11 @@
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence1_zip",
-      "datatype": "string"
-    },
-    {
       "name": "dd_alternate_recent_residence1_weeks",
       "datatype": "integer"
     },
     {
       "name": "dd_alternate_recent_residence2_state",
-      "datatype": "string"
-    },
-    {
-      "name": "dd_alternate_recent_residence2_zip",
       "datatype": "string"
     },
     {
@@ -82,19 +66,11 @@
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence3_zip",
-      "datatype": "string"
-    },
-    {
       "name": "dd_alternate_recent_residence3_weeks",
       "datatype": "integer"
     },
     {
       "name": "dd_alternate_recent_residence4_state",
-      "datatype": "string"
-    },
-    {
-      "name": "dd_alternate_recent_residence4_zip",
       "datatype": "string"
     },
     {
@@ -106,19 +82,11 @@
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence5_zip",
-      "datatype": "string"
-    },
-    {
       "name": "dd_alternate_recent_residence5_weeks",
       "datatype": "integer"
     },
     {
       "name": "dd_alternate_recent_residence6_state",
-      "datatype": "string"
-    },
-    {
-      "name": "dd_alternate_recent_residence6_zip",
       "datatype": "string"
     },
     {
@@ -130,19 +98,11 @@
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence7_zip",
-      "datatype": "string"
-    },
-    {
       "name": "dd_alternate_recent_residence7_weeks",
       "datatype": "integer"
     },
     {
       "name": "dd_alternate_recent_residence8_state",
-      "datatype": "string"
-    },
-    {
-      "name": "dd_alternate_recent_residence8_zip",
       "datatype": "string"
     },
     {
@@ -154,19 +114,11 @@
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence9_zip",
-      "datatype": "string"
-    },
-    {
       "name": "dd_alternate_recent_residence9_weeks",
       "datatype": "integer"
     },
     {
       "name": "dd_alternate_recent_residence10_state",
-      "datatype": "string"
-    },
-    {
-      "name": "dd_alternate_recent_residence10_zip",
       "datatype": "string"
     },
     {
@@ -178,10 +130,6 @@
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence11_zip",
-      "datatype": "string"
-    },
-    {
       "name": "dd_alternate_recent_residence11_weeks",
       "datatype": "integer"
     },
@@ -190,19 +138,11 @@
       "datatype": "string"
     },
     {
-      "name": "dd_alternate_recent_residence12_zip",
-      "datatype": "string"
-    },
-    {
       "name": "dd_alternate_recent_residence12_weeks",
       "datatype": "integer"
     },
     {
       "name": "dd_alternate_recent_residence13_state",
-      "datatype": "string"
-    },
-    {
-      "name": "dd_alternate_recent_residence13_zip",
       "datatype": "string"
     },
     {

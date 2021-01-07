@@ -173,10 +173,6 @@
       "datatype": "string"
     },
     {
-      "name": "dd_acquired_zip",
-      "datatype": "string"
-    },
-    {
       "name": "dd_activities_companion_animal",
       "datatype": "integer"
     },

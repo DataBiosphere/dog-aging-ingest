@@ -15,7 +15,6 @@ class AdditionalStudiesTransformationsSpec extends AnyFlatSpec with Matchers wit
       "fs_pcvet_consent" -> Array("1"),
       "fs_pcvet_email_yn" -> Array("1"),
       "fs_pcvet_st" -> Array("MA"),
-      "fs_pcvet_zip" -> Array("02062-4444"),
       "fs_future_studies" -> Array("88"),
       "fs_pc_ppf_lifespan" -> Array("87"),
       "fs_gene_lifespan" -> Array("86"),
@@ -31,7 +30,6 @@ class AdditionalStudiesTransformationsSpec extends AnyFlatSpec with Matchers wit
     hasConsentOut.fsPrimaryCareVeterinarianConsentShareVemr.value shouldBe true
     hasConsentOut.fsPrimaryCareVeterinarianCanProvideEmail.value shouldBe true
     hasConsentOut.fsPrimaryCareVeterinarianState.value shouldBe "MA"
-    hasConsentOut.fsPrimaryCareVeterinarianZip.value shouldBe "02062-4444"
     hasConsentOut.fsFutureStudiesParticipationLikelihood.value shouldBe 88L
     hasConsentOut.fsPhenotypeVsLifespanParticipationLikelihood.value shouldBe 87L
     hasConsentOut.fsGenotypeVsLifespanParticipationLikelihood.value shouldBe 86L
@@ -44,7 +42,6 @@ class AdditionalStudiesTransformationsSpec extends AnyFlatSpec with Matchers wit
       "fs_pcvet_consent" -> Array("2"),
       "fs_pcvet_email_yn" -> Array("1"),
       "fs_pcvet_st" -> Array("MA"),
-      "fs_pcvet_zip" -> Array("02062-4444"),
       "fs_future_studies" -> Array("3"),
       "fs_pc_ppf_lifespan" -> Array("2"),
       "fs_gene_lifespan" -> Array("5"),
@@ -60,7 +57,6 @@ class AdditionalStudiesTransformationsSpec extends AnyFlatSpec with Matchers wit
     lacksConsentOut.fsPrimaryCareVeterinarianConsentShareVemr.value shouldBe false
     lacksConsentOut.fsPrimaryCareVeterinarianCanProvideEmail shouldBe None
     lacksConsentOut.fsPrimaryCareVeterinarianState shouldBe None
-    lacksConsentOut.fsPrimaryCareVeterinarianZip shouldBe None
     lacksConsentOut.fsFutureStudiesParticipationLikelihood.value shouldBe 3L
     lacksConsentOut.fsPhenotypeVsLifespanParticipationLikelihood shouldBe None
     lacksConsentOut.fsGenotypeVsLifespanParticipationLikelihood shouldBe None

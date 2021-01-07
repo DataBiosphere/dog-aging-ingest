@@ -408,7 +408,6 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
       "dd_us_born" -> Array("1"),
       "dd_acquired_location_yn" -> Array("1"),
       "dd_acquired_st" -> Array("OH"),
-      "dd_acquired_zip" -> Array("44657"),
       "dd_acquire_source" -> Array("2")
     )
     val international = Map[String, Array[String]](
@@ -439,7 +438,6 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     usBornOut.ddAcquiredCountry.value shouldBe "US"
     usBornOut.ddAcquiredState.value shouldBe "OH"
-    usBornOut.ddAcquiredZip.value shouldBe "44657"
     usBornOut.ddAcquiredSource.value shouldBe 2L
 
     internationalOut.ddAcquiredCountry.value shouldBe "UK"
@@ -447,7 +445,6 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
 
     unknownOut.ddAcquiredCountry.value shouldBe "99"
     unknownOut.ddAcquiredState shouldBe None
-    unknownOut.ddAcquiredZip shouldBe None
     unknownOut.ddAcquiredSource.value shouldBe 98L
     unknownOut.ddAcquiredSourceOtherDescription.value shouldBe "?????"
   }

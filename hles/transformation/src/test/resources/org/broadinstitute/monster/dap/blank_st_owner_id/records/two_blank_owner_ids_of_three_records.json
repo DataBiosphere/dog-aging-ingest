@@ -1,6 +1,5 @@
 {"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"study_id","value":"11111"}
 {"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"ss_id","value":"22222"}
-{"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"ss_zip","value":"00000"}
 {"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"ss_num_people_hh","value":"4"}
 {"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"ss_num_dogs_hh","value":"2"}
 {"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_pure_or_mixed","value":"1"}
@@ -35,7 +34,6 @@
 {"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"oc_children_household","value":"1"}
 {"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"oc_address1_city","value":"Placezone"}
 {"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"oc_address1_state","value":"XX"}
-{"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"oc_address1_zip","value":"00000"}
 {"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"oc_mail_address_yn","value":"1"}
 {"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"oc_address1_own","value":"98"}
 {"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"oc_address2_yn","value":"0"}
@@ -494,7 +492,6 @@
 {"record":"11111","redcap_event_name":"baseline_arm_1","field_name":"st_vemr_possible","value":"0"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"study_id","value":"22222"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"ss_id","value":"101010"}
-{"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"ss_zip","value":"12300"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"ss_num_people_hh","value":"2"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"ss_num_dogs_hh","value":"1"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_pure_or_mixed","value":"1"}
@@ -529,7 +526,6 @@
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"oc_timer_5","value":"39.77"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"oc_address1_city","value":"Placeopolis"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"oc_address1_state","value":"ZZ"}
-{"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"oc_address1_zip","value":"12300"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"oc_mail_address_yn","value":"1"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"oc_address1_own","value":"2"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"oc_address2_yn","value":"0"}
@@ -565,7 +561,6 @@
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"dd_acquired_address","value":"0001 Cemetery Lane"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"dd_acquired_city","value":"Atlantis"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"dd_acquired_st","value":"OC"}
-{"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"dd_acquired_zip","value":"55000"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"dd_timer_9","value":"244.2"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"dd_activities","value":"1"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"dd_timer_8","value":"39.35"}
@@ -968,7 +963,6 @@
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"fs_pcvet_street1","value":"3704 Literally In Space"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"fs_pcvet_city","value":"Placeopolis"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"fs_pcvet_st","value":"ZZ"}
-{"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"fs_pcvet_zip","value":"12300"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"fs_pcvet_email_yn","value":"1"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"fs_timer_4","value":"579.3"}
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"fs_gene_lifespan","value":"2"}
@@ -984,7 +978,6 @@
 {"record":"22222","redcap_event_name":"baseline_arm_1","field_name":"st_vemr_date_due","value":"2020-12-31"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"study_id","value":"33333"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"ss_id","value":"129675"}
-{"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"ss_zip","value":"00000"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"ss_num_people_hh","value":"1"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"ss_num_dogs_hh","value":"2"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_pure_or_mixed","value":"1"}
@@ -1015,7 +1008,6 @@
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"oc_timer_5","value":"25.33"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"oc_address1_city","value":"Horrorzone"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"oc_address1_state","value":"XM"}
-{"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"oc_address1_zip","value":"76543"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"oc_mail_address_yn","value":"1"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"oc_address1_own","value":"2"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"oc_address2_yn","value":"0"}
@@ -1458,7 +1450,6 @@
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"fs_pcvet_street1","value":"96 Hellville Blvd"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"fs_pcvet_city","value":"Hell"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"fs_pcvet_st","value":"AA"}
-{"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"fs_pcvet_zip","value":"99999"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"fs_pcvet_email_yn","value":"7"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"fs_timer_4","value":"254.9"}
 {"record":"33333","redcap_event_name":"baseline_arm_1","field_name":"fs_gene_lifespan","value":"1"}
