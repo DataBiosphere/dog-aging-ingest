@@ -83,10 +83,6 @@
       "datatype": "integer"
     },
     {
-      "name": "oc_primary_residence_zip",
-      "datatype": "string"
-    },
-    {
       "name": "oc_primary_residence_ownership",
       "datatype": "integer"
     },
@@ -100,10 +96,6 @@
     },
     {
       "name": "oc_secondary_residence_state",
-      "datatype": "string"
-    },
-    {
-      "name": "oc_secondary_residence_zip",
       "datatype": "string"
     },
     {

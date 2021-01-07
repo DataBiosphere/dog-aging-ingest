@@ -38,28 +38,11 @@ object ResidentialEnvironmentTransformations {
     rawRecord
       .getOptionalNumber("de_home_nbr")
       .fold(dog.copy(deLifetimeResidenceCount = currentResidenceCount)) { pastResidenceCount =>
-        val pastZipCount =
-          if (pastResidenceCount > 0) rawRecord.getRequired("de_zip_nbr").toLong else 0L
         val pastCountryCount =
           if (pastResidenceCount > 0) rawRecord.getRequired("de_country_nbr").toLong else 0L
 
         dog.copy(
           deLifetimeResidenceCount = Some(pastResidenceCount + currentResidenceCount.getOrElse(0L)),
-          dePastResidenceZipCount = Some(pastZipCount),
-          dePastResidenceZip1 = if (pastZipCount > 1) {
-            rawRecord.getOptional("de_zip_01")
-          } else {
-            rawRecord.getOptional("de_zip_01_only")
-          },
-          dePastResidenceZip2 = if (pastZipCount > 1) rawRecord.getOptional("de_zip_02") else None,
-          dePastResidenceZip3 = if (pastZipCount > 2) rawRecord.getOptional("de_zip_03") else None,
-          dePastResidenceZip4 = if (pastZipCount > 3) rawRecord.getOptional("de_zip_04") else None,
-          dePastResidenceZip5 = if (pastZipCount > 4) rawRecord.getOptional("de_zip_05") else None,
-          dePastResidenceZip6 = if (pastZipCount > 5) rawRecord.getOptional("de_zip_06") else None,
-          dePastResidenceZip7 = if (pastZipCount > 6) rawRecord.getOptional("de_zip_07") else None,
-          dePastResidenceZip8 = if (pastZipCount > 7) rawRecord.getOptional("de_zip_08") else None,
-          dePastResidenceZip9 = if (pastZipCount > 8) rawRecord.getOptional("de_zip_09") else None,
-          dePastResidenceZip10 = if (pastZipCount > 9) rawRecord.getOptional("de_zip_10") else None,
           dePastResidenceCountryCount = Some(pastCountryCount),
           dePastResidenceCountry1 = if (pastCountryCount > 1) {
             rawRecord.getOptional("de_country_01")

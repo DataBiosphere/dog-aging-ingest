@@ -22,12 +22,10 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     "ss_num_dogs_hh" -> Array("2"),
     "oc_address1_state" -> Array("OH"),
     "oc_address1_division" -> Array("Division 3: East North Central"),
-    "oc_address1_zip" -> Array("32837-4949"),
     "oc_address1_own" -> Array("98"),
     "oc_address1_own_other" -> Array("some text"),
     "oc_address2_yn" -> Array("1"),
     "oc_address2_state" -> Array("MA"),
-    "oc_address2_zip" -> Array("02222"),
     "oc_address2_own" -> Array("98"),
     "oc_address2_own_other" -> Array("some text")
   )
@@ -62,12 +60,10 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
           // residence fields
           ocPrimaryResidenceState = Some("OH"),
           ocPrimaryResidenceCensusDivision = Some(3),
-          ocPrimaryResidenceZip = Some("32837-4949"),
           ocPrimaryResidenceOwnership = Some(98),
           ocPrimaryResidenceOwnershipOtherDescription = Some("some text"),
           ocSecondaryResidence = Some(true),
           ocSecondaryResidenceState = Some("MA"),
-          ocSecondaryResidenceZip = Some("02222"),
           ocSecondaryResidenceOwnership = Some(98),
           ocSecondaryResidenceOwnershipOtherDescription = Some("some text")
         )
@@ -85,7 +81,6 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
       case None => FailedStatus
       case Some(owner) =>
         owner.ocSecondaryResidenceState shouldBe None
-        owner.ocSecondaryResidenceZip shouldBe None
         owner.ocSecondaryResidenceOwnership shouldBe None
         owner.ocSecondaryResidenceOwnershipOtherDescription shouldBe None
     }

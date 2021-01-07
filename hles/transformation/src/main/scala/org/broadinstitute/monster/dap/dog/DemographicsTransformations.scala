@@ -214,8 +214,7 @@ object DemographicsTransformations {
       ddAcquiredSourceOtherDescription =
         if (source.contains(98)) rawRecord.getOptional("dd_acquire_source_other") else None,
       ddAcquiredCountry = country,
-      ddAcquiredState = if (locationKnown) rawRecord.getOptional("dd_acquired_st") else None,
-      ddAcquiredZip = if (locationKnown) rawRecord.getOptional("dd_acquired_zip") else None
+      ddAcquiredState = if (locationKnown) rawRecord.getOptional("dd_acquired_st") else None
     )
   }
 

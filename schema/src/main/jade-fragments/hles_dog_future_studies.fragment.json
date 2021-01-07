@@ -1,39 +1,35 @@
 {
   "name": "hles_dog_future_studies",
   "columns": [
-    { 
+    {
       "name": "fs_primary_care_veterinarian_exists",
       "datatype": "boolean"
     },
-    { 
+    {
       "name": "fs_primary_care_veterinarian_consent_share_vemr",
       "datatype": "boolean"
     },
-    { 
+    {
       "name": "fs_primary_care_veterinarian_can_provide_email",
       "datatype": "boolean"
     },
-    { 
+    {
       "name": "fs_primary_care_veterinarian_state",
       "datatype": "string"
     },
-    { 
-      "name": "fs_primary_care_veterinarian_zip",
-      "datatype": "string"
-    },
-    { 
+    {
       "name": "fs_future_studies_participation_likelihood",
       "datatype": "integer"
     },
-    { 
+    {
       "name": "fs_phenotype_vs_lifespan_participation_likelihood",
       "datatype": "integer"
     },
-    { 
+    {
       "name": "fs_genotype_vs_lifespan_participation_likelihood",
       "datatype": "integer"
     },
-    { 
+    {
       "name": "fs_medically_slowed_aging_participation_likelihood",
       "datatype": "integer"
     }

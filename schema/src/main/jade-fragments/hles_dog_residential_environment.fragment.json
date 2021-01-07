@@ -6,50 +6,6 @@
       "datatype": "integer"
     },
     {
-      "name": "de_past_residence_zip_count",
-      "datatype": "integer"
-    },
-    {
-      "name": "de_past_residence_zip1",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_zip2",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_zip3",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_zip4",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_zip5",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_zip6",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_zip7",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_zip8",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_zip9",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_zip10",
-      "datatype": "string"
-    },
-    {
       "name": "de_past_residence_country_count",
       "datatype": "integer"
     },

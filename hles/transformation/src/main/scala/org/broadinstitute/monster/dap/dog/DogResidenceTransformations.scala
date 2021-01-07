@@ -18,9 +18,8 @@ object DogResidenceTransformations {
     val tertiaryResidences = List.tabulate(tertiaryResidenceCutoff) { i =>
       val prefix = f"dd_2nd_residence_${i + 1}%02d"
       val state = rawRecord.getOptional(s"${prefix}_st")
-      val zip = rawRecord.getOptional(s"${prefix}_zip")
       val weeks = rawRecord.getOptionalNumber(s"${prefix}_time")
-      (state, zip, weeks)
+      (state, weeks)
     }
 
     val primaryOwned = rawRecord.getOptionalNumber("oc_address1_own")
@@ -33,7 +32,6 @@ object DogResidenceTransformations {
       ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division").flatMap {
         OwnerTransformations.getCensusDivision(_)
       },
-      ocPrimaryResidenceZip = rawRecord.getOptional("oc_address1_zip"),
       ocPrimaryResidenceOwnership = primaryOwned,
       ocPrimaryResidenceOwnershipOtherDescription =
         if (primaryOwned.contains(98)) rawRecord.getOptional("oc_address1_own_other") else None,
@@ -43,9 +41,6 @@ object DogResidenceTransformations {
       ocSecondaryResidence = hasSecondaryResidence,
       ocSecondaryResidenceState = hasSecondaryResidence.flatMap {
         if (_) rawRecord.getOptional("oc_address2_state") else None
-      },
-      ocSecondaryResidenceZip = hasSecondaryResidence.flatMap {
-        if (_) rawRecord.getOptional("oc_address2_zip") else None
       },
       ocSecondaryResidenceOwnership = secondaryOwned,
       ocSecondaryResidenceOwnershipOtherDescription = if (secondaryOwned.contains(98)) {
@@ -59,82 +54,56 @@ object DogResidenceTransformations {
       ddAlternateRecentResidenceCount = tertiaryResidenceCount.map(_.toLong),
       ddAlternateRecentResidence1State =
         if (tertiaryResidenceCutoff >= 1) tertiaryResidences(0)._1 else None,
-      ddAlternateRecentResidence1Zip =
-        if (tertiaryResidenceCutoff >= 1) tertiaryResidences(0)._2 else None,
       ddAlternateRecentResidence1Weeks =
-        if (tertiaryResidenceCutoff >= 1) tertiaryResidences(0)._3 else None,
+        if (tertiaryResidenceCutoff >= 1) tertiaryResidences(0)._2 else None,
       ddAlternateRecentResidence2State =
         if (tertiaryResidenceCutoff >= 2) tertiaryResidences(1)._1 else None,
-      ddAlternateRecentResidence2Zip =
-        if (tertiaryResidenceCutoff >= 2) tertiaryResidences(1)._2 else None,
       ddAlternateRecentResidence2Weeks =
-        if (tertiaryResidenceCutoff >= 2) tertiaryResidences(1)._3 else None,
+        if (tertiaryResidenceCutoff >= 2) tertiaryResidences(1)._2 else None,
       ddAlternateRecentResidence3State =
         if (tertiaryResidenceCutoff >= 3) tertiaryResidences(2)._1 else None,
-      ddAlternateRecentResidence3Zip =
-        if (tertiaryResidenceCutoff >= 3) tertiaryResidences(2)._2 else None,
       ddAlternateRecentResidence3Weeks =
-        if (tertiaryResidenceCutoff >= 3) tertiaryResidences(2)._3 else None,
+        if (tertiaryResidenceCutoff >= 3) tertiaryResidences(2)._2 else None,
       ddAlternateRecentResidence4State =
         if (tertiaryResidenceCutoff >= 4) tertiaryResidences(3)._1 else None,
-      ddAlternateRecentResidence4Zip =
-        if (tertiaryResidenceCutoff >= 4) tertiaryResidences(3)._2 else None,
       ddAlternateRecentResidence4Weeks =
-        if (tertiaryResidenceCutoff >= 4) tertiaryResidences(3)._3 else None,
+        if (tertiaryResidenceCutoff >= 4) tertiaryResidences(3)._2 else None,
       ddAlternateRecentResidence5State =
         if (tertiaryResidenceCutoff >= 5) tertiaryResidences(4)._1 else None,
-      ddAlternateRecentResidence5Zip =
-        if (tertiaryResidenceCutoff >= 5) tertiaryResidences(4)._2 else None,
       ddAlternateRecentResidence5Weeks =
-        if (tertiaryResidenceCutoff >= 5) tertiaryResidences(4)._3 else None,
+        if (tertiaryResidenceCutoff >= 5) tertiaryResidences(4)._2 else None,
       ddAlternateRecentResidence6State =
         if (tertiaryResidenceCutoff >= 6) tertiaryResidences(5)._1 else None,
-      ddAlternateRecentResidence6Zip =
-        if (tertiaryResidenceCutoff >= 6) tertiaryResidences(5)._2 else None,
       ddAlternateRecentResidence6Weeks =
-        if (tertiaryResidenceCutoff >= 6) tertiaryResidences(5)._3 else None,
+        if (tertiaryResidenceCutoff >= 6) tertiaryResidences(5)._2 else None,
       ddAlternateRecentResidence7State =
         if (tertiaryResidenceCutoff >= 7) tertiaryResidences(6)._1 else None,
-      ddAlternateRecentResidence7Zip =
-        if (tertiaryResidenceCutoff >= 7) tertiaryResidences(6)._2 else None,
       ddAlternateRecentResidence7Weeks =
-        if (tertiaryResidenceCutoff >= 7) tertiaryResidences(6)._3 else None,
+        if (tertiaryResidenceCutoff >= 7) tertiaryResidences(6)._2 else None,
       ddAlternateRecentResidence8State =
         if (tertiaryResidenceCutoff >= 8) tertiaryResidences(7)._1 else None,
-      ddAlternateRecentResidence8Zip =
-        if (tertiaryResidenceCutoff >= 8) tertiaryResidences(7)._2 else None,
       ddAlternateRecentResidence8Weeks =
-        if (tertiaryResidenceCutoff >= 8) tertiaryResidences(7)._3 else None,
+        if (tertiaryResidenceCutoff >= 8) tertiaryResidences(7)._2 else None,
       ddAlternateRecentResidence9State =
         if (tertiaryResidenceCutoff >= 9) tertiaryResidences(8)._1 else None,
-      ddAlternateRecentResidence9Zip =
-        if (tertiaryResidenceCutoff >= 9) tertiaryResidences(8)._2 else None,
       ddAlternateRecentResidence9Weeks =
-        if (tertiaryResidenceCutoff >= 9) tertiaryResidences(8)._3 else None,
+        if (tertiaryResidenceCutoff >= 9) tertiaryResidences(8)._2 else None,
       ddAlternateRecentResidence10State =
         if (tertiaryResidenceCutoff >= 10) tertiaryResidences(9)._1 else None,
-      ddAlternateRecentResidence10Zip =
-        if (tertiaryResidenceCutoff >= 10) tertiaryResidences(9)._2 else None,
       ddAlternateRecentResidence10Weeks =
-        if (tertiaryResidenceCutoff >= 10) tertiaryResidences(9)._3 else None,
+        if (tertiaryResidenceCutoff >= 10) tertiaryResidences(9)._2 else None,
       ddAlternateRecentResidence11State =
         if (tertiaryResidenceCutoff >= 11) tertiaryResidences(10)._1 else None,
-      ddAlternateRecentResidence11Zip =
-        if (tertiaryResidenceCutoff >= 11) tertiaryResidences(10)._2 else None,
       ddAlternateRecentResidence11Weeks =
-        if (tertiaryResidenceCutoff >= 11) tertiaryResidences(10)._3 else None,
+        if (tertiaryResidenceCutoff >= 11) tertiaryResidences(10)._2 else None,
       ddAlternateRecentResidence12State =
         if (tertiaryResidenceCutoff >= 12) tertiaryResidences(11)._1 else None,
-      ddAlternateRecentResidence12Zip =
-        if (tertiaryResidenceCutoff >= 12) tertiaryResidences(11)._2 else None,
       ddAlternateRecentResidence12Weeks =
-        if (tertiaryResidenceCutoff >= 12) tertiaryResidences(11)._3 else None,
+        if (tertiaryResidenceCutoff >= 12) tertiaryResidences(11)._2 else None,
       ddAlternateRecentResidence13State =
         if (tertiaryResidenceCutoff >= 13) tertiaryResidences(12)._1 else None,
-      ddAlternateRecentResidence13Zip =
-        if (tertiaryResidenceCutoff >= 13) tertiaryResidences(12)._2 else None,
       ddAlternateRecentResidence13Weeks =
-        if (tertiaryResidenceCutoff >= 13) tertiaryResidences(12)._3 else None
+        if (tertiaryResidenceCutoff >= 13) tertiaryResidences(12)._2 else None
     )
   }
 }

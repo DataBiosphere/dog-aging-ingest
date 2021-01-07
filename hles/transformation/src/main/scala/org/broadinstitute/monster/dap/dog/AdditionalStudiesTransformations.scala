@@ -20,9 +20,6 @@ object AdditionalStudiesTransformations {
       fsPrimaryCareVeterinarianState = pcVetConsent.flatMap {
         if (_) rawRecord.getOptional("fs_pcvet_st") else None
       },
-      fsPrimaryCareVeterinarianZip = pcVetConsent.flatMap {
-        if (_) rawRecord.getOptional("fs_pcvet_zip") else None
-      },
       fsFutureStudiesParticipationLikelihood = rawRecord.getOptionalNumber("fs_future_studies"),
       fsPhenotypeVsLifespanParticipationLikelihood = pcVetConsent.flatMap {
         if (_) rawRecord.getOptionalNumber("fs_pc_ppf_lifespan") else None

@@ -15,18 +15,6 @@ class ResidentialEnvironmentTransformationsSpec
     val exampleDogFields = Map[String, Array[String]](
       "de_home_nbr" -> Array("10"),
       "oc_address2_yn" -> Array("1"),
-      "de_zip_nbr" -> Array("10"),
-      "de_zip_01_only" -> Array("this should be ignored"),
-      "de_zip_01" -> Array("11111"),
-      "de_zip_02" -> Array("22222"),
-      "de_zip_03" -> Array("33333"),
-      "de_zip_04" -> Array("44444"),
-      "de_zip_05" -> Array("55555"),
-      "de_zip_06" -> Array("66666"),
-      "de_zip_07" -> Array("77777"),
-      "de_zip_08" -> Array("88888"),
-      "de_zip_09" -> Array("99999"),
-      "de_zip_10" -> Array("10101"),
       "de_country_nbr" -> Array("10"),
       "de_country_01_only" -> Array("this should be ignored too"),
       "de_country_01" -> Array("country1"),
@@ -46,17 +34,6 @@ class ResidentialEnvironmentTransformationsSpec
       )
 
     output.deLifetimeResidenceCount.value shouldBe 12
-    output.dePastResidenceZipCount.value shouldBe 10
-    output.dePastResidenceZip1.value shouldBe "11111"
-    output.dePastResidenceZip2.value shouldBe "22222"
-    output.dePastResidenceZip3.value shouldBe "33333"
-    output.dePastResidenceZip4.value shouldBe "44444"
-    output.dePastResidenceZip5.value shouldBe "55555"
-    output.dePastResidenceZip6.value shouldBe "66666"
-    output.dePastResidenceZip7.value shouldBe "77777"
-    output.dePastResidenceZip8.value shouldBe "88888"
-    output.dePastResidenceZip9.value shouldBe "99999"
-    output.dePastResidenceZip10.value shouldBe "10101"
     output.dePastResidenceCountryCount.value shouldBe 10
     output.dePastResidenceCountry1.value shouldBe "country1"
     output.dePastResidenceCountry2.value shouldBe "country2"
@@ -74,10 +51,6 @@ class ResidentialEnvironmentTransformationsSpec
     val exampleDogFields = Map[String, Array[String]](
       "de_home_nbr" -> Array("1"),
       "oc_address2_yn" -> Array("0"),
-      "de_zip_nbr" -> Array("1"),
-      "de_zip_01_only" -> Array("12345"),
-      "de_zip_01" -> Array("ignoredZip1"),
-      "de_zip_01" -> Array("ignoredZip2"),
       "de_country_nbr" -> Array("1"),
       "de_country_01_only" -> Array("USA!"),
       "de_country_01" -> Array("this should be ignored"),
@@ -89,9 +62,6 @@ class ResidentialEnvironmentTransformationsSpec
       )
 
     output.deLifetimeResidenceCount.value shouldBe 2
-    output.dePastResidenceZipCount.value shouldBe 1
-    output.dePastResidenceZip1.value shouldBe "12345"
-    output.dePastResidenceZip2 shouldBe None
     output.dePastResidenceCountryCount.value shouldBe 1
     output.dePastResidenceCountry1.value shouldBe "USA!"
     output.dePastResidenceCountry2 shouldBe None
