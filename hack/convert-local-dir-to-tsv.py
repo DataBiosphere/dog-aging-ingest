@@ -81,17 +81,6 @@ for table_name in table_names:
                     # store data
                     column_set.update(row.keys())
                     row_list.append(row)
-                # environment:
-                elif table_name == "environment":
-                    entity_name = pk_prefix + table_name + '_id'
-                    # env records are unique on dog_id, redcap_event
-                    # setting the primary key
-                    dogId = row.get('dog_id')
-                    eventName = row.get('address_month_year')
-                    row[entity_name] = ('%s-%s' %
-                        (dogId, eventName))
-                    column_set.update(row.keys())
-                    row_list.append(row)
                 else:
                     log.info(f"Unrecognized table: {table_name}")
 
@@ -119,16 +108,23 @@ for table_name in table_names:
             log.info(f"...Processing Split #{chunk} to {output_location}")
             split_column_set = set()
             # add 511 columns
-            for _ in range(0, TERRA_COLUMN_LIMIT - 1):
-                col = column_set.pop()
-                split_column_set.add(col)
-                log.debug(f"......adding {col} to split_column_set ({len(split_column_set)}) ...{len(column_set)} columns left")
-            split_column_list = [entity_name] + sorted(list(split_column_set))
+            col_counter = 0
+            for col in column_set:
+                if col_counter < (TERRA_COLUMN_LIMIT - 1) and len(column_set) > 0:
+                    # add column to split
+                    split_column_set.add(col)
+                    col_counter += len(split_column_set)
+                    log.debug(f"......adding {col} to split_column_set ({col_counter}) ...{len(column_set)} columns left")
+            # remove the split_column_set from column_set
+            column_set = column_set - split_column_set
+            split_column_list = sorted(list(split_column_set))
+            # add PK to each split as first column
+            split_column_list.insert(0, entity_name)
             log.info(f"......Split #{chunk} now contains {len(split_column_list)} columns")
             log.debug(f"cols in split: {len(split_column_list)}")
             log.debug(f"cols left to split: {len(column_set)}")
 
-            def clean_up_string_whitespace(val):
+            def clean_up_string_value(val):
                 try:
                     return val.replace('\r\n', ' ').strip()
                 except AttributeError:
@@ -137,7 +133,7 @@ for table_name in table_names:
             # iterate through every row looking for every column for this split
             split_row_dict_list = [
                 {
-                    col: clean_up_string_whitespace(row[col])
+                    col: clean_up_string_value(row[col])
                     for col in split_column_list
                     if col in row
                 }
@@ -151,7 +147,7 @@ for table_name in table_names:
                 dw.writerows(split_row_dict_list)
             log.info(f"......{table_name} Split #{chunk} was successfully written to {output_location}")
     else:
-        # this branch is executed for any tables with 512 cols or less
+        # this thread is executed for any tables with 512 cols or less
         log.info(f"...No need to split files for {table_name}")
         output_location = os.path.join(parser.output_dir, f'{table_name}.tsv')
         log.info(f"...Writing {table_name} to {output_location}")

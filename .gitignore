@@ -4,3 +4,4 @@ target/
 .metals/
 project/metals.sbt
 .bloop/
+hack/virtualenvs/
