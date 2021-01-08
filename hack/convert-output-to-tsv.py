@@ -15,7 +15,7 @@ try:
 except IndexError:
     debug = None
 
-table_names = ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition', 'hles_owner']
+table_names = ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition', 'hles_owner', 'environment']
 pk_prefix = 'entity:'
 
 # debug printer
@@ -85,80 +85,91 @@ for table_name in table_names:
                     # store data
                     column_set.update(row.keys())
                     row_list.append(row)
+                # environment:
+                elif table_name == "environment":
+                    entity_name = pk_prefix + table_name + '_id'
+                    # env records are unique on dog_id, redcap_event
+                    # setting the primary key
+                    dogId = row.get('dog_id')
+                    eventName = row.get('address_month_year')
+                    row[entity_name] = ('%s-%s' %
+                        (dogId, eventName))
+                    column_set.update(row.keys())
+                    row_list.append(row)
                 else:
                     print(f"Unrecognized table: {table_name}")
 
-    # make sure pk is the first column
-    # pop out the PK, will be splitting this set out later
-    column_set.remove(entity_name)
-    sorted_column_set = sorted(list(column_set))    
-    sorted_column_set.insert(0, entity_name)
+        # make sure pk is the first column
+        # pop out the PK, will be splitting this set out later
+        column_set.remove(entity_name)
+        sorted_column_set = sorted(list(column_set))
+        sorted_column_set.insert(0, entity_name)
 
-    # provide some stats
-    col_count = len(sorted_column_set)
-    print(f"...{table_name} contains {row_count} rows and {col_count} columns")
-    # output to tsv
-    # 512 column max limit per request (upload to workspace) 
-    if (col_count > 512):
-        # calculate chunks needed - each table requires the PK
-        total_col_count = ceil(col_count/512)+col_count-1
-        chunks = ceil(total_col_count/512)
-        print(f"...Splitting {table_name} into {chunks} files")
-        print(f"...{len(column_set)} cols in init list")
-        # FOR EACH SPLIT
-        for chunk in range(1, chunks+1):
-            # Incremented outfile name
-            output_location = output_dir + '/' + table_name+'_%s' % chunk + '.tsv'
-            print(f"...Processing Split #{chunk} to {output_location}")
+        # provide some stats
+        col_count = len(sorted_column_set)
+        print(f"...{table_name} contains {row_count} rows and {col_count} columns")
+        # output to tsv
+        # 512 column max limit per request (upload to workspace)
+        if (col_count > 512):
+            # calculate chunks needed - each table requires the PK
+            total_col_count = ceil(col_count/512)+col_count-1
+            chunks = ceil(total_col_count/512)
+            print(f"...Splitting {table_name} into {chunks} files")
+            print(f"...{len(column_set)} cols in init list")
+            # FOR EACH SPLIT
+            for chunk in range(1, chunks+1):
+                # Incremented outfile name
+                output_location = output_dir + '/' + table_name+'_%s' % chunk + '.tsv'
+                print(f"...Processing Split #{chunk} to {output_location}")
+                with open(output_location, 'w') as output_file:
+                    split_column_set = set()
+                    # add 511 columns
+                    col_counter = 0
+                    for col in column_set:
+                        if (col_counter < 511 and len(column_set) > 0):
+                            # add column to split
+                            split_column_set.add(col)
+                            col_counter = len(split_column_set)
+                            printd(f"......adding {col} to split_column_set ({col_counter}) ...{len(column_set)} columns left")
+                    # remove the split_column_set from column_set
+                    column_set = [x for x in column_set
+                                 if x not in split_column_set]
+                    split_column_list = sorted(list(split_column_set))
+                    # add PK to each split as first column
+                    split_column_list.insert(0, entity_name)
+                    print(f"......Split #{chunk} now contains {len(split_column_list)} columns")
+                    printd(f"cols in split: {len(split_column_list)}")
+                    printd(f"cols left to split: {len(column_set)}")
+                    # split rows
+                    split_row_dict_list = list()
+                    # iterate through every row looking for every column for this split
+                    for row in row_list:
+                        split_row_dict = dict()
+                        for col in split_column_list:
+                            # if a whitelisted col exists in this row
+                            if (col in dict(row).keys()):
+                                # add the col to the split list
+                                # clean up whitespace
+                                try:
+                                    split_row_dict[col] = (dict(row).get(col)).replace('\r\n',' ').strip()
+                                except AttributeError:
+                                    split_row_dict[col] = (dict(row).get(col))
+                            else:
+                                pass
+                        # add the row to the list of rows for this
+                        split_row_dict_list.append(split_row_dict)
+                    # output to tsv
+                    dw = csv.DictWriter(output_file, split_column_list, delimiter='\t')
+                    dw.writeheader()
+                    dw.writerows(split_row_dict_list)
+                print(f"......{table_name} Split #{chunk} was successfully written to {output_location}")
+        else:
+            # this thread is executed for any tables with 512 cols or less
+            print(f"...No need to split files for {table_name}")
+            output_location = output_dir + '/' + table_name + '.tsv'
+            print(f"...Writing {table_name} to {output_location}")
             with open(output_location, 'w') as output_file:
-                split_column_set = set()
-                # add 511 columns
-                col_counter = 0
-                for col in column_set:
-                    if (col_counter < 511 and len(column_set) > 0):
-                        # add column to split
-                        split_column_set.add(col)
-                        col_counter = len(split_column_set)
-                        printd(f"......adding {col} to split_column_set ({col_counter}) ...{len(column_set)} columns left")
-                # remove the split_column_set from column_set
-                column_set = [x for x in column_set 
-                             if x not in split_column_set]
-                split_column_list = sorted(list(split_column_set))
-                # add PK to each split as first column                
-                split_column_list.insert(0, entity_name)
-                print(f"......Split #{chunk} now contains {len(split_column_list)} columns")
-                printd(f"cols in split: {len(split_column_list)}")
-                printd(f"cols left to split: {len(column_set)}")
-                # split rows
-                split_row_dict_list = list()
-                # iterate through every row looking for every column for this split
-                for row in row_list:
-                    split_row_dict = dict()
-                    for col in split_column_list:
-                        # if a whitelisted col exists in this row
-                        if (col in dict(row).keys()):
-                            # add the col to the split list
-                            # clean up whitespace
-                            try:
-                                split_row_dict[col] = (dict(row).get(col)).replace('\r\n',' ').strip()
-                            except AttributeError:
-                                split_row_dict[col] = (dict(row).get(col))
-                        else:
-                            pass
-                    # add the row to the list of rows for this
-                    split_row_dict_list.append(split_row_dict)
-                # output to tsv
-                dw = csv.DictWriter(output_file, split_column_list, delimiter='\t')
+                dw = csv.DictWriter(output_file, sorted_column_set, delimiter='\t')
                 dw.writeheader()
-                dw.writerows(split_row_dict_list)
-            print(f"......{table_name} Split #{chunk} was successfully written to {output_location}")
-    else:
-        # this thread is executed for any tables with 512 cols or less
-        print(f"...No need to split files for {table_name}")
-        output_location = output_dir + '/' + table_name + '.tsv'
-        print(f"...Writing {table_name} to {output_location}")
-        with open(output_location, 'w') as output_file:
-            dw = csv.DictWriter(output_file, sorted_column_set, delimiter='\t')
-            dw.writeheader()
-            dw.writerows(row_list)
-        print(f"...{table_name} was successfully written to {output_location}")
+                dw.writerows(row_list)
+            print(f"...{table_name} was successfully written to {output_location}")

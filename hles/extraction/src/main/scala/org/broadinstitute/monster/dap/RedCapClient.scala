@@ -1,7 +1,6 @@
 package org.broadinstitute.monster.dap
 
 import java.time.format.DateTimeFormatter
-
 import okhttp3._
 import org.slf4j.LoggerFactory
 import upack.Msg
@@ -43,14 +42,17 @@ object RedCapClient {
     val logger = LoggerFactory.getLogger(getClass)
 
     val formBuilder = generatorParams.redcapRequest match {
-      case GetRecords(ids, fields, forms, start, end, filters) =>
+      case GetRecords(ids, fields, forms, start, end, filters, arm) =>
         val logPieces = List(
           s"ids: [${ids.mkString(",")}]",
           s"fields: [${fields.mkString(",")}]",
           s"forms: [${forms.mkString(",")}]",
           s"start: [$start]",
           s"end: [$end]",
-          s"filters: [${filters.map(directive => s"${directive.field}${directive.operation.op}${directive.comparand}").mkString(",")}]"
+          s"filters: [${filters
+            .map(directive => s"${directive.field}${directive.operation.op}${directive.comparand}")
+            .mkString(",")}]",
+          s"arm: [$arm]"
         )
         logger.debug(s"Querying RedCap for records: ${logPieces.mkString(",")}")
 

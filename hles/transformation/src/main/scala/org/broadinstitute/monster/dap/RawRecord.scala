@@ -1,5 +1,7 @@
 package org.broadinstitute.monster.dap
 
+import org.broadinstitute.monster.dap.RawRecord.DAPDateTimeFormatter
+
 import java.lang.NumberFormatException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -22,10 +24,14 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     *
     * Raises an error if the attribute has no value in this record, or
     * if it has multiple values.
+    *
+    * Adding some conditional logic here to collapse duplicate fields to a set
+    * If the values are unique, it would error in the same manner it did before
+    * If the recurring field contains the same value, the head of the set is used
     */
   def getRequired(field: String): String = {
     val values = fields.getOrElse(field, Array.empty)
-    if (values.length != 1) {
+    if (values.toSet.size != 1) {
       throw new IllegalStateException(s"Record $id has more/less than 1 value for field $field")
     } else {
       values.head
@@ -36,11 +42,20 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     * Get the singleton value for an attribute in this record, if one exists.
     *
     * Raises an error if the attribute has multiple values.
+    *
+    * Only unique duplicates will throw an error
+    * If we receive multiple fields with the same value, the head of the set is used
     */
   def getOptional(field: String): Option[String] = {
-    val values = fields.getOrElse(field, Array.empty)
-    if (values.length > 1) {
-      throw new IllegalStateException(s"Record $id has multiple values for field $field")
+    val values = fields.getOrElse(field, Array.empty).toSet
+    // If there are multiple values
+    if (values.size > 1) {
+      // Filtering out "NA"
+      if (values.--(Array("NA")).size > 1) {
+        throw new IllegalStateException(s"Record $id has multiple values for field $field")
+      } else {
+        values.headOption
+      }
     } else {
       values.headOption
     }
@@ -60,7 +75,8 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
       } catch {
         case e: NumberFormatException => {
           if (truncateDecimals) {
-            val truncatedValue: Long = value.toFloat.toLong
+            // The conversion to double and then long is to handle scientific notation
+            val truncatedValue: Long = value.toDouble.toLong
 
             // don't log this error message until after we've successfully converted the string to a long.
             // this avoids us logging this message erroneously if we were unable to parse the value,
@@ -81,10 +97,29 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   def getOptionalDate(field: String): Option[LocalDate] =
     getOptional(field).map(LocalDate.parse(_, RawRecord.DateFormatter))
 
+  def getOptionalDateTime(field: String): Option[LocalDate] = {
+    get(field) match {
+      case Some(datetimes) => {
+        val filtered = datetimes.filter(!_.equals("NA"))
+        val dates: Array[LocalDate] = filtered.map { dt =>
+          LocalDate.parse(dt, DAPDateTimeFormatter)
+        }
+        if (dates.toSet.size > 1) {
+          throw new RuntimeException(s"More than one date time for field ${field}")
+        }
+        Some(dates(0))
+      }
+      case None => None
+    }
+  }
+
   /** Get every value for an attribute in this record. */
   def getArray(field: String): Array[String] = fields.getOrElse(field, Array.empty)
 }
 
 object RawRecord {
   val DateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+  val DAPDateTimeFormatter: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[.SSSSSS]")
 }

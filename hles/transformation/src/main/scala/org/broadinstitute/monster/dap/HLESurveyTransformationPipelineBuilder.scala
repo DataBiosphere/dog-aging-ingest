@@ -5,6 +5,7 @@ import com.spotify.scio.values.SCollection
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.common.msg._
 import org.slf4j.{Logger, LoggerFactory}
+import upack.Msg
 
 object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
   /**
@@ -20,6 +21,8 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
 
     val rawRecords = readRecords(ctx, args)
+    val rawEnvRecords = readEnvRecords(ctx, args)
+
     val dogs = rawRecords.transform("Map Dogs")(_.map(DogTransformations.mapDog))
     val owners = rawRecords.transform("Map Owners")(_.map(OwnerTransformations.mapOwner))
     val cancer_conditions =
@@ -29,6 +32,8 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     val health_conditions = rawRecords.transform("Map health conditions")(
       _.flatMap(HealthTransformations.mapHealthConditions)
     )
+    val environment =
+      rawEnvRecords.transform("Map Environment")(_.map(EnvironmentTransformations.mapEnvironment))
     val cslb_transformations =
       rawRecords.transform("CSLB data")(_.flatMap(CslbTransformations.mapCslbData))
 
@@ -44,7 +49,11 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
       "Health conditions",
       s"${args.outputPrefix}/hles_health_condition"
     )
-
+    StorageIO.writeJsonLists(
+      environment,
+      "Environmental data",
+      s"${args.outputPrefix}/environment"
+    )
     StorageIO.writeJsonLists(
       cslb_transformations,
       "CSLB data",
@@ -75,6 +84,34 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
                 (fieldName, rawValues.map(_.read[String]("value")).toArray.sorted)
             }
           RawRecord(id.toLong, fields)
+      }
+  }
+
+  /** Read in records and group by study Id, with field name subgroups. */
+  def readEnvRecords(ctx: ScioContext, args: Args): SCollection[RawRecord] = {
+    val rawRecords: SCollection[Msg] = StorageIO
+      .readJsonLists(
+        ctx,
+        "Raw Environment Records",
+        s"${args.inputPrefix}/records/*.json"
+      )
+
+    // Group by study ID (record number) and arm (address_year_month)
+    // to get the format: (studyId, arm_id, Iterable((fieldName, Iterable(value))))
+    // (study_id, arm_id, iterable())
+    rawRecords
+      .groupBy(record => {
+        (record.read[String]("record"), record.read[String]("redcap_event_name"))
+      })
+      .map {
+        case ((id, eventName), rawRecordValues) =>
+          val fields: Map[String, Array[String]] = rawRecordValues
+            .groupBy(_.read[String]("field_name"))
+            .map {
+              case (fieldName, rawValues) =>
+                (fieldName, rawValues.map(_.read[String]("value")).toArray.sorted)
+            }
+          RawRecord(id.toLong, fields + ("redcap_event_name" -> Array(eventName)))
       }
   }
 }
