@@ -62,6 +62,7 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
       arm,
       fieldList,
       subdir,
+      // RedCap times out at the default batch size of 100
       10,
       RedCapClient.apply(_: List[String], wrapper)
     )

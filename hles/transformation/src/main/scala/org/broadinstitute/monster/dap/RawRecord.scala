@@ -67,17 +67,16 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   /** Get the singleton value for an attribute in this record if one exists, parsed as a boolean. */
   def getOptionalBoolean(field: String): Option[Boolean] = getOptional(field).map(_ == "1")
 
-  /** Get the singleton value for an attribute in this record, parsed as a long.
-    * The conversion to double and then long is to handle scientific notation
-    */
+  /** Get the singleton value for an attribute in this record, parsed as a long. */
   def getOptionalNumber(field: String, truncateDecimals: Boolean = true): Option[Long] =
     getOptional(field).map(value => {
       try {
-        value.toDouble.toLong
+        value.toLong
       } catch {
         case e: NumberFormatException => {
           if (truncateDecimals) {
-            val truncatedValue: Long = value.toFloat.toLong
+            // The conversion to double and then long is to handle scientific notation
+            val truncatedValue: Long = value.toDouble.toLong
 
             // don't log this error message until after we've successfully converted the string to a long.
             // this avoids us logging this message erroneously if we were unable to parse the value,
