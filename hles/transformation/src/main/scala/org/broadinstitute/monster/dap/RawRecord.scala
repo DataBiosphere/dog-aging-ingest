@@ -37,12 +37,19 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     *
     * Raises an error if the attribute has multiple values.
     */
-  def getOptional(field: String): Option[String] = {
+  def getOptional(field: String, stripNewlines: Boolean = false): Option[String] = {
     val values = fields.getOrElse(field, Array.empty)
     if (values.length > 1) {
       throw new IllegalStateException(s"Record $id has multiple values for field $field")
     } else {
-      values.headOption
+      if (stripNewlines) {
+        values.headOption match {
+          case Some(value) => Some(value.replace('\n', ' '))
+          case None        => None
+        }
+      } else {
+        values.headOption
+      }
     }
   }
 

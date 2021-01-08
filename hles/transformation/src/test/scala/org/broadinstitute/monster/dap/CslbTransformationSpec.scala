@@ -30,6 +30,17 @@ class CslbTransformationSpec extends AnyFlatSpec {
     "cslb_other_changes" -> Array("No new changes")
   )
 
+  it should "strip unwanted newlines from cslb_other_changes" in {
+    val exampleCslbRecord = RawRecord(
+      id = 1,
+      exampleCslbFields.updated("cslb_other_changes", Array("this is some text\nwith a line break"))
+    )
+
+    val output = CslbTransformations.mapCslbData(exampleCslbRecord).get
+
+    output.cslbOtherChanges shouldBe Some("this is some text with a line break")
+  }
+
   it should "return None when not processing a cslb record" in {
     val exampleNonCslbRecord = RawRecord(id = 1, Map("foo" -> Array("Bar")))
     val output = CslbTransformations.mapCslbData(exampleNonCslbRecord)
