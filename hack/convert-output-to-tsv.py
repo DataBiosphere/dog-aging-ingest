@@ -9,6 +9,14 @@ import os
 
 from gcsfs.core import GCSFileSystem
 
+
+def remove_prefix(text, prefix):
+    if text.startswith(prefix):
+        return text[len(prefix):]
+
+    return text
+
+
 parser = argparse.ArgumentParser(description="Convert the records in a specified bucket prefix to a Terra-compatible TSV")
 parser.add_argument('input_dir', metavar='I', help='The bucket prefix to read records from')
 parser.add_argument('output_dir', metavar='O', help='The local directory to write the resulting TSVs to')
@@ -24,14 +32,6 @@ table_names = parser.table or ['cslb', 'hles_cancer_condition', 'hles_dog', 'hle
 PRIMARY_KEY_PREFIX = 'entity'
 
 gcs = GCSFileSystem()
-
-
-def remove_prefix(text, prefix):
-    if text.startswith(prefix):
-        return text[len(prefix):]
-
-    return text
-
 
 # Process the known (hardcoded) tables
 for table_name in table_names:
