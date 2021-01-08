@@ -31,13 +31,12 @@ for table_name in table_names:
     # get the set of files in the directory
     full_input_directory = input_dir + '/' + table_name
     # ingore hidden files and sort files alphabetically
-    input_files = sorted([f for f in listdir(full_input_directory)
+    input_files = sorted([f for f in listdir(full_input_directory) 
                          if not f.startswith('.')])
-    print ("Input files: "+' '.join(input_files))
     # set to hold all columns for this table, list to hold all the rows
     column_set = set()
     row_list = []
-    # read json data
+    # read json data    
     for json_file_name in input_files:
         print(f"...Opening {full_input_directory+'/'+json_file_name}")
         with open(full_input_directory + '/' + json_file_name, 'r') as json_file:
@@ -81,7 +80,7 @@ for table_name in table_names:
                         congenital_flag = 0
                     else:
                         print (f"Error, 'hs_condition_is_congenital' is not populated in {table_name}")
-                    row[entity_name] = ('%s-%s-%s' %
+                    row[entity_name] = ('%s-%s-%s' % 
                         (row.get('dog_id'), row.get('hs_condition'), congenital_flag))
                     # store data
                     column_set.update(row.keys())
