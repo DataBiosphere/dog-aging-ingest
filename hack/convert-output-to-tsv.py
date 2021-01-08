@@ -56,6 +56,9 @@ for table_name in table_names:
     elif table_name == "hles_health_condition":
         pk_name = None
         entity_name = f"{PRIMARY_KEY_PREFIX}:{table_name}_id"
+    elif table_name == "environment":
+        pk_name = 'dog_id'
+        entity_name = f"{PRIMARY_KEY_PREFIX}:{table_name}_id"
     else:
         log.info(f"Unrecognized table: {table_name}")
         break
@@ -77,6 +80,10 @@ for table_name in table_names:
                     except TypeError:
                         log.info(f"Error, 'hs_condition_is_congenital' is not populated in {table_name}")
                     row[entity_name] = '-'.join([row.get('dog_id'), row.get('hs_condition'), congenital_flag])
+                elif table_name == "environment":
+                    dogId = row.get('dog_id')
+                    eventName = row.get('address_month_year')
+                    row[entity_name] = '-'.join([dogId, eventName])
                 else:
                     row[entity_name] = row.pop(pk_name)
 
