@@ -61,6 +61,10 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     }
   }
 
+  def getOptionalStripped(field: String): Option[String] = {
+    getOptional(field).map(_.replace('\n', ' '))
+  }
+
   /** Get the singleton value for an attribute in this record, parsed as a boolean. */
   def getBoolean(field: String): Boolean = getOptionalBoolean(field).getOrElse(false)
 

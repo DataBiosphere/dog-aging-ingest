@@ -25,7 +25,7 @@ object CslbTransformations {
             cslbRecognize6mo = rawRecord.getOptionalNumber("cslb_recognize_6mo"),
             cslbActive6mo = rawRecord.getOptionalNumber("cslb_active_6mo"),
             cslbScore = rawRecord.getOptionalNumber("cslb_score"),
-            cslbOtherChanges = rawRecord.getOptional("cslb_other_changes")
+            cslbOtherChanges = rawRecord.getOptionalStripped("cslb_other_changes")
           )
         )
       case _ =>
