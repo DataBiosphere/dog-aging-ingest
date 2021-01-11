@@ -22,13 +22,17 @@ parser.add_argument('input_dir', metavar='I', help='The bucket prefix to read re
 parser.add_argument('output_dir', metavar='O', help='The local directory to write the resulting TSVs to')
 parser.add_argument('table', nargs='*', help="One or more tables to process into TSVs. Processes all tables if none specified.")
 parser.add_argument('--debug', action='store_true', help="Write additional logs for debugging")
-parser.parse_args()
+args = parser.parse_args()
 
 log = logging.getLogger(__name__)
 
+# if debug isn't set, we use the default logging level (logging.WARNING)
+if args.debug:
+    log.basicConfig(level=logging.DEBUG)
+
 TERRA_COLUMN_LIMIT = 512
 
-table_names = parser.table or ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition', 'hles_owner', 'environment']
+table_names = args.table or ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition', 'hles_owner', 'environment']
 PRIMARY_KEY_PREFIX = 'entity'
 
 gcs = GCSFileSystem()
@@ -64,7 +68,7 @@ for table_name in table_names:
         break
 
     # read json data
-    for path in gcs.ls(os.path.join(parser.input_dir, table_name)):
+    for path in gcs.ls(os.path.join(args.input_dir, table_name)):
         log.info(f"...Opening {path}")
 
         with gcs.open(path, 'r') as json_file:
@@ -79,11 +83,11 @@ for table_name in table_names:
                         congenital_flag = int(congenital_flag)
                     except TypeError:
                         log.info(f"Error, 'hs_condition_is_congenital' is not populated in {table_name}")
-                    row[entity_name] = '-'.join([row.get('dog_id'), row.get('hs_condition'), congenital_flag])
+                    row[entity_name] = '-'.join([str(row.get('dog_id')), row.get('hs_condition'), str(congenital_flag)])
                 elif table_name == "environment":
-                    dogId = row.get('dog_id')
-                    eventName = row.get('address_month_year')
-                    row[entity_name] = '-'.join([dogId, eventName])
+                    dog_id = str(row.get('dog_id'))
+                    event_name = row.get('address_month_year')
+                    row[entity_name] = '-'.join([dog_id, event_name])
                 else:
                     row[entity_name] = row.pop(pk_name)
 
@@ -109,7 +113,7 @@ for table_name in table_names:
         # FOR EACH SPLIT
         for chunk in range(1, chunks+1):
             # Incremented outfile name
-            output_location = os.path.join(parser.output_dir, f'{table_name}_{chunk}.tsv')
+            output_location = os.path.join(args.output_dir, f'{table_name}_{chunk}.tsv')
             log.info(f"...Processing Split #{chunk} to {output_location}")
             split_column_set = set()
             # add 511 columns
@@ -148,7 +152,7 @@ for table_name in table_names:
     else:
         # this branch is executed for any tables with 512 cols or less
         log.info(f"...No need to split files for {table_name}")
-        output_location = os.path.join(parser.output_dir, f'{table_name}.tsv')
+        output_location = os.path.join(args.output_dir, f'{table_name}.tsv')
         log.info(f"...Writing {table_name} to {output_location}")
         with open(output_location, 'w') as output_file:
             dw = csv.DictWriter(output_file, sorted_column_set, delimiter='\t')

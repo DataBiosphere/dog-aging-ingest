@@ -4,13 +4,23 @@
 # All files are optional, but at least one must be present to create the virtualenv
 # Files:
 # * requirements.txt: Works as a Python requirements file, listing PyPi packages to install.
-# * virtualenv_args.sh: Specifies additional arguments to pass to the virtualenv executable when creating this virtualenv.
-# * python_executable.txt: Specifies the path to the python executable to use as the core python interpreter in the virtualenv.
+# * virtualenv_args.sh: Specifies additional space-separated arguments to pass to the virtualenv executable when creating this virtualenv.
+# * python_executable.txt: Specifies the path to the python executable to use as the default python interpreter in the virtualenv.
 # * .env: A list of environment variables to set in the virtualenv. May interpolate any values provided directly from virtualenv itself.
 # * setup.sh: An arbitrary shell script that will run when the virtualenv is created. Usable to install any custom dependencies not available from pip.
 set -e
 
 VERBOSE_MODE=0
+
+# unified readlink that works on both linux and mac hosts
+function x_readlink() {
+    # Darwin is the mac kernel - this runs different commands for mac vs. linux
+    if [ "$(uname -s)" = 'Darwin' ]; then
+        echo "$(greadlink $@)"
+    elif [ "$(uname -s)" = 'Linux' ]; then
+        echo "$(readlink $@)"
+    fi
+}
 
 function print_help() {
     echo "usage: ./run_in_virtualenv.sh [-v] virtualenv_name \"command goes here\""
@@ -35,7 +45,7 @@ do
     esac
 done
 
-ROOT_DIRECTORY=$(readlink -e $(dirname "$0"))
+ROOT_DIRECTORY=$(x_readlink -e $(dirname "$0"))
 export VIRTUALENV_NAME=${@:$OPTIND:1}
 export REQUESTED_COMMAND=${@:$OPTIND+1}
 export REQUIREMENTS_DIRECTORY="$ROOT_DIRECTORY/python_requirements/${VIRTUALENV_NAME}"
