@@ -26,9 +26,8 @@ args = parser.parse_args()
 
 log = logging.getLogger(__name__)
 
-# if debug isn't set, we use the default logging level (logging.WARNING)
-if args.debug:
-    log.basicConfig(level=logging.DEBUG)
+log_level = logging.DEBUG if args.debug else logging.INFO
+logging.basicConfig(level=log_level)
 
 TERRA_COLUMN_LIMIT = 512
 
@@ -72,8 +71,13 @@ for table_name in table_names:
         log.info(f"...Opening {path}")
 
         with gcs.open(path, 'r') as json_file:
+            print(path, json_file)
             for line in json_file:
                 row = json.loads(line)
+
+                if not row:
+                    raise RuntimeError(f'Encountered invalid JSON "{line}", aborting.')
+
                 # hles_health_condition: read + copy dog_id and hs_condition and hs_condition_is_congenital
                 # concatenate and write out as pk_name
                 if table_name == "hles_health_condition":
@@ -96,7 +100,7 @@ for table_name in table_names:
 
     # make sure pk is the first column
     # pop out the PK, will be splitting this set out later
-    column_set.remove(entity_name)
+    column_set.discard(entity_name)
     sorted_column_set = [entity_name] + sorted(list(column_set))
 
     # provide some stats
