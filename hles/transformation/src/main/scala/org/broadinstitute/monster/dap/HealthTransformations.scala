@@ -55,6 +55,8 @@ object HealthTransformations {
         }
         if rawRecord.getBoolean(prefix) && healthCondition.subcategory
           .map(subcategoryId =>
+            // if a condition has a subcategory, only include it if that subcategory was selected in the
+            // supplemental "check all that apply" question
             rawRecord.getArray(s"${prefix}_spec").contains(subcategoryId.toString)
           )
           .getOrElse(true)
