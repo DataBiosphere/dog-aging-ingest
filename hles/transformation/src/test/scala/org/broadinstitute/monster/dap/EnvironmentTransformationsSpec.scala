@@ -19,12 +19,14 @@ class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with Opti
     mapped shouldBe Some(
       Environment(
         dogId = 1L,
-        addressMonthYear = "baseline_arm_1",
         environmentGeocoding = Some(EnvironmentGeocoding.init()),
         environmentCensus = Some(EnvironmentCensus.init()),
         environmentPollutants = Some(EnvironmentPollutants.init()),
         environmentTemperaturePrecipitation = Some(EnvironmentTemperaturePrecipitation.init()),
-        environmentWalkability = Some(EnvironmentWalkability.init())
+        environmentWalkability = Some(EnvironmentWalkability.init()),
+        addressSequence = "baseline",
+        addressMonth = None,
+        addressYear = None
       )
     )
   }
@@ -43,12 +45,14 @@ class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with Opti
     mapped shouldBe Some(
       Environment(
         dogId = 1L,
-        addressMonthYear = "dec2019_arm_1",
         environmentGeocoding = Some(EnvironmentGeocoding.init()),
         environmentCensus = Some(EnvironmentCensus.init()),
         environmentPollutants = Some(EnvironmentPollutants.init()),
         environmentTemperaturePrecipitation = Some(EnvironmentTemperaturePrecipitation.init()),
-        environmentWalkability = Some(EnvironmentWalkability.init())
+        environmentWalkability = Some(EnvironmentWalkability.init()),
+        addressSequence = "primary",
+        addressMonth = Some("dec"),
+        addressYear = Some("2019")
       )
     )
   }
