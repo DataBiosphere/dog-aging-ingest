@@ -24,10 +24,10 @@ parser.add_argument('table', nargs='*', help="One or more tables to process into
 parser.add_argument('--debug', action='store_true', help="Write additional logs for debugging")
 args = parser.parse_args()
 
-log = logging.getLogger(__name__)
-
 log_level = logging.DEBUG if args.debug else logging.INFO
 logging.basicConfig(level=log_level)
+
+log = logging.getLogger(__name__)
 
 TERRA_COLUMN_LIMIT = 512
 
@@ -87,7 +87,7 @@ for table_name in table_names:
                         congenital_flag = int(congenital_flag)
                     except TypeError:
                         log.info(f"Error, 'hs_condition_is_congenital' is not populated in {table_name}")
-                    row[entity_name] = '-'.join([str(row.get('dog_id')), row.get('hs_condition'), str(congenital_flag)])
+                    row[entity_name] = '-'.join([str(component) for component in [row.get('dog_id'), row.get('hs_condition'), congenital_flag]])
                 elif table_name == "environment":
                     dog_id = str(row.get('dog_id'))
                     event_name = row.get('address_month_year')
@@ -122,7 +122,11 @@ for table_name in table_names:
             split_column_set = set()
             # add 511 columns
             for _ in range(TERRA_COLUMN_LIMIT - 1):
-                col = column_set.pop()
+                try:
+                    col = column_set.pop()
+                except KeyError:
+                    # KeyError is raised when we're out of columns to pop
+                    break
                 split_column_set.add(col)
                 log.debug(f"......adding {col} to split_column_set ({len(split_column_set)}) ...{len(column_set)} columns left")
             split_column_list = [entity_name] + sorted(list(split_column_set))
