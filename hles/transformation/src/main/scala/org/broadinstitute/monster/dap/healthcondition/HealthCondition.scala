@@ -24,7 +24,8 @@ sealed abstract class HealthCondition(
   val cg: Option[String] = None,
   val dx: Option[String] = None,
   val isOther: Boolean = false,
-  val descriptionSuffixOverride: Option[String] = None
+  val descriptionSuffixOverride: Option[String] = None,
+  val subcategory: Option[Int] = None
 ) extends LongEnumEntry
 
 object HealthCondition extends LongEnum[HealthCondition] {
@@ -373,10 +374,17 @@ object HealthCondition extends LongEnum[HealthCondition] {
       extends HealthCondition(1704L, "Ingestion of human medications", ToxinConsumption, dx = Some("rx_human"), isOther = true)
   case object RecreationalDrugs
       extends HealthCondition(1705L, "Ingestion of recreational drugs", ToxinConsumption, dx = Some("rec"), isOther = true)
-  case object RatPoison extends HealthCondition(1706L, "Mouse or rat bait/poison", ToxinConsumption, dx = Some("rat"), isOther = true)
+  case object RatPoisonBromethalin
+      extends HealthCondition(1706L, "Mouse or rat bait/poison", ToxinConsumption, dx = Some("rat"), subcategory = Some(1))
+  case object RatPoisonCholecalciferol
+      extends HealthCondition(1707L, "Mouse or rat bait/poison", ToxinConsumption, dx = Some("rat"), subcategory = Some(2))
+  case object RatPoisonWarfarin
+      extends HealthCondition(1708L, "Mouse or rat bait/poison", ToxinConsumption, dx = Some("rat"), subcategory = Some(3))
+  case object RatPoisonOther
+      extends HealthCondition(1709L, "Mouse or rat bait/poison", ToxinConsumption, dx = Some("rat"), subcategory = Some(99))
   case object DogMedications
-      extends HealthCondition(1707L, "Overdose of medications prescribed to the dog", ToxinConsumption, dx = Some("rx_dog_od"), isOther = true)
-  case object OtherToxin extends HealthCondition(1708L, "Other", ToxinConsumption, dx = Some("other"), isOther = true)
+      extends HealthCondition(1710L, "Overdose of medications prescribed to the dog", ToxinConsumption, dx = Some("rx_dog_od"), isOther = true)
+  case object OtherToxin extends HealthCondition(1711L, "Other", ToxinConsumption, dx = Some("other"), isOther = true)
 
   // Trauma.
   case object DogBite extends HealthCondition(1801L, "Dog bite", Trauma, dx = Some("dogbite"))

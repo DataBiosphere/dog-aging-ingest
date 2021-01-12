@@ -54,7 +54,19 @@ object HealthTransformations {
           s"${dxKey.dataPrefix}_$abbrev"
         }
         if rawRecord.getBoolean(prefix)
+        subcategory <- healthCondition.subcategory
+        if (subcategory match {
+          case None             => true
+          case Some(categoryId) => rawRecord.getArray(s"${prefix}_spec").contains(categoryId)
+        })
+        // isn't defined
+        // is defined and checked
+
       } yield {
+        // iterate through each individual checkbox option (getAll)
+        // if it includes this number, we have this kind of rat poison, etc.
+        // need to add a handler for the idea of a row only existing if it's flag exists and the list of poss. includes this number
+
         val base = createHealthConditionRow(
           rawRecord,
           prefix,
