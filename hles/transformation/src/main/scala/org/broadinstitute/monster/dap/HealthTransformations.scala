@@ -54,7 +54,9 @@ object HealthTransformations {
           s"${dxKey.dataPrefix}_$abbrev"
         }
         if rawRecord.getBoolean(prefix) && healthCondition.subcategory
-          .map(rawRecord.getArray(s"${prefix}_spec").contains(_))
+          .map(subcategoryId =>
+            rawRecord.getArray(s"${prefix}_spec").contains(subcategoryId.toString)
+          )
           .getOrElse(true)
       } yield {
         val base = createHealthConditionRow(
