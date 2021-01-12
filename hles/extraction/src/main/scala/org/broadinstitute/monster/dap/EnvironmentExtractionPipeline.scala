@@ -25,7 +25,6 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
 
   val arm =
     List(
-      "baseline_arm_1",
       "dec2019_arm_1",
       "dec2019_secondary_arm_1",
       "jan2020_arm_1",
