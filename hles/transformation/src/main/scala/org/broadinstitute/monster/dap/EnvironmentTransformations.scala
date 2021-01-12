@@ -10,10 +10,32 @@ object EnvironmentTransformations {
     */
   def mapEnvironment(rawRecord: RawRecord): Option[Environment] = {
     val dogId = rawRecord.id
+    val redcapEventName = rawRecord.getRequired("redcap_event_name").split("_")
+    // set address sequence
+    val addSeq: String = if (redcapEventName(0) == "baseline") {
+      "baseline"
+    } else {
+      redcapEventName(1) match {
+        case "arm"       => "primary"
+        case "secondary" => "secondary"
+      }
+    }
+    // set address month
+    val addMonth = if (redcapEventName(0) != "baseline") {
+      redcapEventName(0).filterNot(_.isDigit)
+    }
+
+    // set address year
+    val addYear = if (redcapEventName(0) != "baseline") {
+      redcapEventName(0).filter(_.isDigit)
+    }
+
     Some(
       Environment(
         dogId = dogId,
-        addressMonthYear = rawRecord.getRequired("redcap_event_name"),
+        addressSequence = addSeq,
+        addressMonth = addMonth,
+        addressYear = addYear,
         environmentGeocoding = Some(GeocodingTransformations.mapGeocodingMetadata(rawRecord)),
         environmentCensus = Some(CensusTransformations.mapCensusVariables(rawRecord)),
         environmentPollutants = Some(PollutantTransformations.mapPollutantVariables(rawRecord)),
