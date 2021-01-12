@@ -2,7 +2,7 @@ package org.broadinstitute.monster.dap.dog
 
 import java.time.{LocalDate, Period}
 
-import org.broadinstitute.monster.dap.RawRecord
+import org.broadinstitute.monster.dap.{MissingCalcFieldError, RawRecord}
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogDemographics
 
 object DemographicsTransformations {
@@ -56,10 +56,20 @@ object DemographicsTransformations {
   def mapAge(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics =
     rawRecord.getOptionalBoolean("dd_dog_birth_year_certain").fold(dog) { ageCertain =>
       if (ageCertain) {
-        val formYear = rawRecord.getRequired("dd_dog_current_year_calc").toInt
+        val formYear = rawRecord.getOptional("dd_dog_current_year_calc") match {
+          case None =>
+            MissingCalcFieldError(s"Record $dogId has less than 1 value for field dd_dog_current_year_calc").log
+            None
+          case Some(yearCalc) => yearCalc.toInt
+        }
         val birthYear = rawRecord.getRequired("dd_dog_birth_year").toInt
 
-        val formMonth = rawRecord.getRequired("dd_dog_current_month_calc").toInt
+        val formMonth = rawRecord.getOptional("dd_dog_current_month_calc") match {
+          case None =>
+            MissingCalcFieldError(s"Record $dogId has less than 1 value for field dd_dog_current_month_calc").log
+            None
+          case Some(monthCalc) => monthCalc.toInt
+        }
         val exactMonthKnown = rawRecord.getBoolean("dd_dog_birth_month_yn")
         val birthMonth = if (exactMonthKnown) {
           rawRecord.getRequired("dd_dog_birth_month").toInt
