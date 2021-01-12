@@ -21,13 +21,15 @@ object EnvironmentTransformations {
       }
     }
     // set address month
-    val addMonth = if (redcapEventName(0) != "baseline") {
-      redcapEventName(0).filterNot(_.isDigit)
+    val addMonth = redcapEventName(0) match {
+      case "baseline" => None
+      case _          => Some(redcapEventName(0).filterNot(_.isDigit))
     }
 
     // set address year
-    val addYear = if (redcapEventName(0) != "baseline") {
-      redcapEventName(0).filter(_.isDigit)
+    val addYear = redcapEventName(0) match {
+      case "baseline" => None
+      case _          => Some(redcapEventName(0).filter(_.isDigit))
     }
 
     Some(

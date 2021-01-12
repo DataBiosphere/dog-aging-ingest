@@ -19,13 +19,11 @@
     },
     {
       "name": "address_month",
-      "datatype": "string",
-      "type": "primary_key"
+      "datatype": "string"
     },
     {
       "name": "address_year",
-      "datatype": "string",
-      "type": "primary_key"
+      "datatype": "string"
     }
   ],
   "table_fragments": [
