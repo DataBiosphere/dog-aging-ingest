@@ -62,7 +62,7 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   }
 
   def getOptionalStripped(field: String): Option[String] = {
-    getOptional(field).map(_.replace("\r\n", " "))
+    getOptional(field).map(_.replaceAll("\r?\n", " "))
   }
 
   /** Get the singleton value for an attribute in this record, parsed as a boolean. */
