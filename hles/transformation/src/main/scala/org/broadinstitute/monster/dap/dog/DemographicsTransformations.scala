@@ -4,7 +4,6 @@ import java.time.{LocalDate, Period}
 
 import org.broadinstitute.monster.dap.{MissingCalcFieldError, RawRecord}
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogDemographics
-import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
 
 object DemographicsTransformations {
 
@@ -58,19 +57,26 @@ object DemographicsTransformations {
     rawRecord.getOptionalBoolean("dd_dog_birth_year_certain").fold(dog) { ageCertain =>
       if (ageCertain) {
         val dogId = rawRecord.id
-        val formYear = rawRecord.getOptional("dd_dog_current_year_calc").map(_.toInt)
-        if (formYear isEmpty) {
-          MissingCalcFieldError(
-            s"Record $dogId has less than 1 value for field dd_dog_current_year_calc"
-          ).log
+        val formYear = rawRecord.getOptional("dd_dog_current_year_calc") match {
+          case Some(year) => year.toInt
+          case None       =>
+            // we're throwing these errors instead of logging them because we want to completely skip records missing this value. they get logged
+            // by the logic up the chain that catches the error.
+            throw MissingCalcFieldError(
+              s"Record $dogId has less than 1 value for field dd_dog_current_year_calc"
+            )
         }
+
         val birthYear = rawRecord.getRequired("dd_dog_birth_year").toInt
 
-        val formMonth = rawRecord.getOptional("dd_dog_current_month_calc").map(_.toInt)
-        if (formMonth isEmpty) {
-          MissingCalcFieldError(
-            s"Record $dogId has less than 1 value for field dd_dog_current_month_calc"
-          ).log
+        val formMonth = rawRecord.getOptional("dd_dog_current_month_calc") match {
+          case Some(month) => month.toInt
+          case None        =>
+            // we're throwing these errors instead of logging them because we want to completely skip records missing this value. they get logged
+            // by the logic up the chain that catches the error.
+            throw MissingCalcFieldError(
+              s"Record $dogId has less than 1 value for field dd_dog_current_month_calc"
+            )
         }
         val exactMonthKnown = rawRecord.getBoolean("dd_dog_birth_month_yn")
         val birthMonth = if (exactMonthKnown) {

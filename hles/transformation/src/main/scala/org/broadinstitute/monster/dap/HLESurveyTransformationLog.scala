@@ -6,7 +6,7 @@ import org.slf4j.Logger
 import ujson.Obj
 
 // a trait to capture the generic logging mechanism we'll want with case classes for the different logging levels
-abstract class HLESurveyTransformationLog {
+abstract class HLESurveyTransformationLog extends Throwable {
   val jsonMsg: Obj
 
   def log(implicit logger: Logger): Unit
