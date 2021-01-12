@@ -24,7 +24,8 @@ sealed abstract class HealthCondition(
   val cg: Option[String] = None,
   val dx: Option[String] = None,
   val isOther: Boolean = false,
-  val descriptionSuffixOverride: Option[String] = None
+  val descriptionSuffixOverride: Option[String] = None,
+  val subcategory: Option[Int] = None
 ) extends LongEnumEntry
 
 object HealthCondition extends LongEnum[HealthCondition] {
@@ -373,25 +374,39 @@ object HealthCondition extends LongEnum[HealthCondition] {
       extends HealthCondition(1704L, "Ingestion of human medications", ToxinConsumption, dx = Some("rx_human"), isOther = true)
   case object RecreationalDrugs
       extends HealthCondition(1705L, "Ingestion of recreational drugs", ToxinConsumption, dx = Some("rec"), isOther = true)
-  case object RatPoison extends HealthCondition(1706L, "Mouse or rat bait/poison", ToxinConsumption, dx = Some("rat"), isOther = true)
+  case object RatPoisonBromethalin
+      extends HealthCondition(1706L, "Mouse or rat bait/poison (Bromethalin)", ToxinConsumption, dx = Some("rat"), subcategory = Some(1))
+  case object RatPoisonCholecalciferol
+      extends HealthCondition(1707L, "Mouse or rat bait/poison (Calciferol)", ToxinConsumption, dx = Some("rat"), subcategory = Some(2))
+  case object RatPoisonWarfarin
+      extends HealthCondition(1708L, "Mouse or rat bait/poison (Warfarin)", ToxinConsumption, dx = Some("rat"), subcategory = Some(3))
+  case object RatPoisonOther
+      extends HealthCondition(1709L, "Mouse or rat bait/poison (Other/Unknown)", ToxinConsumption, dx = Some("rat"), subcategory = Some(99))
   case object DogMedications
-      extends HealthCondition(1707L, "Overdose of medications prescribed to the dog", ToxinConsumption, dx = Some("rx_dog_od"), isOther = true)
-  case object OtherToxin extends HealthCondition(1708L, "Other", ToxinConsumption, dx = Some("other"), isOther = true)
+      extends HealthCondition(1710L, "Overdose of medications prescribed to the dog", ToxinConsumption, dx = Some("rx_dog_od"), isOther = true)
+  case object OtherToxin extends HealthCondition(1798L, "Other", ToxinConsumption, dx = Some("other"), isOther = true)
 
   // Trauma.
   case object DogBite extends HealthCondition(1801L, "Dog bite", Trauma, dx = Some("dogbite"))
   case object AnimalBite extends HealthCondition(1802L, "Bite wound from another animal", Trauma, dx = Some("anibite"))
   case object Fall extends HealthCondition(1803L, "Fall from height", Trauma, dx = Some("fall"))
-  case object Fracture extends HealthCondition(1804L, "Fractured bone", Trauma, dx = Some("frac"), isOther = true)
-  case object Head extends HealthCondition(1805L, "Head trauma due to any cause", Trauma, dx = Some("head"))
-  case object Car extends HealthCondition(1806L, "Hit by car or other vehicle", Trauma, dx = Some("car"))
-  case object Kick extends HealthCondition(1807L, "Kicked by horse or other large animal", Trauma, dx = Some("kick"))
-  case object Laceration extends HealthCondition(1808L, "Laceration", Trauma, dx = Some("lac"))
-  case object PenetratingWound extends HealthCondition(1809L, "Penetrating wound (such as a stick)", Trauma, dx = Some("pene"))
-  case object Proptosis extends HealthCondition(1810L, "Proptosis (eye out of socket)", Trauma, dx = Some("prop"))
-  case object SnakeBite extends HealthCondition(1811L, "Snakebite", Trauma, dx = Some("snake"))
-  case object Tail extends HealthCondition(1812L, "Tail injury", Trauma, dx = Some("tail"))
-  case object Nail extends HealthCondition(1813L, "Torn or broken toenail", Trauma, dx = Some("nail"))
+  case object FractureLongLimb
+      extends HealthCondition(1804L, "Fractured bone (long bone in limb)", Trauma, dx = Some("frac"), subcategory = Some(1))
+  case object FractureOtherLimb
+      extends HealthCondition(1805L, "Fractured bone (other bone in limb)", Trauma, dx = Some("frac"), subcategory = Some(2))
+  case object FractureSpine extends HealthCondition(1806L, "Fractured bone (spine)", Trauma, dx = Some("frac"), subcategory = Some(3))
+  case object FractureRib extends HealthCondition(1807L, "Fractured bone (rib(s))", Trauma, dx = Some("frac"), subcategory = Some(4))
+  case object FractureHeadFace
+      extends HealthCondition(1808L, "Fractured bone (flat bone of head or face)", Trauma, dx = Some("frac"), subcategory = Some(5))
+  case object Head extends HealthCondition(1809L, "Head trauma due to any cause", Trauma, dx = Some("head"))
+  case object Car extends HealthCondition(1810L, "Hit by car or other vehicle", Trauma, dx = Some("car"))
+  case object Kick extends HealthCondition(1811L, "Kicked by horse or other large animal", Trauma, dx = Some("kick"))
+  case object Laceration extends HealthCondition(1812L, "Laceration", Trauma, dx = Some("lac"))
+  case object PenetratingWound extends HealthCondition(1813L, "Penetrating wound (such as a stick)", Trauma, dx = Some("pene"))
+  case object Proptosis extends HealthCondition(1814L, "Proptosis (eye out of socket)", Trauma, dx = Some("prop"))
+  case object SnakeBite extends HealthCondition(1815L, "Snakebite", Trauma, dx = Some("snake"))
+  case object Tail extends HealthCondition(1816L, "Tail injury", Trauma, dx = Some("tail"))
+  case object Nail extends HealthCondition(1817L, "Torn or broken toenail", Trauma, dx = Some("nail"))
   case object OtherTrauma extends HealthCondition(1898L, "Other trauma", Trauma, dx = Some("other"), isOther = true)
 
   // Immune conditions.

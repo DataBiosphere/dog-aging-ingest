@@ -53,7 +53,13 @@ object HealthTransformations {
         prefix <- healthCondition.both.orElse(healthCondition.dx).map { abbrev =>
           s"${dxKey.dataPrefix}_$abbrev"
         }
-        if rawRecord.getBoolean(prefix)
+        if rawRecord.getBoolean(prefix) && healthCondition.subcategory
+          .map(subcategoryId =>
+            // if a condition has a subcategory, only include it if that subcategory was selected in the
+            // supplemental "check all that apply" question
+            rawRecord.getArray(s"${prefix}_spec").contains(subcategoryId.toString)
+          )
+          .getOrElse(true)
       } yield {
         val base = createHealthConditionRow(
           rawRecord,
