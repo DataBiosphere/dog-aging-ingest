@@ -4,6 +4,7 @@ import java.time.{LocalDate, Period}
 
 import org.broadinstitute.monster.dap.{MissingCalcFieldError, RawRecord}
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogDemographics
+import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
 
 object DemographicsTransformations {
 
