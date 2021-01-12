@@ -11,31 +11,26 @@ object EnvironmentTransformations {
   def mapEnvironment(rawRecord: RawRecord): Option[Environment] = {
     val dogId = rawRecord.id
     val redcapEventName = rawRecord.getRequired("redcap_event_name").split("_")
-    // set address sequence
-    val addSeq: String = if (redcapEventName(0) == "baseline") {
-      "baseline"
-    } else {
-      redcapEventName(1) match {
-        case "arm"       => "primary"
-        case "secondary" => "secondary"
-      }
-    }
-    // set address month
-    val addMonth = redcapEventName(0) match {
-      case "baseline" => None
-      case _          => Some(redcapEventName(0).filterNot(_.isDigit))
+    if (redcapEventName(0).equals("baseline")) {
+      return None
     }
 
+    // set address sequence
+    val addSeq: String =
+      redcapEventName(1) match {
+        case "arm"       => "1"
+        case "secondary" => "2"
+      }
+
+    // set address month
+    val addMonth = redcapEventName(0).filterNot(_.isDigit)
+
     // set address year
-    val addYear = redcapEventName(0) match {
-      case "baseline" => None
-      case _          => Some(redcapEventName(0).filter(_.isDigit))
-    }
+    val addYear = redcapEventName(0).filter(_.isDigit)
 
     Some(
       Environment(
         dogId = dogId,
-        addressSequence = addSeq,
         addressMonth = addMonth,
         addressYear = addYear,
         environmentGeocoding = Some(GeocodingTransformations.mapGeocodingMetadata(rawRecord)),
@@ -44,7 +39,9 @@ object EnvironmentTransformations {
         environmentTemperaturePrecipitation = Some(
           TemperaturePrecipitationTransformations.mapTemperaturePrecipitationVariables(rawRecord)
         ),
-        environmentWalkability = Some(WalkabilityTransformations.mapWalkabilityVariables(rawRecord))
+        environmentWalkability =
+          Some(WalkabilityTransformations.mapWalkabilityVariables(rawRecord)),
+        address1Or2 = addSeq
       )
     )
   }

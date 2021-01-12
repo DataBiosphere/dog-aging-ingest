@@ -13,17 +13,19 @@
       ]
     },
     {
-      "name": "address_sequence",
+      "name": "address_1_or_2",
       "datatype": "string",
       "type": "primary_key"
     },
     {
       "name": "address_month",
-      "datatype": "string"
+      "datatype": "string",
+      "type": "primary_key"
     },
     {
       "name": "address_year",
-      "datatype": "string"
+      "datatype": "string",
+      "type": "primary_key"
     }
   ],
   "table_fragments": [

@@ -16,19 +16,7 @@ class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with Opti
         Map("redcap_event_name" -> Array("baseline_arm_1"), "baseline_complete" -> Array("2"))
       )
     )
-    mapped shouldBe Some(
-      Environment(
-        dogId = 1L,
-        addressSequence = "baseline",
-        addressMonth = None,
-        addressYear = None,
-        environmentGeocoding = Some(EnvironmentGeocoding.init()),
-        environmentCensus = Some(EnvironmentCensus.init()),
-        environmentPollutants = Some(EnvironmentPollutants.init()),
-        environmentTemperaturePrecipitation = Some(EnvironmentTemperaturePrecipitation.init()),
-        environmentWalkability = Some(EnvironmentWalkability.init())
-      )
-    )
+    mapped shouldBe None
   }
 
   // Testing the deduping behavior of getRequired
@@ -45,9 +33,9 @@ class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with Opti
     mapped shouldBe Some(
       Environment(
         dogId = 1L,
-        addressSequence = "primary",
-        addressMonth = Some("dec"),
-        addressYear = Some("2019"),
+        address1Or2 = "1",
+        addressMonth = "dec",
+        addressYear = "2019",
         environmentGeocoding = Some(EnvironmentGeocoding.init()),
         environmentCensus = Some(EnvironmentCensus.init()),
         environmentPollutants = Some(EnvironmentPollutants.init()),
