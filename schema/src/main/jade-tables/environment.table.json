@@ -15,7 +15,7 @@
     {
       "name": "address_sequence",
       "datatype": "string",
-      "type": "primary_key"
+      "type": "string"
     },
     {
       "name": "address_month",

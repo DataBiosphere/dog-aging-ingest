@@ -90,8 +90,12 @@ for table_name in table_names:
                     row[entity_name] = '-'.join([str(row.get('dog_id')), row.get('hs_condition'), str(congenital_flag)])
                 elif table_name == "environment":
                     dog_id = str(row.get('dog_id'))
-                    event_name = row.get('address_month_year')
-                    row[entity_name] = '-'.join([dog_id, event_name])
+                    row[entity_name] = '-'.join([
+                        dog_id,
+                        row["address_sequence"],
+                        row.get("address_month", ""),
+                        row.get("address_year", "")
+                    ])
                 else:
                     row[entity_name] = row.pop(pk_name)
 
