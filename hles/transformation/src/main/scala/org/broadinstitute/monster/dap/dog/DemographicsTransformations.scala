@@ -56,9 +56,12 @@ object DemographicsTransformations {
   def mapAge(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics =
     rawRecord.getOptionalBoolean("dd_dog_birth_year_certain").fold(dog) { ageCertain =>
       if (ageCertain) {
+        val dogId = rawRecord.id
         val formYear = rawRecord.getOptional("dd_dog_current_year_calc") match {
           case None =>
-            MissingCalcFieldError(s"Record $dogId has less than 1 value for field dd_dog_current_year_calc").log
+            MissingCalcFieldError(
+              s"Record $dogId has less than 1 value for field dd_dog_current_year_calc"
+            ).log
             None
           case Some(yearCalc) => yearCalc.toInt
         }
@@ -66,7 +69,9 @@ object DemographicsTransformations {
 
         val formMonth = rawRecord.getOptional("dd_dog_current_month_calc") match {
           case None =>
-            MissingCalcFieldError(s"Record $dogId has less than 1 value for field dd_dog_current_month_calc").log
+            MissingCalcFieldError(
+              s"Record $dogId has less than 1 value for field dd_dog_current_month_calc"
+            ).log
             None
           case Some(monthCalc) => monthCalc.toInt
         }
