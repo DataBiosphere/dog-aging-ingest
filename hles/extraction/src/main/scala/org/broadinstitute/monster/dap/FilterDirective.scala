@@ -13,6 +13,10 @@ object FilterOps {
   case object > extends FilterOp {
     def op: String = ">"
   }
+
+  case object < extends FilterOp {
+    def op: String = "<"
+  }
 }
 
 /**

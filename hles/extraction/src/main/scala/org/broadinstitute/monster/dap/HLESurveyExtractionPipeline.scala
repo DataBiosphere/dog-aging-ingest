@@ -32,6 +32,7 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
     FilterDirective("co_consent", FilterOps.==, "1"),
     FilterDirective("st_dap_pack_count", FilterOps.>, "0"),
     FilterDirective("st_dap_pack_date", FilterOps.>, HLESEpoch)
+    FilterDirective("st_dap_pack_date", FilterOps.<, "2021-01-01")
   ) // Magic marker for "completed".
 
   val subdir = "hles"
