@@ -27,7 +27,7 @@ object EnvironmentTransformations {
       case "mar"  => Some("3")
       case "apr"  => Some("4")
       case "may"  => Some("5")
-      case "jun"  => Some("6")
+      case "june"  => Some("6")
       case "july" => Some("7")
       case "aug"  => Some("8")
       case "sept" => Some("9")
