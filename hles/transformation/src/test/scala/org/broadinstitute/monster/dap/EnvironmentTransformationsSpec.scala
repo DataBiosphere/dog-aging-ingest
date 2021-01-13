@@ -13,10 +13,25 @@ class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with Opti
     val mapped = EnvironmentTransformations.mapEnvironment(
       RawRecord(
         1,
-        Map("redcap_event_name" -> Array("baseline_arm_1"), "baseline_complete" -> Array("2"))
+        Map(
+          "redcap_event_name" -> Array("sept2020_secondary_arm_1"),
+          "baseline_complete" -> Array("2")
+        )
       )
     )
-    mapped shouldBe None
+    mapped shouldBe Some(
+      Environment(
+        dogId = 1L,
+        address1Or2 = "2",
+        addressMonth = "sept",
+        addressYear = "2020",
+        environmentGeocoding = Some(EnvironmentGeocoding.init()),
+        environmentCensus = Some(EnvironmentCensus.init()),
+        environmentPollutants = Some(EnvironmentPollutants.init()),
+        environmentTemperaturePrecipitation = Some(EnvironmentTemperaturePrecipitation.init()),
+        environmentWalkability = Some(EnvironmentWalkability.init())
+      )
+    )
   }
 
   // Testing the deduping behavior of getRequired

@@ -11,9 +11,6 @@ object EnvironmentTransformations {
   def mapEnvironment(rawRecord: RawRecord): Option[Environment] = {
     val dogId = rawRecord.id
     val redcapEventName = rawRecord.getRequired("redcap_event_name").split("_")
-    if (redcapEventName(0).equals("baseline")) {
-      return None
-    }
 
     // set address sequence
     val addSeq: String =
