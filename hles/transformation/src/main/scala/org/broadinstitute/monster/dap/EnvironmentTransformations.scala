@@ -1,7 +1,7 @@
 package org.broadinstitute.monster.dap
 
-import org.slf4j.LoggerFactory
 import org.broadinstitute.monster.dap.environment._
+import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
 import org.broadinstitute.monster.dogaging.jadeschema.table.Environment
 
 object EnvironmentTransformations {
@@ -27,7 +27,7 @@ object EnvironmentTransformations {
       case "mar"  => Some("3")
       case "apr"  => Some("4")
       case "may"  => Some("5")
-      case "june"  => Some("6")
+      case "june" => Some("6")
       case "july" => Some("7")
       case "aug"  => Some("8")
       case "sept" => Some("9")
@@ -42,9 +42,8 @@ object EnvironmentTransformations {
 
     addMonth match {
       case None =>
-        val logger = LoggerFactory.getLogger(getClass)
         val rawMonth = redcapEventName(0).filterNot(_.isDigit)
-        logger.error(s"Record ID ${dogId} has invalid raw month '${rawMonth}'")
+        InvalidArmMonthError(s"Record ID ${dogId} has invalid raw month '${rawMonth}'").log
         None
       case Some(addressMonthStr) =>
         Some(

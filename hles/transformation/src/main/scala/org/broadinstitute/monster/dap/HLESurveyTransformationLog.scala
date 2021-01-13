@@ -29,3 +29,4 @@ class HLESurveyTransformationError(msg: String) extends HLESurveyTransformationL
 // case classes for all the different actual warnings and errors we want to raise during the workflow
 case class MissingOwnerIdError(msg: String) extends HLESurveyTransformationError(msg)
 case class TruncatedDecimalError(msg: String) extends HLESurveyTransformationError(msg)
+case class InvalidArmMonthError(msg: String) extends HLESurveyTransformationError(msg)
