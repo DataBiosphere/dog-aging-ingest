@@ -30,3 +30,4 @@ class HLESurveyTransformationError(msg: String) extends HLESurveyTransformationL
 case class MissingOwnerIdError(msg: String) extends HLESurveyTransformationError(msg)
 case class TruncatedDecimalError(msg: String) extends HLESurveyTransformationError(msg)
 case class MissingCalcFieldError(msg: String) extends HLESurveyTransformationError(msg)
+case class InvalidArmMonthError(msg: String) extends HLESurveyTransformationError(msg)
