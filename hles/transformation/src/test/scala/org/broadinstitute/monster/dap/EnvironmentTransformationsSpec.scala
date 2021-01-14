@@ -22,9 +22,9 @@ class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with Opti
     mapped shouldBe Some(
       Environment(
         dogId = 1L,
-        address1Or2 = "2",
-        addressMonth = "9",
-        addressYear = "2020",
+        address1Or2 = 2L,
+        addressMonth = 9L,
+        addressYear = 2020L,
         environmentGeocoding = Some(EnvironmentGeocoding.init()),
         environmentCensus = Some(EnvironmentCensus.init()),
         environmentPollutants = Some(EnvironmentPollutants.init()),
@@ -48,9 +48,9 @@ class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with Opti
     mapped shouldBe Some(
       Environment(
         dogId = 1L,
-        address1Or2 = "1",
-        addressMonth = "12",
-        addressYear = "2019",
+        address1Or2 = 1L,
+        addressMonth = 12L,
+        addressYear = 2019L,
         environmentGeocoding = Some(EnvironmentGeocoding.init()),
         environmentCensus = Some(EnvironmentCensus.init()),
         environmentPollutants = Some(EnvironmentPollutants.init()),
