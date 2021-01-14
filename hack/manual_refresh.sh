@@ -8,6 +8,8 @@
 #   You must be authenticated with vault and have the vault CLI installed (you can check by running `vault token lookup` and seeing if your access info is displayed)
 #   You must be authenticated with GCP (`gcloud auth list` should show a star next to your email address)
 #     Your account must be set as the default application credentials for your machine (you can do this with `gcloud auth application-default login`)
+#   If you're on a Mac, you'll need to have GNU's core utilities installed (`brew install coreutils`) for some of the helper
+#     utilities we call in the script.
 
 # INVOCATION SYNTAX: ./hack/manual_refresh.sh [env [tsv_output_path [refresh_subdirectory]]]
 ## env: environment to refresh, defaults to 'dev'. must be either 'prod' or 'dev'.
