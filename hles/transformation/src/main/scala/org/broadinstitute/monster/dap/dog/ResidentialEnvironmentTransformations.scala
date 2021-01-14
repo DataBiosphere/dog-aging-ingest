@@ -82,7 +82,7 @@ object ResidentialEnvironmentTransformations {
     dog.copy(
       deHomeAreaType = rawRecord.getOptionalNumber("de_type_area"),
       deHomeType = rawRecord.getOptionalNumber("de_type_home"),
-      deHomeTypeOtherDescription = rawRecord.getOptional("he_type_home_other"),
+      deHomeTypeOtherDescription = rawRecord.getOptionalStripped("de_type_home_other"),
       deHomeConstructionDecade = rawRecord.getOptionalNumber("de_home_age"),
       deHomeYearsLivedIn = rawRecord.getOptionalNumber("de_home_lived_years"),
       deHomeSquareFootage = rawRecord.getOptionalNumber("de_home_area", truncateDecimals = true)
@@ -110,18 +110,18 @@ object ResidentialEnvironmentTransformations {
     dog.copy(
       dePrimaryHeatFuel = primaryHeat,
       dePrimaryHeatFuelOtherDescription =
-        if (primaryHeat.contains(98L)) rawRecord.getOptional("de_primary_heat_other") else None,
+        if (primaryHeat.contains(98L)) rawRecord.getOptionalStripped("de_primary_heat_other") else None,
       deSecondaryHeatFuelUsed = secondaryHeatUsed,
       deSecondaryHeatFuel = secondaryHeat,
       deSecondaryHeatFuelOtherDescription =
-        if (secondaryHeat.contains(98L)) rawRecord.getOptional("de_secondary_heat_other") else None,
+        if (secondaryHeat.contains(98L)) rawRecord.getOptionalStripped("de_secondary_heat_other") else None,
       dePrimaryStoveFuel = primaryStove,
       dePrimaryStoveFuelOtherDescription =
-        if (primaryStove.contains(98L)) rawRecord.getOptional("de_primary_stove_other") else None,
+        if (primaryStove.contains(98L)) rawRecord.getOptionalStripped("de_primary_stove_other") else None,
       deSecondaryStoveFuelUsed = secondaryStoveUsed,
       deSecondaryStoveFuel = secondaryStove,
       deSecondaryStoveFuelOtherDescription = if (secondaryStove.contains(98L)) {
-        rawRecord.getOptional("de_secondary_stove_other")
+        rawRecord.getOptionalStripped("de_secondary_stove_other")
       } else {
         None
       }

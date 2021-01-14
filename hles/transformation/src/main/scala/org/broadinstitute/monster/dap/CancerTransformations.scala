@@ -62,7 +62,7 @@ object CancerTransformations {
           hsCancerLocationsOther = cancerLocations.map(_.contains("98")),
           hsCancerLocationsOtherDescription =
             if (cancerLocations.getOrElse(Array.empty).contains("98")) {
-              rawRecord.getOptional("hs_dx_cancer_loc_other")
+              rawRecord.getOptionalStripped("hs_dx_cancer_loc_other")
             } else {
               None
             },
@@ -103,7 +103,7 @@ object CancerTransformations {
           hsCancerTypesUnknown = cancerTypes.map(_.contains("99")),
           hsCancerTypesOther = cancerTypes.map(_.contains("98")),
           hsCancerTypesOtherDescription = if (cancerTypes.getOrElse(Array.empty).contains("98")) {
-            rawRecord.getOptional("hs_dx_cancer_type_other")
+            rawRecord.getOptionalStripped("hs_dx_cancer_type_other")
           } else {
             None
           },
@@ -113,7 +113,7 @@ object CancerTransformations {
           hsLeukemiaTypesOther = leukemiaTypes.map(_.contains("98")),
           hsLeukemiaTypesOtherDescription =
             if (leukemiaTypes.getOrElse(Array.empty).contains("98")) {
-              rawRecord.getOptional("hs_dx_cancer_leuk_other")
+              rawRecord.getOptionalStripped("hs_dx_cancer_leuk_other")
             } else {
               None
             },
@@ -124,7 +124,7 @@ object CancerTransformations {
           hsLymphomaLymphosarcomaTypesOther = lymphomaTypes.map(_.contains("98")),
           hsLymphomaLymphosarcomaTypesOtherDescription =
             if (lymphomaTypes.getOrElse(Array.empty).contains("98")) {
-              rawRecord.getOptional("hs_dx_cancer_lymph_other")
+              rawRecord.getOptionalStripped("hs_dx_cancer_lymph_other")
             } else {
               None
             }

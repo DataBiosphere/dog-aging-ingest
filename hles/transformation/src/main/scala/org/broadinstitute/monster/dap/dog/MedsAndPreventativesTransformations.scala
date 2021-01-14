@@ -56,7 +56,7 @@ object MedsAndPreventativesTransformations {
           mpProfessionalGroomingShampoosUnknown = shampoos.map(_.contains("99")),
           mpProfessionalGroomingShampoosOther = shampoos.map(_.contains("98")),
           mpProfessionalGroomingShampoosOtherDescription = if (shampoos.exists(_.contains("98"))) {
-            rawRecord.getOptional("mp_gr_pro_shampoo_other")
+            rawRecord.getOptionalStripped("mp_gr_pro_shampoo_other")
           } else {
             None
           }
@@ -80,7 +80,7 @@ object MedsAndPreventativesTransformations {
           mpHomeGroomingShampoosUnknown = shampoos.map(_.contains("99")),
           mpHomeGroomingShampoosOther = shampoos.map(_.contains("98")),
           mpHomeGroomingShampoosOtherDescription = if (shampoos.exists(_.contains("98"))) {
-            rawRecord.getOptional("mp_gr_home_shampoo_other")
+            rawRecord.getOptionalStripped("mp_gr_home_shampoo_other")
           } else {
             None
           }
@@ -104,7 +104,7 @@ object MedsAndPreventativesTransformations {
           mpFleaAndTickTreatmentCollar = rawRecord.getOptionalBoolean("mp_flea_collar"),
           mpFleaAndTickTreatmentOther = otherTreatment,
           mpFleaAndTickTreatmentOtherDescription = otherTreatment.flatMap {
-            if (_) rawRecord.getOptional("mp_flea_other") else None
+            if (_) rawRecord.getOptionalStripped("mp_flea_other") else None
           }
         )
       } else {
@@ -126,7 +126,7 @@ object MedsAndPreventativesTransformations {
           mpHeartwormPreventativeInjectable = rawRecord.getOptionalBoolean("mp_hw_injectable"),
           mpHeartwormPreventativeOther = otherTreatment,
           mpHeartwormPreventativeOtherDescription = otherTreatment.flatMap {
-            if (_) rawRecord.getOptional("mp_hw_other") else None
+            if (_) rawRecord.getOptionalStripped("mp_hw_other") else None
           }
         )
       } else {
@@ -163,7 +163,7 @@ object MedsAndPreventativesTransformations {
       mpRecentNonPrescriptionMedsVitamin = rawRecord.getOptionalBoolean("mp_np_vitamin"),
       mpRecentNonPrescriptionMedsOther = otherNonPrescription,
       mpRecentNonPrescriptionMedsOtherDescription = otherNonPrescription.flatMap {
-        if (_) rawRecord.getOptional("mp_np_other") else None
+        if (_) rawRecord.getOptionalStripped("mp_np_other") else None
       }
     )
   }

@@ -37,7 +37,7 @@ object DemographicsTransformations {
           ddBreedPureOrMixed = breedType,
           ddBreedPure = breed,
           ddBreedPureNonAkc =
-            if (breed.contains(277L)) rawRecord.getOptional("dd_dog_breed_non_akc") else None
+            if (breed.contains(277L)) rawRecord.getOptionalStripped("dd_dog_breed_non_akc") else None
         )
       case Some(2) =>
         dog.copy(
@@ -90,7 +90,7 @@ object DemographicsTransformations {
           ddAgeExactSourceFromLitterOwnerBred = Some(sources.contains("5")),
           ddAgeExactSourceOther = Some(sources.contains("98")),
           ddAgeExactSourceOtherDescription =
-            if (sources.contains("98")) rawRecord.getOptional("dd_dog_age_certain_other") else None,
+            if (sources.contains("98")) rawRecord.getOptionalStripped("dd_dog_age_certain_other") else None,
           ddBirthYear = Some(birthYear.toLong),
           ddBirthMonthKnown = Some(exactMonthKnown),
           ddBirthMonth = if (exactMonthKnown) Some(birthMonth.toLong) else None
@@ -107,7 +107,7 @@ object DemographicsTransformations {
           ddAgeEstimateSourceDeterminedByVeterinarian = Some(sources.contains("4")),
           ddAgeEstimateSourceOther = Some(sources.contains("98")),
           ddAgeEstimateSourceOtherDescription =
-            if (sources.contains("98")) rawRecord.getOptional("dd_dog_age_estimate_other") else None
+            if (sources.contains("98")) rawRecord.getOptionalStripped("dd_dog_age_estimate_other") else None
         )
       }
     }
@@ -186,7 +186,7 @@ object DemographicsTransformations {
           ddInsurance = Some(insurance),
           ddInsuranceProvider = provider,
           ddInsuranceProviderOtherDescription =
-            if (provider.contains(98)) rawRecord.getOptional("dd_insurance_other") else None
+            if (provider.contains(98)) rawRecord.getOptionalStripped("dd_insurance_other") else None
         )
       } else {
         dog.copy(ddInsurance = Some(insurance))
@@ -212,7 +212,7 @@ object DemographicsTransformations {
       ddAcquiredMonth = rawRecord.getOptionalNumber("dd_acquire_month"),
       ddAcquiredSource = source,
       ddAcquiredSourceOtherDescription =
-        if (source.contains(98)) rawRecord.getOptional("dd_acquire_source_other") else None,
+        if (source.contains(98)) rawRecord.getOptionalStripped("dd_acquire_source_other") else None,
       ddAcquiredCountry = country,
       ddAcquiredState = if (locationKnown) rawRecord.getOptional("dd_acquired_st") else None
     )
@@ -279,8 +279,8 @@ object DemographicsTransformations {
       ddActivitiesAssistanceOrTherapy = assistanceLevel,
       ddActivitiesOther = otherLevel,
       ddActivitiesOtherDescription = otherLevel.flatMap {
-        case 1L => rawRecord.getOptional("dd_1st_activity_other")
-        case 2L => rawRecord.getOptional("dd_2nd_activity_other")
+        case 1L => rawRecord.getOptionalStripped("dd_1st_activity_other")
+        case 2L => rawRecord.getOptionalStripped("dd_2nd_activity_other")
         case _  => None
       },
       ddActivitiesServiceSeeingEye = serviceTypes.map(_.contains("1")),
@@ -288,17 +288,17 @@ object DemographicsTransformations {
       ddActivitiesServiceWheelchair = serviceTypes.map(_.contains("3")),
       ddActivitiesServiceOtherMedical = otherMedService,
       ddActivitiesServiceOtherMedicalDescription =
-        if (otherMedService.contains(true)) rawRecord.getOptional("dd_service_medical_other_1")
+        if (otherMedService.contains(true)) rawRecord.getOptionalStripped("dd_service_medical_other_1")
         else None,
       ddActivitiesServiceOtherHealth = otherHealthService,
       ddActivitiesServiceOtherHealthDescription =
-        if (otherHealthService.contains(true)) rawRecord.getOptional("dd_service_health_other_1")
+        if (otherHealthService.contains(true)) rawRecord.getOptionalStripped("dd_service_health_other_1")
         else None,
       ddActivitiesServiceCommunityTherapy = serviceTypes.map(_.contains("6")),
       ddActivitiesServiceEmotionalSupport = serviceTypes.map(_.contains("7")),
       ddActivitiesServiceOther = otherService,
       ddActivitiesServiceOtherDescription =
-        if (otherService.contains(true)) rawRecord.getOptional("dd_service_other_1") else None
+        if (otherService.contains(true)) rawRecord.getOptionalStripped("dd_service_other_1") else None
     )
   }
 }

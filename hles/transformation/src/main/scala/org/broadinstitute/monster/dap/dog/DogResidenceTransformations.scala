@@ -33,7 +33,7 @@ object DogResidenceTransformations {
       },
       ocPrimaryResidenceOwnership = primaryOwned,
       ocPrimaryResidenceOwnershipOtherDescription =
-        if (primaryOwned.contains(98)) rawRecord.getOptional("oc_address1_own_other") else None,
+        if (primaryOwned.contains(98)) rawRecord.getOptionalStripped("oc_address1_own_other") else None,
       ocPrimaryResidenceTimePercentage = hasSecondaryResidence.flatMap {
         if (_) rawRecord.getOptionalNumber("oc_address1_pct") else None
       },
