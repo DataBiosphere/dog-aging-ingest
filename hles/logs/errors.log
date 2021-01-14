@@ -1,0 +1,9 @@
+{"errorType":"MissingOwnerIdError","message":"Record 1 has less than 1 value for field st_owner_id"}
+{"errorType":"TruncatedDecimalError","message":"Record 1 has an unexpected decimal value in field de_home_area, truncated to integer"}
+{"errorType":"MissingOwnerIdError","message":"Record 33333 has less than 1 value for field st_owner_id"}
+{"errorType":"MissingOwnerIdError","message":"Record 11111 has less than 1 value for field st_owner_id"}
+{"errorType":"MissingOwnerIdError","message":"Record 33333 has less than 1 value for field st_owner_id"}
+{"errorType":"MissingOwnerIdError","message":"Record 11111 has less than 1 value for field st_owner_id"}
+{"errorType":"MissingOwnerIdError","message":"Record 11111 has less than 1 value for field st_owner_id"}
+{"errorType":"MissingOwnerIdError","message":"Record 33333 has less than 1 value for field st_owner_id"}
+{"errorType":"TruncatedDecimalError","message":"Record 1 has an unexpected decimal value in field cv_medianincomee, truncated to integer"}
