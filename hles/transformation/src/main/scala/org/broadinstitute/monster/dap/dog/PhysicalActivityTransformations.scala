@@ -91,7 +91,8 @@ object PhysicalActivityTransformations {
         if (hasModerateWeather) rawRecord.getOptionalBoolean("pa_w_astro") else None,
       paModerateWeatherOutdoorOtherSurface = moderateWeatherOtherSurface,
       paModerateWeatherOutdoorOtherSurfaceDescription =
-        if (moderateWeatherOtherSurface.getOrElse(false)) rawRecord.getOptional("pa_w_other")
+        if (moderateWeatherOtherSurface.getOrElse(false))
+          rawRecord.getOptionalStripped("pa_w_other")
         else None,
       paModerateWeatherSunExposureLevel = rawRecord.getOptionalNumber("pa_w_sun"),
       // hot weather
@@ -113,7 +114,7 @@ object PhysicalActivityTransformations {
         if (hasHotWeather) rawRecord.getOptionalBoolean("pa_h_astro") else None,
       paHotWeatherOutdoorOtherSurface = hotWeatherOtherSurface,
       paHotWeatherOutdoorOtherSurfaceDescription =
-        if (hotWeatherOtherSurface.getOrElse(false)) rawRecord.getOptional("pa_h_other")
+        if (hotWeatherOtherSurface.getOrElse(false)) rawRecord.getOptionalStripped("pa_h_other")
         else None,
       paHotWeatherSunExposureLevel = rawRecord.getOptionalNumber("pa_h_sun"),
       // cold weather
@@ -135,7 +136,7 @@ object PhysicalActivityTransformations {
         if (hasColdWeather) rawRecord.getOptionalBoolean("pa_c_astro") else None,
       paColdWeatherOutdoorOtherSurface = coldWeatherOtherSurface,
       paColdWeatherOutdoorOtherSurfaceDescription =
-        if (coldWeatherOtherSurface.getOrElse(false)) rawRecord.getOptional("pa_c_other")
+        if (coldWeatherOtherSurface.getOrElse(false)) rawRecord.getOptionalStripped("pa_c_other")
         else None,
       paColdWeatherSunExposureLevel = rawRecord.getOptionalNumber("pa_c_sun")
     )
@@ -193,7 +194,8 @@ object PhysicalActivityTransformations {
         paOnLeashWalkReasonsTrainingObedience = walkReasons.map(_.contains("5")),
         paOnLeashWalkReasonsOther = otherWalkReason,
         paOnLeashWalkReasonsOtherDescription =
-          if (otherWalkReason.contains(true)) rawRecord.getOptional("pa_walk_leash_why_other")
+          if (otherWalkReason.contains(true))
+            rawRecord.getOptionalStripped("pa_walk_leash_why_other")
           else None
       )
     } else dogWithBasicLeashInfo
@@ -224,7 +226,8 @@ object PhysicalActivityTransformations {
         paOffLeashWalkReasonsTrainingObedience = walkReasons.map(_.contains("5")),
         paOffLeashWalkReasonsOther = otherWalkReason,
         paOffLeashWalkReasonsOtherDescription =
-          if (otherWalkReason.contains(true)) rawRecord.getOptional("pa_walk_unleash_why_other")
+          if (otherWalkReason.contains(true))
+            rawRecord.getOptionalStripped("pa_walk_unleash_why_other")
           else None,
         paOffLeashWalkInEnclosedArea = rawRecord.getOptionalBoolean("pa_walk_unleash_contain_yn"),
         paOffLeashWalkInOpenArea = rawRecord.getOptionalBoolean("pa_walk_unleash_open"),
@@ -255,7 +258,8 @@ object PhysicalActivityTransformations {
           paSwimLocationsOcean = swimLocations.map(_.contains("5")),
           paSwimLocationsOther = otherSwimLocation,
           paSwimLocationsOtherDescription =
-            if (otherSwimLocation.contains(true)) rawRecord.getOptional("pa_swim_location_other")
+            if (otherSwimLocation.contains(true))
+              rawRecord.getOptionalStripped("pa_swim_location_other")
             else None
         )
       } else {

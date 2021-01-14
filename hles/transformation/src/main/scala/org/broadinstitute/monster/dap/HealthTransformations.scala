@@ -36,7 +36,9 @@ object HealthTransformations {
             val descriptionFieldName = healthCondition.descriptionSuffixOverride
               .map(suffix => s"${cgKey.dataPrefix}_$suffix")
               .getOrElse(s"${prefix}_spec")
-            base.copy(hsConditionOtherDescription = rawRecord.getOptional(descriptionFieldName))
+            base.copy(hsConditionOtherDescription =
+              rawRecord.getOptionalStripped(descriptionFieldName)
+            )
           } else {
             base
           }
@@ -75,7 +77,7 @@ object HealthTransformations {
           base.copy(
             hsConditionCause = conditionCause,
             hsConditionCauseOtherDescription = if (conditionCause.contains(98)) {
-              rawRecord.getOptional("hs_dx_eye_cause_other")
+              rawRecord.getOptionalStripped("hs_dx_eye_cause_other")
             } else {
               None
             }
@@ -84,15 +86,17 @@ object HealthTransformations {
           val isCauseKnown = rawRecord.getBoolean("hs_dx_kidney_ui_fu_cause")
           base.copy(
             hsConditionCauseOtherDescription =
-              if (isCauseKnown) rawRecord.getOptional("hs_dx_kidney_ui_fu_why") else None
+              if (isCauseKnown) rawRecord.getOptionalStripped("hs_dx_kidney_ui_fu_why") else None
           )
         } else if (healthCondition == HealthCondition.VestibularDisease) {
-          base.copy(hsConditionCauseOtherDescription = rawRecord.getOptional("hs_dx_neuro_vd_type"))
+          base.copy(hsConditionCauseOtherDescription =
+            rawRecord.getOptionalStripped("hs_dx_neuro_vd_type")
+          )
         } else if (healthCondition.isOther) {
           val descriptionFieldName = healthCondition.descriptionSuffixOverride
             .map(suffix => s"${dxKey.dataPrefix}_$suffix")
             .getOrElse(s"${prefix}_spec")
-          base.copy(hsConditionOtherDescription = rawRecord.getOptional(descriptionFieldName))
+          base.copy(hsConditionOtherDescription = rawRecord.getOptionalStripped(descriptionFieldName))
         } else {
           base
         }

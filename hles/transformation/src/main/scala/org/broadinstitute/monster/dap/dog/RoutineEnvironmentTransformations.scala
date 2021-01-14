@@ -48,7 +48,7 @@ object RoutineEnvironmentTransformations {
         deDogparkTravelOther = dogparkTravelOther,
         //ONLY if: de_dogpark_get_to(98) = '1'
         deDogparkTravelOtherDescription = if (dogparkTravelOther.contains(true)) {
-          rawRecord.getOptional("de_dogpark_get_to_other")
+          rawRecord.getOptionalStripped("de_dogpark_get_to_other")
         } else {
           None
         },
@@ -82,7 +82,7 @@ object RoutineEnvironmentTransformations {
         deRecreationalSpacesTravelOther = dogRecSpacesTravelOther,
         //ONLY if: de_spaces_get_to(98) = '1'
         deRecreationalSpacesTravelOtherDescription = if (dogRecSpacesTravelOther.contains(true)) {
-          rawRecord.getOptional("de_spaces_get_to_other")
+          rawRecord.getOptionalStripped("de_spaces_get_to_other")
         } else {
           None
         },
@@ -113,7 +113,7 @@ object RoutineEnvironmentTransformations {
         deWorkTravelOther = dogWorkTravelOther,
         // ONLY if: de_dog_to_work_how(98) = '1'
         deWorkTravelOtherDescription = if (dogWorkTravelOther.contains(true)) {
-          rawRecord.getOptional("de_dog_to_work_how_other")
+          rawRecord.getOptionalStripped("de_dog_to_work_how_other")
         } else {
           None
         },
@@ -144,7 +144,7 @@ object RoutineEnvironmentTransformations {
         deSitterOrDaycareTravelOther = dogSitterTravelOther,
         // ONLY if: de_sitter_how(98) = '1'
         deSitterOrDaycareTravelOtherDescription = if (dogSitterTravelOther.contains(true)) {
-          rawRecord.getOptional("de_sitter_how_other")
+          rawRecord.getOptionalStripped("de_sitter_how_other")
         } else {
           None
         },
@@ -190,7 +190,7 @@ object RoutineEnvironmentTransformations {
         deEatsFecesOther = eatsFecesOther,
         // ONLY if: de_eat_feces_type(98) = '1'
         deEatsFecesOtherDescription = if (eatsFecesOther.contains(true)) {
-          rawRecord.getOptional("de_eat_feces_type_other")
+          rawRecord.getOptionalStripped("de_eat_feces_type_other")
         } else {
           None
         },
@@ -230,7 +230,7 @@ object RoutineEnvironmentTransformations {
         deRoutineToysIncludeOther = otherToys,
         // ONLY if: de_toy_other_yn = '1'
         deRoutineToysOtherDescription = if (otherToys.contains(1L)) {
-          rawRecord.getOptional("de_toy_other")
+          rawRecord.getOptionalStripped("de_toy_other")
         } else {
           None
         },
@@ -262,7 +262,7 @@ object RoutineEnvironmentTransformations {
     // ONLY if: de_sleep_location_day = 98
     val daytimeSleepLocationOtherDescription =
       if (daytimeSleepLocation.contains(98L)) {
-        rawRecord.getOptional("de_sleep_loc_day_other")
+        rawRecord.getOptionalStripped("de_sleep_loc_day_other")
       } else {
         None
       }
@@ -270,7 +270,7 @@ object RoutineEnvironmentTransformations {
       deNighttimeSleepLocation = nighttimeSleepLocation,
       // ONLY if: de_sleep_location = '98'
       deNighttimeSleepLocationOtherDescription = if (nighttimeSleepLocation.contains(98L)) {
-        rawRecord.getOptional("de_sleep_location_other")
+        rawRecord.getOptionalStripped("de_sleep_location_other")
       } else {
         None
       },
@@ -290,7 +290,8 @@ object RoutineEnvironmentTransformations {
     val toxinsAmount = rawRecord.getOptionalNumber("de_ingest_bad_amt")
     //ONLY if: de_ingest_bad_amt = 1 OR de_ingest_bad_amt = 2
     if (toxinsAmount.exists(_ > 0)) {
-      val toxinsDescription = rawRecord.getOptional("de_ingest_bad").map(_.trim).filter(_.nonEmpty)
+      val toxinsDescription =
+        rawRecord.getOptionalStripped("de_ingest_bad").map(_.trim).filter(_.nonEmpty)
       val toxinsIngested = rawRecord.get("de_ingest_bad_what")
       val recentToxinsOrHazardsIngestedOther = toxinsIngested.map(_.contains("98"))
       dog.copy(
@@ -309,7 +310,7 @@ object RoutineEnvironmentTransformations {
           // ONLY if: de_ingest_bad_what(98) = 1
           recentToxinsOrHazardsIngestedOther.fold(toxinsDescription) {
             if (_) {
-              rawRecord.getOptional("de_ingest_bad_what_other")
+              rawRecord.getOptionalStripped("de_ingest_bad_what_other")
             } else {
               toxinsDescription
             }
@@ -347,7 +348,7 @@ object RoutineEnvironmentTransformations {
         deOtherPresentAnimalsOther = otherPresentAnimalsOther,
         //ONLY if: de_other_other_yn = "1"
         deOtherPresentAnimalsOtherDescription = if (otherPresentAnimalsOther.contains(true)) {
-          rawRecord.getOptional("de_other_other")
+          rawRecord.getOptionalStripped("de_other_other")
         } else {
           None
         },

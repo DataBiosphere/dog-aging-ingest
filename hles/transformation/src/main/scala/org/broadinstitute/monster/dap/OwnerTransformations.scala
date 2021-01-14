@@ -50,7 +50,7 @@ object OwnerTransformations {
             odRaceOtherPacificIslander = raceValues.map(_.contains("7")),
             odRaceOther = otherRace,
             odRaceOtherDescription = otherRace.flatMap {
-              if (_) rawRecord.getOptional("od_race_other") else None
+              if (_) rawRecord.getOptionalStripped("od_race_other") else None
             },
             odHispanic = rawRecord.getOptionalBoolean("od_hispanic_yn"),
             odAnnualIncomeRangeUsd = rawRecord.getOptionalNumber("od_income"),
@@ -66,7 +66,7 @@ object OwnerTransformations {
             ocPrimaryResidenceOwnership = primaryAddressOwnership,
             ocPrimaryResidenceOwnershipOtherDescription =
               if (primaryAddressOwnership.contains(98)) {
-                rawRecord.getOptional("oc_address1_own_other")
+                rawRecord.getOptionalStripped("oc_address1_own_other")
               } else {
                 None
               },
@@ -77,7 +77,7 @@ object OwnerTransformations {
             ocSecondaryResidenceOwnership = secondaryAddressOwnership,
             ocSecondaryResidenceOwnershipOtherDescription =
               if (secondaryAddressOwnership.contains(98)) {
-                rawRecord.getOptional("oc_address2_own_other")
+                rawRecord.getOptionalStripped("oc_address2_own_other")
               } else {
                 None
               }

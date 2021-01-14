@@ -29,7 +29,7 @@ object DietTransformations {
       dfFeedingsPerDay = rawRecord.getOptionalNumber("df_frequency"),
       dfDietConsistency = consistency,
       dfDietConsistencyOtherDescription = if (consistency.contains(98L)) {
-        rawRecord.getOptional("df_consistent_other")
+        rawRecord.getOptionalStripped("df_consistent_other")
       } else {
         None
       },
@@ -63,7 +63,7 @@ object DietTransformations {
     dog.copy(
       dfPrimaryDietComponent = component,
       dfPrimaryDietComponentOtherDescription = if (component.contains(98L)) {
-        rawRecord.getOptional("df_prim_other")
+        rawRecord.getOptionalStripped("df_prim_other")
       } else {
         None
       },
@@ -82,7 +82,7 @@ object DietTransformations {
       dfPrimaryDietComponentChangeNewFoodSameBrand = changeReasons.map(_.contains("6")),
       dfPrimaryDietComponentChangeOther = changeOther,
       dfPrimaryDietComponentChangeOtherDescription = changeOther.flatMap {
-        if (_) rawRecord.getOptional("df_prim_change_why_other") else None
+        if (_) rawRecord.getOptionalStripped("df_prim_change_why_other") else None
       }
     )
   }
@@ -105,7 +105,7 @@ object DietTransformations {
       dfSecondaryDietComponentUsed = secondaryUsed,
       dfSecondaryDietComponent = component,
       dfSecondaryDietComponentOtherDescription = if (component.contains(98L)) {
-        rawRecord.getOptional("df_sec_other")
+        rawRecord.getOptionalStripped("df_sec_other")
       } else {
         None
       },
@@ -124,7 +124,7 @@ object DietTransformations {
       dfSecondaryDietComponentChangeNewFoodSameBrand = changeReasons.map(_.contains("6")),
       dfSecondaryDietComponentChangeOther = changeOther,
       dfSecondaryDietComponentChangeOtherDescription = changeOther.flatMap {
-        if (_) rawRecord.getOptional("df_sec_change_why_other") else None
+        if (_) rawRecord.getOptionalStripped("df_sec_change_why_other") else None
       }
     )
   }

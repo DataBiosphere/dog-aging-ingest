@@ -17,4 +17,20 @@ class RawRecordSpec extends AnyFlatSpec with Matchers {
     result shouldBe defined
     result shouldBe Some(LocalDate.parse("2020-07-26"))
   }
+
+  it should "strip tabs and both styles of newline when using getOptionalStripped" in {
+    val fields =
+      Map(
+        "dd_steve_greatness_other" -> Array(
+          "Much has\tbeen written\nabout the\r\ngreatness\nof Steve[clipped remaining 4098 chars]"
+        )
+      )
+
+    val record = RawRecord(456L, fields)
+    val result: Option[String] = record.getOptionalStripped("dd_steve_greatness_other")
+    result shouldBe defined
+    result shouldBe Some(
+      "Much has been written about the greatness of Steve[clipped remaining 4098 chars]"
+    )
+  }
 }

@@ -45,11 +45,11 @@ object HealthStatusTransformations {
       hsRecentHospitalizationReasonOther = hospitalizationReasons.map(_.contains("99")),
       hsRecentHospitalizationReasonOtherDescription =
         if (hospitalizationReasons.getOrElse(Array.empty).contains("99")) {
-          rawRecord.getOptional("hs_hosp_why_other")
+          rawRecord.getOptionalStripped("hs_hosp_why_other")
         } else {
           None
         },
-      hsOtherMedicalInfo = rawRecord.getOptional("hs_other_med_info")
+      hsOtherMedicalInfo = rawRecord.getOptionalStripped("hs_other_med_info")
     )
   }
 
@@ -119,7 +119,7 @@ object HealthStatusTransformations {
       hsAlternativeCareTraditionalChineseMedicine = altCareMethods.map(_.contains("8")),
       hsAlternativeCareOther = otherAltCare,
       hsAlternativeCareOtherDescription = otherAltCare.flatMap {
-        if (_) rawRecord.getOptional("hs_other_health_care_other") else None
+        if (_) rawRecord.getOptionalStripped("hs_other_health_care_other") else None
       }
     )
   }
