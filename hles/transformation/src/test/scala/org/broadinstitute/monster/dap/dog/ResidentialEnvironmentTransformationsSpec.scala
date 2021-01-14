@@ -71,7 +71,7 @@ class ResidentialEnvironmentTransformationsSpec
     val exampleDogFields = Map[String, Array[String]](
       "de_type_area" -> Array("2000"),
       "de_type_home" -> Array("2"),
-      "he_type_home_other" -> Array("something else"),
+      "de_type_home_other" -> Array("something else"),
       "de_home_age" -> Array("75"),
       "de_home_lived_years" -> Array("10"),
       "de_home_area" -> Array("1000")
