@@ -5,8 +5,11 @@ import org.broadinstitute.monster.dap.PostProcess.errCount
 import org.slf4j.Logger
 import ujson.Obj
 
-// a trait to capture the generic logging mechanism we'll want with case classes for the different logging levels
-abstract class HLESurveyTransformationLog extends Throwable {
+// A trait to capture the generic logging mechanism we'll want with case classes for the different logging levels.
+//   To note a skippable error you encountered, you should just call the `log` method of these classes.
+//   They should only be thrown in cases where a missing field means the entire record must be thrown out, and you should
+//     still call `log` in the block where you catch the error and skip the record.
+abstract class HLESurveyTransformationLog extends Exception {
   val jsonMsg: Obj
 
   def log(implicit logger: Logger): Unit
