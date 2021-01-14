@@ -290,7 +290,8 @@ object RoutineEnvironmentTransformations {
     val toxinsAmount = rawRecord.getOptionalNumber("de_ingest_bad_amt")
     //ONLY if: de_ingest_bad_amt = 1 OR de_ingest_bad_amt = 2
     if (toxinsAmount.exists(_ > 0)) {
-      val toxinsDescription = rawRecord.getOptionalStripped("de_ingest_bad").map(_.trim).filter(_.nonEmpty)
+      val toxinsDescription =
+        rawRecord.getOptionalStripped("de_ingest_bad").map(_.trim).filter(_.nonEmpty)
       val toxinsIngested = rawRecord.get("de_ingest_bad_what")
       val recentToxinsOrHazardsIngestedOther = toxinsIngested.map(_.contains("98"))
       dog.copy(

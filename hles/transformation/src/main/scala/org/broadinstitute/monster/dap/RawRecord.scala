@@ -62,10 +62,13 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   }
 
   val sequencesToStrip = List("\r?\n", "\t")
+
   def getOptionalStripped(field: String): Option[String] = {
-    getOptional(field).map(fieldValue => sequencesToStrip.fold(fieldValue) {
-      (processedFieldValue, sequence) => processedFieldValue.replaceAll(sequence, " ")
-    }
+    getOptional(field).map(fieldValue =>
+      sequencesToStrip.fold(fieldValue) { (processedFieldValue, sequence) =>
+        processedFieldValue.replaceAll(sequence, " ")
+      }
+    )
   }
 
   /** Get the singleton value for an attribute in this record, parsed as a boolean. */

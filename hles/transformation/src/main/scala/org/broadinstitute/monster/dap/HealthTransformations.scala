@@ -36,7 +36,9 @@ object HealthTransformations {
             val descriptionFieldName = healthCondition.descriptionSuffixOverride
               .map(suffix => s"${cgKey.dataPrefix}_$suffix")
               .getOrElse(s"${prefix}_spec")
-            base.copy(hsConditionOtherDescription = rawRecord.getOptionalStripped(descriptionFieldName))
+            base.copy(hsConditionOtherDescription =
+              rawRecord.getOptionalStripped(descriptionFieldName)
+            )
           } else {
             base
           }
@@ -87,7 +89,9 @@ object HealthTransformations {
               if (isCauseKnown) rawRecord.getOptionalStripped("hs_dx_kidney_ui_fu_why") else None
           )
         } else if (healthCondition == HealthCondition.VestibularDisease) {
-          base.copy(hsConditionCauseOtherDescription = rawRecord.getOptionalStripped("hs_dx_neuro_vd_type"))
+          base.copy(hsConditionCauseOtherDescription =
+            rawRecord.getOptionalStripped("hs_dx_neuro_vd_type")
+          )
         } else if (healthCondition.isOther) {
           val descriptionFieldName = healthCondition.descriptionSuffixOverride
             .map(suffix => s"${dxKey.dataPrefix}_$suffix")
