@@ -23,7 +23,7 @@ class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with Opti
       Environment(
         dogId = 1L,
         address1Or2 = "2",
-        addressMonth = "sept",
+        addressMonth = "9",
         addressYear = "2020",
         environmentGeocoding = Some(EnvironmentGeocoding.init()),
         environmentCensus = Some(EnvironmentCensus.init()),
@@ -49,7 +49,7 @@ class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with Opti
       Environment(
         dogId = 1L,
         address1Or2 = "1",
-        addressMonth = "dec",
+        addressMonth = "12",
         addressYear = "2019",
         environmentGeocoding = Some(EnvironmentGeocoding.init()),
         environmentCensus = Some(EnvironmentCensus.init()),

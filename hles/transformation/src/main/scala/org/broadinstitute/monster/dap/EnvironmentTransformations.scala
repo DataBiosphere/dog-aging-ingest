@@ -1,6 +1,7 @@
 package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.dap.environment._
+import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
 import org.broadinstitute.monster.dogaging.jadeschema.table.Environment
 
 object EnvironmentTransformations {
@@ -20,26 +21,47 @@ object EnvironmentTransformations {
       }
 
     // set address month
-    val addMonth = redcapEventName(0).filterNot(_.isDigit)
+    val addMonth: Option[String] = redcapEventName(0).filterNot(_.isDigit) match {
+      case "jan"  => Some("1")
+      case "feb"  => Some("2")
+      case "mar"  => Some("3")
+      case "apr"  => Some("4")
+      case "may"  => Some("5")
+      case "june" => Some("6")
+      case "july" => Some("7")
+      case "aug"  => Some("8")
+      case "sept" => Some("9")
+      case "oct"  => Some("10")
+      case "nov"  => Some("11")
+      case "dec"  => Some("12")
+      case _      => None
+    }
 
     // set address year
     val addYear = redcapEventName(0).filter(_.isDigit)
 
-    Some(
-      Environment(
-        dogId = dogId,
-        addressMonth = addMonth,
-        addressYear = addYear,
-        environmentGeocoding = Some(GeocodingTransformations.mapGeocodingMetadata(rawRecord)),
-        environmentCensus = Some(CensusTransformations.mapCensusVariables(rawRecord)),
-        environmentPollutants = Some(PollutantTransformations.mapPollutantVariables(rawRecord)),
-        environmentTemperaturePrecipitation = Some(
-          TemperaturePrecipitationTransformations.mapTemperaturePrecipitationVariables(rawRecord)
-        ),
-        environmentWalkability =
-          Some(WalkabilityTransformations.mapWalkabilityVariables(rawRecord)),
-        address1Or2 = addSeq
-      )
-    )
+    addMonth match {
+      case None =>
+        val rawMonth = redcapEventName(0).filterNot(_.isDigit)
+        InvalidArmMonthError(s"Record ID ${dogId} has invalid raw month '${rawMonth}'").log
+        None
+      case Some(addressMonthStr) =>
+        Some(
+          Environment(
+            dogId = dogId,
+            addressMonth = addressMonthStr,
+            addressYear = addYear,
+            environmentGeocoding = Some(GeocodingTransformations.mapGeocodingMetadata(rawRecord)),
+            environmentCensus = Some(CensusTransformations.mapCensusVariables(rawRecord)),
+            environmentPollutants = Some(PollutantTransformations.mapPollutantVariables(rawRecord)),
+            environmentTemperaturePrecipitation = Some(
+              TemperaturePrecipitationTransformations.mapTemperaturePrecipitationVariables(rawRecord)
+            ),
+            environmentWalkability =
+              Some(WalkabilityTransformations.mapWalkabilityVariables(rawRecord)),
+            address1Or2 = addSeq
+          )
+        )
+    }
   }
 }
