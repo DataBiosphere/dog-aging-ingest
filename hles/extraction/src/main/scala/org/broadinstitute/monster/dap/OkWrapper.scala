@@ -13,7 +13,7 @@ import scala.concurrent.{Future, Promise}
 
 class OkWrapper extends HttpWrapper {
   /** Timeout to use for all requests to production RedCap. */
-  private val timeout = Duration.ofSeconds(60)
+  private val timeout = Duration.ofSeconds(300)
   private val logger = LoggerFactory.getLogger(getClass)
 
   /** Construct a client instance backed by the production RedCap instance. */
