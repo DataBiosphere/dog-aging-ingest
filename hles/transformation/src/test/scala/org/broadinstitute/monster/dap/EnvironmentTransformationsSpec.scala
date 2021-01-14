@@ -13,13 +13,18 @@ class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with Opti
     val mapped = EnvironmentTransformations.mapEnvironment(
       RawRecord(
         1,
-        Map("redcap_event_name" -> Array("baseline_arm_1"), "baseline_complete" -> Array("2"))
+        Map(
+          "redcap_event_name" -> Array("sept2020_secondary_arm_1"),
+          "baseline_complete" -> Array("2")
+        )
       )
     )
     mapped shouldBe Some(
       Environment(
         dogId = 1L,
-        addressMonthYear = "baseline_arm_1",
+        address1Or2 = "2",
+        addressMonth = "9",
+        addressYear = "2020",
         environmentGeocoding = Some(EnvironmentGeocoding.init()),
         environmentCensus = Some(EnvironmentCensus.init()),
         environmentPollutants = Some(EnvironmentPollutants.init()),
@@ -43,7 +48,9 @@ class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with Opti
     mapped shouldBe Some(
       Environment(
         dogId = 1L,
-        addressMonthYear = "dec2019_arm_1",
+        address1Or2 = "1",
+        addressMonth = "12",
+        addressYear = "2019",
         environmentGeocoding = Some(EnvironmentGeocoding.init()),
         environmentCensus = Some(EnvironmentCensus.init()),
         environmentPollutants = Some(EnvironmentPollutants.init()),
