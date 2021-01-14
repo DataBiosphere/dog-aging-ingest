@@ -14,10 +14,10 @@ object EnvironmentTransformations {
     val redcapEventName = rawRecord.getRequired("redcap_event_name").split("_")
 
     // set address sequence
-    val addSeq: String =
+    val addSeq: Long =
       redcapEventName(1) match {
-        case "arm"       => "1"
-        case "secondary" => "2"
+        case "arm"       => 1L
+        case "secondary" => 2L
       }
 
     // set address month
@@ -49,8 +49,8 @@ object EnvironmentTransformations {
         Some(
           Environment(
             dogId = dogId,
-            addressMonth = addressMonthStr,
-            addressYear = addYear,
+            addressMonth = addressMonthStr.toLong,
+            addressYear = addYear.toLong,
             environmentGeocoding = Some(GeocodingTransformations.mapGeocodingMetadata(rawRecord)),
             environmentCensus = Some(CensusTransformations.mapCensusVariables(rawRecord)),
             environmentPollutants = Some(PollutantTransformations.mapPollutantVariables(rawRecord)),

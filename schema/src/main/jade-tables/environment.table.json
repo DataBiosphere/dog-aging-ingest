@@ -14,17 +14,17 @@
     },
     {
       "name": "address_1_or_2",
-      "datatype": "string",
+      "datatype": "integer",
       "type": "primary_key"
     },
     {
       "name": "address_month",
-      "datatype": "string",
+      "datatype": "integer",
       "type": "primary_key"
     },
     {
       "name": "address_year",
-      "datatype": "string",
+      "datatype": "integer",
       "type": "primary_key"
     }
   ],
