@@ -2,7 +2,7 @@ package org.broadinstitute.monster.dap.dog
 
 import java.time.{LocalDate, Period}
 
-import org.broadinstitute.monster.dap.RawRecord
+import org.broadinstitute.monster.dap.{MissingCalcFieldError, RawRecord}
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogDemographics
 
 object DemographicsTransformations {
@@ -57,10 +57,28 @@ object DemographicsTransformations {
   def mapAge(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics =
     rawRecord.getOptionalBoolean("dd_dog_birth_year_certain").fold(dog) { ageCertain =>
       if (ageCertain) {
-        val formYear = rawRecord.getRequired("dd_dog_current_year_calc").toInt
+        val dogId = rawRecord.id
+        val formYear = rawRecord.getOptional("dd_dog_current_year_calc") match {
+          case Some(year) => year.toInt
+          case None       =>
+            // we're throwing these errors instead of logging them because we want to completely skip records missing this value. they get logged
+            // by the logic up the chain that catches the error.
+            throw MissingCalcFieldError(
+              s"Record $dogId has less than 1 value for field dd_dog_current_year_calc"
+            )
+        }
+
         val birthYear = rawRecord.getRequired("dd_dog_birth_year").toInt
 
-        val formMonth = rawRecord.getRequired("dd_dog_current_month_calc").toInt
+        val formMonth = rawRecord.getOptional("dd_dog_current_month_calc") match {
+          case Some(month) => month.toInt
+          case None        =>
+            // we're throwing these errors instead of logging them because we want to completely skip records missing this value. they get logged
+            // by the logic up the chain that catches the error.
+            throw MissingCalcFieldError(
+              s"Record $dogId has less than 1 value for field dd_dog_current_month_calc"
+            )
+        }
         val exactMonthKnown = rawRecord.getBoolean("dd_dog_birth_month_yn")
         val birthMonth = if (exactMonthKnown) {
           rawRecord.getRequired("dd_dog_birth_month").toInt

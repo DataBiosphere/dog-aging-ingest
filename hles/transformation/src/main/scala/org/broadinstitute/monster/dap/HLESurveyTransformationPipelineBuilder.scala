@@ -23,29 +23,29 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     val rawRecords = readRecords(ctx, args)
     val rawEnvRecords = readEnvRecords(ctx, args)
 
-    val dogs = rawRecords.transform("Map Dogs")(_.map(DogTransformations.mapDog))
-    val owners = rawRecords.transform("Map Owners")(_.map(OwnerTransformations.mapOwner))
-    val cancer_conditions =
+    val dogs = rawRecords.transform("Map Dogs")(_.flatMap(DogTransformations.mapDog))
+    val owners = rawRecords.transform("Map Owners")(_.flatMap(OwnerTransformations.mapOwner))
+    val cancerConditions =
       rawRecords.transform("Map Cancer conditions")(
         _.flatMap(CancerTransformations.mapCancerConditions)
       )
-    val health_conditions = rawRecords.transform("Map health conditions")(
+    val healthConditions = rawRecords.transform("Map health conditions")(
       _.flatMap(HealthTransformations.mapHealthConditions)
     )
     val environment =
       rawEnvRecords.transform("Map Environment")(_.map(EnvironmentTransformations.mapEnvironment))
-    val cslb_transformations =
+    val cslbTransformations =
       rawRecords.transform("CSLB data")(_.flatMap(CslbTransformations.mapCslbData))
 
     StorageIO.writeJsonLists(dogs, "Dogs", s"${args.outputPrefix}/hles_dog")
     StorageIO.writeJsonLists(owners, "Owners", s"${args.outputPrefix}/hles_owner")
     StorageIO.writeJsonLists(
-      cancer_conditions,
+      cancerConditions,
       "Cancer conditions",
       s"${args.outputPrefix}/hles_cancer_condition"
     )
     StorageIO.writeJsonLists(
-      health_conditions,
+      healthConditions,
       "Health conditions",
       s"${args.outputPrefix}/hles_health_condition"
     )
@@ -55,7 +55,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
       s"${args.outputPrefix}/environment"
     )
     StorageIO.writeJsonLists(
-      cslb_transformations,
+      cslbTransformations,
       "CSLB data",
       s"${args.outputPrefix}/cslb"
     )

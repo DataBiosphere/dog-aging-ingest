@@ -15,27 +15,34 @@ object DogTransformations {
         MissingOwnerIdError(s"Record $dogId has less than 1 value for field st_owner_id").log
         None
       case Some(ownerId) =>
-        Some(
-          HlesDog(
-            dogId = dogId,
-            ownerId = ownerId.toLong,
-            hlesDogStudyStatus = Some(StudyStatusTransformations.mapStudyStatus(rawRecord)),
-            hlesDogDemographics = Some(DemographicsTransformations.mapDemographics(rawRecord)),
-            hlesDogResidences = Some(DogResidenceTransformations.mapDogResidences(rawRecord)),
-            hlesDogPhysicalActivity =
-              Some(PhysicalActivityTransformations.mapPhysicalActivity(rawRecord)),
-            hlesDogResidentialEnvironment =
-              Some(ResidentialEnvironmentTransformations.mapResidentialEnvironment(rawRecord)),
-            hlesDogRoutineEnvironment =
-              Some(RoutineEnvironmentTransformations.mapRoutineEnvironment(rawRecord)),
-            hlesDogBehavior = Some(BehaviorTransformations.mapBehavior(rawRecord)),
-            hlesDogDiet = Some(DietTransformations.mapDiet(rawRecord)),
-            hlesDogMedsPreventatives =
-              Some(MedsAndPreventativesTransformations.mapMedsPreventatives(rawRecord)),
-            hlesDogHealthSummary = Some(HealthStatusTransformations.mapHealthSummary(rawRecord)),
-            hlesDogFutureStudies = Some(AdditionalStudiesTransformations.mapFutureStudies(rawRecord))
+        try {
+          Some(
+            HlesDog(
+              dogId = dogId,
+              ownerId = ownerId.toLong,
+              hlesDogStudyStatus = Some(StudyStatusTransformations.mapStudyStatus(rawRecord)),
+              hlesDogDemographics = Some(DemographicsTransformations.mapDemographics(rawRecord)),
+              hlesDogResidences = Some(DogResidenceTransformations.mapDogResidences(rawRecord)),
+              hlesDogPhysicalActivity =
+                Some(PhysicalActivityTransformations.mapPhysicalActivity(rawRecord)),
+              hlesDogResidentialEnvironment =
+                Some(ResidentialEnvironmentTransformations.mapResidentialEnvironment(rawRecord)),
+              hlesDogRoutineEnvironment =
+                Some(RoutineEnvironmentTransformations.mapRoutineEnvironment(rawRecord)),
+              hlesDogBehavior = Some(BehaviorTransformations.mapBehavior(rawRecord)),
+              hlesDogDiet = Some(DietTransformations.mapDiet(rawRecord)),
+              hlesDogMedsPreventatives =
+                Some(MedsAndPreventativesTransformations.mapMedsPreventatives(rawRecord)),
+              hlesDogHealthSummary = Some(HealthStatusTransformations.mapHealthSummary(rawRecord)),
+              hlesDogFutureStudies =
+                Some(AdditionalStudiesTransformations.mapFutureStudies(rawRecord))
+            )
           )
-        )
+        } catch {
+          case e: HLESurveyTransformationError =>
+            e.log
+            None
+        }
     }
   }
 }

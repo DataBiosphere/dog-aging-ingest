@@ -1,6 +1,6 @@
 package org.broadinstitute.monster.dap.dog
 
-import org.broadinstitute.monster.dap.RawRecord
+import org.broadinstitute.monster.dap.{MissingCalcFieldError, RawRecord}
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogDemographics
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
@@ -112,6 +112,34 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     out.ddAgeExactSourceFromLitterOwnerBred.value shouldBe true
     out.ddAgeExactSourceOther.value shouldBe false
     out.ddBirthMonthKnown.value shouldBe false
+  }
+
+  it should "raise an exception when calculated current year is not supplied" in {
+    val example = Map[String, Array[String]](
+      "dd_dog_birth_year_certain" -> Array("1"),
+      "dd_dog_birth_year" -> Array("2010"),
+      "dd_dog_current_month_calc" -> Array("5"),
+      "dd_dog_birth_month_yn" -> Array("2"),
+      "dd_dog_age_certain_why" -> Array("1", "3", "5")
+    )
+
+    assertThrows[MissingCalcFieldError] {
+      DemographicsTransformations.mapAge(RawRecord(id = 1, example), HlesDogDemographics.init())
+    }
+  }
+
+  it should "raise an exception when calculated current month is not supplied" in {
+    val example = Map[String, Array[String]](
+      "dd_dog_birth_year_certain" -> Array("1"),
+      "dd_dog_current_year_calc" -> Array("2020"),
+      "dd_dog_birth_year" -> Array("2010"),
+      "dd_dog_birth_month_yn" -> Array("2"),
+      "dd_dog_age_certain_why" -> Array("1", "3", "5")
+    )
+
+    assertThrows[MissingCalcFieldError] {
+      DemographicsTransformations.mapAge(RawRecord(id = 1, example), HlesDogDemographics.init())
+    }
   }
 
   it should "map age-related demographics fields when age is estimated by owner" in {
