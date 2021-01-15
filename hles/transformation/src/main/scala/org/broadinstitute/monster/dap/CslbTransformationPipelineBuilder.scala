@@ -6,7 +6,7 @@ import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.common.msg._
 import org.slf4j.{Logger, LoggerFactory}
 
-object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
+object CslbTransformationPipelineBuilder extends PipelineBuilder[Args] {
   /**
     * Schedule all the steps for the Dog Aging transformation in the given pipeline context.
     *
@@ -20,27 +20,13 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
     val rawRecords = readRecords(ctx, args)
 
-    val dogs = rawRecords.transform("Map Dogs")(_.flatMap(DogTransformations.mapDog))
-    val owners = rawRecords.transform("Map Owners")(_.flatMap(OwnerTransformations.mapOwner))
-    val cancerConditions =
-      rawRecords.transform("Map Cancer conditions")(
-        _.flatMap(CancerTransformations.mapCancerConditions)
-      )
-    val healthConditions = rawRecords.transform("Map health conditions")(
-      _.flatMap(HealthTransformations.mapHealthConditions)
-    )
+    val cslbTransformations =
+      rawRecords.transform("CSLB data")(_.flatMap(CslbTransformations.mapCslbData))
 
-    StorageIO.writeJsonLists(dogs, "Dogs", s"${args.outputPrefix}/hles_dog")
-    StorageIO.writeJsonLists(owners, "Owners", s"${args.outputPrefix}/hles_owner")
     StorageIO.writeJsonLists(
-      cancerConditions,
-      "Cancer conditions",
-      s"${args.outputPrefix}/hles_cancer_condition"
-    )
-    StorageIO.writeJsonLists(
-      healthConditions,
-      "Health conditions",
-      s"${args.outputPrefix}/hles_health_condition"
+      cslbTransformations,
+      "CSLB data",
+      s"${args.outputPrefix}/cslb"
     )
     ()
   }
@@ -69,5 +55,4 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
           RawRecord(id.toLong, fields)
       }
   }
-
 }
