@@ -2,6 +2,8 @@ package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.dogaging.jadeschema.table.Cslb
 
+case class CslbTsv extends Cslb
+
 object CslbTransformations {
 
   def mapCslbData(rawRecord: RawRecord): Option[Cslb] =
@@ -31,4 +33,6 @@ object CslbTransformations {
       case _ =>
         None
     }
+
+  def mapToTsvFormat(cslbRecord: Cslb): List
 }

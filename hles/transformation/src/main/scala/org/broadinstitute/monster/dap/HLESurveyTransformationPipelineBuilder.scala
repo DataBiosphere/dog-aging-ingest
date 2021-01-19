@@ -29,6 +29,13 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     val healthConditions = rawRecords.transform("Map health conditions")(
       _.flatMap(HealthTransformations.mapHealthConditions)
     )
+    // todo for hles_dog: primary key of entity:dog_id_id must be added (replacing the dog_id column) as the first column
+    // todo for hles_cancer_condition: primary key of entity:hles_cancer_condition_id must be added (replacing the dog_id column) as the first column
+    // todo for hles_health_condition: primary key of entity:hles_health_condition_id must be added (composed of the following lines) as the first column
+    //    * dog_id
+    //    * hs_condition
+    //    * hs_condition_is_congenital (converted to 0/1)
+    // todo for hles_owner: primary key of entity:owner_id_id must be added (replacing the owner_id column) as the first column
 
     StorageIO.writeJsonLists(dogs, "Dogs", s"${args.outputPrefix}/hles_dog")
     StorageIO.writeJsonLists(owners, "Owners", s"${args.outputPrefix}/hles_owner")

@@ -29,6 +29,13 @@ object EnvironmentTransformationPipelineBuilder extends PipelineBuilder[Args] {
       "Environmental data",
       s"${args.outputPrefix}/environment"
     )
+
+    // todo: primary key of entity:environment_id must be added (composed of the following lines) as the first column
+    //    * dog_id
+    //    * address_1_or_2
+    //    * address_month
+    //    * address_year
+    //    joined by hyphens
     ()
   }
 

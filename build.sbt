@@ -33,7 +33,12 @@ lazy val `dog-aging-hles-transformation` = project
   .enablePlugins(MonsterScioPipelinePlugin)
   .dependsOn(`dog-aging-schema`)
   .settings(
-    libraryDependencies += "com.beachape" %% "enumeratum" % enumeratumVersion
+    libraryDependencies += "com.beachape" %% "enumeratum" % enumeratumVersion,
+    // TODO: verify that these are all necessary
+    libraryDependencies ++= Seq(
+      "io.chrisdavenport" %% "cormorant-core"     % "0.3.0",
+      "io.chrisdavenport" %% "cormorant-generic"  % "0.3.0",
+    )
   )
 
 lazy val `dog-aging-hles-orchestration` = project
