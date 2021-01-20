@@ -391,7 +391,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     val example = Map[String, Array[String]](
       "dd_dog_weight" -> Array("3"),
       "dd_dog_weight_lbs" -> Array("100.25"),
-      "dd_weight_range_expected_adult" -> Array("4")
+      "dd_dog_weight_as_adult" -> Array("4")
     )
     val out = DemographicsTransformations.mapWeight(
       RawRecord(id = 1, example),
