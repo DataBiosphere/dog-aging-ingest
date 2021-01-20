@@ -18,7 +18,7 @@ class MedsAndPreventativesTransformationsSpec extends AnyFlatSpec with Matchers 
       "mp_de_treat" -> Array("4"),
       "mp_de_food" -> Array("0"),
       "mp_de_freshen" -> Array("2"),
-      "mp_de_cleaning_when" -> Array("4")
+      "mp_de_clean_when" -> Array("4")
     )
 
     val out = MedsAndPreventativesTransformations.mapDental(
@@ -136,7 +136,7 @@ class MedsAndPreventativesTransformationsSpec extends AnyFlatSpec with Matchers 
       "mp_vacc" -> Array("2"),
       "mp_np_ab_ointment" -> Array("1"),
       "mp_np_antihistamine" -> Array("0"),
-      "mp_np_anti_inflammatory" -> Array("1"),
+      "mp_np_anti_inflamatory" -> Array("1"),
       "mp_np_ear_cleaner" -> Array("0"),
       "mp_np_enzyme" -> Array("1"),
       "mp_np_eye_lube" -> Array("0"),
