@@ -2,9 +2,6 @@ package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.common.{PipelineBuilder, ScioApp}
 
-// Ignore IntelliJ, this is used to make the implicit parser compile.
-import Args._
-
 /** Entry-point for the HLE extraction pipeline. */
 object HLESurveyExtractionPipeline extends ScioApp[Args] {
 
@@ -26,14 +23,23 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
     "study_status"
   )
 
-  val extractionFilters: List[FilterDirective] = forms
-    .filterNot(_ == "study_status") // For some reason, study_status is never marked as completed.
-    .map(form => FilterDirective(s"${form}_complete", FilterOps.==, "2")) ++ List(
-    FilterDirective("co_consent", FilterOps.==, "1"),
-    FilterDirective("st_dap_pack_count", FilterOps.>, "0"),
-    FilterDirective("st_dap_pack_date", FilterOps.>, HLESEpoch),
-    FilterDirective("st_dap_pack_date", FilterOps.<, "2021-01-01")
-  ) // Magic marker for "completed".
+  def extractionFiltersGenerator(args: Args): List[FilterDirective] = {
+    val completionFilters: List[FilterDirective] = forms
+      .filterNot(_ == "study_status") // For some reason, study_status is never marked as completed.
+      // Magic marker for "completed".
+      .map(form => FilterDirective(s"${form}_complete", FilterOps.==, "2"))
+    val standardDirectives: List[FilterDirective] = List(
+      FilterDirective("co_consent", FilterOps.==, "1"),
+      FilterDirective("st_dap_pack_count", FilterOps.>, "0"),
+      FilterDirective("st_dap_pack_date", FilterOps.>, args.startTime.getOrElse(HLESEpoch))
+    )
+    val endFilter: List[FilterDirective] =
+      args.endTime
+        .map(end => List(FilterDirective("st_dap_pack_date", FilterOps.<, end)))
+        .getOrElse(List())
+
+    completionFilters ++ standardDirectives ++ endFilter
+  }
 
   val subdir = "hles"
   // Limit to the initial HLE event.
@@ -45,7 +51,7 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
     // We might need to revisit this as more dogs are consented.
     new ExtractionPipelineBuilder(
       forms,
-      extractionFilters,
+      extractionFiltersGenerator,
       arm,
       fieldList,
       subdir,

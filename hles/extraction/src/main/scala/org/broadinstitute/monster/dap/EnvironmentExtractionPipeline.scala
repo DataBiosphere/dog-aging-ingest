@@ -2,9 +2,6 @@ package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.common.{PipelineBuilder, ScioApp}
 
-// Ignore IntelliJ, this is used to make the implicit parser compile.
-import Args._
-
 object EnvironmentExtractionPipeline extends ScioApp[Args] {
 
   val forms = List(
@@ -17,10 +14,14 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
 
   // Magic marker for "completed".
   // NB: We are looking for baseline_complete -> 2
-  val extractionFilters: List[FilterDirective] = List(
-    FilterDirective("baseline_complete", FilterOps.==, "2"),
-    FilterDirective("bl_dap_pack_date", FilterOps.<, "2021-01-01")
-  )
+  def extractionFiltersGenerator(args: Args): List[FilterDirective] =
+    List(FilterDirective("baseline_complete", FilterOps.==, "2")) ++
+      args.startTime
+        .map(start => List(FilterDirective("bl_dap_pack_date", FilterOps.>, start)))
+        .getOrElse(List()) ++
+      args.endTime
+        .map(end => List(FilterDirective("bl_dap_pack_date", FilterOps.<, end)))
+        .getOrElse(List())
 
   val subdir = "environment"
 
@@ -58,7 +59,7 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
   def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
       forms,
-      extractionFilters,
+      extractionFiltersGenerator,
       arm,
       fieldList,
       subdir,

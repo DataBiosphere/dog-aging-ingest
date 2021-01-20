@@ -1,6 +1,5 @@
 package org.broadinstitute.monster.dap
 
-import java.time.format.DateTimeFormatter
 import okhttp3._
 import org.slf4j.LoggerFactory
 import upack.Msg
@@ -35,20 +34,15 @@ object RedCapClient {
   /** URL for the production RedCap API. */
   private val apiRoute = "https://redcap.dogagingproject.org/api/"
 
-  /** Formatter matching the production RedCap's interface. */
-  private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-
   def buildRequest(generatorParams: RedcapRequestGeneratorParams): Request = {
     val logger = LoggerFactory.getLogger(getClass)
 
     val formBuilder = generatorParams.redcapRequest match {
-      case GetRecords(ids, fields, forms, start, end, filters, arm) =>
+      case GetRecords(ids, fields, forms, filters, arm) =>
         val logPieces = List(
           s"ids: [${ids.mkString(",")}]",
           s"fields: [${fields.mkString(",")}]",
           s"forms: [${forms.mkString(",")}]",
-          s"start: [$start]",
-          s"end: [$end]",
           s"filters: [${filters
             .map(directive => s"${directive.field}${directive.operation.op}${directive.comparand}")
             .mkString(",")}]",
@@ -85,8 +79,6 @@ object RedCapClient {
         forms.zipWithIndex.foreach {
           case (f, i) => formBuilder.add(s"forms[$i]", f)
         }
-        start.foreach(s => formBuilder.add("dateRangeBegin", s.format(dateFormatter)))
-        end.foreach(e => formBuilder.add("dateRangeEnd", e.format(dateFormatter)))
         if (filters.nonEmpty) {
           formBuilder.add(
             "filterLogic",
