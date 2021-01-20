@@ -122,6 +122,7 @@ class HealthStatusTransformationsSpec extends AnyFlatSpec with Matchers with Opt
       HlesDogHealthSummary.init()
     )
 
+    out.hsAlternativeCareNone.value shouldBe false
     out.hsAlternativeCareAcupuncture.value shouldBe true
     out.hsAlternativeCareHerbalMedicine.value shouldBe false
     out.hsAlternativeCareHomeopathy.value shouldBe true
