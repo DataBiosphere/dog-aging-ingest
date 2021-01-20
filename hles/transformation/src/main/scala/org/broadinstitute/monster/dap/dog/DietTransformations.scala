@@ -150,7 +150,8 @@ object DietTransformations {
       dfTreatsPeanutButter = rawRecord.getOptionalBoolean("df_t_pb"),
       dfTreatsOther = otherTreats,
       dfTreatsOtherDescription = otherTreats.flatMap {
-        if (_) rawRecord.getOptional("df_t_other_text") else None
+        // this variable was given the wrong instrument prefix in REDCap early in study
+        if (_) rawRecord.getOptional("db_t_other_text") else None
       }
     )
   }
