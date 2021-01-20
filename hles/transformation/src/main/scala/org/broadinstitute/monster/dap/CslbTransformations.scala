@@ -2,7 +2,7 @@ package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.dogaging.jadeschema.table.Cslb
 
-object CslbTransformations {
+object CslbTransformations extends TsvUtils[Cslb] {
 
   def mapCslbData(rawRecord: RawRecord): Option[Cslb] =
     rawRecord.getOptionalDate("cslb_date") match {
@@ -31,4 +31,16 @@ object CslbTransformations {
       case _ =>
         None
     }
+
+  // def buildTsvRow(record: Cslb): List[String] = {
+  //   val row = buildFieldSequence(record, fieldsToOmit = List("dogId"))
+
+  //   List(transformedRecord.dogId) ++ row
+  // }
+
+  def buildTsvRow(record: Cslb): List[String] = List(record.dogId.toString)
+
+  val terraTsvHeaders: List[String] =
+    List("entity:cslb_id") ++ classOf[Cslb].getDeclaredFields.map(_.getName).toList
+
 }
