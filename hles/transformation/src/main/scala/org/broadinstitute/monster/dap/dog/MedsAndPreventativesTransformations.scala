@@ -33,7 +33,7 @@ object MedsAndPreventativesTransformations {
       mpDentalProcedureUndergone = rawRecord.getOptionalBoolean("mp_de_procedure"),
       mpDentalCleaning = dentalCleaning,
       mpDentalCleaningMonthsAgo = dentalCleaning.flatMap {
-        if (_) rawRecord.getOptionalNumber("mp_de_cleaning_when") else None
+        if (_) rawRecord.getOptionalNumber("mp_de_clean_when") else None
       },
       mpDentalExtraction = dentalExtraction,
       mpDentalExtractionMonthsAgo = dentalExtraction.flatMap {
@@ -147,7 +147,8 @@ object MedsAndPreventativesTransformations {
       mpRecentNonPrescriptionMedsAntihistamine =
         rawRecord.getOptionalBoolean("mp_np_antihistamine"),
       mpRecentNonPrescriptionMedsAntiInflammatory =
-        rawRecord.getOptionalBoolean("mp_np_anti_inflammatory"),
+        // This is correct, misspelled in REDCap
+        rawRecord.getOptionalBoolean("mp_np_anti_inflamatory"),
       mpRecentNonPrescriptionMedsEarCleaner = rawRecord.getOptionalBoolean("mp_np_ear_cleaner"),
       mpRecentNonPrescriptionMedsEnzymes = rawRecord.getOptionalBoolean("mp_np_enzyme"),
       mpRecentNonPrescriptionMedsEyeLubricant = rawRecord.getOptionalBoolean("mp_np_eye_lube"),

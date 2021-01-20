@@ -283,6 +283,7 @@ object ResidentialEnvironmentTransformations {
       } else {
         None
       },
+      dePropertyDrinkingWaterNone = drinkingWaterSources.map(_.contains("0")),
       dePropertyDrinkingWaterBowl = drinkingWaterSources.map(_.contains("1")),
       dePropertyDrinkingWaterHose = drinkingWaterSources.map(_.contains("2")),
       dePropertyDrinkingWaterPuddles = drinkingWaterSources.map(_.contains("3")),

@@ -191,7 +191,7 @@ class DietTransformationsSpec extends AnyFlatSpec with Matchers with OptionValue
       "df_t_pumpkin" -> Array("1"),
       "df_t_pb" -> Array("0"),
       "df_t_other" -> Array("1"),
-      "df_t_other_text" -> Array("foob")
+      "db_t_other_text" -> Array("foob")
     )
 
     val out = DietTransformations.mapTreats(

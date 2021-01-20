@@ -360,6 +360,7 @@ class ResidentialEnvironmentTransformationsSpec
     output.dePropertyAreaAccessible.value shouldBe 2L
     output.dePropertyContainmentType.value shouldBe 4L
     output.dePropertyContainmentTypeOtherDescription.value shouldBe "a different fence"
+    output.dePropertyDrinkingWaterNone.value shouldBe false
     output.dePropertyDrinkingWaterBowl.value shouldBe true
     output.dePropertyDrinkingWaterHose.value shouldBe false
     output.dePropertyDrinkingWaterPuddles.value shouldBe true
@@ -377,7 +378,7 @@ class ResidentialEnvironmentTransformationsSpec
       "de_property_access" -> Array("2"),
       "de_property_fence_yn" -> Array("4"),
       "de_property_fence_other" -> Array("ignore this"),
-      "de_outside_water" -> Array("2", "99"),
+      "de_outside_water" -> Array("0", "2", "99"),
       "de_outside_water_other" -> Array("ignore this"),
       "de_yard_weed_ctl_yn" -> Array("0"),
       "de_yard_weed_ctl_freq" -> Array("5"),
@@ -394,6 +395,7 @@ class ResidentialEnvironmentTransformationsSpec
     output.dePropertyAreaAccessible shouldBe None
     output.dePropertyContainmentType shouldBe None
     output.dePropertyContainmentTypeOtherDescription shouldBe None
+    output.dePropertyDrinkingWaterNone.value shouldBe true
     output.dePropertyDrinkingWaterBowl.value shouldBe false
     output.dePropertyDrinkingWaterHose.value shouldBe true
     output.dePropertyDrinkingWaterPuddles.value shouldBe false
