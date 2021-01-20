@@ -192,7 +192,7 @@ object DemographicsTransformations {
     dog.copy(
       ddWeightRange = rawRecord.getOptionalNumber("dd_dog_weight"),
       ddWeightLbs = rawRecord.getOptional("dd_dog_weight_lbs").map(_.toDouble),
-      ddWeightRangeExpectedAdult = rawRecord.getOptionalNumber("dd_weight_range_expected_adult")
+      ddWeightRangeExpectedAdult = rawRecord.getOptionalNumber("dd_dog_weight_as_adult")
     )
 
   /**
