@@ -16,7 +16,8 @@ object CslbExtractionPipeline extends ScioApp[Args] {
   // NB: We are purposefully excluding the recruitment_fields_complete -> 2
   // mapping, as that conflicts with the CSLB data
   val extractionFilters: List[FilterDirective] = List(
-    FilterDirective("canine_social_and_learned_behavior_complete", FilterOps.==, "2")
+    FilterDirective("canine_social_and_learned_behavior_complete", FilterOps.==, "2"),
+    FilterDirective("cslb_date", FilterOps.<, "2021-01-01"),
   )
 
   val subdir = "cslb"

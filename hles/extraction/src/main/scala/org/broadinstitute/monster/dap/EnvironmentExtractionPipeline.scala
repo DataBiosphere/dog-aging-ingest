@@ -18,7 +18,8 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
   // Magic marker for "completed".
   // NB: We are looking for baseline_complete -> 2
   val extractionFilters: List[FilterDirective] = List(
-    FilterDirective("baseline_complete", FilterOps.==, "2")
+    FilterDirective("baseline_complete", FilterOps.==, "2"),
+    FilterDirective("bl_dap_pack_date", FilterOps.<, "2021-01-01")
   )
 
   val subdir = "environment"
