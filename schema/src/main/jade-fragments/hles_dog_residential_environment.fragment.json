@@ -290,6 +290,10 @@
       "datatype": "string"
     },
     {
+      "name": "de_property_drinking_water_none",
+      "datatype": "boolean"
+    },
+    {
       "name": "de_property_drinking_water_bowl",
       "datatype": "boolean"
     },
