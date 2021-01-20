@@ -14,6 +14,7 @@ class ResidentialEnvironmentTransformationsSpec
   it should "map all past-residence-related fields" in {
     val exampleDogFields = Map[String, Array[String]](
       "de_home_nbr" -> Array("10"),
+      "de_zip_nbr" -> Array("10"),
       "oc_address2_yn" -> Array("1"),
       "de_country_nbr" -> Array("10"),
       "de_country_01_only" -> Array("this should be ignored too"),
@@ -34,6 +35,7 @@ class ResidentialEnvironmentTransformationsSpec
       )
 
     output.deLifetimeResidenceCount.value shouldBe 12
+    output.dePastResidenceZipCount.value shouldBe 10
     output.dePastResidenceCountryCount.value shouldBe 10
     output.dePastResidenceCountry1.value shouldBe "country1"
     output.dePastResidenceCountry2.value shouldBe "country2"
@@ -50,6 +52,7 @@ class ResidentialEnvironmentTransformationsSpec
   it should "map past-residence-related fields where there is a single past and current home" in {
     val exampleDogFields = Map[String, Array[String]](
       "de_home_nbr" -> Array("1"),
+      "de_zip_nbr" -> Array("1"),
       "oc_address2_yn" -> Array("0"),
       "de_country_nbr" -> Array("1"),
       "de_country_01_only" -> Array("USA!"),
@@ -62,6 +65,7 @@ class ResidentialEnvironmentTransformationsSpec
       )
 
     output.deLifetimeResidenceCount.value shouldBe 2
+    output.dePastResidenceZipCount.value shouldBe 1
     output.dePastResidenceCountryCount.value shouldBe 1
     output.dePastResidenceCountry1.value shouldBe "USA!"
     output.dePastResidenceCountry2 shouldBe None

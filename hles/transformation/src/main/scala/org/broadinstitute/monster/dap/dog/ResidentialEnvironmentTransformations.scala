@@ -38,11 +38,14 @@ object ResidentialEnvironmentTransformations {
     rawRecord
       .getOptionalNumber("de_home_nbr")
       .fold(dog.copy(deLifetimeResidenceCount = currentResidenceCount)) { pastResidenceCount =>
+        val pastZipCount =
+          if (pastResidenceCount > 0) rawRecord.getRequired("de_zip_nbr").toLong else 0L
         val pastCountryCount =
           if (pastResidenceCount > 0) rawRecord.getRequired("de_country_nbr").toLong else 0L
 
         dog.copy(
           deLifetimeResidenceCount = Some(pastResidenceCount + currentResidenceCount.getOrElse(0L)),
+          dePastResidenceZipCount = Some(pastZipCount),
           dePastResidenceCountryCount = Some(pastCountryCount),
           dePastResidenceCountry1 = if (pastCountryCount > 1) {
             rawRecord.getOptional("de_country_01")

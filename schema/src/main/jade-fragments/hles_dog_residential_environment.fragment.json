@@ -6,6 +6,10 @@
       "datatype": "integer"
     },
     {
+      "name": "de_past_residence_zip_count",
+      "datatype": "integer"
+    },
+    {
       "name": "de_past_residence_country_count",
       "datatype": "integer"
     },
