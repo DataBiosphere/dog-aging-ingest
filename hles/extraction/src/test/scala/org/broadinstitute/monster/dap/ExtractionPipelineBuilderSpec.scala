@@ -20,8 +20,6 @@ object ExtractionPipelineBuilderSpec {
   val fields = List("co_consent")
 
   val initQuery = GetRecords(
-    start = Some(start),
-    end = Some(end),
     fields = List("study_id"),
     filters = filters,
     arm = event
@@ -79,7 +77,7 @@ class ExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
   override val builder =
     new ExtractionPipelineBuilder(
       forms,
-      filters,
+      _ => filters,
       event,
       fields,
       "",
