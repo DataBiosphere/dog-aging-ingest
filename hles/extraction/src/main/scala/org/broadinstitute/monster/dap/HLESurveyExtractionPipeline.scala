@@ -1,5 +1,7 @@
 package org.broadinstitute.monster.dap
 
+import java.time.{OffsetDateTime, ZoneOffset}
+
 import org.broadinstitute.monster.common.{PipelineBuilder, ScioApp}
 
 // Ignore IntelliJ, this is used to make the implicit parser compile.
@@ -8,7 +10,8 @@ import Args._
 /** Entry-point for the HLE extraction pipeline. */
 object HLESurveyExtractionPipeline extends ScioApp[Args] {
 
-  val HLESEpoch = "2018-01-01 00:00"
+  // january 1, 2018 - we ignore any records before this by default (though there shouldn't be any)
+  val HLESEpoch = OffsetDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
 
   /** Names of all forms we want to extract as part of HLE ingest. */
   val forms = List(
@@ -37,7 +40,7 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
       FilterDirective(
         "st_dap_pack_date",
         FilterOps.>,
-        args.startTime.map(RedCapClient.redcapFormatDate(_)) getOrElse (HLESEpoch)
+        RedCapClient.redcapFormatDate(args.startTime.getOrElse(HLESEpoch))
       )
     )
     val endFilter: List[FilterDirective] =
