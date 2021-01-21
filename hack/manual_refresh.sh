@@ -103,6 +103,16 @@ function main_work() {
 function cleanup() {
 	echo "Cleaning up after ourselves."
 
+	echo "Killing running HLES pipeline."
+	kill $hles_pid || echo "HLES PID already dead."
+
+	echo "Killing running CSLB pipeline."
+	kill $cslb_pid || echo "CSLB PID already dead."
+
+	echo "Killing running env pipeline."
+	kill $env_pid || echo "Env PID already dead."
+
+	echo "Removing temporary checkouts."
 	rm -rf "hack/python_requirements/terra_tools"
 
 	rm -rf "$tmp_terra_tools"
