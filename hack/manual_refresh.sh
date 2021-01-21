@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -e
+set -e
 
 # This script performs a manual refresh of our various DAP tables.
 #   Run this script from the root directory of your broadinstitute/dog-aging-ingest checkout.
@@ -32,6 +32,7 @@ most_recent_monday_date=$(x_date -dlast-monday +%Y%m%d)
 ENV=${1:-dev}
 TSV_OUTPUT_PATH=${2:-./tsv_output}
 REFRESH_SUBDIRECTORY=${3:-$most_recent_monday_date}
+LOCAL_LOGS_DIRECTORY="refresh_logs_$REFRESH_SUBDIRECTORY"
 
 # Check out the terra-tools repo to a temporary directory so we can use its utilities
 tmp_terra_tools=$(mktemp -d -t terratools-XXXXXXXX)
@@ -41,38 +42,72 @@ git clone git@github.com:broadinstitute/terra-tools.git "$tmp_terra_tools"
 mkdir -p "hack/python_requirements/terra_tools"
 cp "$tmp_terra_tools/requirements.txt" "hack/python_requirements/terra_tools/"
 
-# Grab the Redcap tokens from Vault
-automation=$(vault read -field=token secret/dsde/monster/${ENV}/dog-aging/redcap-tokens/automation)
-env_automation=$(vault read -field=token secret/dsde/monster/${ENV}/dog-aging/redcap-tokens/env_automation)
+function main_work() {
+	# Grab the Redcap tokens from Vault
+	automation=$(vault read -field=token secret/dsde/monster/${ENV}/dog-aging/redcap-tokens/automation)
+	env_automation=$(vault read -field=token secret/dsde/monster/${ENV}/dog-aging/redcap-tokens/env_automation)
 
-# EXTRACTION
-#   HLES
-sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.HLESurveyExtractionPipeline --apiToken=$automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2021-01-01T00:00:00-05:00"
-#   CSLB
-sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.CslbExtractionPipeline --apiToken=$automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2021-01-01T00:00:00-05:00"
-#   ENVIRONMENT
-sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.EnvironmentExtractionPipeline --apiToken=$env_automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2021-01-01T00:00:00-05:00"
+	# set up a directory to keep our logs in
+	mkdir -p "$LOCAL_LOGS_DIRECTORY"
 
-# TRANSFORMATION
-#   HLES
-sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.HLESurveyTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/hles --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service"
-#   CSLB
-sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.CslbTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/cslb --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service"
-#   ENVIRONMENT
-sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.EnvironmentTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/environment --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service --dumpHeapOnOOM --saveHeapDumpsToGcsPath=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/transform/OOMlogs"
+	echo "Spinning up all extraction pipelines."
 
-# convert transformed results to TSV
-mkdir -p "$TSV_OUTPUT_PATH"
-./hack/run_in_virtualenv.sh gsutil_reader "./hack/convert-output-to-tsv.py gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform $TSV_OUTPUT_PATH --debug"
+	# EXTRACTION
+	#   HLES
+	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.HLESurveyExtractionPipeline --apiToken=$automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2021-01-01T00:00:00-05:00" > "$LOCAL_LOGS_DIRECTORY/hles_extraction.log" &
+	hles_pid=$!
+	#   CSLB
+	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.CslbExtractionPipeline --apiToken=$automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2021-01-01T00:00:00-05:00" > "$LOCAL_LOGS_DIRECTORY/cslb_extraction.log" &
+	cslb_pid=$!
+	#   ENVIRONMENT
+	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.EnvironmentExtractionPipeline --apiToken=$env_automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2021-01-01T00:00:00-05:00" > "$LOCAL_LOGS_DIRECTORY/environment_extraction.log" &
+	env_pid=$!
 
-# upload TSVs to terra
-working_dir=$(pwd)
-pushd $tmp_terra_tools
-for tsv_path in "$TSV_OUTPUT_PATH/*.tsv"; do
-    "$working_dir/hack/run_in_virtualenv.sh" terra_tools "python '$tmp_terra_tools/scripts/import_large_tsv/import_large_tsv.py' --tsv '$tsv_path' --project 'workshop-temp' --workspace 'Dog Aging Project - Terra Training Workshop'"
-done
-popd
+	echo "Waiting for extraction pipelines to complete. Pipeline logs are being written to ./$LOCAL_LOGS_DIRECTORY/."
+	wait $hles_pid $cslb_pid $env_pid
 
-rm -rf "hack/python_requirements/terra_tools"
+	echo "All extraction pipelines have completed. Spinning up transformation pipelines."
 
-rm -rf "$tmp_terra_tools"
+	# TRANSFORMATION
+	#   HLES
+	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.HLESurveyTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/hles --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service" > "$LOCAL_LOGS_DIRECTORY/hles_transformation.log" &
+	hles_pid=$!
+	#   CSLB
+	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.CslbTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/cslb --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service" > "$LOCAL_LOGS_DIRECTORY/cslb_transformation.log" &
+	cslb_pid=$!
+	#   ENVIRONMENT
+	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.EnvironmentTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/environment --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service" > "$LOCAL_LOGS_DIRECTORY/environment_transformation.log" &
+	env_pid=$!
+
+	echo "Waiting for transformation pipelines to complete. Pipeline logs are being written to ./$LOCAL_LOGS_DIRECTORY/"
+	wait $hles_pid $cslb_pid $env_pid
+
+	echo "All transformation pipelines have completed. Starting to convert all transformation outputs to Terra-compatible TSVs."
+
+	# convert transformed results to TSV
+	mkdir -p "$TSV_OUTPUT_PATH"
+	./hack/run_in_virtualenv.sh gsutil_reader "./hack/convert-output-to-tsv.py gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform $TSV_OUTPUT_PATH --debug"
+
+	echo "Uploading completed TSVs to Terra."
+
+	# upload TSVs to terra
+	working_dir=$(pwd)
+	pushd $tmp_terra_tools
+	for tsv_path in "$TSV_OUTPUT_PATH/*.tsv"; do
+		echo "...Uploading $tsv_path"
+	    "$working_dir/hack/run_in_virtualenv.sh" terra_tools "python '$tmp_terra_tools/scripts/import_large_tsv/import_large_tsv.py' --tsv '$tsv_path' --project 'workshop-temp' --workspace 'Dog Aging Project - Terra Training Workshop'"
+	done
+	popd
+}
+
+function cleanup() {
+	echo "Cleaning up after ourselves."
+
+	rm -rf "hack/python_requirements/terra_tools"
+
+	rm -rf "$tmp_terra_tools"
+}
+
+(main_work) && (echo "Work complete.") || echo "Something went wrong."
+
+cleanup
