@@ -43,79 +43,91 @@ mkdir -p "hack/python_requirements/terra_tools"
 cp "$tmp_terra_tools/requirements.txt" "hack/python_requirements/terra_tools/"
 
 function main_work() {
-	# Grab the Redcap tokens from Vault
-	automation=$(vault read -field=token secret/dsde/monster/${ENV}/dog-aging/redcap-tokens/automation)
-	env_automation=$(vault read -field=token secret/dsde/monster/${ENV}/dog-aging/redcap-tokens/env_automation)
+    # Grab the Redcap tokens from Vault
+    automation=$(vault read -field=token secret/dsde/monster/${ENV}/dog-aging/redcap-tokens/automation)
+    env_automation=$(vault read -field=token secret/dsde/monster/${ENV}/dog-aging/redcap-tokens/env_automation)
 
-	# set up a directory to keep our logs in
-	mkdir -p "$LOCAL_LOGS_DIRECTORY"
+    # set up a directory to keep our logs in
+    mkdir -p "$LOCAL_LOGS_DIRECTORY"
 
-	echo "Spinning up all extraction pipelines."
+    echo "Spinning up all extraction pipelines."
 
-	# EXTRACTION
-	#   HLES
-	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.HLESurveyExtractionPipeline --apiToken=$automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2021-01-01T00:00:00-05:00" > "$LOCAL_LOGS_DIRECTORY/hles_extraction.log" &
-	hles_pid=$!
-	#   CSLB
-	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.CslbExtractionPipeline --apiToken=$automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2021-01-01T00:00:00-05:00" > "$LOCAL_LOGS_DIRECTORY/cslb_extraction.log" &
-	cslb_pid=$!
-	#   ENVIRONMENT
-	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.EnvironmentExtractionPipeline --apiToken=$env_automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2021-01-01T00:00:00-05:00" > "$LOCAL_LOGS_DIRECTORY/environment_extraction.log" &
-	env_pid=$!
+    # EXTRACTION
+    #   HLES
+    sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.HLESurveyExtractionPipeline --apiToken=$automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2021-01-01T00:00:00-05:00" > "$LOCAL_LOGS_DIRECTORY/hles_extraction.log" &
+    hles_pid=$!
 
-	echo "Waiting for extraction pipelines to complete. Pipeline logs are being written to ./$LOCAL_LOGS_DIRECTORY/."
-	wait $hles_pid $cslb_pid $env_pid
+    sleep 30  # sleeping for 30 seconds between spin-ups avoids collisions from sbt trying to stage multiple pipelines at once
 
-	echo "All extraction pipelines have completed. Spinning up transformation pipelines."
+    #   CSLB
+    sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.CslbExtractionPipeline --apiToken=$automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2021-01-01T00:00:00-05:00" > "$LOCAL_LOGS_DIRECTORY/cslb_extraction.log" # &
+    cslb_pid=$!
 
-	# TRANSFORMATION
-	#   HLES
-	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.HLESurveyTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/hles --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service" > "$LOCAL_LOGS_DIRECTORY/hles_transformation.log" &
-	hles_pid=$!
-	#   CSLB
-	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.CslbTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/cslb --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service" > "$LOCAL_LOGS_DIRECTORY/cslb_transformation.log" &
-	cslb_pid=$!
-	#   ENVIRONMENT
-	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.EnvironmentTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/environment --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service" > "$LOCAL_LOGS_DIRECTORY/environment_transformation.log" &
-	env_pid=$!
+    sleep 30  # sleeping for 30 seconds between spin-ups avoids collisions from sbt trying to stage multiple pipelines at once
 
-	echo "Waiting for transformation pipelines to complete. Pipeline logs are being written to ./$LOCAL_LOGS_DIRECTORY/"
-	wait $hles_pid $cslb_pid $env_pid
+    #   ENVIRONMENT
+    sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.EnvironmentExtractionPipeline --apiToken=$env_automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2021-01-01T00:00:00-05:00" > "$LOCAL_LOGS_DIRECTORY/environment_extraction.log" &
+    env_pid=$!
 
-	echo "All transformation pipelines have completed. Starting to convert all transformation outputs to Terra-compatible TSVs."
+    echo "Waiting for extraction pipelines to complete. Pipeline logs are being written to ./$LOCAL_LOGS_DIRECTORY/."
+    wait $hles_pid $cslb_pid $env_pid
 
-	# convert transformed results to TSV
-	mkdir -p "$TSV_OUTPUT_PATH"
-	./hack/run_in_virtualenv.sh gsutil_reader "./hack/convert-output-to-tsv.py gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform $TSV_OUTPUT_PATH --debug"
+    echo "All extraction pipelines have completed. Spinning up transformation pipelines."
 
-	echo "Uploading completed TSVs to Terra."
+    # TRANSFORMATION
+    #   HLES
+    sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.HLESurveyTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/hles --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service" > "$LOCAL_LOGS_DIRECTORY/hles_transformation.log" &
+    hles_pid=$!
+    #   CSLB
 
-	# upload TSVs to terra
-	working_dir=$(pwd)
-	pushd $tmp_terra_tools
-	for tsv_path in "$TSV_OUTPUT_PATH/*.tsv"; do
-		echo "...Uploading $tsv_path"
-	    "$working_dir/hack/run_in_virtualenv.sh" terra_tools "python '$tmp_terra_tools/scripts/import_large_tsv/import_large_tsv.py' --tsv '$tsv_path' --project 'workshop-temp' --workspace 'Dog Aging Project - Terra Training Workshop'"
-	done
-	popd
+    sleep 30  # sleeping for 30 seconds between spin-ups avoids collisions from sbt trying to stage multiple pipelines at once
+
+    sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.CslbTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/cslb --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service" > "$LOCAL_LOGS_DIRECTORY/cslb_transformation.log" &
+    cslb_pid=$!
+
+    sleep 30  # sleeping for 30 seconds between spin-ups avoids collisions from sbt trying to stage multiple pipelines at once
+
+    #   ENVIRONMENT
+    sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.EnvironmentTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/environment --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service" > "$LOCAL_LOGS_DIRECTORY/environment_transformation.log" &
+    env_pid=$!
+
+    echo "Waiting for transformation pipelines to complete. Pipeline logs are being written to ./$LOCAL_LOGS_DIRECTORY/"
+    wait $hles_pid $cslb_pid $env_pid
+
+    echo "All transformation pipelines have completed. Starting to convert all transformation outputs to Terra-compatible TSVs."
+
+    # convert transformed results to TSV
+    mkdir -p "$TSV_OUTPUT_PATH"
+    ./hack/run_in_virtualenv.sh gsutil_reader "./hack/convert-output-to-tsv.py gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform $TSV_OUTPUT_PATH --debug"
+
+    echo "Uploading completed TSVs to Terra."
+
+    # upload TSVs to terra
+    working_dir=$(pwd)
+    pushd $tmp_terra_tools
+    for tsv_path in "$TSV_OUTPUT_PATH/*.tsv"; do
+        echo "...Uploading $tsv_path"
+        "$working_dir/hack/run_in_virtualenv.sh" terra_tools "python '$tmp_terra_tools/scripts/import_large_tsv/import_large_tsv.py' --tsv '$tsv_path' --project 'workshop-temp' --workspace 'Dog Aging Project - Terra Training Workshop'"
+    done
+    popd
 }
 
 function cleanup() {
-	echo "Cleaning up after ourselves."
+    echo "Cleaning up after ourselves."
 
-	echo "Killing running HLES pipeline."
-	kill $hles_pid || echo "HLES PID already dead."
+    echo "Killing running HLES pipeline."
+    kill $hles_pid || echo "HLES PID already dead."
 
-	echo "Killing running CSLB pipeline."
-	kill $cslb_pid || echo "CSLB PID already dead."
+    echo "Killing running CSLB pipeline."
+    kill $cslb_pid || echo "CSLB PID already dead."
 
-	echo "Killing running env pipeline."
-	kill $env_pid || echo "Env PID already dead."
+    echo "Killing running env pipeline."
+    kill $env_pid || echo "Env PID already dead."
 
-	echo "Removing temporary checkouts."
-	rm -rf "hack/python_requirements/terra_tools"
+    echo "Removing temporary checkouts."
+    rm -rf "hack/python_requirements/terra_tools"
 
-	rm -rf "$tmp_terra_tools"
+    rm -rf "$tmp_terra_tools"
 }
 
 (main_work) && (echo "Work complete.") || echo "Something went wrong."
