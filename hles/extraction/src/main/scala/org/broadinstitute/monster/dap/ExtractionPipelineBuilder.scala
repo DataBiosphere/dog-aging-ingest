@@ -29,7 +29,7 @@ object ExtractionPipelineBuilder {
   *   4. Write the downloaded forms to storage
   *
   * @param formsForExtraction List of forms to be pulled from RedCap
-  * @param extractionFilters  Map of filters to be applied whenn pulling RedCap data
+  * @param extractionFiltersGenerator Function that builds a list of filters to be applied whenn pulling RedCap data
   * @param arms List of event arms to be pulled from RedCap (optional)
   * @param fieldList List of fields be pulled from RedCap (optional)
   * @param subDir             : Sub directory name where data from this pipeline should be
@@ -41,7 +41,7 @@ object ExtractionPipelineBuilder {
   */
 class ExtractionPipelineBuilder(
   formsForExtraction: List[String],
-  extractionFilters: List[FilterDirective],
+  extractionFiltersGenerator: Args => List[FilterDirective],
   arms: List[String],
   fieldList: List[String],
   subDir: String,
@@ -69,9 +69,7 @@ class ExtractionPipelineBuilder(
     val initRequests: Seq[GetRecords] = arms.map(arms =>
       GetRecords(
         fields = List("study_id"),
-        start = args.startTime,
-        end = args.endTime,
-        filters = extractionFilters,
+        filters = extractionFiltersGenerator(args),
         arm = List(arms)
       )
     )

@@ -32,9 +32,7 @@ class CslbExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
     CslbExtractionPipeline.arm,
     GetRecords(
       fields = List("study_id"),
-      start = Some(start),
-      end = Some(end),
-      filters = CslbExtractionPipeline.extractionFilters
+      filters = CslbExtractionPipeline.extractionFiltersGenerator(testArgs)
     )
   )
 

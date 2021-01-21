@@ -15,9 +15,18 @@ object CslbExtractionPipeline extends ScioApp[Args] {
   // Magic marker for "completed".
   // NB: We are purposefully excluding the recruitment_fields_complete -> 2
   // mapping, as that conflicts with the CSLB data
-  val extractionFilters: List[FilterDirective] = List(
-    FilterDirective("canine_social_and_learned_behavior_complete", FilterOps.==, "2")
-  )
+  def extractionFiltersGenerator(args: Args): List[FilterDirective] =
+    List(
+      FilterDirective("canine_social_and_learned_behavior_complete", FilterOps.==, "2")
+    ) ++
+      args.startTime
+        .map(start =>
+          List(FilterDirective("cslb_date", FilterOps.>, RedCapClient.redcapFormatDate(start)))
+        )
+        .getOrElse(List()) ++
+      args.endTime
+        .map(end => List(FilterDirective("cslb_date", FilterOps.<, RedCapClient.redcapFormatDate(end))))
+        .getOrElse(List())
 
   val subdir = "cslb"
   val arm = List("annual_2020_arm_1")
@@ -26,7 +35,7 @@ object CslbExtractionPipeline extends ScioApp[Args] {
   def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
       forms,
-      extractionFilters,
+      extractionFiltersGenerator,
       arm,
       fieldList,
       subdir,

@@ -32,9 +32,7 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
     HLESurveyExtractionPipeline.arm,
     GetRecords(
       fields = List("study_id"),
-      start = Some(start),
-      end = Some(end),
-      filters = HLESurveyExtractionPipeline.extractionFilters
+      filters = HLESurveyExtractionPipeline.extractionFiltersGenerator(testArgs)
     )
   )
 

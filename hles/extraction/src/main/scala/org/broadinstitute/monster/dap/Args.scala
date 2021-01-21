@@ -5,6 +5,7 @@ import java.time.format.DateTimeParseException
 
 import caseapp.core.Error.MalformedValue
 import caseapp.core.argparser.{ArgParser, SimpleArgParser}
+
 import caseapp.{AppName, AppVersion, HelpMessage, ProgName}
 import org.broadinstitute.monster.buildinfo.DogAgingHlesExtractionBuildInfo
 
@@ -14,9 +15,9 @@ import org.broadinstitute.monster.buildinfo.DogAgingHlesExtractionBuildInfo
 case class Args(
   @HelpMessage("API token to use when querying RedCap")
   apiToken: String,
-  @HelpMessage("Only extract records created/updated at or after this time")
+  @HelpMessage("Only extract records created/updated at or after this timestamp")
   startTime: Option[OffsetDateTime],
-  @HelpMessage("Only extract records created/updated before or at this time")
+  @HelpMessage("Only extract records created/updated before or at this timestamp")
   endTime: Option[OffsetDateTime],
   @HelpMessage("Path where extracted JSON should be written")
   outputPrefix: String,
