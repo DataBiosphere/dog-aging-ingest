@@ -134,6 +134,10 @@
       "datatype": "integer"
     },
     {
+      "name": "hs_alternative_care_none",
+      "datatype": "boolean"
+    },
+    {
       "name": "hs_alternative_care_acupuncture",
       "datatype": "boolean"
     },

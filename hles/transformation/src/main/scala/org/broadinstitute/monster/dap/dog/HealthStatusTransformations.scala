@@ -109,6 +109,7 @@ object HealthStatusTransformations {
     val otherAltCare = altCareMethods.map(_.contains("98"))
 
     dog.copy(
+      hsAlternativeCareNone = altCareMethods.map(_.contains("0")),
       hsAlternativeCareAcupuncture = altCareMethods.map(_.contains("1")),
       hsAlternativeCareHerbalMedicine = altCareMethods.map(_.contains("2")),
       hsAlternativeCareHomeopathy = altCareMethods.map(_.contains("3")),
