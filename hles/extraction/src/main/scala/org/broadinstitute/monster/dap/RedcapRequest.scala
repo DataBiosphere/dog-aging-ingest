@@ -1,7 +1,5 @@
 package org.broadinstitute.monster.dap
 
-import java.time.OffsetDateTime
-
 sealed trait RedcapRequest
 
 /**
@@ -15,10 +13,6 @@ sealed trait RedcapRequest
   *                will be downloaded
   * @param forms   subset of forms to download. If not set, fields from all
   *                forms will be downloaded
-  * @param start   if given, only records created-or-updated at or after this
-  *                time will be downloaded
-  * @param end     if given, only records created-or-updated before or at this
-  *                time will be downloaded
   * @param filters arbitrary field-value pairs to use as an exact-match
   *                filter on downloaded records
   */
@@ -26,8 +20,6 @@ case class GetRecords(
   ids: List[String] = Nil,
   fields: List[String] = Nil,
   forms: List[String] = Nil,
-  start: Option[OffsetDateTime] = None,
-  end: Option[OffsetDateTime] = None,
   filters: List[FilterDirective] = List.empty,
   arm: Seq[String] = List.empty
 ) extends RedcapRequest

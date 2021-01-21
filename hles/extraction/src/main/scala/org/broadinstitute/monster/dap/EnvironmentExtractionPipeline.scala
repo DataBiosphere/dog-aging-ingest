@@ -17,9 +17,18 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
 
   // Magic marker for "completed".
   // NB: We are looking for baseline_complete -> 2
-  val extractionFilters: List[FilterDirective] = List(
-    FilterDirective("baseline_complete", FilterOps.==, "2")
-  )
+  def extractionFiltersGenerator(args: Args): List[FilterDirective] =
+    List(FilterDirective("baseline_complete", FilterOps.==, "2")) ++
+      args.startTime
+        .map(start =>
+          List(FilterDirective("bl_dap_pack_date", FilterOps.>, RedCapClient.redcapFormatDate(start)))
+        )
+        .getOrElse(List()) ++
+      args.endTime
+        .map(end =>
+          List(FilterDirective("bl_dap_pack_date", FilterOps.<, RedCapClient.redcapFormatDate(end)))
+        )
+        .getOrElse(List())
 
   val subdir = "environment"
 
@@ -57,7 +66,7 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
   def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
       forms,
-      extractionFilters,
+      extractionFiltersGenerator,
       arm,
       fieldList,
       subdir,
