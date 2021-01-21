@@ -42,7 +42,7 @@ class OkWrapper extends HttpWrapper {
             JsonParser.parseEncodedJsonReturningFailure(responseBodyString)
           maybeResult match {
             case Right(result) => p.success(result)
-            case Left(err) => p.failure(err)
+            case Left(err)     => p.failure(err)
           }
         }
       })
