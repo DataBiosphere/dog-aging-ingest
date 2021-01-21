@@ -24,9 +24,9 @@ class OkWrapper extends HttpWrapper {
       .addInterceptor(new HttpLoggingInterceptor(new Logger() {
 
         override def log(s: String): Unit = {
-          logger.info(s)
+          logger.error(s)
         }
-      }).setLevel(Level.BASIC))
+      }).setLevel(Level.BODY))
       .build()
 
   def makeRequest(request: Request): Future[Msg] = {
@@ -37,11 +37,15 @@ class OkWrapper extends HttpWrapper {
         override def onFailure(call: Call, e: IOException): Unit =
           p.failure(e)
         override def onResponse(call: Call, response: Response): Unit = {
+          val responseBodyString = response.body().string()
           val maybeResult =
-            JsonParser.parseEncodedJsonReturningFailure(response.body().string())
+            JsonParser.parseEncodedJsonReturningFailure(responseBodyString)
           maybeResult match {
             case Right(result) => p.success(result)
-            case Left(err)     => p.failure(err)
+            case Left(err) => {
+              logger.error(err.message)
+              p.failure(new Exception(responseBodyString))
+            }
           }
         }
       })

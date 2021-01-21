@@ -1,5 +1,8 @@
 package org.broadinstitute.monster.dap
 
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+
 import okhttp3._
 import org.slf4j.LoggerFactory
 import upack.Msg
@@ -34,6 +37,9 @@ object RedCapClient {
   /** URL for the production RedCap API. */
   private val apiRoute = "https://redcap.dogagingproject.org/api/"
 
+  def redcapFormatDate(date: OffsetDateTime): String =
+    date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"))
+
   def buildRequest(generatorParams: RedcapRequestGeneratorParams): Request = {
     val logger = LoggerFactory.getLogger(getClass)
 
@@ -44,7 +50,7 @@ object RedCapClient {
           s"fields: [${fields.mkString(",")}]",
           s"forms: [${forms.mkString(",")}]",
           s"filters: [${filters
-            .map(directive => s"${directive.field}${directive.operation.op}${directive.comparand}")
+            .map(directive => s"${directive.field}${directive.operation.op}${directive.spaceEscapedComparand}")
             .mkString(",")}]",
           s"arm: [$arm]"
         )
@@ -83,7 +89,7 @@ object RedCapClient {
           formBuilder.add(
             "filterLogic",
             filters.map { directive =>
-              s"[${directive.field}]${directive.operation.op}${directive.comparand}"
+              s"[${directive.field}]${directive.operation.op}${directive.spaceEscapedComparand}"
             }.mkString(" and ")
           )
         }
