@@ -24,9 +24,9 @@ class OkWrapper extends HttpWrapper {
       .addInterceptor(new HttpLoggingInterceptor(new Logger() {
 
         override def log(s: String): Unit = {
-          logger.error(s)
+          logger.info(s)
         }
-      }).setLevel(Level.BODY))
+      }).setLevel(Level.BASIC))
       .build()
 
   def makeRequest(request: Request): Future[Msg] = {
@@ -42,10 +42,7 @@ class OkWrapper extends HttpWrapper {
             JsonParser.parseEncodedJsonReturningFailure(responseBodyString)
           maybeResult match {
             case Right(result) => p.success(result)
-            case Left(err) => {
-              logger.error(err.message)
-              p.failure(new Exception(responseBodyString))
-            }
+            case Left(err) => p.failure(err)
           }
         }
       })

@@ -37,8 +37,10 @@ object RedCapClient {
   /** URL for the production RedCap API. */
   private val apiRoute = "https://redcap.dogagingproject.org/api/"
 
-  def redcapFormatDate(date: OffsetDateTime): String =
-    date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"))
+  /** Formatter matching the production RedCap's interface. */
+  private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+
+  def redcapFormatDate(date: OffsetDateTime): String = date.format(dateFormatter)
 
   def buildRequest(generatorParams: RedcapRequestGeneratorParams): Request = {
     val logger = LoggerFactory.getLogger(getClass)
