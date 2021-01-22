@@ -34,7 +34,8 @@ lazy val `dog-aging-hles-transformation` = project
   .dependsOn(`dog-aging-schema`)
   .settings(
     libraryDependencies += "com.beachape" %% "enumeratum" % enumeratumVersion,
-    libraryDependencies += "com.nrinaudo" %% "kantan.csv" % "0.6.1"
+    libraryDependencies += "com.nrinaudo" %% "kantan.csv" % "0.6.1",
+    libraryDependencies += "com.nrinaudo" %% "kantan.csv-generic" % "0.6.1"
   )
 
 lazy val `dog-aging-hles-orchestration` = project

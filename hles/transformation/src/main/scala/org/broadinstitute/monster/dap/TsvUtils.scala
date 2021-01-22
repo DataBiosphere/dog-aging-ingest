@@ -1,9 +1,11 @@
 package org.broadinstitute.monster.dap
 
-// import java.io.File
+import java.io.File
+import java.time.LocalDate
 
-// import kantan.csv.CsvConfiguration.rfc
-// import kantan.csv.ops._
+import kantan.csv.CsvConfiguration.rfc
+import kantan.csv.generic._
+import kantan.csv.ops._
 import kantan.csv._
 
 trait TsvUtils[T <: Product] {
@@ -11,10 +13,14 @@ trait TsvUtils[T <: Product] {
 
   def buildTsvRow(record: T): List[String]
 
-  // def writeToTsv(file: File): Unit = {
-  //   val writer =
-  //     file.asCsvWriter[List[String]](rfc.withCellSeparator('\t').withHeader(terraTsvHeaders: _*))
-  // }
+  def writeToTsv(file: File, rows: Traversable[T]): Unit = {
+    val writer =
+      file.asCsvWriter[List[String]](rfc.withCellSeparator('\t').withHeader(terraTsvHeaders: _*))
+
+    rows.foreach(writer.write(row => buildTsvRow(row)))
+
+    writer.close
+  }
 
   def getFieldNames(caseClass: T): List[String] = {
     caseClass.getClass.getDeclaredFields.map(_.getName).toList
@@ -24,21 +30,19 @@ trait TsvUtils[T <: Product] {
     caseClass.productIterator.toList
   }
 
-  // todo figure out how to map across key/value pairs
-  def getSerializedFieldMapping(caseClass: T): List[String] = {
-    getFieldValueMapping(caseClass).map(pair =>
-      pair match {
-        case (Class(fieldType), fieldValue) => {
-          serialize(value = fieldValue.asInstanceOf[fieldType])
-        }
+  // we're forced to handle this type reflection/serialization ourselves because most
+  // utilities for dynamic serialization rely on type safety via tuples,
+  // and scala does not support tuples with more than 22 values (which encompasses several of our tables)
+  def getSerializedFieldValues(caseClass: T): List[String] = {
+    getFieldValues(caseClass).map(fieldValue =>
+      fieldValue match {
+        case fieldInt: Int        => serialize[Int](value = fieldInt)
+        case fieldStr: String     => serialize[String](value = fieldStr)
+        case fieldDate: LocalDate => serialize[LocalDate](value = fieldDate)
       }
     )
   }
 
   def serialize[N](implicit encoder: CellEncoder[N], value: N) = encoder.encode(value)
-
-  def getFieldValueMapping(caseClass: T): Map[Class[_], Any] = {
-    caseClass.getClass.getDeclaredFields.toList.zip(caseClass.productIterator.toList).toMap
-  }
 
 }
