@@ -1124,7 +1124,11 @@
 {"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"pa_timer_3","value":"25.65"}
 {"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"pa_timer","value":"3.073"}
 {"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"environment_complete","value":"2"}
-{"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"de_home_nbr","value":"0"}
+{"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"de_home_nbr","value":"2"}
+{"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"de_zip_nbr","value":"2"}
+{"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"de_country_nbr","value":"2"}
+{"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"de_country_01","value":"USA"}
+{"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"de_country_02_dd","value":"US"}
 {"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"de_timer_14","value":"8.158"}
 {"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"de_type_area","value":"1"}
 {"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"de_type_home","value":"1"}
@@ -1461,4 +1465,5 @@
 {"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"st_dap_pack_count","value":"14496"}
 {"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"st_dap_pack_date","value":"2020-10-16 16:45"}
 {"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"st_vemr_possible","value":"1"}
+{"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"st_vemr_date_due","value":"2020-11-26"}
 {"record":"33333","redcap_event_name":"jan2020_arm_1","field_name":"st_vemr_date_due","value":"2020-11-26"}
