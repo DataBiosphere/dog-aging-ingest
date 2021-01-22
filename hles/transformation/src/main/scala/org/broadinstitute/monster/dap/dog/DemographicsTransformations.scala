@@ -270,7 +270,7 @@ object DemographicsTransformations {
       if (allActivities.contains[Long](ActivityValues(activity))) {
         rawRecord.getOptionalNumber(s"dd_${activity}_m").orElse(Some(3L))
       } else {
-        None
+        rawRecord.getOptionalNumber(s"dd_${activity}_m").orElse(None)
       }
 
     val serviceLevel = activityLevel("service")
