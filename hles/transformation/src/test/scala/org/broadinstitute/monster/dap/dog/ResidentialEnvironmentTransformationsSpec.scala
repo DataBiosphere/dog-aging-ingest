@@ -19,15 +19,15 @@ class ResidentialEnvironmentTransformationsSpec
       "de_country_nbr" -> Array("10"),
       "de_country_01_only" -> Array("this should be ignored too"),
       "de_country_01" -> Array("country1"),
-      "de_country_02" -> Array("country2"),
-      "de_country_03" -> Array("country3"),
+      "de_country_02_dd" -> Array("country2"),
+      "de_country_03_dd" -> Array("country3"),
       "de_country_04" -> Array("country4"),
       "de_country_05" -> Array("country5"),
       "de_country_06" -> Array("country6"),
       "de_country_07" -> Array("country7"),
-      "de_country_08" -> Array("country8"),
+      "de_country_08_dd" -> Array("country8"),
       "de_country_09" -> Array("country9"),
-      "de_country_10" -> Array("country10")
+      "de_country_10_dd" -> Array("country10")
     )
     val output =
       ResidentialEnvironmentTransformations.mapResidentialEnvironment(
@@ -68,6 +68,28 @@ class ResidentialEnvironmentTransformationsSpec
     output.dePastResidenceZipCount.value shouldBe 1
     output.dePastResidenceCountryCount.value shouldBe 1
     output.dePastResidenceCountry1.value shouldBe "USA!"
+    output.dePastResidenceCountry2 shouldBe None
+  }
+
+  it should "map past-residence-related fields where there is a single past and current home (dropdown)" in {
+    val exampleDogFields = Map[String, Array[String]](
+      "de_home_nbr" -> Array("1"),
+      "de_zip_nbr" -> Array("1"),
+      "oc_address2_yn" -> Array("0"),
+      "de_country_nbr" -> Array("1"),
+      "de_country_01_only_dd" -> Array("US"),
+      "de_country_01" -> Array("this should be ignored"),
+      "de_country_02" -> Array("IgnoredCountry")
+    )
+    val output =
+      ResidentialEnvironmentTransformations.mapResidentialEnvironment(
+        RawRecord(id = 1, exampleDogFields)
+      )
+
+    output.deLifetimeResidenceCount.value shouldBe 2
+    output.dePastResidenceZipCount.value shouldBe 1
+    output.dePastResidenceCountryCount.value shouldBe 1
+    output.dePastResidenceCountry1.value shouldBe "US"
     output.dePastResidenceCountry2 shouldBe None
   }
 

@@ -24,6 +24,19 @@ object ResidentialEnvironmentTransformations {
   }
 
   /**
+    * Parse both country fields for a RedCap record,
+    * de_country_[n] is the deprecated user entry free text field
+    * de_country_[n]_dd is the updated drop down option list
+    */
+  def parseCountry(
+    rawRecord: RawRecord,
+    countryField: String,
+    countryFieldDropdown: String
+  ): Option[String] = {
+    rawRecord.getOptional(countryField).orElse(rawRecord.getOptional(countryFieldDropdown))
+  }
+
+  /**
     * Parse all past-residence-related fields out of a raw RedCap record,
     * injecting them into a partially-modeled dog record.
     */
@@ -31,10 +44,8 @@ object ResidentialEnvironmentTransformations {
     rawRecord: RawRecord,
     dog: HlesDogResidentialEnvironment
   ): HlesDogResidentialEnvironment = {
-    val currentResidenceCount = rawRecord.getOptionalBoolean("oc_address2_yn").map {
-      case true  => 2L
-      case false => 1L
-    }
+    val currentResidenceCount = rawRecord.getOptionalBoolean("oc_address2_yn").map(if (_) 2L else 1L)
+
     rawRecord
       .getOptionalNumber("de_home_nbr")
       .fold(dog.copy(deLifetimeResidenceCount = currentResidenceCount)) { pastResidenceCount =>
@@ -48,28 +59,37 @@ object ResidentialEnvironmentTransformations {
           dePastResidenceZipCount = Some(pastZipCount),
           dePastResidenceCountryCount = Some(pastCountryCount),
           dePastResidenceCountry1 = if (pastCountryCount > 1) {
-            rawRecord.getOptional("de_country_01")
+            parseCountry(rawRecord, "de_country_01", "de_country_01_dd")
           } else {
-            rawRecord.getOptional("de_country_01_only")
+            parseCountry(rawRecord, "de_country_01_only", "de_country_01_only_dd")
           },
           dePastResidenceCountry2 =
-            if (pastCountryCount > 1) rawRecord.getOptional("de_country_02") else None,
+            if (pastCountryCount > 1) parseCountry(rawRecord, "de_country_02", "de_country_02_dd")
+            else None,
           dePastResidenceCountry3 =
-            if (pastCountryCount > 2) rawRecord.getOptional("de_country_03") else None,
+            if (pastCountryCount > 2) parseCountry(rawRecord, "de_country_03", "de_country_03_dd")
+            else None,
           dePastResidenceCountry4 =
-            if (pastCountryCount > 3) rawRecord.getOptional("de_country_04") else None,
+            if (pastCountryCount > 3) parseCountry(rawRecord, "de_country_04", "de_country_04_dd")
+            else None,
           dePastResidenceCountry5 =
-            if (pastCountryCount > 4) rawRecord.getOptional("de_country_05") else None,
+            if (pastCountryCount > 4) parseCountry(rawRecord, "de_country_05", "de_country_05_dd")
+            else None,
           dePastResidenceCountry6 =
-            if (pastCountryCount > 5) rawRecord.getOptional("de_country_06") else None,
+            if (pastCountryCount > 5) parseCountry(rawRecord, "de_country_06", "de_country_06_dd")
+            else None,
           dePastResidenceCountry7 =
-            if (pastCountryCount > 6) rawRecord.getOptional("de_country_07") else None,
+            if (pastCountryCount > 6) parseCountry(rawRecord, "de_country_07", "de_country_07_dd")
+            else None,
           dePastResidenceCountry8 =
-            if (pastCountryCount > 7) rawRecord.getOptional("de_country_08") else None,
+            if (pastCountryCount > 7) parseCountry(rawRecord, "de_country_08", "de_country_08_dd")
+            else None,
           dePastResidenceCountry9 =
-            if (pastCountryCount > 8) rawRecord.getOptional("de_country_09") else None,
+            if (pastCountryCount > 8) parseCountry(rawRecord, "de_country_09", "de_country_09_dd")
+            else None,
           dePastResidenceCountry10 =
-            if (pastCountryCount > 9) rawRecord.getOptional("de_country_10") else None
+            if (pastCountryCount > 9) parseCountry(rawRecord, "de_country_10", "de_country_10_dd")
+            else None
         )
       }
   }
