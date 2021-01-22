@@ -156,77 +156,96 @@ object DietTransformations {
     )
   }
 
-  /** Map fields about supplements taken daily by a dog. */
+  /** Map fields about supplements taken daily by a dog when available. */
   def mapDailySupplements(rawRecord: RawRecord, dog: HlesDogDiet): HlesDogDiet = {
-    val otherSupps = rawRecord.getOptionalNumber("df_s_other").filter(_ != 0L)
+    val dailySupps = rawRecord.getRequiredBoolean("df_supplement_daily")
+    if (dailySupps) {
+      val otherSupps = rawRecord.getOptionalNumber("df_s_other").filter(_ != 0L)
 
-    dog.copy(
-      dfDailySupplementsBoneMeal = rawRecord.getOptionalNumber("df_s_bone_meal").filter(_ != 0L),
-      dfDailySupplementsGlucosamine =
-        rawRecord.getOptionalNumber("df_s_glucosamine").filter(_ != 0L),
-      dfDailySupplementsChondroitin =
-        rawRecord.getOptionalNumber("df_s_chondroitin").filter(_ != 0L),
-      dfDailySupplementsOtherJoint =
-        rawRecord.getOptionalNumber("df_s_joint_other").filter(_ != 0L),
-      dfDailySupplementsOmega3 = rawRecord.getOptionalNumber("df_s_omega3").filter(_ != 0L),
-      dfDailySupplementsNonOilSkin = rawRecord.getOptionalNumber("df_s_skin").filter(_ != 0L),
-      dfDailySupplementsVitamins = rawRecord.getOptionalNumber("df_s_vitamin").filter(_ != 0L),
-      dfDailySupplementsEnzyme = rawRecord.getOptionalNumber("df_s_enzyme").filter(_ != 0L),
-      dfDailySupplementsProbiotics = rawRecord.getOptionalNumber("df_s_probiotics").filter(_ != 0L),
-      dfDailySupplementsFiber = rawRecord.getOptionalNumber("df_s_fiber").filter(_ != 0L),
-      dfDailySupplementsAlkalinize = rawRecord.getOptionalNumber("df_s_alkalinize").filter(_ != 0L),
-      dfDailySupplementsAcidify = rawRecord.getOptionalNumber("df_s_acidify").filter(_ != 0L),
-      dfDailySupplementsTaurine = rawRecord.getOptionalNumber("df_s_taurine").filter(_ != 0L),
-      dfDailySupplementsAntiox = rawRecord.getOptionalNumber("df_s_antiox").filter(_ != 0L),
-      dfDailySupplementsCoenzymeQ10 = rawRecord.getOptionalNumber("df_s_q10").filter(_ != 0L),
-      dfDailySupplementsOther = otherSupps,
-      dfDailySupplementsOtherDescription = if (otherSupps.nonEmpty) {
-        rawRecord.getOptional("df_s_other_text")
-      } else {
-        None
-      }
-    )
+      dog.copy(
+        dfDailySupplements = Some(dailySupps),
+        dfDailySupplementsBoneMeal = rawRecord.getOptionalNumber("df_s_bone_meal").filter(_ != 0L),
+        dfDailySupplementsGlucosamine =
+          rawRecord.getOptionalNumber("df_s_glucosamine").filter(_ != 0L),
+        dfDailySupplementsChondroitin =
+          rawRecord.getOptionalNumber("df_s_chondroitin").filter(_ != 0L),
+        dfDailySupplementsOtherJoint =
+          rawRecord.getOptionalNumber("df_s_joint_other").filter(_ != 0L),
+        dfDailySupplementsOmega3 = rawRecord.getOptionalNumber("df_s_omega3").filter(_ != 0L),
+        dfDailySupplementsNonOilSkin = rawRecord.getOptionalNumber("df_s_skin").filter(_ != 0L),
+        dfDailySupplementsVitamins = rawRecord.getOptionalNumber("df_s_vitamin").filter(_ != 0L),
+        dfDailySupplementsEnzyme = rawRecord.getOptionalNumber("df_s_enzyme").filter(_ != 0L),
+        dfDailySupplementsProbiotics =
+          rawRecord.getOptionalNumber("df_s_probiotics").filter(_ != 0L),
+        dfDailySupplementsFiber = rawRecord.getOptionalNumber("df_s_fiber").filter(_ != 0L),
+        dfDailySupplementsAlkalinize =
+          rawRecord.getOptionalNumber("df_s_alkalinize").filter(_ != 0L),
+        dfDailySupplementsAcidify = rawRecord.getOptionalNumber("df_s_acidify").filter(_ != 0L),
+        dfDailySupplementsTaurine = rawRecord.getOptionalNumber("df_s_taurine").filter(_ != 0L),
+        dfDailySupplementsAntiox = rawRecord.getOptionalNumber("df_s_antiox").filter(_ != 0L),
+        dfDailySupplementsCoenzymeQ10 = rawRecord.getOptionalNumber("df_s_q10").filter(_ != 0L),
+        dfDailySupplementsOther = otherSupps,
+        dfDailySupplementsOtherDescription = if (otherSupps.nonEmpty) {
+          rawRecord.getOptional("df_s_other_text")
+        } else {
+          None
+        }
+      )
+    } else {
+      dog.copy(
+        dfDailySupplements = Some(dailySupps)
+      )
+    }
   }
 
   /** Map fields about supplements taken less-than-daily by a dog. */
   def mapInfrequentSupplements(rawRecord: RawRecord, dog: HlesDogDiet): HlesDogDiet = {
-    val otherSupps = rawRecord.getOptionalNumber("df_s_other_ltd").filter(_ != 0L)
+    val infreqSupps = rawRecord.getRequiredBoolean("df_supplement_ltd")
+    if (infreqSupps) {
+      val otherSupps = rawRecord.getOptionalNumber("df_s_other_ltd").filter(_ != 0L)
 
-    dog.copy(
-      dfInfrequentSupplementsBoneMeal =
-        rawRecord.getOptionalNumber("df_s_bone_meal_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsGlucosamine =
-        rawRecord.getOptionalNumber("df_s_glucosamine_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsChondroitin =
-        rawRecord.getOptionalNumber("df_s_chondroitin_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsOtherJoint =
-        rawRecord.getOptionalNumber("df_s_joint_other_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsOmega3 =
-        rawRecord.getOptionalNumber("df_s_omega3_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsNonOilSkin =
-        rawRecord.getOptionalNumber("df_s_skin_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsVitamins =
-        rawRecord.getOptionalNumber("df_s_vitamin_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsEnzyme =
-        rawRecord.getOptionalNumber("df_s_enzyme_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsProbiotics =
-        rawRecord.getOptionalNumber("df_s_probiotics_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsFiber = rawRecord.getOptionalNumber("df_s_fiber_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsAlkalinize =
-        rawRecord.getOptionalNumber("df_s_alkalinize_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsAcidify =
-        rawRecord.getOptionalNumber("df_s_acidify_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsTaurine =
-        rawRecord.getOptionalNumber("df_s_taurine_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsAntiox =
-        rawRecord.getOptionalNumber("df_s_antiox_ltd").filter(_ != 0L),
-      dfInfrequentSupplementsCoenzymeQ10 = rawRecord.getOptionalNumber("df_s_q10_ltd"),
-      dfInfrequentSupplementsOther = otherSupps,
-      dfInfrequentSupplementsOtherDescription = if (otherSupps.nonEmpty) {
-        rawRecord.getOptional("df_s_other_ltd_text")
-      } else {
-        None
-      }
-    )
+      dog.copy(
+        dfInfrequentSupplements = Some(infreqSupps),
+        dfInfrequentSupplementsBoneMeal =
+          rawRecord.getOptionalNumber("df_s_bone_meal_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsGlucosamine =
+          rawRecord.getOptionalNumber("df_s_glucosamine_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsChondroitin =
+          rawRecord.getOptionalNumber("df_s_chondroitin_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsOtherJoint =
+          rawRecord.getOptionalNumber("df_s_joint_other_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsOmega3 =
+          rawRecord.getOptionalNumber("df_s_omega3_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsNonOilSkin =
+          rawRecord.getOptionalNumber("df_s_skin_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsVitamins =
+          rawRecord.getOptionalNumber("df_s_vitamin_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsEnzyme =
+          rawRecord.getOptionalNumber("df_s_enzyme_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsProbiotics =
+          rawRecord.getOptionalNumber("df_s_probiotics_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsFiber =
+          rawRecord.getOptionalNumber("df_s_fiber_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsAlkalinize =
+          rawRecord.getOptionalNumber("df_s_alkalinize_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsAcidify =
+          rawRecord.getOptionalNumber("df_s_acidify_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsTaurine =
+          rawRecord.getOptionalNumber("df_s_taurine_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsAntiox =
+          rawRecord.getOptionalNumber("df_s_antiox_ltd").filter(_ != 0L),
+        dfInfrequentSupplementsCoenzymeQ10 = rawRecord.getOptionalNumber("df_s_q10_ltd"),
+        dfInfrequentSupplementsOther = otherSupps,
+        dfInfrequentSupplementsOtherDescription = if (otherSupps.nonEmpty) {
+          rawRecord.getOptional("df_s_other_ltd_text")
+        } else {
+          None
+        }
+      )
+    } else {
+      dog.copy(
+        dfInfrequentSupplements = Some(infreqSupps)
+      )
+    }
   }
 }

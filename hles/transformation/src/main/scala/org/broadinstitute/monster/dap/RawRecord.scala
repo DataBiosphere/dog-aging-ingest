@@ -38,6 +38,9 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     }
   }
 
+  /** Get the singleton value for an attribute in this record, parsed as a boolean. */
+  def getRequiredBoolean(field: String): Boolean = getRequired(field) == "1"
+
   /**
     * Get the singleton value for an attribute in this record, if one exists.
     *

@@ -214,8 +214,9 @@ class DietTransformationsSpec extends AnyFlatSpec with Matchers with OptionValue
     out.dfTreatsOtherDescription.value shouldBe "foob"
   }
 
-  it should "map information about daily supplements" in {
+  it should "map information about daily supplements when available" in {
     val example = Map(
+      "df_supplement_daily" -> Array("1"),
       "df_s_bone_meal" -> Array("0"),
       "df_s_glucosamine" -> Array("1"),
       "df_s_chondroitin" -> Array("2"),
@@ -240,6 +241,7 @@ class DietTransformationsSpec extends AnyFlatSpec with Matchers with OptionValue
       HlesDogDiet.init()
     )
 
+    out.dfDailySupplements.value shouldBe true
     out.dfDailySupplementsBoneMeal shouldBe None
     out.dfDailySupplementsGlucosamine.value shouldBe 1L
     out.dfDailySupplementsChondroitin.value shouldBe 2L
@@ -259,8 +261,56 @@ class DietTransformationsSpec extends AnyFlatSpec with Matchers with OptionValue
     out.dfDailySupplementsOtherDescription shouldBe None
   }
 
-  it should "map information about supplements taken less-than-daily" in {
+  it should "not map information about daily supplements when unavailable" in {
     val example = Map(
+      "df_supplement_daily" -> Array("0"),
+      "df_s_bone_meal" -> Array("0"),
+      "df_s_glucosamine" -> Array("1"),
+      "df_s_chondroitin" -> Array("2"),
+      "df_s_joint_other" -> Array("0"),
+      "df_s_omega3" -> Array("1"),
+      "df_s_skin" -> Array("2"),
+      "df_s_vitamin" -> Array("0"),
+      "df_s_enzyme" -> Array("1"),
+      "df_s_probiotics" -> Array("2"),
+      "df_s_fiber" -> Array("0"),
+      "df_s_alkalinize" -> Array("1"),
+      "df_s_acidify" -> Array("2"),
+      "df_s_taurine" -> Array("0"),
+      "df_s_antiox" -> Array("1"),
+      "df_s_q10" -> Array("2"),
+      "df_s_other" -> Array("0"),
+      "df_s_other_text" -> Array("No passthrough")
+    )
+
+    val out = DietTransformations.mapDailySupplements(
+      RawRecord(1, example),
+      HlesDogDiet.init()
+    )
+
+    out.dfDailySupplements.value shouldBe false
+    out.dfDailySupplementsBoneMeal shouldBe None
+    out.dfDailySupplementsGlucosamine shouldBe None
+    out.dfDailySupplementsChondroitin shouldBe None
+    out.dfDailySupplementsOtherJoint shouldBe None
+    out.dfDailySupplementsOmega3 shouldBe None
+    out.dfDailySupplementsNonOilSkin shouldBe None
+    out.dfDailySupplementsVitamins shouldBe None
+    out.dfDailySupplementsEnzyme shouldBe None
+    out.dfDailySupplementsProbiotics shouldBe None
+    out.dfDailySupplementsFiber shouldBe None
+    out.dfDailySupplementsAlkalinize shouldBe None
+    out.dfDailySupplementsAcidify shouldBe None
+    out.dfDailySupplementsTaurine shouldBe None
+    out.dfDailySupplementsAntiox shouldBe None
+    out.dfDailySupplementsCoenzymeQ10 shouldBe None
+    out.dfDailySupplementsOther shouldBe None
+    out.dfDailySupplementsOtherDescription shouldBe None
+  }
+
+  it should "map information about supplements taken less-than-daily when unavailable" in {
+    val example = Map(
+      "df_supplement_ltd" -> Array("0"),
       "df_s_bone_meal_ltd" -> Array("0"),
       "df_s_glucosamine_ltd" -> Array("1"),
       "df_s_chondroitin_ltd" -> Array("2"),
@@ -285,6 +335,54 @@ class DietTransformationsSpec extends AnyFlatSpec with Matchers with OptionValue
       HlesDogDiet.init()
     )
 
+    out.dfInfrequentSupplements.value shouldBe false
+    out.dfInfrequentSupplementsBoneMeal shouldBe None
+    out.dfInfrequentSupplementsGlucosamine shouldBe None
+    out.dfInfrequentSupplementsChondroitin shouldBe None
+    out.dfInfrequentSupplementsOtherJoint shouldBe None
+    out.dfInfrequentSupplementsOmega3 shouldBe None
+    out.dfInfrequentSupplementsNonOilSkin shouldBe None
+    out.dfInfrequentSupplementsVitamins shouldBe None
+    out.dfInfrequentSupplementsEnzyme shouldBe None
+    out.dfInfrequentSupplementsProbiotics shouldBe None
+    out.dfInfrequentSupplementsFiber shouldBe None
+    out.dfInfrequentSupplementsAlkalinize shouldBe None
+    out.dfInfrequentSupplementsAcidify shouldBe None
+    out.dfInfrequentSupplementsTaurine shouldBe None
+    out.dfInfrequentSupplementsAntiox shouldBe None
+    out.dfInfrequentSupplementsCoenzymeQ10 shouldBe None
+    out.dfInfrequentSupplementsOther shouldBe None
+    out.dfInfrequentSupplementsOtherDescription shouldBe None
+  }
+
+  it should "not map information about supplements taken less-than-daily when unavailable" in {
+    val example = Map(
+      "df_supplement_ltd" -> Array("1"),
+      "df_s_bone_meal_ltd" -> Array("0"),
+      "df_s_glucosamine_ltd" -> Array("1"),
+      "df_s_chondroitin_ltd" -> Array("2"),
+      "df_s_joint_other_ltd" -> Array("0"),
+      "df_s_omega3_ltd" -> Array("1"),
+      "df_s_skin_ltd" -> Array("2"),
+      "df_s_vitamin_ltd" -> Array("0"),
+      "df_s_enzyme_ltd" -> Array("1"),
+      "df_s_probiotics_ltd" -> Array("2"),
+      "df_s_fiber_ltd" -> Array("0"),
+      "df_s_alkalinize_ltd" -> Array("1"),
+      "df_s_acidify_ltd" -> Array("2"),
+      "df_s_taurine_ltd" -> Array("0"),
+      "df_s_antiox_ltd" -> Array("1"),
+      "df_s_q10_ltd" -> Array("2"),
+      "df_s_other_ltd" -> Array("0"),
+      "df_s_other_ltd_text" -> Array("No passthrough")
+    )
+
+    val out = DietTransformations.mapInfrequentSupplements(
+      RawRecord(1, example),
+      HlesDogDiet.init()
+    )
+
+    out.dfInfrequentSupplements.value shouldBe true
     out.dfInfrequentSupplementsBoneMeal shouldBe None
     out.dfInfrequentSupplementsGlucosamine.value shouldBe 1L
     out.dfInfrequentSupplementsChondroitin.value shouldBe 2L

@@ -10,7 +10,16 @@ class DogTransformationsSpec extends AnyFlatSpec with Matchers with OptionValues
   behavior of "DogTransformations"
 
   it should "map required fields" in {
-    val mapped = DogTransformations.mapDog(RawRecord(1, Map("st_owner_id" -> Array("2"))))
+    val mapped = DogTransformations.mapDog(
+      RawRecord(
+        1,
+        Map(
+          "st_owner_id" -> Array("2"),
+          "df_supplement_daily" -> Array("0"),
+          "df_supplement_ltd" -> Array("0")
+        )
+      )
+    )
     mapped shouldBe Some(
       HlesDog(
         dogId = 1L,
@@ -19,7 +28,11 @@ class DogTransformationsSpec extends AnyFlatSpec with Matchers with OptionValues
         hlesDogDemographics = Some(HlesDogDemographics.init()),
         hlesDogResidences = Some(HlesDogResidences.init()),
         hlesDogBehavior = Some(HlesDogBehavior.init()),
-        hlesDogDiet = Some(HlesDogDiet.init()),
+        hlesDogDiet = Some(
+          HlesDogDiet
+            .init()
+            .copy(dfDailySupplements = Some(false), dfInfrequentSupplements = Some(false))
+        ),
         hlesDogHealthSummary = Some(HlesDogHealthSummary.init()),
         hlesDogPhysicalActivity = Some(HlesDogPhysicalActivity.init()),
         hlesDogResidentialEnvironment = Some(HlesDogResidentialEnvironment.init()),
