@@ -1,13 +1,12 @@
 package org.broadinstitute.monster.dap.dog
 
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogResidences
-import org.broadinstitute.monster.dap.{OwnerTransformations, RawRecord}
+import org.broadinstitute.monster.dap.RawRecord
 
 object DogResidenceTransformations {
 
   /** Parse all residence-related fields out of a raw RedCap record. */
   def mapDogResidences(rawRecord: RawRecord): HlesDogResidences = {
-    val hasSecondaryResidence = rawRecord.getOptionalBoolean("oc_address2_yn")
     val hasTertiaryResidences = rawRecord.getOptionalBoolean("dd_2nd_residence_yn")
     val tertiaryResidenceCount = hasTertiaryResidences.map { yn =>
       if (yn) rawRecord.getRequired("dd_2nd_residence_nbr").toInt else 0
@@ -21,36 +20,7 @@ object DogResidenceTransformations {
       (state, weeks)
     }
 
-    val primaryOwned = rawRecord.getOptionalNumber("oc_address1_own")
-    val secondaryOwned = hasSecondaryResidence.flatMap {
-      if (_) rawRecord.getOptionalNumber("oc_address2_own") else None
-    }
-
     HlesDogResidences(
-      ocPrimaryResidenceState = rawRecord.getOptional("oc_address1_state"),
-      ocPrimaryResidenceCensusDivision = rawRecord.getOptional("oc_address1_division").flatMap {
-        OwnerTransformations.getCensusDivision(_)
-      },
-      ocPrimaryResidenceOwnership = primaryOwned,
-      ocPrimaryResidenceOwnershipOtherDescription =
-        if (primaryOwned.contains(98)) rawRecord.getOptionalStripped("oc_address1_own_other")
-        else None,
-      ocPrimaryResidenceTimePercentage = hasSecondaryResidence.flatMap {
-        if (_) rawRecord.getOptionalNumber("oc_address1_pct") else None
-      },
-      ocSecondaryResidence = hasSecondaryResidence,
-      ocSecondaryResidenceState = hasSecondaryResidence.flatMap {
-        if (_) rawRecord.getOptional("oc_address2_state") else None
-      },
-      ocSecondaryResidenceOwnership = secondaryOwned,
-      ocSecondaryResidenceOwnershipOtherDescription = if (secondaryOwned.contains(98)) {
-        rawRecord.getOptional("oc_address2_own_other")
-      } else {
-        None
-      },
-      ocSecondaryResidenceTimePercentage = hasSecondaryResidence.flatMap {
-        if (_) rawRecord.getOptionalNumber("oc_2nd_address_pct") else None
-      },
       ddAlternateRecentResidenceCount = tertiaryResidenceCount.map(_.toLong),
       ddAlternateRecentResidence1State =
         if (tertiaryResidenceCutoff >= 1) tertiaryResidences(0)._1 else None,
