@@ -32,13 +32,11 @@ object CslbTransformations extends TsvUtils[Cslb] {
         None
     }
 
-  // def buildTsvRow(record: Cslb): List[String] = {
-  //   val row = buildFieldSequence(record, fieldsToOmit = List("dogId"))
+  def buildTsvRow(record: Cslb): List[String] = {
+    val entityHeader = record.dogId.toString
 
-  //   List(transformedRecord.dogId) ++ row
-  // }
-
-  def buildTsvRow(record: Cslb): List[String] = List(record.dogId.toString)
+    List(entityHeader) ++ getSerializedFieldValues(record)
+  }
 
   val terraTsvHeaders: List[String] =
     List("entity:cslb_id") ++ classOf[Cslb].getDeclaredFields.map(_.getName).toList

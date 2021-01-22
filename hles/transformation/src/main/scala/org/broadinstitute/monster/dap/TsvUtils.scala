@@ -2,6 +2,7 @@ package org.broadinstitute.monster.dap
 
 import java.io.File
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 import kantan.csv.CsvConfiguration.rfc
 import kantan.csv.generic._
@@ -13,11 +14,18 @@ trait TsvUtils[T <: Product] {
 
   def buildTsvRow(record: T): List[String]
 
+  private final val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+  val intEncoder: CellEncoder[Int] = CellEncoder.from(_.toString)
+  val strEncoder: CellEncoder[String] = CellEncoder.from(_.toString)
+
+  val dateEncoder: CellEncoder[LocalDate] = CellEncoder.from(_.format(dateFormat))
+
   def writeToTsv(file: File, rows: Traversable[T]): Unit = {
     val writer =
       file.asCsvWriter[List[String]](rfc.withCellSeparator('\t').withHeader(terraTsvHeaders: _*))
 
-    rows.foreach(writer.write(row => buildTsvRow(row)))
+    rows.foreach(row => writer.write(buildTsvRow(row)))
 
     writer.close
   }
@@ -36,13 +44,13 @@ trait TsvUtils[T <: Product] {
   def getSerializedFieldValues(caseClass: T): List[String] = {
     getFieldValues(caseClass).map(fieldValue =>
       fieldValue match {
-        case fieldInt: Int        => serialize[Int](value = fieldInt)
-        case fieldStr: String     => serialize[String](value = fieldStr)
-        case fieldDate: LocalDate => serialize[LocalDate](value = fieldDate)
+        case fieldInt: Int        => serialize[Int](intEncoder, fieldInt)
+        case fieldStr: String     => serialize[String](strEncoder, fieldStr)
+        case fieldDate: LocalDate => serialize[LocalDate](dateEncoder, fieldDate)
       }
     )
   }
 
-  def serialize[N](implicit encoder: CellEncoder[N], value: N) = encoder.encode(value)
+  def serialize[N](encoder: CellEncoder[N], value: N) = encoder.encode(value)
 
 }
