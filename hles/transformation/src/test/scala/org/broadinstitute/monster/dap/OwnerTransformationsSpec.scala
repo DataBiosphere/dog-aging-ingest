@@ -24,10 +24,12 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     "oc_address1_division" -> Array("Division 3: East North Central"),
     "oc_address1_own" -> Array("98"),
     "oc_address1_own_other" -> Array("some text"),
+    "oc_address1_pct" -> Array("1"),
     "oc_address2_yn" -> Array("1"),
     "oc_address2_state" -> Array("MA"),
     "oc_address2_own" -> Array("98"),
-    "oc_address2_own_other" -> Array("some text")
+    "oc_address2_own_other" -> Array("some text"),
+    "oc_2nd_address_pct" -> Array("2")
   )
 
   it should "correctly map owner values when all values are defined" in {
@@ -62,10 +64,12 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
           ocPrimaryResidenceCensusDivision = Some(3),
           ocPrimaryResidenceOwnership = Some(98),
           ocPrimaryResidenceOwnershipOtherDescription = Some("some text"),
+          ocPrimaryResidenceTimePercentage = Some(1),
           ocSecondaryResidence = Some(true),
           ocSecondaryResidenceState = Some("MA"),
           ocSecondaryResidenceOwnership = Some(98),
-          ocSecondaryResidenceOwnershipOtherDescription = Some("some text")
+          ocSecondaryResidenceOwnershipOtherDescription = Some("some text"),
+          ocSecondaryResidenceTimePercentage = Some(2)
         )
       )
     }
@@ -80,6 +84,7 @@ class OwnerTransformationsSpec extends AnyFlatSpec with Matchers {
     output match {
       case None => FailedStatus
       case Some(owner) =>
+        owner.ocPrimaryResidenceTimePercentage shouldBe None
         owner.ocSecondaryResidenceState shouldBe None
         owner.ocSecondaryResidenceOwnership shouldBe None
         owner.ocSecondaryResidenceOwnershipOtherDescription shouldBe None

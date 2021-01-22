@@ -53,6 +53,7 @@ object MedsAndPreventativesTransformations {
           mpProfessionalGroomingShampoosRegular = shampoos.map(_.contains("1")),
           mpProfessionalGroomingShampoosFleaOrTickControl = shampoos.map(_.contains("2")),
           mpProfessionalGroomingShampoosMedicated = shampoos.map(_.contains("3")),
+          mpProfessionalGroomingShampoosNone = shampoos.map(_.contains("4")),
           mpProfessionalGroomingShampoosUnknown = shampoos.map(_.contains("99")),
           mpProfessionalGroomingShampoosOther = shampoos.map(_.contains("98")),
           mpProfessionalGroomingShampoosOtherDescription = if (shampoos.exists(_.contains("98"))) {
@@ -77,6 +78,7 @@ object MedsAndPreventativesTransformations {
           mpHomeGroomingShampoosRegular = shampoos.map(_.contains("1")),
           mpHomeGroomingShampoosFleaOrTickControl = shampoos.map(_.contains("2")),
           mpHomeGroomingShampoosMedicated = shampoos.map(_.contains("3")),
+          mpHomeGroomingShampoosNone = shampoos.map(_.contains("4")),
           mpHomeGroomingShampoosUnknown = shampoos.map(_.contains("99")),
           mpHomeGroomingShampoosOther = shampoos.map(_.contains("98")),
           mpHomeGroomingShampoosOtherDescription = if (shampoos.exists(_.contains("98"))) {

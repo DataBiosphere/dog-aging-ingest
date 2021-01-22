@@ -62,6 +62,10 @@
       "datatype": "boolean"
     },
     {
+      "name": "mp_professional_grooming_shampoos_none",
+      "datatype": "boolean"
+    },
+    {
       "name": "mp_professional_grooming_shampoos_unknown",
       "datatype": "boolean"
     },
@@ -91,6 +95,10 @@
     },
     {
       "name": "mp_home_grooming_shampoos_medicated",
+      "datatype": "boolean"
+    },
+    {
+      "name": "mp_home_grooming_shampoos_none",
       "datatype": "boolean"
     },
     {
