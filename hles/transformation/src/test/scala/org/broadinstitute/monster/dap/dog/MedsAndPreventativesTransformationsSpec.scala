@@ -52,6 +52,7 @@ class MedsAndPreventativesTransformationsSpec extends AnyFlatSpec with Matchers 
     out.mpProfessionalGroomingShampoosRegular.value shouldBe true
     out.mpProfessionalGroomingShampoosFleaOrTickControl.value shouldBe false
     out.mpProfessionalGroomingShampoosMedicated.value shouldBe true
+    out.mpProfessionalGroomingShampoosNone.value shouldBe false
     out.mpProfessionalGroomingShampoosUnknown.value shouldBe false
     out.mpProfessionalGroomingShampoosOther.value shouldBe true
     out.mpProfessionalGroomingShampoosOtherDescription.value shouldBe "Magic shampoo"
@@ -60,7 +61,7 @@ class MedsAndPreventativesTransformationsSpec extends AnyFlatSpec with Matchers 
   it should "map home grooming fields" in {
     val example = Map(
       "mp_gr_home" -> Array("1"),
-      "mp_gr_home_shampoo" -> Array("2", "99", "98"),
+      "mp_gr_home_shampoo" -> Array("2", "4", "99", "98"),
       "mp_gr_home_shampoo_other" -> Array("Secret sauce")
     )
 
@@ -73,6 +74,7 @@ class MedsAndPreventativesTransformationsSpec extends AnyFlatSpec with Matchers 
     out.mpHomeGroomingShampoosRegular.value shouldBe false
     out.mpHomeGroomingShampoosFleaOrTickControl.value shouldBe true
     out.mpHomeGroomingShampoosMedicated.value shouldBe false
+    out.mpHomeGroomingShampoosNone.value shouldBe true
     out.mpHomeGroomingShampoosUnknown.value shouldBe true
     out.mpHomeGroomingShampoosOther.value shouldBe true
     out.mpHomeGroomingShampoosOtherDescription.value shouldBe "Secret sauce"
