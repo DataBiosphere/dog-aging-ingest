@@ -70,6 +70,9 @@ object OwnerTransformations {
               } else {
                 None
               },
+            ocPrimaryResidenceTimePercentage = secondaryAddress.flatMap {
+              if (_) rawRecord.getOptionalNumber("oc_address1_pct") else None
+            },
             ocSecondaryResidence = secondaryAddress,
             ocSecondaryResidenceState = secondaryAddress.flatMap {
               if (_) rawRecord.getOptional("oc_address2_state") else None
@@ -80,7 +83,10 @@ object OwnerTransformations {
                 rawRecord.getOptionalStripped("oc_address2_own_other")
               } else {
                 None
-              }
+              },
+            ocSecondaryResidenceTimePercentage = secondaryAddress.flatMap {
+              if (_) rawRecord.getOptionalNumber("oc_2nd_address_pct") else None
+            }
           )
         )
     }

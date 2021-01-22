@@ -91,6 +91,10 @@
       "datatype": "string"
     },
     {
+      "name": "oc_primary_residence_time_percentage",
+      "datatype": "integer"
+    },
+    {
       "name": "oc_secondary_residence",
       "datatype": "boolean"
     },
@@ -105,6 +109,10 @@
     {
       "name": "oc_secondary_residence_ownership_other_description",
       "datatype": "string"
+    },
+    {
+      "name": "oc_secondary_residence_time_percentage",
+      "datatype": "integer"
     }
   ]
 }

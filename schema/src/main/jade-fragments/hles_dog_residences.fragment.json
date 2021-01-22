@@ -2,46 +2,6 @@
   "name": "hles_dog_residences",
   "columns": [
     {
-      "name": "oc_primary_residence_state",
-      "datatype": "string"
-    },
-    {
-      "name": "oc_primary_residence_census_division",
-      "datatype": "integer"
-    },
-    {
-      "name": "oc_primary_residence_ownership",
-      "datatype": "integer"
-    },
-    {
-      "name": "oc_primary_residence_ownership_other_description",
-      "datatype": "string"
-    },
-    {
-      "name": "oc_primary_residence_time_percentage",
-      "datatype": "integer"
-    },
-    {
-      "name": "oc_secondary_residence",
-      "datatype": "boolean"
-    },
-    {
-      "name": "oc_secondary_residence_state",
-      "datatype": "string"
-    },
-    {
-      "name": "oc_secondary_residence_ownership",
-      "datatype": "integer"
-    },
-    {
-      "name": "oc_secondary_residence_ownership_other_description",
-      "datatype": "string"
-    },
-    {
-      "name": "oc_secondary_residence_time_percentage",
-      "datatype": "integer"
-    },
-    {
       "name": "dd_alternate_recent_residence_count",
       "datatype": "integer"
     },
