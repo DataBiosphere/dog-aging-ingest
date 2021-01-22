@@ -22,7 +22,9 @@ object EnvironmentTransformationPipelineBuilder extends PipelineBuilder[Args] {
     val rawEnvRecords = readEnvRecords(ctx, args)
 
     val environment =
-      rawEnvRecords.transform("Map Environment")(_.map(EnvironmentTransformations.mapEnvironment))
+      rawEnvRecords.transform("Map Environment")(
+        _.map(EnvironmentTransformations.mapEnvironment).flatten
+      )
 
     StorageIO.writeJsonLists(
       environment,

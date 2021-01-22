@@ -1,6 +1,6 @@
 package org.broadinstitute.monster.dap
 
-import java.io.File
+import java.io.ByteArrayOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -11,23 +11,23 @@ import kantan.csv._
 
 trait TsvUtils[T <: Product] {
   val terraTsvHeaders: List[String]
+  lazy val csvConfig = rfc.withCellSeparator('\t').withHeader(terraTsvHeaders: _*)
 
   def buildTsvRow(record: T): List[String]
 
   private final val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
   val intEncoder: CellEncoder[Int] = CellEncoder.from(_.toString)
+  val longEncoder: CellEncoder[Long] = CellEncoder.from(_.toString)
   val strEncoder: CellEncoder[String] = CellEncoder.from(_.toString)
-
   val dateEncoder: CellEncoder[LocalDate] = CellEncoder.from(_.format(dateFormat))
 
-  def writeToTsv(file: File, rows: Traversable[T]): Unit = {
-    val writer =
-      file.asCsvWriter[List[String]](rfc.withCellSeparator('\t').withHeader(terraTsvHeaders: _*))
+  def serializeTsvRow(record: T): String = {
+    val stream = new ByteArrayOutputStream()
 
-    rows.foreach(row => writer.write(buildTsvRow(row)))
+    stream.asCsvWriter[List[String]](csvConfig).write(buildTsvRow(record))
 
-    writer.close
+    stream.toString
   }
 
   def getFieldNames(caseClass: T): List[String] = {
@@ -42,13 +42,18 @@ trait TsvUtils[T <: Product] {
   // utilities for dynamic serialization rely on type safety via tuples,
   // and scala does not support tuples with more than 22 values (which encompasses several of our tables)
   def getSerializedFieldValues(caseClass: T): List[String] = {
-    getFieldValues(caseClass).map(fieldValue =>
-      fieldValue match {
-        case fieldInt: Int        => serialize[Int](intEncoder, fieldInt)
-        case fieldStr: String     => serialize[String](strEncoder, fieldStr)
-        case fieldDate: LocalDate => serialize[LocalDate](dateEncoder, fieldDate)
-      }
-    )
+    getFieldValues(caseClass).map(serializeField)
+  }
+
+  def serializeField(field: Any): String = {
+    field match {
+      case fieldInt: Int        => serialize[Int](intEncoder, fieldInt)
+      case fieldLong: Long      => serialize[Long](longEncoder, fieldLong)
+      case fieldStr: String     => serialize[String](strEncoder, fieldStr)
+      case fieldDate: LocalDate => serialize[LocalDate](dateEncoder, fieldDate)
+      case Some(value)          => serializeField(value)
+      case None                 => ""
+    }
   }
 
   def serialize[N](encoder: CellEncoder[N], value: N) = encoder.encode(value)

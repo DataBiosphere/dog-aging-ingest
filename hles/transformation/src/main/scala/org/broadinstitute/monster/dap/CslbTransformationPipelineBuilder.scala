@@ -21,7 +21,18 @@ object CslbTransformationPipelineBuilder extends PipelineBuilder[Args] {
     val rawRecords = readRecords(ctx, args)
 
     val cslbTransformations =
-      rawRecords.transform("CSLB data")(_.flatMap(CslbTransformations.mapCslbData))
+      rawRecords.transform("CSLB data (json)")(_.map(CslbTransformations.mapCslbData).flatten)
+
+    val cslbTsvRows =
+      cslbTransformations.transform("CSLB data (tsv)")(_.map(CslbTransformations.serializeTsvRow))
+
+    StorageIO.writeListsCommon(
+      cslbTsvRows,
+      identity[String](_),
+      "CSLB TSV row",
+      s"${args.outputPrefix}/tsv/cslb",
+      ".tsv"
+    )
 
     StorageIO.writeJsonLists(
       cslbTransformations,
