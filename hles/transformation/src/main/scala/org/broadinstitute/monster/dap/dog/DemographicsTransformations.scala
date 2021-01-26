@@ -266,12 +266,20 @@ object DemographicsTransformations {
   def mapActivities(rawRecord: RawRecord, dog: HlesDogDemographics): HlesDogDemographics = {
     val allActivities = rawRecord.getArray("dd_activities").map(_.toLong)
 
-    def activityLevel(activity: String): Option[Long] =
-      if (allActivities.contains[Long](ActivityValues(activity))) {
-        rawRecord.getOptionalNumber(s"dd_${activity}_m").orElse(Some(3L))
-      } else {
-        None
+    def activityLevel(activity: String): Option[Long] = {
+      /**
+        * Gets activity level regardless of activities_m check
+        */
+      rawRecord.getOptionalNumber(s"dd_${activity}_m") match {
+        case Some(value) => Some(value)
+        case None =>
+          if (allActivities.contains[Long](ActivityValues(activity))) {
+            Some(3L)
+          } else {
+            None
+          }
       }
+    }
 
     val serviceLevel = activityLevel("service")
     val assistanceLevel = activityLevel("assistance")
