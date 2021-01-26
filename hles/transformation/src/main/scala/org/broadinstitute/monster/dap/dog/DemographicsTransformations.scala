@@ -60,7 +60,7 @@ object DemographicsTransformations {
         val dogId = rawRecord.id
         val formYear = rawRecord.getOptional("dd_dog_current_year_calc") match {
           case Some(year) => year.toInt
-          case None       =>
+          case None =>
             // we're throwing these errors instead of logging them because we want to completely skip records missing this value. they get logged
             // by the logic up the chain that catches the error.
             throw MissingCalcFieldError(
@@ -72,7 +72,7 @@ object DemographicsTransformations {
 
         val formMonth = rawRecord.getOptional("dd_dog_current_month_calc") match {
           case Some(month) => month.toInt
-          case None        =>
+          case None =>
             // we're throwing these errors instead of logging them because we want to completely skip records missing this value. they get logged
             // by the logic up the chain that catches the error.
             throw MissingCalcFieldError(
@@ -223,7 +223,7 @@ object DemographicsTransformations {
     val country = usBorn match {
       case Some("1") => Some("US")
       case Some("0") => rawRecord.getOptional("dd_us_born_no")
-      case other     => other
+      case other => other
     }
     val source = rawRecord.getOptionalNumber("dd_acquire_source")
     val locationKnown = usBorn.contains("1") && rawRecord.getBoolean("dd_acquired_location_yn")
@@ -272,7 +272,7 @@ object DemographicsTransformations {
         */
       rawRecord.getOptionalNumber(s"dd_${activity}_m") match {
         case Some(value) => Some(value)
-        case None => if(allActivities.contains[Long](ActivityValues(activity))){
+        case None => if (allActivities.contains[Long](ActivityValues(activity))) {
           Some(3L)
         } else {
           None
@@ -309,7 +309,7 @@ object DemographicsTransformations {
       ddActivitiesOtherDescription = otherLevel.flatMap {
         case 1L => rawRecord.getOptionalStripped("dd_1st_activity_other")
         case 2L => rawRecord.getOptionalStripped("dd_2nd_activity_other")
-        case _  => None
+        case _ => None
       },
       ddActivitiesServiceSeeingEye = serviceTypes.map(_.contains("1")),
       ddActivitiesServiceHearingOrSignal = serviceTypes.map(_.contains("2")),
