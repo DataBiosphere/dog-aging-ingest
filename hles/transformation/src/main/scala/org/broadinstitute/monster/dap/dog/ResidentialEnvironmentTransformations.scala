@@ -343,14 +343,14 @@ object ResidentialEnvironmentTransformations {
       deNeighborhoodHasSidewalks = rawRecord.getOptionalNumber("de_sidewalk_yn"),
       deNeighborhoodHasParks = rawRecord.getOptionalBoolean("de_parks_near"),
       deInteractsWithNeighborhoodAnimals = animalsInteract,
-      deInteractsWithNeighborhoodAnimalsWithoutOwner = if (animalsInteract.contains(true)) {
-        rawRecord.getOptionalBoolean("de_animal_interact_present").map(!_)
+      deInteractsWithNeighborhoodAnimalsWithOwner = if (animalsInteract.contains(true)) {
+        rawRecord.getOptionalBoolean("de_animal_interact_present")
       } else {
         None
       },
       deInteractsWithNeighborhoodHumans = humansInteract,
-      deInteractsWithNeighborhoodHumansWithoutOwner = if (humansInteract.contains(true)) {
-        rawRecord.getOptionalBoolean("de_human_interact_present").map(!_)
+      deInteractsWithNeighborhoodHumansWithOwner = if (humansInteract.contains(true)) {
+        rawRecord.getOptionalBoolean("de_human_interact_present")
       } else {
         None
       }

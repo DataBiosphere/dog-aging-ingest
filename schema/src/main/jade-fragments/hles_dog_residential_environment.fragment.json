@@ -346,7 +346,7 @@
       "datatype": "boolean"
     },
     {
-      "name": "de_interacts_with_neighborhood_animals_without_owner",
+      "name": "de_interacts_with_neighborhood_animals_with_owner",
       "datatype": "boolean"
     },
     {
@@ -354,7 +354,7 @@
       "datatype": "boolean"
     },
     {
-      "name": "de_interacts_with_neighborhood_humans_without_owner",
+      "name": "de_interacts_with_neighborhood_humans_with_owner",
       "datatype": "boolean"
     }
   ]
