@@ -6,10 +6,6 @@
       "datatype": "integer"
     },
     {
-      "name": "st_batch_label",
-      "datatype": "string"
-    },
-    {
       "name": "st_portal_invitation_date",
       "datatype": "date"
     },
