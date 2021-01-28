@@ -57,17 +57,17 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     // If there are multiple values
     if (values.--(Array("NA")).size > 1) {
       throw new IllegalStateException(s"Record $id has multiple values for field $field")
-    } else {
-      val toReturn = values.headOption
-
-      val validValue: Boolean =
-        permittedValues.isEmpty || toReturn.map(permittedValues.contains(_)).getOrElse(true)
-      if (!validValue) {
-        throw new IllegalStateException(s"Record $id has invalid value '$toReturn' for field $field")
-      }
-
-      toReturn
     }
+
+    val toReturn = values.headOption
+
+    val validValue: Boolean =
+      permittedValues.isEmpty || toReturn.map(permittedValues.contains(_)).getOrElse(true)
+    if (!validValue) {
+      throw new IllegalStateException(s"Record $id has invalid value '$toReturn' for field $field")
+    }
+
+    toReturn
   }
 
   val sequencesToStrip = List("\r?\n", "\t")
