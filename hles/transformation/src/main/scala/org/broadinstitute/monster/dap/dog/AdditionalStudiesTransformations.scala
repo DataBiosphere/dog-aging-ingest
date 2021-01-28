@@ -15,7 +15,9 @@ object AdditionalStudiesTransformations {
       fsPrimaryCareVeterinarianExists = rawRecord.getOptionalBoolean("fs_pcvet"),
       fsPrimaryCareVeterinarianConsentShareVemr = pcVetConsent,
       fsPrimaryCareVeterinarianCanProvideEmail = pcVetConsent.flatMap {
-        if (_) rawRecord.getOptionalNumber("fs_pcvet_email_yn") else None
+        if (_)
+          rawRecord.getOptionalNumber("fs_pcvet_email_yn", permittedValues = Set(1L, 7L, 8L))
+        else None
       },
       fsPrimaryCareVeterinarianState = pcVetConsent.flatMap {
         if (_) rawRecord.getOptional("fs_pcvet_st") else None

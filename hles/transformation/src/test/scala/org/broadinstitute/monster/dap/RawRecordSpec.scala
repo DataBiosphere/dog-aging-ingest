@@ -33,4 +33,22 @@ class RawRecordSpec extends AnyFlatSpec with Matchers {
       "Much has been written about the greatness of Steve[clipped remaining 4098 chars]"
     )
   }
+
+  it should "reject values not in the defined permittedValues" in {
+    val fields =
+      Map("field_one" -> Array("abc123"))
+    val record = RawRecord(789L, fields)
+    an[IllegalStateException] should be thrownBy record.getOptional(
+      "field_one",
+      permittedValues = Set("abc124")
+    )
+  }
+
+  it should "not reject empty or non-empty values if permittedValues is not provided" in {
+    val fields =
+      Map("field_one" -> Array("abc123"))
+    val record = RawRecord(999L, fields)
+    record.getOptional("field_one", permittedValues = Set()) shouldBe Some("abc123")
+    record.getOptional("field_two", permittedValues = Set()) shouldBe None
+  }
 }
