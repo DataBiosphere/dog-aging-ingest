@@ -435,7 +435,7 @@ class ResidentialEnvironmentTransformationsSpec
       "de_sidewalk_yn" -> Array("3"),
       "de_parks_near" -> Array("0"),
       "de_animal_interact" -> Array("1"),
-      "de_animal_interact_present" -> Array("1"),
+      "de_animal_interact_present" -> Array("0"),
       "de_human_interact" -> Array("1"),
       "de_human_interact_present" -> Array("1")
     )
@@ -449,9 +449,9 @@ class ResidentialEnvironmentTransformationsSpec
     output.deNeighborhoodHasSidewalks.value shouldBe 3L
     output.deNeighborhoodHasParks.value shouldBe false
     output.deInteractsWithNeighborhoodAnimals.value shouldBe true
-    output.deInteractsWithNeighborhoodAnimalsWithoutOwner.value shouldBe false
+    output.deInteractsWithNeighborhoodAnimalsWithOwner.value shouldBe false
     output.deInteractsWithNeighborhoodHumans.value shouldBe true
-    output.deInteractsWithNeighborhoodHumansWithoutOwner.value shouldBe false
+    output.deInteractsWithNeighborhoodHumansWithOwner.value shouldBe true
   }
 
   it should "map neighborhood-related fields where there are no neighborhood animal interactions" in {
@@ -459,16 +459,26 @@ class ResidentialEnvironmentTransformationsSpec
       "de_animal_interact" -> Array("0"),
       "de_animal_interact_present" -> Array("1"),
       "de_human_interact" -> Array("0"),
-      "de_human_interact_present" -> Array("1")
+      "de_human_interact_present" -> Array("0")
     )
-    val output =
+    val missingExpectedExampleDogFields = Map[String, Array[String]](
+      "de_animal_interact" -> Array("0"),
+      "de_human_interact" -> Array("0")
+    )
+    val filledOutput =
       ResidentialEnvironmentTransformations.mapResidentialEnvironment(
         RawRecord(id = 1, exampleDogFields)
       )
+    val blankedOutput =
+      ResidentialEnvironmentTransformations.mapResidentialEnvironment(
+        RawRecord(id = 1, missingExpectedExampleDogFields)
+      )
 
-    output.deInteractsWithNeighborhoodAnimals.value shouldBe false
-    output.deInteractsWithNeighborhoodAnimalsWithoutOwner shouldBe None
-    output.deInteractsWithNeighborhoodHumans.value shouldBe false
-    output.deInteractsWithNeighborhoodHumansWithoutOwner shouldBe None
+    Seq(filledOutput, blankedOutput).foreach(output => {
+      output.deInteractsWithNeighborhoodAnimals.value shouldBe false
+      output.deInteractsWithNeighborhoodAnimalsWithOwner shouldBe None
+      output.deInteractsWithNeighborhoodHumans.value shouldBe false
+      output.deInteractsWithNeighborhoodHumansWithOwner shouldBe None
+    })
   }
 }
