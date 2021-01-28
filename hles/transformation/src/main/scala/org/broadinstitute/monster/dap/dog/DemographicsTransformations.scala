@@ -226,7 +226,9 @@ object DemographicsTransformations {
       case other     => other
     }
     val source = rawRecord.getOptionalNumber("dd_acquire_source")
-    val locationKnown = usBorn.contains("1") && rawRecord.getBoolean("dd_acquired_location_yn")
+    // a state can be selected if dd_us_born is answered with either yes (1) or unknown (99).
+    //  the only time they won't provide one is if they explicitly said the dog is not from the US.
+    val locationKnown = !(usBorn.contains("0")) && rawRecord.getBoolean("dd_acquired_location_yn")
 
     dog.copy(
       ddAcquiredYear = rawRecord.getOptionalNumber("dd_acquire_year"),
