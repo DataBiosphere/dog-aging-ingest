@@ -242,22 +242,22 @@ class DietTransformationsSpec extends AnyFlatSpec with Matchers with OptionValue
     )
 
     out.dfDailySupplements.value shouldBe true
-    out.dfDailySupplementsBoneMeal shouldBe None
+    out.dfDailySupplementsBoneMeal.value shouldBe 0L
     out.dfDailySupplementsGlucosamine.value shouldBe 1L
     out.dfDailySupplementsChondroitin.value shouldBe 2L
-    out.dfDailySupplementsOtherJoint shouldBe None
+    out.dfDailySupplementsOtherJoint.value shouldBe 0L
     out.dfDailySupplementsOmega3.value shouldBe 1L
     out.dfDailySupplementsNonOilSkin.value shouldBe 2L
-    out.dfDailySupplementsVitamins shouldBe None
+    out.dfDailySupplementsVitamins.value shouldBe 0L
     out.dfDailySupplementsEnzyme.value shouldBe 1L
     out.dfDailySupplementsProbiotics.value shouldBe 2L
-    out.dfDailySupplementsFiber shouldBe None
+    out.dfDailySupplementsFiber.value shouldBe 0L
     out.dfDailySupplementsAlkalinize.value shouldBe 1L
     out.dfDailySupplementsAcidify.value shouldBe 2L
-    out.dfDailySupplementsTaurine shouldBe None
+    out.dfDailySupplementsTaurine.value shouldBe 0L
     out.dfDailySupplementsAntiox.value shouldBe 1L
     out.dfDailySupplementsCoenzymeQ10.value shouldBe 2L
-    out.dfDailySupplementsOther shouldBe None
+    out.dfDailySupplementsOther.value shouldBe 0L
     out.dfDailySupplementsOtherDescription shouldBe None
   }
 
@@ -383,22 +383,22 @@ class DietTransformationsSpec extends AnyFlatSpec with Matchers with OptionValue
     )
 
     out.dfInfrequentSupplements.value shouldBe true
-    out.dfInfrequentSupplementsBoneMeal shouldBe None
+    out.dfInfrequentSupplementsBoneMeal.value shouldBe 0L
     out.dfInfrequentSupplementsGlucosamine.value shouldBe 1L
     out.dfInfrequentSupplementsChondroitin.value shouldBe 2L
-    out.dfInfrequentSupplementsOtherJoint shouldBe None
+    out.dfInfrequentSupplementsOtherJoint.value shouldBe 0L
     out.dfInfrequentSupplementsOmega3.value shouldBe 1L
     out.dfInfrequentSupplementsNonOilSkin.value shouldBe 2L
-    out.dfInfrequentSupplementsVitamins shouldBe None
+    out.dfInfrequentSupplementsVitamins.value shouldBe 0L
     out.dfInfrequentSupplementsEnzyme.value shouldBe 1L
     out.dfInfrequentSupplementsProbiotics.value shouldBe 2L
-    out.dfInfrequentSupplementsFiber shouldBe None
+    out.dfInfrequentSupplementsFiber.value shouldBe 0L
     out.dfInfrequentSupplementsAlkalinize.value shouldBe 1L
     out.dfInfrequentSupplementsAcidify.value shouldBe 2L
-    out.dfInfrequentSupplementsTaurine shouldBe None
+    out.dfInfrequentSupplementsTaurine.value shouldBe 0L
     out.dfInfrequentSupplementsAntiox.value shouldBe 1L
     out.dfInfrequentSupplementsCoenzymeQ10.value shouldBe 2L
-    out.dfInfrequentSupplementsOther shouldBe None
+    out.dfInfrequentSupplementsOther.value shouldBe 0L
     out.dfInfrequentSupplementsOtherDescription shouldBe None
   }
 }
