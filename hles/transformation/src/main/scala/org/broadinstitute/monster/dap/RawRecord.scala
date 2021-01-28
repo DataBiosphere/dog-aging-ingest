@@ -55,7 +55,7 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   def getOptional(field: String, permittedValues: Set[String] = Set()): Option[String] = {
     val values = fields.getOrElse(field, Array.empty).toSet
     // If there are multiple values
-    if (values.size > 1 && values.--(Array("NA")).size > 1) {
+    if (values.--(Array("NA")).size > 1) {
       throw new IllegalStateException(s"Record $id has multiple values for field $field")
     } else {
       val toReturn = values.headOption
