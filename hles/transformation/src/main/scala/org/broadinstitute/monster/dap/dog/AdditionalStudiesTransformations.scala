@@ -1,9 +1,12 @@
 package org.broadinstitute.monster.dap.dog
 
-import org.broadinstitute.monster.dap.RawRecord
+import purecsv.safe.converter.StringConverter
+
+import org.broadinstitute.monster.dap.{RawRecord, TsvUtils}
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogFutureStudies
 
 object AdditionalStudiesTransformations {
+  import purecsv.safe._
 
   /**
     * Parse all future-studies health fields out of a raw RedCap record,
@@ -34,4 +37,7 @@ object AdditionalStudiesTransformations {
       }
     )
   }
+
+  implicit val additionalStudiesc: StringConverter[HlesDogFutureStudies] =
+    TsvUtils.mkOneWayCaseClassSerializer[HlesDogFutureStudies](fs => fs.toCSV())
 }

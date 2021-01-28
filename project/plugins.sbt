@@ -10,5 +10,6 @@ resolvers += Resolver.url(
   "Broad Artifactory",
   new URL("https://broadinstitute.jfrog.io/broadinstitute/libs-release/")
 )(publishPatterns)
+resolvers += Resolver.sonatypeRepo("releases")
 
 addSbtPlugin("org.broadinstitute.monster" % "ingest-sbt-plugins" % "2.1.8")
