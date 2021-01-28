@@ -469,7 +469,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     usBornOut.ddAcquiredSource.value shouldBe 2L
 
     internationalOut.ddAcquiredCountry.value shouldBe "UK"
-    internationalOut.ddAcquiredState.value shouldBe None
+    internationalOut.ddAcquiredState shouldBe None
     internationalOut.ddAcquiredSource.value shouldBe 5L
 
     unknownOut.ddAcquiredCountry.value shouldBe "99"
