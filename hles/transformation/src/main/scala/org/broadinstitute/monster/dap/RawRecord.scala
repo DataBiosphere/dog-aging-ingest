@@ -29,12 +29,11 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     * If the values are unique, it would error in the same manner it did before
     * If the recurring field contains the same value, the head of the set is used
     */
-  def getRequired(field: String): String = {
-    val values = fields.getOrElse(field, Array.empty)
-    if (values.toSet.size != 1) {
-      throw new IllegalStateException(s"Record $id has more/less than 1 value for field $field")
-    } else {
-      values.head
+  def getRequired(field: String, permittedValues: Set[String] = Set()): String = {
+    getOptional(field, permittedValues) match {
+      case Some(value: String) => value
+      case None =>
+        throw new IllegalStateException(s"Record $id is missing a value for required field $field")
     }
   }
 
@@ -48,20 +47,27 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
     *
     * Only unique duplicates will throw an error
     * If we receive multiple fields with the same value, the head of the set is used
+    *
+    * If permittedValues is provided, raises an error if the value provided is not in the provided list.
+    * Optional values not present in the data are not validated against permittedValues.
+    * An empty set means that all possible values are permitted (a question with no permitted answers would be silly)
     */
-  def getOptional(field: String): Option[String] = {
+  def getOptional(field: String, permittedValues: Set[String] = Set()): Option[String] = {
     val values = fields.getOrElse(field, Array.empty).toSet
     // If there are multiple values
-    if (values.size > 1) {
-      // Filtering out "NA"
-      if (values.--(Array("NA")).size > 1) {
-        throw new IllegalStateException(s"Record $id has multiple values for field $field")
-      } else {
-        values.headOption
-      }
-    } else {
-      values.headOption
+    if (values.--(Array("NA")).size > 1) {
+      throw new IllegalStateException(s"Record $id has multiple values for field $field")
     }
+
+    val toReturn = values.headOption
+
+    val validValue: Boolean =
+      permittedValues.isEmpty || toReturn.map(permittedValues.contains(_)).getOrElse(true)
+    if (!validValue) {
+      throw new IllegalStateException(s"Record $id has invalid value '$toReturn' for field $field")
+    }
+
+    toReturn
   }
 
   val sequencesToStrip = List("\r?\n", "\t")
@@ -81,8 +87,12 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
   def getOptionalBoolean(field: String): Option[Boolean] = getOptional(field).map(_ == "1")
 
   /** Get the singleton value for an attribute in this record, parsed as a long. */
-  def getOptionalNumber(field: String, truncateDecimals: Boolean = true): Option[Long] =
-    getOptional(field).map(value => {
+  def getOptionalNumber(
+    field: String,
+    truncateDecimals: Boolean = true,
+    permittedValues: Set[Long] = Set()
+  ): Option[Long] =
+    getOptional(field, permittedValues.map(_.toString)).map(value => {
       try {
         value.toLong
       } catch {

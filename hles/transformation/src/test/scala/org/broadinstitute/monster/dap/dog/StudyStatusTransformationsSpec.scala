@@ -21,7 +21,6 @@ class StudyStatusTransformationsSpec extends AnyFlatSpec with Matchers with Opti
     val output = StudyStatusTransformations.mapStudyStatus(RawRecord(id = 1, exampleDogFields))
 
     output.stVipOrStaff.value shouldBe 2
-    output.stBatchLabel.value shouldBe "this is my label"
     output.stPortalInvitationDate.value shouldBe LocalDate.of(2020, 5, 22)
     output.stPortalAccountCreationDate.value shouldBe LocalDate.of(2000, 1, 1)
     output.stHlesCompletionDate.value shouldBe LocalDate.of(2020, 1, 15)

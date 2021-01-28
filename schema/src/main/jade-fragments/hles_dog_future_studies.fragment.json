@@ -11,7 +11,7 @@
     },
     {
       "name": "fs_primary_care_veterinarian_can_provide_email",
-      "datatype": "boolean"
+      "datatype": "integer"
     },
     {
       "name": "fs_primary_care_veterinarian_state",

@@ -28,7 +28,34 @@ class AdditionalStudiesTransformationsSpec extends AnyFlatSpec with Matchers wit
     // output of a record with primary care vet consent
     hasConsentOut.fsPrimaryCareVeterinarianExists.value shouldBe true
     hasConsentOut.fsPrimaryCareVeterinarianConsentShareVemr.value shouldBe true
-    hasConsentOut.fsPrimaryCareVeterinarianCanProvideEmail.value shouldBe true
+    hasConsentOut.fsPrimaryCareVeterinarianCanProvideEmail.value shouldBe 1L
+    hasConsentOut.fsPrimaryCareVeterinarianState.value shouldBe "MA"
+    hasConsentOut.fsFutureStudiesParticipationLikelihood.value shouldBe 88L
+    hasConsentOut.fsPhenotypeVsLifespanParticipationLikelihood.value shouldBe 87L
+    hasConsentOut.fsGenotypeVsLifespanParticipationLikelihood.value shouldBe 86L
+    hasConsentOut.fsMedicallySlowedAgingParticipationLikelihood.value shouldBe 85L
+  }
+
+  it should "map vet email information properly when fs_pcvet_email_yn is 7" in {
+    val hasConsentExample = Map(
+      "fs_pcvet" -> Array("1"),
+      "fs_pcvet_consent" -> Array("1"),
+      "fs_pcvet_email_yn" -> Array("7"),
+      "fs_pcvet_st" -> Array("MA"),
+      "fs_future_studies" -> Array("88"),
+      "fs_pc_ppf_lifespan" -> Array("87"),
+      "fs_gene_lifespan" -> Array("86"),
+      "fs_med_aging" -> Array("85")
+    )
+
+    val hasConsentOut = AdditionalStudiesTransformations.mapFutureStudies(
+      RawRecord(1, hasConsentExample)
+    )
+
+    // output of a record with primary care vet consent
+    hasConsentOut.fsPrimaryCareVeterinarianExists.value shouldBe true
+    hasConsentOut.fsPrimaryCareVeterinarianConsentShareVemr.value shouldBe true
+    hasConsentOut.fsPrimaryCareVeterinarianCanProvideEmail.value shouldBe 7L
     hasConsentOut.fsPrimaryCareVeterinarianState.value shouldBe "MA"
     hasConsentOut.fsFutureStudiesParticipationLikelihood.value shouldBe 88L
     hasConsentOut.fsPhenotypeVsLifespanParticipationLikelihood.value shouldBe 87L
