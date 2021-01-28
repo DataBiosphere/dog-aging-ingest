@@ -473,7 +473,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     internationalOut.ddAcquiredSource.value shouldBe 5L
 
     unknownOut.ddAcquiredCountry.value shouldBe "99"
-    unknownOut.ddAcquiredState shouldBe "OH"
+    unknownOut.ddAcquiredState.value shouldBe "OH"
     unknownOut.ddAcquiredSource.value shouldBe 98L
     unknownOut.ddAcquiredSourceOtherDescription.value shouldBe "?????"
   }
