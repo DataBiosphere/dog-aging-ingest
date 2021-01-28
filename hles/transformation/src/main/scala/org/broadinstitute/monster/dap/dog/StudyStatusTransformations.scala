@@ -14,7 +14,6 @@ object StudyStatusTransformations {
   def mapStudyStatus(rawRecord: RawRecord): HlesDogStudyStatus =
     HlesDogStudyStatus(
       stVipOrStaff = rawRecord.getOptionalNumber("st_vip_or_staff"),
-      stBatchLabel = rawRecord.getOptional("st_batch_label"),
       stPortalInvitationDate = rawRecord.getOptionalDate("st_invite_to_portal"),
       stPortalAccountCreationDate = rawRecord.getOptionalDate("st_portal_account_date"),
       stHlesCompletionDate = rawRecord.getOptional("st_dap_pack_date").map { timeString =>
