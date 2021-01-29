@@ -44,14 +44,11 @@ def test_spay_or_neuter_age(hles_dog2_data):
 
 
 def test_vet_can_provide_email(hles_dog1_data):
-    data_values = set()
     for row in hles_dog1_data:
         assert 'fs_primary_care_veterinarian_can_provide_email' in row
-        data_values.add(row['fs_primary_care_veterinarian_can_provide_email'])
+        assert row['fs_primary_care_veterinarian_can_provide_email'] in {'1', '7', '8', ''}
 
-    assert data_values == {'1', '7', '8', ''}
-
-
+         
 def test_zip_nbr(hles_dog1_data):
     for row in hles_dog1_data:
         assert 'de_past_residence_zip_count' in row
