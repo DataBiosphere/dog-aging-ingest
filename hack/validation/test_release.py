@@ -38,11 +38,9 @@ def test_cslb_date(cslb_data):
 
 
 def test_spay_or_neuter_age(hles_dog2_data):
-    spay_values = set()
     for row in hles_dog2_data:
         assert 'dd_spay_or_neuter_age' in row
-        spay_values.add(row['dd_spay_or_neuter_age'])
-    assert len(spay_values) > 0
+        assert row['dd_spay_or_neuter_age'] in {'', '5', '99', '2', '4', '7', '6', '8', '3', '1'}
 
 
 def test_vet_can_provide_email(hles_dog1_data):
