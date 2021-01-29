@@ -20,7 +20,7 @@ jobs:
         env:
           JVM_OPTS: -Xmx6144m -Xms6144m -Xss16m
       - name: Test
-        run: sbt "set ThisBuild/coverageEnabled := true" test IntegrationTest/test coverageAggregate
+        run: sbt "set ThisBuild/coverageEnabled := true" test IntegrationTest/test coverageAggregate doc
         env:
           VAULT_ADDR: ${{ secrets.VaultAddress }}
           VAULT_ROLE_ID: ${{ secrets.VaultRoleId }}
