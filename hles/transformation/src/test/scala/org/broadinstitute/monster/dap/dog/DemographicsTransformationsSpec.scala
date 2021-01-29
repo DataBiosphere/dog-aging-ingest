@@ -535,23 +535,4 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     assistanceOut.ddActivitiesServiceOtherDescription.value shouldBe "Activity!"
 
   }
-  it should "map activity-related fallback fields" in {
-    val activitiesDog = Map[String, Array[String]](
-      "dd_activities" -> Array("3", "5", "7", "9", "11", "98"),
-      "dd_assistance_m" -> Array("2"),
-      "dd_other_m" -> Array("1"),
-      "dd_companion_m" -> Array("1"),
-      "dd_1st_activity_other" -> Array("Activity?"),
-      "dd_service_type_1" -> Array("2", "4", "6", "98"),
-      "dd_service_medical_other_1" -> Array("Medical!"),
-      "dd_service_other_1" -> Array("Activity!")
-    )
-
-    val activitiesOut = DemographicsTransformations.mapActivities(
-      RawRecord(1, activitiesDog),
-      HlesDogDemographics.init()
-    )
-
-    activitiesOut.ddActivitiesCompanionAnimal.value shouldBe 1L
-  }
 }
