@@ -413,8 +413,8 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
 
     output1.deRoutineToys.value shouldBe true
     output1.deRoutineToysIncludePlastic.value shouldBe 1
-    output1.deRoutineToysIncludeStuffedFabric.value shouldBe 0
-    output1.deRoutineToysIncludeUnstuffedFabric.value shouldBe 1
+    output1.deRoutineToysIncludeFabricStuffed.value shouldBe 0
+    output1.deRoutineToysIncludeFabricUnstuffed.value shouldBe 1
     output1.deRoutineToysIncludeRubber.value shouldBe 0
     output1.deRoutineToysIncludeMetal.value shouldBe 1
     output1.deRoutineToysIncludeAnimalProducts.value shouldBe 0
@@ -449,8 +449,8 @@ class RoutineEnvironmentTransformationsSpec extends AnyFlatSpec with Matchers wi
 
     output2.deRoutineToys.value shouldBe true
     output2.deRoutineToysIncludePlastic.value shouldBe 0
-    output2.deRoutineToysIncludeStuffedFabric.value shouldBe 1
-    output2.deRoutineToysIncludeUnstuffedFabric.value shouldBe 0
+    output2.deRoutineToysIncludeFabricStuffed.value shouldBe 1
+    output2.deRoutineToysIncludeFabricUnstuffed.value shouldBe 0
     output2.deRoutineToysIncludeRubber.value shouldBe 1
     output2.deRoutineToysIncludeMetal.value shouldBe 0
     output2.deRoutineToysIncludeAnimalProducts.value shouldBe 1
