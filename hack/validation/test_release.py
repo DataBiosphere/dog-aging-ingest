@@ -48,7 +48,7 @@ def test_vet_can_provide_email(hles_dog1_data):
         assert 'fs_primary_care_veterinarian_can_provide_email' in row
         assert row['fs_primary_care_veterinarian_can_provide_email'] in {'1', '7', '8', ''}
 
-         
+
 def test_zip_nbr(hles_dog1_data):
     for row in hles_dog1_data:
         assert 'de_past_residence_zip_count' in row
@@ -113,3 +113,11 @@ def test_dd_activities_agility(hles_dog2_data):
             assert row['dd_activities_agility'] == '2'
             found_affected_row = True
     assert found_affected_row is True
+
+
+def test_st_portal_account_creation_date(hles_dog1_data):
+    affected_ids = {'1342', '4128', '17745'}
+    for row in hles_dog1_data:
+        if row['entity:dog_id_id'] in affected_ids:
+            assert 'st_portal_account_creation_date' in row
+            assert len(row['st_portal_account_creation_date']) > 0
