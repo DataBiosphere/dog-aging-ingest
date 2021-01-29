@@ -169,20 +169,20 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     val noLitters = Map[String, Array[String]](
       "dd_dog_sex" -> Array("1"),
       "dd_dog_spay_neuter" -> Array("1"),
-      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_ms_neuter_age" -> Array("2"),
       "dd_ms_sired_yn" -> Array("2")
     )
     val litters = Map[String, Array[String]](
       "dd_dog_sex" -> Array("1"),
       "dd_dog_spay_neuter" -> Array("1"),
-      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_ms_neuter_age" -> Array("2"),
       "dd_ms_sired_yn" -> Array("1"),
       "dd_mns_nbr_litters_2" -> Array("3")
     )
     val unknown = Map[String, Array[String]](
       "dd_dog_sex" -> Array("1"),
       "dd_dog_spay_neuter" -> Array("1"),
-      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_ms_neuter_age" -> Array("2"),
       "dd_ms_sired_yn" -> Array("99")
     )
 
@@ -233,7 +233,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     val unknown = Map[String, Array[String]](
       "dd_dog_sex" -> Array("1"),
       "dd_dog_spay_neuter" -> Array("2"),
-      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_ms_neuter_age" -> Array("2"),
       "dd_mns_sired_yn" -> Array("99")
     )
 
@@ -270,7 +270,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     val noLitters = Map[String, Array[String]](
       "dd_dog_sex" -> Array("2"),
       "dd_dog_spay_neuter" -> Array("1"),
-      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_fs_spay_age" -> Array("2"),
       "dd_fs_spay_method" -> Array("3"),
       "dd_fs_pregnant" -> Array("2"),
       "dd_fs_heat_yn" -> Array("99")
@@ -278,7 +278,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     val litters = Map[String, Array[String]](
       "dd_dog_sex" -> Array("2"),
       "dd_dog_spay_neuter" -> Array("1"),
-      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_fs_spay_age" -> Array("2"),
       "dd_fs_spay_method" -> Array("2"),
       "dd_fs_pregnant" -> Array("1"),
       "dd_fs_nbr_litters" -> Array("3"),
@@ -287,7 +287,7 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     val unknown = Map[String, Array[String]](
       "dd_dog_sex" -> Array("2"),
       "dd_dog_spay_neuter" -> Array("1"),
-      "dd_spay_or_neuter_age" -> Array("2"),
+      "dd_fs_spay_age" -> Array("2"),
       "dd_fs_spay_method" -> Array("1"),
       "dd_fs_pregnant" -> Array("99"),
       "dd_fs_heat_yn" -> Array("1"),

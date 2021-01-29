@@ -141,12 +141,6 @@ object DemographicsTransformations {
     val sex = rawRecord.getOptionalNumber("dd_dog_sex")
     rawRecord.getOptionalBoolean("dd_dog_spay_neuter").fold(dog.copy(ddSex = sex)) {
       spayedOrNeutered =>
-        val spayOrNeuterAge = if (spayedOrNeutered) {
-          rawRecord.getOptionalNumber("dd_spay_or_neuter_age")
-        } else {
-          None
-        }
-
         if (sex.contains(1L)) {
           val siredLitters = if (spayedOrNeutered) {
             rawRecord.getOptionalNumber("dd_ms_sired_yn")
@@ -158,7 +152,7 @@ object DemographicsTransformations {
           dog.copy(
             ddSex = sex,
             ddSpayedOrNeutered = Some(spayedOrNeutered),
-            ddSpayOrNeuterAge = spayOrNeuterAge,
+            ddSpayOrNeuterAge = rawRecord.getOptionalNumber("dd_ms_neuter_age"),
             ddHasSiredLitters = siredLitters,
             ddLitterCount =
               if (siredLitters.contains(1)) rawRecord.getOptionalNumber(litterCountField) else None
@@ -169,7 +163,7 @@ object DemographicsTransformations {
           dog.copy(
             ddSex = sex,
             ddSpayedOrNeutered = Some(spayedOrNeutered),
-            ddSpayOrNeuterAge = spayOrNeuterAge,
+            ddSpayOrNeuterAge = rawRecord.getOptionalNumber("dd_fs_spay_age"),
             ddSpayMethod =
               if (spayedOrNeutered) rawRecord.getOptionalNumber("dd_fs_spay_method") else None,
             ddEstrousCycleExperiencedBeforeSpayed =
