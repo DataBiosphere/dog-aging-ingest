@@ -218,11 +218,11 @@
       "datatype": "integer"
     },
     {
-      "name": "de_routine_toys_include_stuffed_fabric",
+      "name": "de_routine_toys_include_fabric_stuffed",
       "datatype": "integer"
     },
     {
-      "name": "de_routine_toys_include_unstuffed_fabric",
+      "name": "de_routine_toys_include_fabric_unstuffed",
       "datatype": "integer"
     },
     {

@@ -217,8 +217,8 @@ object RoutineEnvironmentTransformations {
       dog.copy(
         deRoutineToys = toys,
         deRoutineToysIncludePlastic = rawRecord.getOptionalNumber("de_toy_plastic"),
-        deRoutineToysIncludeStuffedFabric = rawRecord.getOptionalNumber("de_toy_fabric_stuffed"),
-        deRoutineToysIncludeUnstuffedFabric =
+        deRoutineToysIncludeFabricStuffed = rawRecord.getOptionalNumber("de_toy_fabric_stuffed"),
+        deRoutineToysIncludeFabricUnstuffed =
           rawRecord.getOptionalNumber("de_toy_fabric_unstuffed"),
         deRoutineToysIncludeRubber = rawRecord.getOptionalNumber("de_toy_rubber"),
         deRoutineToysIncludeMetal = rawRecord.getOptionalNumber("de_toy_metal"),
