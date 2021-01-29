@@ -116,8 +116,6 @@ def test_dd_activities_agility(hles_dog2_data):
 
 
 def test_st_portal_account_creation_date(hles_dog1_data):
-    affected_ids = {'1342', '4128', '17745'}
     for row in hles_dog1_data:
-        if row['entity:dog_id_id'] in affected_ids:
-            assert 'st_portal_account_creation_date' in row
-            assert len(row['st_portal_account_creation_date']) > 0
+        assert 'st_portal_account_creation_date' in row
+        assert len(row['st_portal_account_creation_date']) > 0
