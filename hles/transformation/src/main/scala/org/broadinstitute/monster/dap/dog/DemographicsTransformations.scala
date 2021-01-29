@@ -267,7 +267,8 @@ object DemographicsTransformations {
     val allActivities = rawRecord.getArray("dd_activities").map(_.toLong)
 
     def activityLevel(activity: String): Option[Long] = {
-      // gets activity level regardless of activities_m check
+      /** Gets activity level regardless of activities_m check
+        */
       rawRecord.getOptionalNumber(s"dd_${activity}_m") match {
         case Some(value) => Some(value)
         case None =>
