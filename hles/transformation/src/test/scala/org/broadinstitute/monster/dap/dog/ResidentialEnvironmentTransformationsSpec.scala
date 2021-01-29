@@ -37,15 +37,15 @@ class ResidentialEnvironmentTransformationsSpec
     output.deLifetimeResidenceCount.value shouldBe 12
     output.dePastResidenceZipCount.value shouldBe 10
     output.dePastResidenceCountryCount.value shouldBe 10
-    output.dePastResidenceCountry1.value shouldBe "country1"
+    output.dePastResidenceCountry1Text.value shouldBe "country1"
     output.dePastResidenceCountry2.value shouldBe "country2"
     output.dePastResidenceCountry3.value shouldBe "country3"
-    output.dePastResidenceCountry4.value shouldBe "country4"
-    output.dePastResidenceCountry5.value shouldBe "country5"
-    output.dePastResidenceCountry6.value shouldBe "country6"
-    output.dePastResidenceCountry7.value shouldBe "country7"
+    output.dePastResidenceCountry4Text.value shouldBe "country4"
+    output.dePastResidenceCountry5Text.value shouldBe "country5"
+    output.dePastResidenceCountry6Text.value shouldBe "country6"
+    output.dePastResidenceCountry7Text.value shouldBe "country7"
     output.dePastResidenceCountry8.value shouldBe "country8"
-    output.dePastResidenceCountry9.value shouldBe "country9"
+    output.dePastResidenceCountry9Text.value shouldBe "country9"
     output.dePastResidenceCountry10.value shouldBe "country10"
   }
 
@@ -67,7 +67,7 @@ class ResidentialEnvironmentTransformationsSpec
     output.deLifetimeResidenceCount.value shouldBe 2
     output.dePastResidenceZipCount.value shouldBe 1
     output.dePastResidenceCountryCount.value shouldBe 1
-    output.dePastResidenceCountry1.value shouldBe "USA!"
+    output.dePastResidenceCountry1Text.value shouldBe "USA!"
     output.dePastResidenceCountry2 shouldBe None
   }
 

@@ -54,6 +54,46 @@
       "datatype": "string"
     },
     {
+      "name": "de_past_residence_country1_text",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country2_text",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country3_text",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country4_text",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country5_text",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country6_text",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country7_text",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country8_text",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country9_text",
+      "datatype": "string"
+    },
+    {
+      "name": "de_past_residence_country10_text",
+      "datatype": "string"
+    },
+    {
       "name": "de_home_area_type",
       "datatype": "integer"
     },
