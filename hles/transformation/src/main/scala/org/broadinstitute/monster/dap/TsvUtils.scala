@@ -1,16 +1,24 @@
 package org.broadinstitute.monster.dap
 
-import scala.NotImplementedError
-import scala.util.Try
+import io.circe.parser._
 
-object TsvUtils {
-  import purecsv.safe.converter.StringConverter
-  import purecsv.safe.converter.StringConverterUtils.mkStringConverter
+import com.spotify.scio.values.SCollection
 
-  // helper to let us serialize nested case classes
-  def mkOneWayCaseClassSerializer[A](serializer: A => String): StringConverter[A] =
-    mkStringConverter(
-      _ => Try(throw new NotImplementedError("Attempted to parse unparseable type.")),
-      serializer
+import purecsv.safe._
+
+import org.broadinstitute.monster.common.StorageIO
+
+trait TsvUtils {
+
+  // override to add columns to map or otherwise alter values
+  def buildTsvMapFromJson(json: String) = decode[Map[String, Any]](json)
+
+  def jsonToTsv(messages: SCollection[String], description: String, outputPrefix: String) =
+    StorageIO.writeListsCommon[String](
+      messages,
+      m => buildTsvMapFromJson(m).toCSV("\t"),
+      description,
+      outputPrefix,
+      ".tsv"
     )
 }

@@ -1,12 +1,9 @@
 package org.broadinstitute.monster.dap.dog
 
-import purecsv.safe.converter.StringConverter
-
-import org.broadinstitute.monster.dap.{RawRecord, TsvUtils}
+import org.broadinstitute.monster.dap.RawRecord
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogBehavior
 
 object BehaviorTransformations {
-  import purecsv.safe._
 
   /**
     * Parse all behavior-related fields out of a raw RedCap record,
@@ -60,7 +57,4 @@ object BehaviorTransformations {
       dbChasesTailFrequency = rawRecord.getOptionalNumber("db_m_chase_tail"),
       dbBarksFrequency = rawRecord.getOptionalNumber("db_m_bark")
     )
-
-  implicit val behaviorc: StringConverter[HlesDogBehavior] =
-    TsvUtils.mkOneWayCaseClassSerializer[HlesDogBehavior](fs => fs.toCSV())
 }

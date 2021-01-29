@@ -1,12 +1,9 @@
 package org.broadinstitute.monster.dap.dog
 
-import purecsv.safe.converter.StringConverter
-
-import org.broadinstitute.monster.dap.{RawRecord, TsvUtils}
+import org.broadinstitute.monster.dap.RawRecord
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogDiet
 
 object DietTransformations {
-  import purecsv.safe._
 
   /** Map all diet-related RedCap fields into our target schema. */
   def mapDiet(rawRecord: RawRecord): HlesDogDiet = {
@@ -232,7 +229,4 @@ object DietTransformations {
       )
     }
   }
-
-  implicit val dietc: StringConverter[HlesDogDiet] =
-    TsvUtils.mkOneWayCaseClassSerializer[HlesDogDiet](fs => fs.toCSV())
 }

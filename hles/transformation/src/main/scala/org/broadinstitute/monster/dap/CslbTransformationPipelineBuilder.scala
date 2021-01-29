@@ -2,11 +2,16 @@ package org.broadinstitute.monster.dap
 
 import com.spotify.scio.ScioContext
 import com.spotify.scio.values.SCollection
+
+import io.circe.syntax._
+
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.common.msg._
 import org.slf4j.{Logger, LoggerFactory}
 
 object CslbTransformationPipelineBuilder extends PipelineBuilder[Args] {
+  import StorageIO.circePrinter
+
   /**
     * Schedule all the steps for the Dog Aging transformation in the given pipeline context.
     *
@@ -18,15 +23,28 @@ object CslbTransformationPipelineBuilder extends PipelineBuilder[Args] {
   implicit val logger: Logger = LoggerFactory.getLogger(getClass)
 
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
+    val outputPrefix = s"${args.outputPrefix}/cslb"
+
     val rawRecords = readRecords(ctx, args)
 
     val cslbTransformations =
       rawRecords.transform("CSLB data")(_.flatMap(CslbTransformations.mapCslbData))
 
+    val jsonStrings = cslbTransformations
+      .transform("Convert CSLB messages to JSON")(
+        _.map(msg => msg.asJson.printWith(circePrinter))
+      )
+
+    jsonStrings
+      .withName(s"Write 'CSLB data' messages to '$outputPrefix'")
+      .saveAsTextFile(outputPrefix, suffix = ".json", numShards = 0)
+
+    CslbTransformations.jsonToTsv(jsonStrings, "CSLB data", s"${outputPrefix}/tsv")
+
     StorageIO.writeJsonLists(
       cslbTransformations,
       "CSLB data",
-      s"${args.outputPrefix}/cslb"
+      outputPrefix
     )
     ()
   }

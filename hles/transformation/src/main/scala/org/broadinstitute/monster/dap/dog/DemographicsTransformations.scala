@@ -4,11 +4,10 @@ import java.time.{LocalDate, Period}
 
 import purecsv.safe.converter.StringConverter
 
-import org.broadinstitute.monster.dap.{MissingCalcFieldError, RawRecord, TsvUtils}
+import org.broadinstitute.monster.dap.{MissingCalcFieldError, RawRecord}
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogDemographics
 
 object DemographicsTransformations {
-  import purecsv.safe._
 
   /** Map all demographics-related fields out of a raw RedCap record into a partial Dog model. */
   def mapDemographics(rawRecord: RawRecord): HlesDogDemographics = {
@@ -332,7 +331,4 @@ object DemographicsTransformations {
         else None
     )
   }
-
-  implicit val demographicsc: StringConverter[HlesDogDemographics] =
-    TsvUtils.mkOneWayCaseClassSerializer[HlesDogDemographics](fs => fs.toCSV())
 }

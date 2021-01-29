@@ -2,7 +2,12 @@ package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.dogaging.jadeschema.table.Cslb
 
-object CslbTransformations {
+object CslbTransformations extends TsvUtils {
+
+  override def buildTsvMapFromJson(json: String) = {
+    val baseMap = super.buildMapFromJson(json)
+    baseMap ++ Map("entity:cslb_id" -> baseMap("dog_id")) - "dog_id"
+  }
 
   def mapCslbData(rawRecord: RawRecord): Option[Cslb] =
     rawRecord.getOptionalDate("cslb_date") match {
