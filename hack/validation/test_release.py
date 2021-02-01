@@ -119,3 +119,14 @@ def test_st_portal_account_creation_date(hles_dog1_data):
     for row in hles_dog1_data:
         assert 'st_portal_account_creation_date' in row
         assert len(row['st_portal_account_creation_date']) > 0
+
+
+def test_past_country_residence_text(hles_dog2_data):
+    found_country1_text = False
+    found_country2_text = False
+    found_country3_text = False
+
+    for row in hles_dog2_data:
+        found_country1_text = found_country1_text or len(row['de_past_residence_country1_text']) > 0
+        found_country2_text = found_country2_text or len(row['de_past_residence_country2_text']) > 0
+        found_country3_text = found_country3_text or len(row['de_past_residence_country3_text']) > 0
