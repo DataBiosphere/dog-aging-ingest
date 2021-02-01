@@ -24,21 +24,25 @@ object ResidentialEnvironmentTransformations {
   }
 
   /**
-    * Parse both country fields for a RedCap record,
-    * de_country_[n] is the deprecated user entry free text field
-    * de_country_[n]_dd is the updated drop down option list
+    * Checks for a given alternate residence country, gated with a check on residence count
+    * pastCountryCount arg is the RC variable "de_country_nbr"
+    * countryCounter arg is the sequence number for the supplied RC variable (next arg)
+    * countryField arg is the RC past residence country we are currently checking
     */
-  def parseOnlyCountry(
+  def getPastResidenceCountry(
     rawRecord: RawRecord,
-    multipleAdd: String,
-    only1Add: String
+    pastCountryCount: Long,
+    countryCounter: Long,
+    countryField: String
   ): Option[String] = {
-    rawRecord.getOptional(multipleAdd).orElse(rawRecord.getOptional(only1Add))
+    if (pastCountryCount > countryCounter) rawRecord.getOptional(countryField) else None
   }
 
   /**
     * Parse all past-residence-related fields out of a raw RedCap record,
     * injecting them into a partially-modeled dog record.
+    * de_country_[n] is the deprecated user entry free text field
+    * de_country_[n]_dd is the updated drop down option list
     */
   def mapPastResidences(
     rawRecord: RawRecord,
@@ -58,6 +62,7 @@ object ResidentialEnvironmentTransformations {
           deLifetimeResidenceCount = Some(pastResidenceCount + currentResidenceCount.getOrElse(0L)),
           dePastResidenceZipCount = Some(pastZipCount),
           dePastResidenceCountryCount = Some(pastCountryCount),
+          // there are two separate fields to check for "First country"
           dePastResidenceCountry1 =
             if (pastCountryCount > 1)
               rawRecord
@@ -65,23 +70,24 @@ object ResidentialEnvironmentTransformations {
                 .orElse(rawRecord.getOptional("de_country_01_only_dd"))
             else None,
           dePastResidenceCountry2 =
-            if (pastCountryCount > 2) rawRecord.getOptional("de_country_02_dd") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 2L, "de_country_02_dd"),
           dePastResidenceCountry3 =
-            if (pastCountryCount > 3) rawRecord.getOptional("de_country_03_dd") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 3L, "de_country_03_dd"),
           dePastResidenceCountry4 =
-            if (pastCountryCount > 4) rawRecord.getOptional("de_country_04_dd") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 4L, "de_country_04_dd"),
           dePastResidenceCountry5 =
-            if (pastCountryCount > 5) rawRecord.getOptional("de_country_05_dd") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 5L, "de_country_05_dd"),
           dePastResidenceCountry6 =
-            if (pastCountryCount > 6) rawRecord.getOptional("de_country_06_dd") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 6L, "de_country_06_dd"),
           dePastResidenceCountry7 =
-            if (pastCountryCount > 7) rawRecord.getOptional("de_country_07_dd") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 7L, "de_country_07_dd"),
           dePastResidenceCountry8 =
-            if (pastCountryCount > 8) rawRecord.getOptional("de_country_08_dd") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 8L, "de_country_08_dd"),
           dePastResidenceCountry9 =
-            if (pastCountryCount > 9) rawRecord.getOptional("de_country_09_dd") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 9L, "de_country_09_dd"),
           dePastResidenceCountry10 =
-            if (pastCountryCount > 10) rawRecord.getOptional("de_country_10_dd") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 10L, "de_country_10_dd"),
+          // there are two separate fields to check for "First country"
           dePastResidenceCountry1Text =
             if (pastCountryCount > 1)
               rawRecord
@@ -89,23 +95,23 @@ object ResidentialEnvironmentTransformations {
                 .orElse(rawRecord.getOptional("de_country_01_only"))
             else None,
           dePastResidenceCountry2Text =
-            if (pastCountryCount > 2) rawRecord.getOptional("de_country_02") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 2L, "de_country_02"),
           dePastResidenceCountry3Text =
-            if (pastCountryCount > 3) rawRecord.getOptional("de_country_03") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 3L, "de_country_03"),
           dePastResidenceCountry4Text =
-            if (pastCountryCount > 4) rawRecord.getOptional("de_country_04") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 4L, "de_country_04"),
           dePastResidenceCountry5Text =
-            if (pastCountryCount > 5) rawRecord.getOptional("de_country_05") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 5L, "de_country_05"),
           dePastResidenceCountry6Text =
-            if (pastCountryCount > 6) rawRecord.getOptional("de_country_06") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 6L, "de_country_06"),
           dePastResidenceCountry7Text =
-            if (pastCountryCount > 7) rawRecord.getOptional("de_country_07") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 7L, "de_country_07"),
           dePastResidenceCountry8Text =
-            if (pastCountryCount > 8) rawRecord.getOptional("de_country_08") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 8L, "de_country_08"),
           dePastResidenceCountry9Text =
-            if (pastCountryCount > 9) rawRecord.getOptional("de_country_09") else None,
+            getPastResidenceCountry(rawRecord, pastCountryCount, 9L, "de_country_09"),
           dePastResidenceCountry10Text =
-            if (pastCountryCount > 10) rawRecord.getOptional("de_country_10") else None
+            getPastResidenceCountry(rawRecord, pastCountryCount, 10L, "de_country_10")
         )
       }
   }
