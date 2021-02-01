@@ -43,8 +43,8 @@ def test_spay_or_neuter_age(hles_dog2_data):
         assert row['dd_spay_or_neuter_age'] in {'', '5', '99', '2', '4', '7', '6', '8', '3', '1'}
 
 
-def test_vet_can_provide_email(hles_dog1_data):
-    for row in hles_dog1_data:
+def test_vet_can_provide_email(hles_dog2_data):
+    for row in hles_dog2_data:
         assert 'fs_primary_care_veterinarian_can_provide_email' in row
         assert row['fs_primary_care_veterinarian_can_provide_email'] in {'1', '7', '8', ''}
 
@@ -69,8 +69,8 @@ def test_daily_bone_meal_supplements_sane(hles_dog1_data):
         assert row['df_daily_supplements_bone_meal'] in {'', '0', '1', '2'}
 
 
-def test_infreq_bone_meal_supplements_sane(hles_dog2_data):
-    for row in hles_dog2_data:
+def test_infreq_bone_meal_supplements_sane(hles_dog1_data):
+    for row in hles_dog1_data:
         assert 'df_infrequent_supplements_bone_meal' in row
         assert row['df_infrequent_supplements_bone_meal'] in {'', '0', '1', '2'}
 
@@ -87,9 +87,9 @@ def test_de_interacts_with_neighborhood_humans_with_owner(hles_dog2_data):
         assert row['de_interacts_with_neighborhood_humans_with_owner'] in {'True', 'False', ''}
 
 
-def test_dd_acquired_st(hles_dog2_data):
+def test_dd_acquired_st(hles_dog1_data):
     found_affected_row = False
-    for row in hles_dog2_data:
+    for row in hles_dog1_data:
         if row['entity:dog_id_id'] in ('18069', '32705', '40519', '63438', '89055'):
             found_affected_row = True
             assert row['dd_acquired_state'] not in {'', 'NA'}
@@ -101,16 +101,58 @@ def test_dd_activities_obedience(hles_dog1_data):
     found_affected_row = False
     for row in hles_dog1_data:
         if row['entity:dog_id_id'] in {'76099'}:
-            assert row['dd_activities_obedience'] == '2'
+            assert 'dd_activities_obedience' in row
+            assert row['dd_activities_obedience'] == ''
             found_affected_row = True
     assert found_affected_row is True
 
 
-def test_dd_activities_agility(hles_dog2_data):
+def test_dd_activities_agility(hles_dog1_data):
     found_affected_row = False
-    for row in hles_dog2_data:
+    for row in hles_dog1_data:
         if row['entity:dog_id_id'] in {'34888'}:
-            assert row['dd_activities_agility'] == '2'
+            assert 'dd_activities_agility' in row
+            assert row['dd_activities_agility'] == ''
+            found_affected_row = True
+    assert found_affected_row is True
+
+
+def test_dd_activities_breeding(hles_dog1_data):
+    found_affected_row = False
+    for row in hles_dog1_data:
+        if row['entity:dog_id_id'] in {'66316'}:
+            assert 'dd_activities_breeding' in row
+            assert row['dd_activities_breeding'] == ''
+            found_affected_row = True
+    assert found_affected_row is True
+
+
+def test_dd_activities_breeding(hles_dog1_data):
+    found_affected_row = False
+    for row in hles_dog1_data:
+        if row['entity:dog_id_id'] in {'19971'}:
+            assert 'dd_activities_hunting' in row
+            assert row['dd_activities_hunting'] == ''
+            found_affected_row = True
+    assert found_affected_row is True
+
+
+def test_dd_activities_field_trials(hles_dog1_data):
+    found_affected_row = False
+    for row in hles_dog1_data:
+        if row['entity:dog_id_id'] in {'13359'}:
+            assert 'dd_activities_field_trials' in row
+            assert row['dd_activities_field_trials'] == ''
+            found_affected_row = True
+    assert found_affected_row is True
+
+
+def test_dd_activities_working(hles_dog1_data):
+    found_affected_row = False
+    for row in hles_dog1_data:
+        if row['entity:dog_id_id'] in {'82623'}:
+            assert 'dd_activities_working' in row
+            assert row['dd_activities_working'] == ''
             found_affected_row = True
     assert found_affected_row is True
 
@@ -121,12 +163,19 @@ def test_st_portal_account_creation_date(hles_dog1_data):
         assert len(row['st_portal_account_creation_date']) > 0
 
 
-def test_past_country_residence_text(hles_dog2_data):
-    found_country1_text = False
-    found_country2_text = False
-    found_country3_text = False
+def test_past_residence_country(hles_dog2_data, hles_dog1_data):
+    past_residence_country1_vals = set()
+    past_residence_country2_vals = set()
 
     for row in hles_dog2_data:
-        found_country1_text = found_country1_text or len(row['de_past_residence_country1_text']) > 0
-        found_country2_text = found_country2_text or len(row['de_past_residence_country2_text']) > 0
-        found_country3_text = found_country3_text or len(row['de_past_residence_country3_text']) > 0
+        assert 'de_past_residence_country1_text' in row
+        if row['de_past_residence_country1_text']:
+            past_residence_country1_vals.add(row['de_past_residence_country1_text'])
+
+    for row in hles_dog1_data:
+        assert 'de_past_residence_country2_text' in row
+        if row['de_past_residence_country2_text']:
+            past_residence_country2_vals.add(row['de_past_residence_country2_text'])
+
+    assert len(past_residence_country1_vals) > 0
+    assert len(past_residence_country2_vals) > 0
