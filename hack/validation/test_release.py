@@ -158,10 +158,7 @@ def test_past_residence_country(hles_dog2_data, hles_dog1_data):
     past_residence_country1_vals = set()
     past_residence_country2_vals = set()
 
-    for row in hles_dog2_data:
-        assert 'de_past_residence_country1_text' in row
-        if row['de_past_residence_country1_text']:
-            past_residence_country1_vals.add(row['de_past_residence_country1_text'])
+    assert any(row['de_past_residence_country1_text'] for row in hles_dog2_data)
 
     for row in hles_dog1_data:
         assert 'de_past_residence_country2_text' in row
