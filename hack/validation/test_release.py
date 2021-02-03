@@ -89,7 +89,7 @@ def test_dd_acquired_st(hles_dog1_data):
             found_affected_row = True
             assert row['dd_acquired_state'] not in {'', 'NA'}
 
-    assert found_affected_row is True
+    assert found_affected_row
 
 
 def test_dd_activities_obedience(hles_dog1_data):
