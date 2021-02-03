@@ -35,7 +35,7 @@ def test_cslb_date(cslb_data):
 def test_spay_or_neuter_age(hles_dog2_data):
     for row in hles_dog2_data:
         assert 'dd_spay_or_neuter_age' in row
-        assert row['dd_spay_or_neuter_age'] in {'', '5', '99', '2', '4', '7', '6', '8', '3', '1'}
+        assert row['dd_spay_or_neuter_age'] in {'', '1', '2', '3', '4', '5', '6', '7', '8', '99'}
 
 
 def test_vet_can_provide_email(hles_dog2_data):
@@ -94,8 +94,8 @@ def test_dd_acquired_st(hles_dog1_data):
 
 def test_dd_activities_obedience(hles_dog1_data):
     affected_obedience_row = next(row for row in hles_dog1_data if row['entity:dog_id_id'] == '76099')
-    assert 'dd_activities_obedience' in row
-    assert row['dd_activities_obedience'] == ''
+    assert 'dd_activities_obedience' in affected_obedience_row
+    assert affected_obedience_row['dd_activities_obedience'] == ''
 
 
 def test_dd_activities_agility(hles_dog1_data):
