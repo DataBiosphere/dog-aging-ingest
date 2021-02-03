@@ -151,7 +151,7 @@ def test_dd_activities_working(hles_dog1_data):
 def test_st_portal_account_creation_date(hles_dog1_data):
     for row in hles_dog1_data:
         assert 'st_portal_account_creation_date' in row
-        assert len(row['st_portal_account_creation_date']) > 0
+        assert bool(row['st_portal_account_creation_date'])
 
 
 def test_past_residence_country(hles_dog2_data, hles_dog1_data):
