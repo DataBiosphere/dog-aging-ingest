@@ -93,13 +93,9 @@ def test_dd_acquired_st(hles_dog1_data):
 
 
 def test_dd_activities_obedience(hles_dog1_data):
-    found_affected_row = False
-    for row in hles_dog1_data:
-        if row['entity:dog_id_id'] in {'76099'}:
-            assert 'dd_activities_obedience' in row
-            assert row['dd_activities_obedience'] == ''
-            found_affected_row = True
-    assert found_affected_row is True
+    affected_obedience_row = next(row for row in hles_dog1_data if row['entity:dog_id_id'] == '76099')
+    assert 'dd_activities_obedience' in row
+    assert row['dd_activities_obedience'] == ''
 
 
 def test_dd_activities_agility(hles_dog1_data):
