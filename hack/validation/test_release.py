@@ -22,13 +22,8 @@ def hles_dog2_data():
 
 
 def parse_file(path):
-    rows = []
     with open(path) as f:
-        reader = csv.DictReader(f, delimiter='\t')
-        for row in reader:
-            rows.append(row)
-
-    return rows
+        return [row for row in csv.DictReader(f, delimiter='\t')]
 
 
 def test_cslb_date(cslb_data):
