@@ -24,69 +24,70 @@ class ReleaseValidationTestCase(unittest.TestCase):
 
     def test_cslb_date(self):
         for row in self._cslb_data:
-            assert '2021' not in row['cslb_date']
-            assert '2020' in row['cslb_date']
+            self.assertNotIn('2021', row['cslb_date'], msg=f"Row ID {row['entity:cslb_id']} has a 2021 cslb_date")
+            self.assertIn('2020', row['cslb_date'],
+                          msg=f"Row ID {row['entity:cslb_id']} does not have a 2020 cslb_date")
 
     def test_spay_or_neuter_age(self):
         for row in self._hles_dog2_data:
-            assert 'dd_spay_or_neuter_age' in row
-            assert row['dd_spay_or_neuter_age'] in {'', '1', '2', '3', '4', '5', '6', '7', '8', '99'}
+            self.assertIn('dd_spay_or_neuter_age', row)
+            self.assertIn(row['dd_spay_or_neuter_age'], {'', '1', '2', '3', '4', '5', '6', '7', '8', '99'})
 
     def test_vet_can_provide_email(self):
         for row in self._hles_dog2_data:
-            assert 'fs_primary_care_veterinarian_can_provide_email' in row
-            assert row['fs_primary_care_veterinarian_can_provide_email'] in {'1', '7', '8', ''}
+            self.assertIn('fs_primary_care_veterinarian_can_provide_email', row)
+            self.assertIn(row['fs_primary_care_veterinarian_can_provide_email'], {'1', '7', '8', ''})
 
     def test_zip_nbr(self):
         for row in self._hles_dog1_data:
-            assert 'de_past_residence_zip_count' in row
+            self.assertIn('de_past_residence_zip_count', row)
             cnt = int(row['de_past_residence_zip_count'])
-            assert (cnt >= 0)
+            self.assertTrue(cnt >= 0)
 
     def test_st_label_not_present(self):
         for row in self._hles_dog1_data:
-            assert 'st_batch_label' not in row
+            self.assertNotIn('st_batch_label', row)
         for row in self._hles_dog2_data:
-            assert 'st_batch_label' not in row
+            self.assertNotIn('st_batch_label', row)
 
     def test_daily_bone_meal_supplements_sane(self):
         for row in self._hles_dog1_data:
-            assert 'df_daily_supplements_bone_meal' in row
-            assert row['df_daily_supplements_bone_meal'] in {'', '0', '1', '2'}
+            self.assertIn('df_daily_supplements_bone_meal', row)
+            self.assertIn(row['df_daily_supplements_bone_meal'], {'', '0', '1', '2'})
 
     def test_infreq_bone_meal_supplements_sane(self):
         for row in self._hles_dog1_data:
-            assert 'df_infrequent_supplements_bone_meal' in row
-            assert row['df_infrequent_supplements_bone_meal'] in {'', '0', '1', '2'}
+            self.assertIn('df_infrequent_supplements_bone_meal', row)
+            self.assertIn(row['df_infrequent_supplements_bone_meal'], {'', '0', '1', '2'})
 
     def test_de_interacts_with_neighborhood_animals_with_owner(self):
         for row in self._hles_dog1_data:
-            assert 'de_interacts_with_neighborhood_animals_with_owner' in row
-            assert row['de_interacts_with_neighborhood_animals_with_owner'] in {'True', 'False', ''}
+            self.assertIn('de_interacts_with_neighborhood_animals_with_owner', row)
+            self.assertIn(row['de_interacts_with_neighborhood_animals_with_owner'], {'True', 'False', ''})
 
     def test_de_interacts_with_neighborhood_humans_with_owner(self):
         for row in self._hles_dog2_data:
-            assert 'de_interacts_with_neighborhood_humans_with_owner' in row
-            assert row['de_interacts_with_neighborhood_humans_with_owner'] in {'True', 'False', ''}
+            self.assertIn('de_interacts_with_neighborhood_humans_with_owner', row)
+            self.assertIn(row['de_interacts_with_neighborhood_humans_with_owner'], {'True', 'False', ''})
 
     def test_dd_acquired_st(self):
-        found_affected_row = False
+        found_affected_rows = False
         for row in self._hles_dog1_data:
             if row['entity:dog_id_id'] in ('18069', '32705', '40519', '63438', '89055'):
-                found_affected_row = True
-                assert row['dd_acquired_state'] not in {'', 'NA'}
+                found_affected_rows = True
+                self.assertNotIn(row['dd_acquired_state'], {'', 'NA'})
 
-        assert found_affected_row
+        self.assertTrue(found_affected_rows)
 
     def test_dd_activities_obedience(self):
         affected_obedience_row = self.find_affected_row(self._hles_dog1_data, '76099')
-        assert 'dd_activities_obedience' in affected_obedience_row
-        assert affected_obedience_row['dd_activities_obedience'] == ''
+        self.assertIn('dd_activities_obedience', affected_obedience_row)
+        self.assertEqual(affected_obedience_row['dd_activities_obedience'], '')
 
     def test_dd_activities_agility(self):
         affected_agility_row = self.find_affected_row(self._hles_dog1_data, '34888')
-        assert 'dd_activities_agility' in affected_agility_row
-        assert affected_agility_row['dd_activities_agility'] == ''
+        self.assertIn('dd_activities_agility', affected_agility_row)
+        self.assertEqual(affected_agility_row['dd_activities_agility'], '')
 
     def test_dd_activities_breeding(self):
         affected_breeding_row = self.find_affected_row(self._hles_dog1_data, '66316')
