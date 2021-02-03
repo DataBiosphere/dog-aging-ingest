@@ -155,15 +155,5 @@ def test_st_portal_account_creation_date(hles_dog1_data):
 
 
 def test_past_residence_country(hles_dog2_data, hles_dog1_data):
-    past_residence_country1_vals = set()
-    past_residence_country2_vals = set()
-
     assert any(row['de_past_residence_country1_text'] for row in hles_dog2_data)
-
-    for row in hles_dog1_data:
-        assert 'de_past_residence_country2_text' in row
-        if row['de_past_residence_country2_text']:
-            past_residence_country2_vals.add(row['de_past_residence_country2_text'])
-
-    assert len(past_residence_country1_vals) > 0
-    assert len(past_residence_country2_vals) > 0
+    assert any(row['de_past_residence_country2_text'] for row in hles_dog1_data)
