@@ -1,9 +1,19 @@
 package org.broadinstitute.monster.dap
 
+import io.circe.JsonObject
+
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesOwner
 import scala.util.matching.Regex
 
 object OwnerTransformations {
+
+  def jsonTsvTransform(json: JsonObject): JsonObject =
+    json.add("entity:owner_id_id", json.apply("owner_id").get).remove("owner_id")
+
+  val tsvHeaders: Seq[String] =
+    Seq("entity:owner_id_id") ++ CaseClassInspector
+      .snakeCaseHeaderList[HlesOwner]
+      .filterNot(_ == "owner_id")
 
   // Parsing the oc_primary_residence_census_division
   // format is: "Division <N>: <some-description>"

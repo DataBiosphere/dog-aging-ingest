@@ -24,9 +24,11 @@ object EnvironmentTransformationPipelineBuilder extends PipelineBuilder[Args] {
     val environment =
       rawEnvRecords.transform("Map Environment")(_.map(EnvironmentTransformations.mapEnvironment))
 
-    StorageIO.writeJsonLists(
+    ScioUtils.toJsonAndTsv(
       environment,
       "Environmental data",
+      EnvironmentTransformations.tsvHeaders,
+      EnvironmentTransformations.jsonTsvTransform,
       s"${args.outputPrefix}/environment"
     )
     ()

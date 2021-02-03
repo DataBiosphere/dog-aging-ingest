@@ -1,9 +1,26 @@
 package org.broadinstitute.monster.dap
 
+import io.circe.syntax._
+import io.circe.JsonObject
+
 import org.broadinstitute.monster.dap.healthcondition.{HealthCondition, HealthConditionType}
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesHealthCondition
 
 object HealthTransformations {
+
+  def jsonTsvTransform(json: JsonObject): JsonObject = {
+    val congenitalBool = json.apply("hs_condition_is_congenital").get.asBoolean.getOrElse(false)
+    val congenitalInt =
+      if (congenitalBool) 1 else 0
+    val primaryKey = Seq(json.apply("dog_id").get, json.apply("hs_condition").get, congenitalInt)
+      .map(_.toString)
+      .mkString("-")
+    json.add("entity:hles_health_condition_id", primaryKey.asJson)
+  }
+
+  val tsvHeaders: Seq[String] =
+    Seq("entity:hles_health_condition_id") ++ CaseClassInspector
+      .snakeCaseHeaderList[HlesHealthCondition]
 
   /** Parse all health-condition-related fields out of a raw RedCap record. */
   def mapHealthConditions(rawRecord: RawRecord): Iterable[HlesHealthCondition] = {

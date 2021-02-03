@@ -30,16 +30,35 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
       _.flatMap(HealthTransformations.mapHealthConditions)
     )
 
-    StorageIO.writeJsonLists(dogs, "Dogs", s"${args.outputPrefix}/hles_dog")
-    StorageIO.writeJsonLists(owners, "Owners", s"${args.outputPrefix}/hles_owner")
-    StorageIO.writeJsonLists(
+    ScioUtils.toJsonAndTsv(
+      dogs,
+      "HLES dog",
+      DogTransformations.tsvHeaders,
+      DogTransformations.jsonTsvTransform,
+      s"${args.outputPrefix}/hles_dog"
+    )
+
+    ScioUtils.toJsonAndTsv(
+      owners,
+      "HLES owner",
+      OwnerTransformations.tsvHeaders,
+      OwnerTransformations.jsonTsvTransform,
+      s"${args.outputPrefix}/hles_owner"
+    )
+
+    ScioUtils.toJsonAndTsv(
       cancerConditions,
-      "Cancer conditions",
+      "HLES cancer condition",
+      CancerTransformations.tsvHeaders,
+      CancerTransformations.jsonTsvTransform,
       s"${args.outputPrefix}/hles_cancer_condition"
     )
-    StorageIO.writeJsonLists(
+
+    ScioUtils.toJsonAndTsv(
       healthConditions,
-      "Health conditions",
+      "HLES health condition",
+      HealthTransformations.tsvHeaders,
+      HealthTransformations.jsonTsvTransform,
       s"${args.outputPrefix}/hles_health_condition"
     )
     ()

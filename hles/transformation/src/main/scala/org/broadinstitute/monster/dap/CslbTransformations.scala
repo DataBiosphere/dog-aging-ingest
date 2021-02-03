@@ -1,13 +1,16 @@
 package org.broadinstitute.monster.dap
 
+import io.circe.JsonObject
+
 import org.broadinstitute.monster.dogaging.jadeschema.table.Cslb
 
-object CslbTransformations extends TsvUtils {
+object CslbTransformations {
 
-  override def buildTsvMapFromJson(json: String) = {
-    val baseMap = super.buildMapFromJson(json)
-    baseMap ++ Map("entity:cslb_id" -> baseMap("dog_id")) - "dog_id"
-  }
+  def jsonTsvTransform(json: JsonObject): JsonObject =
+    json.add("entity:cslb_id", json.apply("dog_id").get).remove("dog_id")
+
+  val tsvHeaders: Seq[String] =
+    Seq("entity:cslb_id") ++ CaseClassInspector.snakeCaseHeaderList[Cslb].filterNot(_ == "dog_id")
 
   def mapCslbData(rawRecord: RawRecord): Option[Cslb] =
     rawRecord.getOptionalDate("cslb_date") match {

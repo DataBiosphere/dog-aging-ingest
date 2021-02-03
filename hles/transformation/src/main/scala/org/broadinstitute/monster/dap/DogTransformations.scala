@@ -1,10 +1,20 @@
 package org.broadinstitute.monster.dap
 
+import io.circe.JsonObject
+
 import org.broadinstitute.monster.dap.dog._
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
 import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
 
 object DogTransformations {
+
+  def jsonTsvTransform(json: JsonObject): JsonObject =
+    json.add("entity:dog_id_id", json.apply("dog_id").get).remove("dog_id")
+
+  val tsvHeaders: Seq[String] =
+    Seq("entity:dog_id_id") ++ CaseClassInspector
+      .snakeCaseHeaderList[HlesDog]
+      .filterNot(_ == "dog_id")
 
   /** Parse all dog-related fields out of a raw RedCap record. */
   def mapDog(rawRecord: RawRecord): Option[HlesDog] = {

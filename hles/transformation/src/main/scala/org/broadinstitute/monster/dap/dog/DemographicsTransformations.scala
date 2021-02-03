@@ -2,8 +2,6 @@ package org.broadinstitute.monster.dap.dog
 
 import java.time.{LocalDate, Period}
 
-import purecsv.safe.converter.StringConverter
-
 import org.broadinstitute.monster.dap.{MissingCalcFieldError, RawRecord}
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogDemographics
 

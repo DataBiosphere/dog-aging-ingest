@@ -1,8 +1,18 @@
 package org.broadinstitute.monster.dap
 
+import io.circe.JsonObject
+
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesCancerCondition
 
 object CancerTransformations {
+
+  def jsonTsvTransform(json: JsonObject): JsonObject =
+    json.add("entity:hles_cancer_condition_id", json.apply("dog_id").get).remove("dog_id")
+
+  val tsvHeaders: Seq[String] =
+    Seq("entity:hles_cancer_condition_id") ++ CaseClassInspector
+      .snakeCaseHeaderList[HlesCancerCondition]
+      .filterNot(_ == "dog_id")
 
   /** Parse all cancer-related fields out of a raw RedCap record. */
   def mapCancerConditions(rawRecord: RawRecord): Option[HlesCancerCondition] = {

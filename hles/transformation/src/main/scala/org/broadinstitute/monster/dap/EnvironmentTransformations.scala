@@ -1,10 +1,23 @@
 package org.broadinstitute.monster.dap
 
+import io.circe.JsonObject
+import io.circe.syntax.EncoderOps
+
 import org.broadinstitute.monster.dap.environment._
 import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
 import org.broadinstitute.monster.dogaging.jadeschema.table.Environment
 
 object EnvironmentTransformations {
+
+  def jsonTsvTransform(json: JsonObject): JsonObject = {
+    val primaryKey = Seq("dog_id", "address_1_or_2", "address_month", "address_year")
+      .map(json.apply(_).get.toString)
+      .mkString("-")
+    json.add("entity:environment_id", primaryKey.asJson)
+  }
+
+  val tsvHeaders: Seq[String] =
+    Seq("entity:environment_id") ++ CaseClassInspector.snakeCaseHeaderList[Environment]
 
   /** Parse all environment related fields out of a RedCap record.
     * The schema for environment variables has been separated into 5 jade-fragments.
