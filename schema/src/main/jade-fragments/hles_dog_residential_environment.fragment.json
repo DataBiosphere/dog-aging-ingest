@@ -22,38 +22,6 @@
       "datatype": "string"
     },
     {
-      "name": "de_past_residence_country3",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_country4",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_country5",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_country6",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_country7",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_country8",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_country9",
-      "datatype": "string"
-    },
-    {
-      "name": "de_past_residence_country10",
-      "datatype": "string"
-    },
-    {
       "name": "de_past_residence_country1_text",
       "datatype": "string"
     },

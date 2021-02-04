@@ -39,14 +39,6 @@ class ResidentialEnvironmentTransformationsSpec
     output.dePastResidenceCountryCount.value shouldBe 11
     output.dePastResidenceCountry1Text.value shouldBe "country1"
     output.dePastResidenceCountry2.value shouldBe "country2"
-    output.dePastResidenceCountry3.value shouldBe "country3"
-    output.dePastResidenceCountry4Text.value shouldBe "country4"
-    output.dePastResidenceCountry5Text.value shouldBe "country5"
-    output.dePastResidenceCountry6Text.value shouldBe "country6"
-    output.dePastResidenceCountry7Text.value shouldBe "country7"
-    output.dePastResidenceCountry8.value shouldBe "country8"
-    output.dePastResidenceCountry9Text.value shouldBe "country9"
-    output.dePastResidenceCountry10.value shouldBe "country10"
   }
 
   it should "map past-residence-related fields where there is a single past and current home" in {
