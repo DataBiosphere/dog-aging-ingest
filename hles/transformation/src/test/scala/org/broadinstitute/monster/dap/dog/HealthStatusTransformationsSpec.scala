@@ -134,4 +134,27 @@ class HealthStatusTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     out.hsAlternativeCareOther.value shouldBe true
     out.hsAlternativeCareOtherDescription.value shouldBe "Voodoo"
   }
+
+  it should "pick up 'none of the above' for alternative care" in {
+    val example = Map(
+      "hs_other_health_care" -> Array("99")
+    )
+
+    val out = HealthStatusTransformations.mapAltCare(
+      RawRecord(1, example),
+      HlesDogHealthSummary.init()
+    )
+
+    out.hsAlternativeCareNone.value shouldBe true
+    out.hsAlternativeCareAcupuncture.value shouldBe false
+    out.hsAlternativeCareHerbalMedicine.value shouldBe false
+    out.hsAlternativeCareHomeopathy.value shouldBe false
+    out.hsAlternativeCareChiropractic.value shouldBe false
+    out.hsAlternativeCareMassage.value shouldBe false
+    out.hsAlternativeCareRehabilitationTherapy.value shouldBe false
+    out.hsAlternativeCareReiki.value shouldBe false
+    out.hsAlternativeCareTraditionalChineseMedicine.value shouldBe false
+    out.hsAlternativeCareOther.value shouldBe false
+    out.hsAlternativeCareOtherDescription shouldBe None
+  }
 }
