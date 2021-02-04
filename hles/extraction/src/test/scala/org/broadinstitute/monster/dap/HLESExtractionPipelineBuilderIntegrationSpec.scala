@@ -1,7 +1,6 @@
 package org.broadinstitute.monster.dap
 
 import java.time.{LocalDate, LocalTime, OffsetDateTime, ZoneOffset}
-
 import better.files.File
 import org.broadinstitute.monster.common.PipelineBuilderSpec
 
@@ -69,4 +68,28 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
   it should "successfully download records from RedCap" in {
     readMsgs(hlesOutputDir, "records/*.json") shouldNot be(empty)
   }
+
+  it should "contain records that all have a record, field_name, and value key" in {
+    readMsgs(hlesOutputDir, "records/*.json").foreach(msg => {
+      val record = msg.obj.toString()
+      record.contains("record") shouldBe true
+      record.contains("field_name") shouldBe true
+      record.contains("value") shouldBe true
+    })
+  }
+
+  it should "contain records with expected valid fields" in {
+    val allRecords = (readMsgs(hlesOutputDir, "records/*.json")).toString()
+    print(allRecords)
+    allRecords.contains("record") shouldBe true
+    allRecords.contains("1") shouldBe true
+    allRecords.contains("st_dap_pack_date") shouldBe true
+    allRecords.contains("2019-04-04") shouldBe true
+    allRecords.contains("field_name") shouldBe true
+    allRecords.contains("st_dap_pack_count") shouldBe true
+    allRecords.contains("co_consent") shouldBe true
+    allRecords.contains("value") shouldBe true
+    allRecords.contains("2") shouldBe true
+  }
+
 }
