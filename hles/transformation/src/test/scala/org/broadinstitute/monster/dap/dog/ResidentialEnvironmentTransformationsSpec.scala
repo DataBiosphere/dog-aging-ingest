@@ -68,7 +68,7 @@ class ResidentialEnvironmentTransformationsSpec
     output.dePastResidenceZipCount.value shouldBe 1
     output.dePastResidenceCountryCount.value shouldBe 1
     output.dePastResidenceCountry1Text.value shouldBe "USA!"
-    output.dePastResidenceCountry2Text.value shouldBe "IgnoredCountry"
+    output.dePastResidenceCountry2Text shouldBe None
   }
 
   it should "map past-residence-country for the number of past residences indicated" in {
