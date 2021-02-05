@@ -63,7 +63,33 @@ class ResidentialEnvironmentTransformationsSpec
     output.dePastResidenceZipCount.value shouldBe 1
     output.dePastResidenceCountryCount.value shouldBe 1
     output.dePastResidenceCountry1Text.value shouldBe "USA!"
-    output.dePastResidenceCountry2 shouldBe None
+    output.dePastResidenceCountry2Text shouldBe None
+  }
+
+  it should "map past-residence-country for the number of past residences indicated" in {
+    val exampleDogFields = Map[String, Array[String]](
+      "de_home_nbr" -> Array("2"),
+      "de_zip_nbr" -> Array("1"),
+      "oc_address2_yn" -> Array("0"),
+      "de_country_nbr" -> Array("2"),
+      "de_country_01_only" -> Array("this should be ignored"),
+      "de_country_01" -> Array("USA!"),
+      "de_country_02_dd" -> Array("US"),
+      "de_country_02" -> Array("IgnoredCountry"),
+      "de_country_03_dd" -> Array("IgnoredCountry2")
+    )
+    val output =
+      ResidentialEnvironmentTransformations.mapResidentialEnvironment(
+        RawRecord(id = 1, exampleDogFields)
+      )
+
+    output.deLifetimeResidenceCount.value shouldBe 3
+    output.dePastResidenceZipCount.value shouldBe 1
+    output.dePastResidenceCountryCount.value shouldBe 2
+    output.dePastResidenceCountry1Text.value shouldBe "USA!"
+    output.dePastResidenceCountry2.value shouldBe "US"
+    output.dePastResidenceCountry2Text.value shouldBe "IgnoredCountry"
+    output.dePastResidenceCountry3 shouldBe None
   }
 
   it should "map past-residence-related fields where there is a single past and current home (dropdown)" in {
