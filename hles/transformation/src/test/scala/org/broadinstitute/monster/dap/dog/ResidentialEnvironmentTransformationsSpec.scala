@@ -40,12 +40,7 @@ class ResidentialEnvironmentTransformationsSpec
     output.dePastResidenceCountry1Text.value shouldBe "country1"
     output.dePastResidenceCountry2.value shouldBe "country2"
     output.dePastResidenceCountry3.value shouldBe "country3"
-    output.dePastResidenceCountry4Text.value shouldBe "country4"
-    output.dePastResidenceCountry5Text.value shouldBe "country5"
-    output.dePastResidenceCountry6Text.value shouldBe "country6"
-    output.dePastResidenceCountry7Text.value shouldBe "country7"
     output.dePastResidenceCountry8.value shouldBe "country8"
-    output.dePastResidenceCountry9Text.value shouldBe "country9"
     output.dePastResidenceCountry10.value shouldBe "country10"
   }
 
@@ -81,7 +76,7 @@ class ResidentialEnvironmentTransformationsSpec
       "de_country_01" -> Array("USA!"),
       "de_country_02_dd" -> Array("US"),
       "de_country_02" -> Array("IgnoredCountry"),
-      "de_country_03" -> Array("IgnoredCountry2")
+      "de_country_03_dd" -> Array("IgnoredCountry2")
     )
     val output =
       ResidentialEnvironmentTransformations.mapResidentialEnvironment(
@@ -94,7 +89,7 @@ class ResidentialEnvironmentTransformationsSpec
     output.dePastResidenceCountry1Text.value shouldBe "USA!"
     output.dePastResidenceCountry2.value shouldBe "US"
     output.dePastResidenceCountry2Text.value shouldBe "IgnoredCountry"
-    output.dePastResidenceCountry3Text shouldBe None
+    output.dePastResidenceCountry3 shouldBe None
   }
 
   it should "map past-residence-related fields where there is a single past and current home (dropdown)" in {
