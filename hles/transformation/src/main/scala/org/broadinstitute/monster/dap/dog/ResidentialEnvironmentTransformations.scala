@@ -64,11 +64,9 @@ object ResidentialEnvironmentTransformations {
           dePastResidenceCountryCount = Some(pastCountryCount),
           // there are two separate fields to check for "First country"
           dePastResidenceCountry1 =
-            if (pastCountryCount > 1)
-              rawRecord
-                .getOptional("de_country_deLifetimeResidenceCount01_dd")
-                .orElse(rawRecord.getOptional("de_country_01_only_dd"))
-            else None,
+            if (pastCountryCount == 1)
+              rawRecord.getOptional("de_country_01_only_dd")
+            else getPastResidenceCountry(rawRecord, pastCountryCount, 1L, "de_country_01_dd"),
           dePastResidenceCountry2 =
             getPastResidenceCountry(rawRecord, pastCountryCount, 1L, "de_country_02_dd"),
           dePastResidenceCountry3 =
@@ -89,11 +87,9 @@ object ResidentialEnvironmentTransformations {
             getPastResidenceCountry(rawRecord, pastCountryCount, 9L, "de_country_10_dd"),
           // there are two separate fields to check for "First country"
           dePastResidenceCountry1Text =
-            if (pastCountryCount > 1)
-              rawRecord
-                .getOptional("de_country_01")
-                .orElse(rawRecord.getOptional("de_country_01_only"))
-            else None,
+            if (pastCountryCount == 1)
+              rawRecord.getOptional("de_country_01_only")
+            else getPastResidenceCountry(rawRecord, pastCountryCount, 1L, "de_country_01"),
           dePastResidenceCountry2Text =
             getPastResidenceCountry(rawRecord, pastCountryCount, 1L, "de_country_02"),
           dePastResidenceCountry3Text =

@@ -54,9 +54,9 @@ class ResidentialEnvironmentTransformationsSpec
       "de_home_nbr" -> Array("1"),
       "de_zip_nbr" -> Array("1"),
       "oc_address2_yn" -> Array("0"),
-      "de_country_nbr" -> Array("2"),
-      "de_country_01_only" -> Array("this should be ignored"),
-      "de_country_01" -> Array("USA!"),
+      "de_country_nbr" -> Array("1"),
+      "de_country_01_only" -> Array("USA!"),
+      "de_country_01" -> Array("this should be ignored"),
       "de_country_02" -> Array("IgnoredCountry")
     )
     val output =
@@ -66,7 +66,7 @@ class ResidentialEnvironmentTransformationsSpec
 
     output.deLifetimeResidenceCount.value shouldBe 2
     output.dePastResidenceZipCount.value shouldBe 1
-    output.dePastResidenceCountryCount.value shouldBe 2
+    output.dePastResidenceCountryCount.value shouldBe 1
     output.dePastResidenceCountry1Text.value shouldBe "USA!"
     output.dePastResidenceCountry2Text.value shouldBe "IgnoredCountry"
   }
@@ -102,9 +102,9 @@ class ResidentialEnvironmentTransformationsSpec
       "de_home_nbr" -> Array("1"),
       "de_zip_nbr" -> Array("1"),
       "oc_address2_yn" -> Array("0"),
-      "de_country_nbr" -> Array("2"),
+      "de_country_nbr" -> Array("1"),
       "de_country_01_only_dd" -> Array("US"),
-      "de_country_01" -> Array("this should be ignored"),
+      "de_country_01_dd" -> Array("this should be ignored"),
       "de_country_02" -> Array("IgnoredCountry")
     )
     val output =
@@ -114,7 +114,7 @@ class ResidentialEnvironmentTransformationsSpec
 
     output.deLifetimeResidenceCount.value shouldBe 2
     output.dePastResidenceZipCount.value shouldBe 1
-    output.dePastResidenceCountryCount.value shouldBe 2
+    output.dePastResidenceCountryCount.value shouldBe 1
     output.dePastResidenceCountry1.value shouldBe "US"
     output.dePastResidenceCountry2 shouldBe None
   }
