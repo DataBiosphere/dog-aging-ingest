@@ -95,23 +95,7 @@ object ResidentialEnvironmentTransformations {
                 .orElse(rawRecord.getOptional("de_country_01_only"))
             else None,
           dePastResidenceCountry2Text =
-            getPastResidenceCountry(rawRecord, pastCountryCount, 2L, "de_country_02"),
-          dePastResidenceCountry3Text =
-            getPastResidenceCountry(rawRecord, pastCountryCount, 3L, "de_country_03"),
-          dePastResidenceCountry4Text =
-            getPastResidenceCountry(rawRecord, pastCountryCount, 4L, "de_country_04"),
-          dePastResidenceCountry5Text =
-            getPastResidenceCountry(rawRecord, pastCountryCount, 5L, "de_country_05"),
-          dePastResidenceCountry6Text =
-            getPastResidenceCountry(rawRecord, pastCountryCount, 6L, "de_country_06"),
-          dePastResidenceCountry7Text =
-            getPastResidenceCountry(rawRecord, pastCountryCount, 7L, "de_country_07"),
-          dePastResidenceCountry8Text =
-            getPastResidenceCountry(rawRecord, pastCountryCount, 8L, "de_country_08"),
-          dePastResidenceCountry9Text =
-            getPastResidenceCountry(rawRecord, pastCountryCount, 9L, "de_country_09"),
-          dePastResidenceCountry10Text =
-            getPastResidenceCountry(rawRecord, pastCountryCount, 10L, "de_country_10")
+            getPastResidenceCountry(rawRecord, pastCountryCount, 2L, "de_country_02")
         )
       }
   }
