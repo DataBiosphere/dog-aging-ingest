@@ -29,7 +29,7 @@ class ReleaseValidationTestCase(unittest.TestCase):
                           msg=f"Row ID {row['entity:cslb_id']} does not have a 2020 cslb_date")
 
     def test_spay_or_neuter_age(self):
-        for row in self._hles_dog2_data:
+        for row in self._hles_dog1_data:
             self.assertIn('dd_spay_or_neuter_age', row)
             self.assertIn(row['dd_spay_or_neuter_age'], {'', '1', '2', '3', '4', '5', '6', '7', '8', '99'})
 
@@ -39,7 +39,7 @@ class ReleaseValidationTestCase(unittest.TestCase):
             self.assertIn(row['fs_primary_care_veterinarian_can_provide_email'], {'1', '7', '8', ''})
 
     def test_zip_nbr(self):
-        for row in self._hles_dog1_data:
+        for row in self._hles_dog2_data:
             self.assertIn('de_past_residence_zip_count', row)
             cnt = int(row['de_past_residence_zip_count'])
             self.assertTrue(cnt >= 0)
@@ -51,7 +51,7 @@ class ReleaseValidationTestCase(unittest.TestCase):
             self.assertNotIn('st_batch_label', row)
 
     def test_daily_bone_meal_supplements_sane(self):
-        for row in self._hles_dog1_data:
+        for row in self._hles_dog2_data:
             self.assertIn('df_daily_supplements_bone_meal', row)
             self.assertIn(row['df_daily_supplements_bone_meal'], {'', '0', '1', '2'})
 
@@ -66,7 +66,7 @@ class ReleaseValidationTestCase(unittest.TestCase):
             self.assertIn(row['de_interacts_with_neighborhood_animals_with_owner'], {'True', 'False', ''})
 
     def test_de_interacts_with_neighborhood_humans_with_owner(self):
-        for row in self._hles_dog2_data:
+        for row in self._hles_dog1_data:
             self.assertIn('de_interacts_with_neighborhood_humans_with_owner', row)
             self.assertIn(row['de_interacts_with_neighborhood_humans_with_owner'], {'True', 'False', ''})
 
@@ -85,7 +85,7 @@ class ReleaseValidationTestCase(unittest.TestCase):
         self.assertEqual(affected_obedience_row['dd_activities_obedience'], '')
 
     def test_dd_activities_agility(self):
-        affected_agility_row = self.find_affected_row(self._hles_dog1_data, '34888')
+        affected_agility_row = self.find_affected_row(self._hles_dog2_data, '34888')
         self.assertIn('dd_activities_agility', affected_agility_row)
         self.assertEqual(affected_agility_row['dd_activities_agility'], '')
 
@@ -111,13 +111,24 @@ class ReleaseValidationTestCase(unittest.TestCase):
 
     def test_st_portal_account_creation_date(self):
         for row in self._hles_dog1_data:
-            assert 'st_portal_account_creation_date' in row
-            assert bool(row['st_portal_account_creation_date'])
+            self.assertIn('st_portal_account_creation_date', row)
+            self.assertTrue(bool(row['st_portal_account_creation_date']))
 
     def test_past_residence_country(self):
-        assert any(row['de_past_residence_country1_text'] for row in self._hles_dog2_data)
-        assert any(row['de_past_residence_country2_text'] for row in self._hles_dog1_data)
+        self.assertTrue(any(row['de_past_residence_country1_text'] for row in self._hles_dog1_data))
+        self.assertTrue(any(row['de_past_residence_country2_text'] for row in self._hles_dog1_data))
 
+    def test_alt_care_none(self):
+        self.assertTrue(any(row['hs_alternative_care_none'] for row in self._hles_dog2_data))
+
+    def test_removed_past_countries(self):
+        self.assertTrue(all('de_past_residence_country3_text' not in row for row in self._hles_dog1_data))
+        self.assertTrue(all('de_past_residence_country3_text' not in row for row in self._hles_dog2_data))
+
+    def test_combined_past_countries(self):
+        affected_country_row = self.find_affected_row(self._hles_dog2_data, '688')
+        self.assertIn('de_past_residence_country1', affected_country_row)
+        self.assertEqual(affected_country_row['de_past_residence_country1'], 'BS')
 
 if __name__ == '__main__':
     unittest.main()
