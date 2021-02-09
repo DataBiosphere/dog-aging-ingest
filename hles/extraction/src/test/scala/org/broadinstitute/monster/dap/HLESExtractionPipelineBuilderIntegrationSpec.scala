@@ -3,6 +3,7 @@ package org.broadinstitute.monster.dap
 import java.time.{LocalDate, LocalTime, OffsetDateTime, ZoneOffset}
 import better.files.File
 import org.broadinstitute.monster.common.PipelineBuilderSpec
+import upack._
 
 class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
   val outputDir = File.newTemporaryDirectory()
@@ -69,27 +70,33 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
     readMsgs(hlesOutputDir, "records/*.json") shouldNot be(empty)
   }
 
-  it should "contain records that all have a record, field_name, and value key" in {
-    readMsgs(hlesOutputDir, "records/*.json").foreach(msg => {
-      val record = msg.obj.toString()
-      record.contains("record") shouldBe true
-      record.contains("field_name") shouldBe true
-      record.contains("value") shouldBe true
-    })
+  val fakeIds = 0 to 1
+  val expectedPackDateRecord: Seq[Obj] = fakeIds.map{ i =>
+    Obj(
+      Str("record") -> Str(i.toString),
+      Str("field_name") -> Str("st_dap_pack_date"),
+      Str("value") -> Str("2019-04-04"),
+    )
   }
+  val expectedPackCountRecord: Seq[Obj] = fakeIds.map{ i =>
+    Obj(
+      Str("record") -> Str(i.toString),
+      Str("field_name") -> Str("st_dap_pack_count"),
+      Str("value") -> Str("2")
+    )
+  }
+  val expectedConsentRecord: Seq[Obj] = fakeIds.map{ i =>
+    Obj(
+      Str("record") -> Str(i.toString),
+      Str("field_name") -> Str("co_consent"),
+      Str("value") -> Str("1")
+    )
+  }
+  val expectedRecords = expectedPackCountRecord ++ expectedPackDateRecord ++ expectedConsentRecord
 
-  it should "contain records with expected valid fields" in {
-    val allRecords = (readMsgs(hlesOutputDir, "records/*.json")).toString()
-    print(allRecords)
-    allRecords.contains("record") shouldBe true
-    allRecords.contains("1") shouldBe true
-    allRecords.contains("st_dap_pack_date") shouldBe true
-    allRecords.contains("2019-04-04") shouldBe true
-    allRecords.contains("field_name") shouldBe true
-    allRecords.contains("st_dap_pack_count") shouldBe true
-    allRecords.contains("co_consent") shouldBe true
-    allRecords.contains("value") shouldBe true
-    allRecords.contains("2") shouldBe true
+  it should "contain all expected fields" in {
+    val allRecords = readMsgs(hlesOutputDir, "records/*.json")
+    allRecords shouldBe expectedRecords.toSet
   }
 
 }
