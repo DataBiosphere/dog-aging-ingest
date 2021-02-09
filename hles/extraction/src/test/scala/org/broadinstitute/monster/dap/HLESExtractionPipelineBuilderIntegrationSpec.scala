@@ -71,21 +71,24 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
   }
 
   val fakeIds = 0 to 1
-  val expectedPackDateRecord: Seq[Obj] = fakeIds.map{ i =>
+
+  val expectedPackDateRecord: Seq[Obj] = fakeIds.map { i =>
     Obj(
       Str("record") -> Str(i.toString),
       Str("field_name") -> Str("st_dap_pack_date"),
-      Str("value") -> Str("2019-04-04"),
+      Str("value") -> Str("2019-04-04")
     )
   }
-  val expectedPackCountRecord: Seq[Obj] = fakeIds.map{ i =>
+
+  val expectedPackCountRecord: Seq[Obj] = fakeIds.map { i =>
     Obj(
       Str("record") -> Str(i.toString),
       Str("field_name") -> Str("st_dap_pack_count"),
       Str("value") -> Str("2")
     )
   }
-  val expectedConsentRecord: Seq[Obj] = fakeIds.map{ i =>
+
+  val expectedConsentRecord: Seq[Obj] = fakeIds.map { i =>
     Obj(
       Str("record") -> Str(i.toString),
       Str("field_name") -> Str("co_consent"),
