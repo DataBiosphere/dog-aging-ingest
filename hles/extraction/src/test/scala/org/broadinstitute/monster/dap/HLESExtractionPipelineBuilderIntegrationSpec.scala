@@ -25,7 +25,8 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
       pullDataDictionaries = false
     )
 
-  val expectedStudyIds = List("id_one", "id_two")
+  val fakeIds = 0 to 1
+  val expectedStudyIds = fakeIds.map { id => s"id_${id}" }.toList
 
   val studyIdsRequest = RedcapRequestGeneratorParams(
     testArgs.apiToken,
@@ -69,8 +70,6 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
   it should "successfully download records from RedCap" in {
     readMsgs(hlesOutputDir, "records/*.json") shouldNot be(empty)
   }
-
-  val fakeIds = 0 to 1
 
   val expectedPackDateRecord: Seq[Obj] = fakeIds.map { i =>
     Obj(
