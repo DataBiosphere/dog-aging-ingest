@@ -1,9 +1,9 @@
 package org.broadinstitute.monster.dap
 
 import java.time.{LocalDate, LocalTime, OffsetDateTime, ZoneOffset}
-
 import better.files.File
 import org.broadinstitute.monster.common.PipelineBuilderSpec
+import upack._
 
 class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
   val outputDir = File.newTemporaryDirectory()
@@ -25,7 +25,8 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
       pullDataDictionaries = false
     )
 
-  val expectedStudyIds = List("id_one", "id_two")
+  val fakeIds = 0 to 1
+  val expectedStudyIds = fakeIds.map { id => s"id_${id}" }.toList
 
   val studyIdsRequest = RedcapRequestGeneratorParams(
     testArgs.apiToken,
@@ -69,4 +70,35 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
   it should "successfully download records from RedCap" in {
     readMsgs(hlesOutputDir, "records/*.json") shouldNot be(empty)
   }
+
+  val expectedPackDateRecord: Seq[Obj] = fakeIds.map { i =>
+    Obj(
+      Str("record") -> Str(i.toString),
+      Str("field_name") -> Str("st_dap_pack_date"),
+      Str("value") -> Str("2019-04-04")
+    )
+  }
+
+  val expectedPackCountRecord: Seq[Obj] = fakeIds.map { i =>
+    Obj(
+      Str("record") -> Str(i.toString),
+      Str("field_name") -> Str("st_dap_pack_count"),
+      Str("value") -> Str("2")
+    )
+  }
+
+  val expectedConsentRecord: Seq[Obj] = fakeIds.map { i =>
+    Obj(
+      Str("record") -> Str(i.toString),
+      Str("field_name") -> Str("co_consent"),
+      Str("value") -> Str("1")
+    )
+  }
+  val expectedRecords = expectedPackCountRecord ++ expectedPackDateRecord ++ expectedConsentRecord
+
+  it should "contain all expected fields" in {
+    val allRecords = readMsgs(hlesOutputDir, "records/*.json")
+    allRecords shouldBe expectedRecords.toSet
+  }
+
 }
