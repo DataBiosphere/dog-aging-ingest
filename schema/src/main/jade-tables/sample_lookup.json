@@ -1,0 +1,50 @@
+{
+  "name": "sample_lookup",
+  "columns": [
+    {
+      "name": "sample_id",
+      "datatype": "integer",
+      "type": "primary_key"
+    },
+    {
+      "name": "dog_id",
+      "datatype": "string",
+      "type": "required"
+    },
+    {
+      "name": "kit_id",
+      "datatype": "string",
+      "type": "required"
+    },
+    {
+      "name": "kit_type",
+      "datatype": "string",
+      "type": "required"
+    },
+    {
+      "name": "sample_type",
+      "datatype": "string",
+      "type": "required"
+    },
+    {
+      "name": "lab_id",
+      "datatype": "string",
+      "type": "required"
+    },
+    {
+      "name": "lab_name",
+      "datatype": "string",
+      "type": "required"
+    },
+    {
+      "name": "date_sent",
+      "datatype": "string",
+      "type": "required"
+    },
+    {
+      "name": "event_name",
+      "datatype": "string",
+      "type": "required"
+    }
+  ]
+}
