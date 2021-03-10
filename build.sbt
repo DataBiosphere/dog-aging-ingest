@@ -19,7 +19,7 @@ lazy val `dog-aging-schema` = project
   )
 
 lazy val `dog-aging-hles-extraction` = project
-  .in(file("hles/extraction"))
+  .in(file("dap-etl/extraction"))
   .enablePlugins(MonsterScioPipelinePlugin)
   .settings(
     libraryDependencies += "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
@@ -29,7 +29,7 @@ lazy val `dog-aging-hles-extraction` = project
   )
 
 lazy val `dog-aging-hles-transformation` = project
-  .in(file("hles/transformation"))
+  .in(file("dap-etl/transformation"))
   .enablePlugins(MonsterScioPipelinePlugin)
   .dependsOn(`dog-aging-schema`)
   .settings(
@@ -37,7 +37,7 @@ lazy val `dog-aging-hles-transformation` = project
   )
 
 lazy val `dog-aging-hles-orchestration` = project
-  .in(file("hles/orchestration"))
+  .in(file("dap-etl/orchestration"))
   .enablePlugins(MonsterHelmPlugin)
   .settings(
     helmChartOrganization := "DataBiosphere",
