@@ -6,7 +6,7 @@ val vaultDriverVersion = "5.1.0"
 
 lazy val `dog-aging-ingest` = project
   .in(file("."))
-  .aggregate(`dog-aging-schema`, `dog-aging-hles-extraction`, `dog-aging-hles-transformation`, `dog-aging-hles-orchestration`)
+  .aggregate(`dog-aging-schema`, `dog-aging-extraction`, `dog-aging-transformation`, `dog-aging-orchestration`)
   .settings(publish / skip := true)
 
 lazy val `dog-aging-schema` = project
@@ -18,8 +18,8 @@ lazy val `dog-aging-schema` = project
     jadeStructPackage := "org.broadinstitute.monster.dogaging.jadeschema.struct"
   )
 
-lazy val `dog-aging-hles-extraction` = project
-  .in(file("hles/extraction"))
+lazy val `dog-aging-extraction` = project
+  .in(file("dap-etl/extraction"))
   .enablePlugins(MonsterScioPipelinePlugin)
   .settings(
     libraryDependencies += "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
@@ -28,16 +28,16 @@ lazy val `dog-aging-hles-extraction` = project
     IntegrationTest / parallelExecution := false
   )
 
-lazy val `dog-aging-hles-transformation` = project
-  .in(file("hles/transformation"))
+lazy val `dog-aging-transformation` = project
+  .in(file("dap-etl/transformation"))
   .enablePlugins(MonsterScioPipelinePlugin)
   .dependsOn(`dog-aging-schema`)
   .settings(
     libraryDependencies += "com.beachape" %% "enumeratum" % enumeratumVersion
   )
 
-lazy val `dog-aging-hles-orchestration` = project
-  .in(file("hles/orchestration"))
+lazy val `dog-aging-orchestration` = project
+  .in(file("dap-etl/orchestration"))
   .enablePlugins(MonsterHelmPlugin)
   .settings(
     helmChartOrganization := "DataBiosphere",
