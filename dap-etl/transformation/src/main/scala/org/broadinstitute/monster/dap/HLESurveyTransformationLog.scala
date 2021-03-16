@@ -1,7 +1,7 @@
 package org.broadinstitute.monster.dap
 
 import com.spotify.scio.ScioMetrics.counter
-import org.broadinstitute.monster.dap.PostProcess.errCount
+import org.broadinstitute.monster.dap.common.PostProcess.errCount
 import org.slf4j.Logger
 import ujson.Obj
 

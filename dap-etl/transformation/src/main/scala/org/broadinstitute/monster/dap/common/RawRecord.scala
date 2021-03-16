@@ -1,12 +1,11 @@
-package org.broadinstitute.monster.dap
-
-import org.broadinstitute.monster.dap.RawRecord.DAPDateTimeFormatter
-
-import java.lang.NumberFormatException
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+package org.broadinstitute.monster.dap.common
 
 import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
+import org.broadinstitute.monster.dap.TruncatedDecimalError
+import org.broadinstitute.monster.dap.common.RawRecord.DAPDateTimeFormatter
+
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 /**
   * Container for the raw properties pulled from RedCap for a single dog.

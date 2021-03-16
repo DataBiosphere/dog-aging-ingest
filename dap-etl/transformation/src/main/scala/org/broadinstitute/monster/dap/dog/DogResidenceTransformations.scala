@@ -1,7 +1,7 @@
 package org.broadinstitute.monster.dap.dog
 
+import org.broadinstitute.monster.dap.common.RawRecord
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogResidences
-import org.broadinstitute.monster.dap.RawRecord
 
 object DogResidenceTransformations {
 

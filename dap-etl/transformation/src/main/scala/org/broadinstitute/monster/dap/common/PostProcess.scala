@@ -1,4 +1,4 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.common
 
 import com.spotify.scio.ScioResult
 

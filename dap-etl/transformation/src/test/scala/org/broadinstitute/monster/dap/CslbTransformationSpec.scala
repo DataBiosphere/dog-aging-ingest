@@ -1,8 +1,9 @@
 package org.broadinstitute.monster.dap
 
+import org.broadinstitute.monster.dap.common.RawRecord
+
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
-
 import org.broadinstitute.monster.dogaging.jadeschema.table.Cslb
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper

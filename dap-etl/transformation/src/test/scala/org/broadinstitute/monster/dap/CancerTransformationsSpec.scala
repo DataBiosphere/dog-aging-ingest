@@ -1,5 +1,6 @@
 package org.broadinstitute.monster.dap
 
+import org.broadinstitute.monster.dap.common.RawRecord
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 

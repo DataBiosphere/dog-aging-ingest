@@ -1,4 +1,4 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.common
 
 import caseapp.{AppName, AppVersion, HelpMessage, ProgName}
 import org.broadinstitute.monster.buildinfo.DogAgingHlesTransformationBuildInfo

@@ -1,6 +1,6 @@
 package org.broadinstitute.monster.dap.environment
 
-import org.broadinstitute.monster.dap.RawRecord
+import org.broadinstitute.monster.dap.common.RawRecord
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.EnvironmentGeocoding
 
 object GeocodingTransformations {

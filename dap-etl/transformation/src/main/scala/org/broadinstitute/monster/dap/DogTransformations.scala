@@ -3,6 +3,7 @@ package org.broadinstitute.monster.dap
 import org.broadinstitute.monster.dap.dog._
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
 import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
+import org.broadinstitute.monster.dap.common.RawRecord
 
 object DogTransformations {
 

@@ -1,8 +1,8 @@
 package org.broadinstitute.monster.dap.dog
 
-import java.time.LocalDate
+import org.broadinstitute.monster.dap.common.RawRecord
 
-import org.broadinstitute.monster.dap.RawRecord
+import java.time.LocalDate
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogStudyStatus
 
 object StudyStatusTransformations {

@@ -1,6 +1,8 @@
 package org.broadinstitute.monster.dap
 
+import org.broadinstitute.monster.dap.common.RawRecord
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesOwner
+
 import scala.util.matching.Regex
 
 object OwnerTransformations {

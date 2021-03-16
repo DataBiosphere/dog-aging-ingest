@@ -5,12 +5,17 @@ import com.spotify.scio.ScioResult
 import org.apache.beam.sdk.options.{PipelineOptions, PipelineOptionsFactory}
 import org.broadinstitute.monster.common.PipelineCoders
 import org.broadinstitute.monster.common.msg.JsonParser
-import org.broadinstitute.monster.dap.PostProcess.errCount
+import org.broadinstitute.monster.dap.common.PostProcess.errCount
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import better.files.File
 import org.apache.beam.sdk.metrics.MetricName
+import org.broadinstitute.monster.dap.common.{
+  Args,
+  HLESurveyTransformationFailException,
+  PostProcess
+}
 import upack.Msg
 
 import scala.io.Source

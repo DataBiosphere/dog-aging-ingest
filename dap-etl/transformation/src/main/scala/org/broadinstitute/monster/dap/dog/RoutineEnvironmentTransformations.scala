@@ -1,6 +1,6 @@
 package org.broadinstitute.monster.dap.dog
 
-import org.broadinstitute.monster.dap.RawRecord
+import org.broadinstitute.monster.dap.common.RawRecord
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogRoutineEnvironment
 
 object RoutineEnvironmentTransformations {

@@ -1,4 +1,4 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.common
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
