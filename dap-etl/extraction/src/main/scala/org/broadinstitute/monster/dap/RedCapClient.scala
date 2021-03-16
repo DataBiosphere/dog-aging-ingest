@@ -2,8 +2,8 @@ package org.broadinstitute.monster.dap
 
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
-
 import okhttp3._
+import org.broadinstitute.monster.dap.common.HttpWrapper
 import org.slf4j.LoggerFactory
 import upack.Msg
 

@@ -1,5 +1,7 @@
 package org.broadinstitute.monster.dap
 
+import org.broadinstitute.monster.dap.common.FilterDirective
+
 sealed trait RedcapRequest
 
 /**

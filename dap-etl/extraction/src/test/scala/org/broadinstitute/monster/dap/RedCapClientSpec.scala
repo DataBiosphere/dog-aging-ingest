@@ -2,8 +2,8 @@ package org.broadinstitute.monster.dap
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-
 import okhttp3.FormBody
+import org.broadinstitute.monster.dap.common.{FilterDirective, FilterOps}
 
 class RedCapClientSpec extends AnyFlatSpec with Matchers {
 

@@ -1,8 +1,8 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.common
 
+import okhttp3._
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.{Level, Logger}
-import okhttp3._
 import org.broadinstitute.monster.common.msg.JsonParser
 import org.slf4j.LoggerFactory
 import upack.Msg

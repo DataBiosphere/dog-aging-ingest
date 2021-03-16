@@ -1,6 +1,13 @@
 package org.broadinstitute.monster.dap
 
-import org.broadinstitute.monster.dap.common.{Args, ExtractionPipelineBuilder}
+import org.broadinstitute.monster.dap.common.{
+  Args,
+  ExtractionPipelineBuilder,
+  FilterDirective,
+  FilterOps,
+  HttpWrapper,
+  OkWrapper
+}
 
 import java.time.{OffsetDateTime, ZoneOffset}
 import org.broadinstitute.monster.common.{PipelineBuilder, ScioApp}
