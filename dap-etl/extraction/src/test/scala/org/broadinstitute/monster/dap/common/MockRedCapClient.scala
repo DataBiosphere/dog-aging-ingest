@@ -1,10 +1,9 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.common
 
-import org.broadinstitute.monster.dap.common.{RedCapClient, RedcapRequest}
 import upack.Msg
 
-import scala.concurrent.Future
 import scala.collection.mutable
+import scala.concurrent.Future
 
 /** Mock implementation of the RedCap client, for unit testing. */
 class MockRedCapClient(

@@ -1,19 +1,10 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.common
 
-import java.time.OffsetDateTime
 import better.files.File
-import common.{
-  Args,
-  ExtractionPipelineBuilder,
-  FilterDirective,
-  FilterOps,
-  GetDataDictionary,
-  GetRecords,
-  RedcapRequest
-}
 import org.broadinstitute.monster.common.PipelineBuilderSpec
 import upack._
 
+import java.time.OffsetDateTime
 import scala.collection.mutable
 
 object ExtractionPipelineBuilderSpec {
