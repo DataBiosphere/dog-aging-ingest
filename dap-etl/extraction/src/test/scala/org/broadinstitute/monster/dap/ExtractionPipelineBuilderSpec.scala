@@ -2,7 +2,15 @@ package org.broadinstitute.monster.dap
 
 import java.time.OffsetDateTime
 import better.files.File
-import common.{Args, ExtractionPipelineBuilder, FilterDirective, FilterOps}
+import common.{
+  Args,
+  ExtractionPipelineBuilder,
+  FilterDirective,
+  FilterOps,
+  GetDataDictionary,
+  GetRecords,
+  RedcapRequest
+}
 import org.broadinstitute.monster.common.PipelineBuilderSpec
 import upack._
 

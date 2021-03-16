@@ -6,7 +6,8 @@ import org.broadinstitute.monster.dap.common.{
   FilterDirective,
   FilterOps,
   HttpWrapper,
-  OkWrapper
+  OkWrapper,
+  RedCapClient
 }
 import org.broadinstitute.monster.common.{PipelineBuilder, ScioApp}
 

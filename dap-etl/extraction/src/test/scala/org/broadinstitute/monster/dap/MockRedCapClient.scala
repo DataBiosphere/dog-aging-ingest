@@ -1,5 +1,6 @@
 package org.broadinstitute.monster.dap
 
+import org.broadinstitute.monster.dap.common.{RedCapClient, RedcapRequest}
 import upack.Msg
 
 import scala.concurrent.Future

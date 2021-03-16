@@ -1,12 +1,11 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.common
 
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import okhttp3._
-import org.broadinstitute.monster.dap.common.HttpWrapper
 import org.slf4j.LoggerFactory
 import upack.Msg
 
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import scala.concurrent.Future
 
 /** Interface for clients that can pull records from a RedCap API. */

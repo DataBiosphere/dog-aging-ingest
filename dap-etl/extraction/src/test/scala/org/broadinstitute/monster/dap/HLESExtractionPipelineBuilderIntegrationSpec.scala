@@ -2,7 +2,7 @@ package org.broadinstitute.monster.dap
 
 import java.time.{LocalDate, LocalTime, OffsetDateTime, ZoneOffset}
 import better.files.File
-import common.Args
+import common.{Args, GetRecords, RedcapRequestGeneratorParams}
 import org.broadinstitute.monster.common.PipelineBuilderSpec
 import upack._
 
@@ -38,7 +38,7 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
     )
   )
 
-  val followUpRecords = RedcapRequestGeneratorParams(
+  val followUpRecords = common.RedcapRequestGeneratorParams(
     testArgs.apiToken,
     HLESurveyExtractionPipeline.arm,
     GetRecords(

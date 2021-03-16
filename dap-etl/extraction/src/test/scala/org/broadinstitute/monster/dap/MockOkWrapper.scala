@@ -1,7 +1,11 @@
 package org.broadinstitute.monster.dap
 
 import okhttp3._
-import org.broadinstitute.monster.dap.common.HttpWrapper
+import org.broadinstitute.monster.dap.common.{
+  HttpWrapper,
+  RedCapClient,
+  RedcapRequestGeneratorParams
+}
 import upack.Msg
 
 import scala.concurrent.{Future, Promise}
