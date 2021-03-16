@@ -1,13 +1,12 @@
-package org.broadinstitute.monster.dap
-
-import java.time.OffsetDateTime
-import java.time.format.DateTimeParseException
+package org.broadinstitute.monster.dap.common
 
 import caseapp.core.Error.MalformedValue
 import caseapp.core.argparser.{ArgParser, SimpleArgParser}
-
 import caseapp.{AppName, AppVersion, HelpMessage, ProgName}
 import org.broadinstitute.monster.buildinfo.DogAgingHlesExtractionBuildInfo
+
+import java.time.OffsetDateTime
+import java.time.format.DateTimeParseException
 
 @AppName("DAP HLE extraction pipeline")
 @AppVersion(DogAgingHlesExtractionBuildInfo.version)

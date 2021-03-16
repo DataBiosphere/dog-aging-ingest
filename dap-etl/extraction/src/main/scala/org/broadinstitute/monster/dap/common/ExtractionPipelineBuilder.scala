@@ -1,4 +1,4 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.common
 
 import com.spotify.scio.ScioContext
 import com.spotify.scio.transforms.ScalaAsyncLookupDoFn
@@ -7,11 +7,12 @@ import org.apache.beam.sdk.coders.{KvCoder, StringUtf8Coder}
 import org.apache.beam.sdk.transforms.{GroupIntoBatches, ParDo}
 import org.apache.beam.sdk.values.KV
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
+import org.broadinstitute.monster.dap._
 import org.slf4j.LoggerFactory
 import upack.Msg
 
-import scala.concurrent.Future
 import scala.collection.JavaConverters._
+import scala.concurrent.Future
 
 object ExtractionPipelineBuilder {
 
@@ -51,8 +52,8 @@ class ExtractionPipelineBuilder(
     with Serializable {
 
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
-    import org.broadinstitute.monster.common.msg.MsgOps
     import ExtractionPipelineBuilder._
+    import org.broadinstitute.monster.common.msg.MsgOps
     val logger = LoggerFactory.getLogger("extraction_pipeline")
 
     val lookupFn =
@@ -92,22 +93,23 @@ class ExtractionPipelineBuilder(
     // Group downloaded IDs into batches.
     // NOTE: This logic is replicated from the encode-ingest pipeline,
     // we should consider moving it to scio-utils.
-    val batchedIds = idsToExtract
-    // Pack up the IDs into dummy objects so beam knows how to handle them,
-    // then encode them into UTF8 so they make consistent JSON.
-      .map(KV.of("", _))
-      .setCoder(KvCoder.of(StringUtf8Coder.of(), StringUtf8Coder.of()))
-      // Batch up the IDs
-      .applyKvTransform(GroupIntoBatches.ofSize(idBatchSize.toLong))
-      .map { ids =>
-        // Construct a query to grab the full records for each batch of study IDs
-        GetRecords(
-          ids = ids.getValue.asScala.toList,
-          forms = formsForExtraction,
-          // List of fields to pull out of the data for us to filter on
-          fields = fieldList
-        )
-      }
+
+    val batchedIds: SCollection[GetRecords] =
+      // Pack up the IDs into dummy objects so beam knows how to handle them,
+      // then encode them into UTF8 so they make consistent JSON.
+      idsToExtract
+        .map(KV.of("", _))
+        .setCoder(KvCoder.of(StringUtf8Coder.of(), StringUtf8Coder.of()))
+        .applyKvTransform(GroupIntoBatches.ofSize(idBatchSize.toLong))
+        .map { ids =>
+          // Construct a query to grab the full records for each batch of study IDs
+          GetRecords(
+            ids = ids.getValue.asScala.toList,
+            forms = formsForExtraction,
+            // List of fields to pull out of the data for us to filter on
+            fields = fieldList
+          )
+        }
 
     // Download the form data for each batch of records.
     // Flatten the batches of results into a single, massive list once they've come back

@@ -290,7 +290,12 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object DiabetesInsipidus
       extends HealthCondition(1306L, "Diabetes insipidus (rare diabetes which causes water balance problems)", Endocrine, dx = Some("di"))
   case object DiabetesMellitus
-      extends HealthCondition(1307L, "Diabetes mellitus (common diabetes which causes high blood sugar)", Endocrine, dx = Some("dm"))
+      extends HealthCondition(
+        1307L,
+        "Diabetes mellitus (org.broadinstitute.monster.dap.common diabetes which causes high blood sugar)",
+        Endocrine,
+        dx = Some("dm")
+      )
   case object Hypercalcemia extends HealthCondition(1308L, "Hypercalcemia (excess calcium in the blood)", Endocrine, dx = Some("hc"))
   case object Hyperparathyroidism
       extends HealthCondition(1309L, "Hyperparathyroidism (excess parathyroid function causing high calcium)", Endocrine, dx = Some("hep"))

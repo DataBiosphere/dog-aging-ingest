@@ -1,5 +1,6 @@
 package org.broadinstitute.monster.dap
 
+import org.broadinstitute.monster.dap.common.{Args, ExtractionPipelineBuilder}
 import org.broadinstitute.monster.common.{PipelineBuilder, ScioApp}
 
 // Ignore IntelliJ, this is used to make the implicit parser compile.
