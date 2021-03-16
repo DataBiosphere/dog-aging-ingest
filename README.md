@@ -18,7 +18,7 @@ pattern would likely be to:
 2. Set up distinct ETL workflows for each independent data stream
 
 As an initial step towards this pattern, the extraction and transformation programs
-for DAP's data stream (the HLES baseline) are nested under their own [`hles/`](./hles)
+for DAP's data stream (the HLES baseline) are nested under their own [`hles/`](dap-etl)
 subdirectory.
 
 ## HLES Baseline
