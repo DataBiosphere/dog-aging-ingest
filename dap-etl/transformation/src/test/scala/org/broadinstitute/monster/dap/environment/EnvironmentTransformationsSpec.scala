@@ -1,12 +1,11 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.environment
 
 import org.broadinstitute.monster.dap.common.RawRecord
-import org.broadinstitute.monster.dap.environment.EnvironmentTransformations
 import org.broadinstitute.monster.dogaging.jadeschema.fragment._
 import org.broadinstitute.monster.dogaging.jadeschema.table.Environment
+import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.OptionValues
 
 class EnvironmentTransformationsSpec extends AnyFlatSpec with Matchers with OptionValues {
   behavior of "EnvironmentTransformations"

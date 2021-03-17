@@ -1,6 +1,5 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.common
 
-import org.broadinstitute.monster.dap.common.{OwnerTransformations, RawRecord}
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesOwner
 import org.scalatest.FailedStatus
 import org.scalatest.flatspec.AnyFlatSpec

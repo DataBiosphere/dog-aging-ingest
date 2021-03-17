@@ -1,6 +1,5 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.common
 
-import org.broadinstitute.monster.dap.common.{CancerTransformations, RawRecord}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
