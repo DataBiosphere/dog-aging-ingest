@@ -1,15 +1,7 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.environment
 
-import org.broadinstitute.monster.dap.common.{
-  Args,
-  ExtractionPipelineBuilder,
-  FilterDirective,
-  FilterOps,
-  HttpWrapper,
-  OkWrapper,
-  RedCapClient
-}
 import org.broadinstitute.monster.common.{PipelineBuilder, ScioApp}
+import org.broadinstitute.monster.dap.common._
 
 // Ignore IntelliJ, this is used to make the implicit parser compile.
 import Args._
