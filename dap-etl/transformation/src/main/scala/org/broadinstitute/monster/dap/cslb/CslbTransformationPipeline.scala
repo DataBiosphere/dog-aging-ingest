@@ -1,4 +1,4 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.cslb
 
 import com.spotify.scio.ScioResult
 import org.broadinstitute.monster.common.{PipelineBuilder, ScioApp}

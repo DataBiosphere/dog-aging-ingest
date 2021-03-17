@@ -1,4 +1,4 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.cslb
 
 import com.spotify.scio.ScioContext
 import com.spotify.scio.values.SCollection
