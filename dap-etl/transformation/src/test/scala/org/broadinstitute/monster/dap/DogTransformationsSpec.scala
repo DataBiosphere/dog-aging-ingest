@@ -1,6 +1,7 @@
 package org.broadinstitute.monster.dap
 
 import org.broadinstitute.monster.dap.common.RawRecord
+import org.broadinstitute.monster.dap.dog.DogTransformations
 import org.broadinstitute.monster.dogaging.jadeschema.fragment._
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
 import org.scalatest.flatspec.AnyFlatSpec

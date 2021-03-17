@@ -5,6 +5,7 @@ import com.spotify.scio.values.SCollection
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.common.msg._
 import org.broadinstitute.monster.dap.common.{Args, RawRecord}
+import org.broadinstitute.monster.dap.dog.DogTransformations
 import org.slf4j.{Logger, LoggerFactory}
 
 object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
