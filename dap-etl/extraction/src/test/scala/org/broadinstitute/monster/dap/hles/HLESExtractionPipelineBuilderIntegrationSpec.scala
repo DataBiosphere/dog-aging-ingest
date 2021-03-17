@@ -3,7 +3,7 @@ package org.broadinstitute.monster.dap.hles
 import better.files.File
 import org.broadinstitute.monster.common.PipelineBuilderSpec
 import org.broadinstitute.monster.dap.common._
-import org.broadinstitute.monster.dap.{HLESurveyExtractionPipeline, common}
+import org.broadinstitute.monster.dap.common
 import upack._
 
 import java.time.{LocalDate, LocalTime, OffsetDateTime, ZoneOffset}
