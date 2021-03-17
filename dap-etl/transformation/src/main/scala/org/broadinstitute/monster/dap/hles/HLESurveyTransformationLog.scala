@@ -1,4 +1,4 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.hles
 
 import com.spotify.scio.ScioMetrics.counter
 import org.broadinstitute.monster.dap.common.PostProcess.errCount

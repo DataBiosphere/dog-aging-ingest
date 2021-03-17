@@ -1,8 +1,8 @@
 package org.broadinstitute.monster.dap.environment
 
-import org.broadinstitute.monster.dap.InvalidArmMonthError
-import org.broadinstitute.monster.dap.HLESurveyTransformationPipelineBuilder.logger
+import org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipelineBuilder.logger
 import org.broadinstitute.monster.dap.common.RawRecord
+import org.broadinstitute.monster.dap.hles.InvalidArmMonthError
 import org.broadinstitute.monster.dogaging.jadeschema.table.Environment
 
 object EnvironmentTransformations {

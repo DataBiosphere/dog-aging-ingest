@@ -16,6 +16,7 @@ import org.broadinstitute.monster.dap.common.{
   HLESurveyTransformationFailException,
   PostProcess
 }
+import org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipelineBuilder
 import upack.Msg
 
 import scala.io.Source
