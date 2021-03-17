@@ -1,10 +1,12 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.hles
+
+import better.files.File
+import org.broadinstitute.monster.common.PipelineBuilderSpec
+import org.broadinstitute.monster.dap.common._
+import org.broadinstitute.monster.dap.{HLESurveyExtractionPipeline, common}
+import upack._
 
 import java.time.{LocalDate, LocalTime, OffsetDateTime, ZoneOffset}
-import better.files.File
-import common.{Args, GetRecords, MockOkWrapper, RedcapMsgGenerator, RedcapRequestGeneratorParams}
-import org.broadinstitute.monster.common.PipelineBuilderSpec
-import upack._
 
 class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
   val outputDir = File.newTemporaryDirectory()
