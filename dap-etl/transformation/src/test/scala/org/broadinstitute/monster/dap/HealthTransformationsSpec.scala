@@ -1,6 +1,6 @@
 package org.broadinstitute.monster.dap
 
-import org.broadinstitute.monster.dap.common.RawRecord
+import org.broadinstitute.monster.dap.common.{HealthTransformations, RawRecord}
 import org.broadinstitute.monster.dap.healthcondition.{HealthCondition, HealthConditionType}
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesHealthCondition
 import org.scalatest.flatspec.AnyFlatSpec

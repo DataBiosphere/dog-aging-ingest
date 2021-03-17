@@ -1,6 +1,5 @@
-package org.broadinstitute.monster.dap
+package org.broadinstitute.monster.dap.common
 
-import org.broadinstitute.monster.dap.common.RawRecord
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesCancerCondition
 
 object CancerTransformations {
