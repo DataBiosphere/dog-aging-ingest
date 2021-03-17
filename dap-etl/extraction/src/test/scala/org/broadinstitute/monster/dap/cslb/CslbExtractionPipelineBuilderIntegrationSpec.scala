@@ -3,7 +3,7 @@ package org.broadinstitute.monster.dap.cslb
 import better.files.File
 import org.broadinstitute.monster.common.PipelineBuilderSpec
 import org.broadinstitute.monster.dap.common._
-import org.broadinstitute.monster.dap.{CslbExtractionPipeline, common}
+import org.broadinstitute.monster.dap.common
 
 import java.time.{LocalDate, LocalTime, OffsetDateTime, ZoneOffset}
 
