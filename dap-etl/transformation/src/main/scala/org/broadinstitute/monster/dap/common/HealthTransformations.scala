@@ -70,12 +70,14 @@ object HealthTransformations {
           healthCondition.value,
           isCongenital = false
         )
+        // If [hs_dx_eye_cause_yn]=Yes, define [hs_eye_condition_cause] using the options in [hs_dx_eye_cause];
+        // If [hs_dx_eye_cause_yn]=No,  define [hs_eye_condition_cause] as 99 for TDR_Raw_value
         if (healthCondition == HealthCondition.Blindness) {
           val isCauseKnown = rawRecord.getBoolean("hs_dx_eye_cause_yn")
           val conditionCause =
-            if (isCauseKnown) rawRecord.getOptionalNumber("hs_dx_eye_cause") else None
+            if (isCauseKnown) rawRecord.getOptionalNumber("hs_dx_eye_cause") else Some(99L)
           base.copy(
-            hsConditionCause = conditionCause,
+            hsEyeConditionCause = conditionCause,
             hsConditionCauseOtherDescription = if (conditionCause.contains(98)) {
               rawRecord.getOptionalStripped("hs_dx_eye_cause_other")
             } else {
@@ -120,7 +122,7 @@ object HealthTransformations {
       hsCondition = condition,
       hsConditionOtherDescription = None,
       hsConditionIsCongenital = isCongenital,
-      hsConditionCause = None,
+      hsEyeConditionCause = None,
       hsConditionCauseOtherDescription = None,
       hsDiagnosisYear = rawRecord.getOptionalNumber(s"${fieldPrefix}_year"),
       hsDiagnosisMonth = rawRecord.getOptionalNumber(s"${fieldPrefix}_month"),
