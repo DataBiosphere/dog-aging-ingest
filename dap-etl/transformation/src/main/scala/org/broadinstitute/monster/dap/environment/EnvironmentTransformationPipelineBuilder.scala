@@ -25,6 +25,10 @@ object EnvironmentTransformationPipelineBuilder extends PipelineBuilder[Args] {
     val environment =
       rawEnvRecords.transform("Map Environment")(_.map(EnvironmentTransformations.mapEnvironment))
 
+    // unlike our other pipelines, we don't configure our printer to include
+    // null-valued fields in our environment data output, because environment data is
+    // much, much larger than our other tables and the size increase from including null fields
+    // might significantly impact pipeline execution time
     StorageIO.writeJsonLists(
       environment,
       "Environmental data",

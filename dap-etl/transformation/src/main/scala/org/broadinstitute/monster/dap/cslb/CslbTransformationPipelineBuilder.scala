@@ -18,6 +18,11 @@ object CslbTransformationPipelineBuilder extends PipelineBuilder[Args] {
     */
   implicit val logger: Logger = LoggerFactory.getLogger(getClass)
 
+  // we save space by nixing whitespace, but we include null values to ensure that
+  // we don't accidentally drop fields, regardless of whether any of them have been
+  // filled in in our input data
+  val printer: Printer = Printer.noSpaces.copy(dropNullValues = false)
+
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
     val rawRecords = readRecords(ctx, args)
 
@@ -27,7 +32,8 @@ object CslbTransformationPipelineBuilder extends PipelineBuilder[Args] {
     StorageIO.writeJsonLists(
       cslbTransformations,
       "CSLB data",
-      s"${args.outputPrefix}/cslb"
+      s"${args.outputPrefix}/cslb",
+      printer = printer
     )
     ()
   }

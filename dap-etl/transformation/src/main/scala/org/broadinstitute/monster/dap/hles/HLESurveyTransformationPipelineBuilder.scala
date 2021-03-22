@@ -1,5 +1,6 @@
 package org.broadinstitute.monster.dap.hles
 
+import io.circe.Printer
 import com.spotify.scio.ScioContext
 import com.spotify.scio.values.SCollection
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
@@ -19,6 +20,11 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     */
   implicit val logger: Logger = LoggerFactory.getLogger(getClass)
 
+  // we save space by nixing whitespace, but we include null values to ensure that
+  // we don't accidentally drop fields, regardless of whether any of them have been
+  // filled in in our input data
+  val printer: Printer = Printer.noSpaces.copy(dropNullValues = false)
+
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
     val rawRecords = readRecords(ctx, args)
 
@@ -32,17 +38,19 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
       _.flatMap(HealthTransformations.mapHealthConditions)
     )
 
-    StorageIO.writeJsonLists(dogs, "Dogs", s"${args.outputPrefix}/hles_dog")
-    StorageIO.writeJsonLists(owners, "Owners", s"${args.outputPrefix}/hles_owner")
+    StorageIO.writeJsonLists(dogs, "Dogs", s"${args.outputPrefix}/hles_dog", printer = printer)
+    StorageIO.writeJsonLists(owners, "Owners", s"${args.outputPrefix}/hles_owner", printer = printer)
     StorageIO.writeJsonLists(
       cancerConditions,
       "Cancer conditions",
-      s"${args.outputPrefix}/hles_cancer_condition"
+      s"${args.outputPrefix}/hles_cancer_condition",
+      printer = printer
     )
     StorageIO.writeJsonLists(
       healthConditions,
       "Health conditions",
-      s"${args.outputPrefix}/hles_health_condition"
+      s"${args.outputPrefix}/hles_health_condition",
+      printer = printer
     )
     ()
   }
