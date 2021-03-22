@@ -39,7 +39,12 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
     )
 
     StorageIO.writeJsonLists(dogs, "Dogs", s"${args.outputPrefix}/hles_dog", printer = jsonPrinter)
-    StorageIO.writeJsonLists(owners, "Owners", s"${args.outputPrefix}/hles_owner", printer = jsonPrinter)
+    StorageIO.writeJsonLists(
+      owners,
+      "Owners",
+      s"${args.outputPrefix}/hles_owner",
+      printer = jsonPrinter
+    )
     StorageIO.writeJsonLists(
       cancerConditions,
       "Cancer conditions",
