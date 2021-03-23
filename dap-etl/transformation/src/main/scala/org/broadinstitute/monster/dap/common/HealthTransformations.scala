@@ -91,8 +91,8 @@ object HealthTransformations {
               if (isCauseKnown) rawRecord.getOptionalStripped("hs_dx_kidney_ui_fu_why") else None
           )
         } else if (healthCondition == HealthCondition.VestibularDisease) {
-          base.copy(hsConditionCauseOtherDescription =
-            rawRecord.getOptionalStripped("hs_dx_neuro_vd_type")
+          base.copy(hsNeurologicalConditionVestibularDiseaseType =
+            rawRecord.getOptionalNumber("hs_dx_neuro_vd_type")
           )
         } else if (healthCondition.isOther) {
           val descriptionFieldName = healthCondition.descriptionSuffixOverride
@@ -124,6 +124,7 @@ object HealthTransformations {
       hsConditionIsCongenital = isCongenital,
       hsEyeConditionCause = None,
       hsConditionCauseOtherDescription = None,
+      hsNeurologicalConditionVestibularDiseaseType = None,
       hsDiagnosisYear = rawRecord.getOptionalNumber(s"${fieldPrefix}_year"),
       hsDiagnosisMonth = rawRecord.getOptionalNumber(s"${fieldPrefix}_month"),
       hsRequiredSurgeryOrHospitalization = rawRecord.getOptionalNumber(s"${fieldPrefix}_surg"),
