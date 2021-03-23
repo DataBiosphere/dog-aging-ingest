@@ -34,6 +34,10 @@
       "datatype": "string"
     },
     {
+      "name": "hs_neurological_condition_vestibular_disease_type",
+      "datatype": "integer"
+    },
+    {
       "name": "hs_diagnosis_year",
       "datatype": "integer"
     },
