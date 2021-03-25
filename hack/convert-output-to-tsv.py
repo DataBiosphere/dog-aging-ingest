@@ -29,7 +29,7 @@ logging.basicConfig(level=log_level)
 
 log = logging.getLogger(__name__)
 
-TERRA_COLUMN_LIMIT = 512
+TERRA_COLUMN_LIMIT = 1000
 
 table_names = args.table or ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition', 'hles_owner', 'environment']
 PRIMARY_KEY_PREFIX = 'entity'
