@@ -19,7 +19,7 @@ class ReleaseValidationTestCase(unittest.TestCase):
 
     @classmethod
     def find_affected_row(cls, data, dog_id):
-        return next(row for row in data if row['entity:dog_id_id'] == dog_id)
+        return next(row for row in data if row['entity:hles_dog_id'] == dog_id)
 
     @classmethod
     def find_affected_hc_row(cls, data, dog_id):
@@ -76,7 +76,7 @@ class ReleaseValidationTestCase(unittest.TestCase):
     def test_dd_acquired_st(self):
         found_affected_rows = False
         for row in self._hles_dog_data:
-            if row['entity:dog_id_id'] in ('18069', '32705', '40519', '63438', '89055'):
+            if row['entity:hles_dog_id'] in ('18069', '32705', '40519', '63438', '89055'):
                 found_affected_rows = True
                 self.assertNotIn(row['dd_acquired_state'], {'', 'NA'})
 

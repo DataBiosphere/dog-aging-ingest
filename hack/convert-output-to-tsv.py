@@ -21,6 +21,7 @@ parser = argparse.ArgumentParser(description="Convert the records in a specified
 parser.add_argument('input_dir', metavar='I', help='The bucket prefix to read records from')
 parser.add_argument('output_dir', metavar='O', help='The local directory to write the resulting TSVs to')
 parser.add_argument('table', nargs='*', help="One or more tables to process into TSVs. Processes all tables if none specified.")
+parser.add_argument('--firecloud', action='store_true', help="Use logic to generate primary keys for Terra upload via Firecloud")
 parser.add_argument('--debug', action='store_true', help="Write additional logs for debugging")
 args = parser.parse_args()
 
@@ -42,28 +43,21 @@ for table_name in table_names:
     # set to hold all columns for this table, list to hold all the rows
     column_set = set()
     row_list = []
-
-    if table_name in {"hles_owner", "hles_dog"}:
-        pk_name = remove_prefix(table_name, 'hles_') + "_id"
-        entity_name = f"{PRIMARY_KEY_PREFIX}:{pk_name}_id"
-    # cslb
-    elif table_name == 'cslb':
+    # most tables should have "dog_id" as a key
+    if table_name in {"hles_dog", "hles_cancer_condition", "hles_health_condition", "environment", "cslb"}:
         pk_name = 'dog_id'
-        entity_name = f"{PRIMARY_KEY_PREFIX}:{table_name}_id"
-    # hles_cancer_condition: read dog_id, copy and write out as pk_name
-    elif table_name == "hles_cancer_condition":
-        pk_name = 'dog_id'
-        entity_name = f"{PRIMARY_KEY_PREFIX}:{table_name}_id"
-    # hles_health_condition: read + copy dog_id and hs_condition and hs_condition_is_congenital
-    # concatenate and write out as pk_name
-    elif table_name == "hles_health_condition":
-        pk_name = None
-        entity_name = f"{PRIMARY_KEY_PREFIX}:{table_name}_id"
-    elif table_name == "environment":
-        entity_name = f"{PRIMARY_KEY_PREFIX}:{table_name}_id"
+    # owner table is linked to hles_dog via "owner_id"
+    elif table_name == 'hles_owner':
+        pk_name = 'owner_id'
     else:
         log.info(f"Unrecognized table: {table_name}")
         break
+    # generated PK column headers for Firecloud compatibility
+    if args.firecloud:
+        entity_name = f"{PRIMARY_KEY_PREFIX}:{table_name}_id"
+    # normal processing of IDs
+    else:
+        entity_name = pk_name
 
     # read json data
     for path in gcs.ls(os.path.join(args.input_dir, table_name)):
@@ -77,29 +71,41 @@ for table_name in table_names:
                 if not row:
                     raise RuntimeError(f'Encountered invalid JSON "{line}", aborting.')
 
-                # hles_health_condition: read + copy dog_id and hs_condition and hs_condition_is_congenital
-                # concatenate and write out as pk_name
-                if table_name == "hles_health_condition":
-                    # grab the congenital flag and convert to int
-                    congenital_flag = row.get('hs_condition_is_congenital')
-                    try:
-                        congenital_flag = int(congenital_flag)
-                    except TypeError:
-                        log.info(f"Error, 'hs_condition_is_congenital' is not populated in {table_name}")
-                    row[entity_name] = '-'.join([str(component) for component in [row.get('dog_id'), row.get('hs_condition'), congenital_flag]])
-                elif table_name == "environment":
-                    primary_key_fields = ['dog_id', 'address_1_or_2', 'address_month', 'address_year']
-                    row[entity_name] = '-'.join([str(row.get(field)) for field in primary_key_fields])
+                # generate ids for Firecloud compatibility
+                if args.firecloud:
+                    # hles_health_condition: read + copy dog_id and hs_condition and hs_condition_is_congenital
+                    # concatenate and write out as entity_name, keep original PK
+                    if table_name == "hles_health_condition":
+                        # grab the congenital flag and convert to int
+                        congenital_flag = row.get('hs_condition_is_congenital')
+                        try:
+                            congenital_flag = int(congenital_flag)
+                        except TypeError:
+                            log.info(f"Error, 'hs_condition_is_congenital' is not populated in {table_name}")
+                        row[entity_name] = '-'.join([str(component) for component in [row.get('dog_id'), row.get('hs_condition'), congenital_flag]])
+                    # environment: read + copy dog_id and address fields to concatenate for generated uuid
+                    elif table_name == "environment":
+                        primary_key_fields = ['dog_id', 'address_1_or_2', 'address_month', 'address_year']
+                        row[entity_name] = '-'.join([str(row.get(field)) for field in primary_key_fields])
+                    # all other tables: store the original PK to the new column, removing the original column
+                    else:
+                        row[entity_name] = row.pop(pk_name)
+                # normal processing of IDs - PK is stored as PK
                 else:
                     row[entity_name] = row.pop(pk_name)
 
                 column_set.update(row.keys())
                 row_list.append(row)
 
-    # make sure pk is the first column
+    # make sure pk is the first column (Firecloud req.)
     # pop out the PK, will be splitting this set out later
     column_set.discard(entity_name)
-    sorted_column_set = [entity_name] + sorted(list(column_set))
+    # logic to move the actual PK columns to beginning of file (where we have generated one)
+    if args.firecloud and table_name in {"hles_health_condition", "environment"}:
+        column_set.discard(pk_name)
+        sorted_column_set = [entity_name] + [pk_name] + sorted(list(column_set))
+    else:
+        sorted_column_set = [entity_name] + sorted(list(column_set))
 
     # provide some stats
     col_count = len(sorted_column_set)
