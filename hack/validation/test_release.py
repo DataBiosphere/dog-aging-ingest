@@ -3,12 +3,14 @@ import unittest
 
 CSLB_PATH = 'tsv_output/cslb.tsv'
 HLES_DOG_PATH = 'tsv_output/hles_dog.tsv'
+HLES_HEALTH_CONDITION_PATH = 'tsv_output/hles_health_condition.tsv'
 
 class ReleaseValidationTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._cslb_data = cls._parse_file(CSLB_PATH)
         cls._hles_dog_data = cls._parse_file(HLES_DOG_PATH)
+        cls._hles_health_condition_data = cls._parse_file(HLES_HEALTH_CONDITION_PATH)
 
     @classmethod
     def _parse_file(cls, path):
@@ -18,6 +20,10 @@ class ReleaseValidationTestCase(unittest.TestCase):
     @classmethod
     def find_affected_row(cls, data, dog_id):
         return next(row for row in data if row['entity:dog_id_id'] == dog_id)
+
+    @classmethod
+    def find_affected_hc_row(cls, data, dog_id):
+        return next(row for row in data if row['dog_id'] == dog_id)
 
     def test_cslb_date(self):
         for row in self._cslb_data:
@@ -125,6 +131,16 @@ class ReleaseValidationTestCase(unittest.TestCase):
         affected_country_row = self.find_affected_row(self._hles_dog_data, '688')
         self.assertIn('de_past_residence_country1', affected_country_row)
         self.assertEqual(affected_country_row['de_past_residence_country1'], 'BS')
+
+    def test_eye_condition_cause(self):
+        for row in self._hles_health_condition_data:
+            self.assertIn('hs_eye_condition_cause', row)
+            self.assertIn(row['hs_eye_condition_cause'], {'1', '2', '3', '4', '5', '6', '98', '99', ''})
+    
+    def test_eye_condition_affected(self):
+        affected_eye_condition_row = self.find_affected_hc_row(self._hles_health_condition_data, '89521')
+        self.assertIn('hs_eye_condition_cause', affected_eye_condition_row)
+        self.assertEqual(affected_eye_condition_row['hs_eye_condition_cause'], '99')
 
 if __name__ == '__main__':
     unittest.main()
