@@ -138,9 +138,9 @@ class ReleaseValidationTestCase(unittest.TestCase):
             self.assertIn(row['hs_eye_condition_cause'], {'1', '2', '3', '4', '5', '6', '98', '99', ''})
     
     def test_eye_condition_affected(self):
-        affected_eye_condition_row = self.find_affected_hc_row(self._hles_health_condition_data, '90060')
+        affected_eye_condition_row = self.find_affected_hc_row(self._hles_health_condition_data, '89521')
         self.assertIn('hs_eye_condition_cause', affected_eye_condition_row)
-        self.assertEqual(affected_eye_condition_row['hs_eye_condition_cause'], '5')
+        self.assertEqual(affected_eye_condition_row['hs_eye_condition_cause'], '99')
 
 if __name__ == '__main__':
     unittest.main()
