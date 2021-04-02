@@ -6,6 +6,7 @@ import json
 import logging
 from math import ceil
 import os
+from dataclasses import dataclass, field
 
 from gcsfs.core import GCSFileSystem
 
@@ -37,27 +38,64 @@ PRIMARY_KEY_PREFIX = 'entity'
 
 gcs = GCSFileSystem()
 
+# create a service object to handle all aspects of generating a primary key
+@dataclass
+class PrimaryKeyGenerator:
+    table_name: str
+    pk_name: str = field(init=False)
+    firecloud: bool
+
+    # this will calculate pk_name during init
+    def __post_init__(self):
+        # most tables should have "dog_id" as a key
+        if self.table_name in {"hles_dog", "hles_cancer_condition", "hles_health_condition", "environment", "cslb"}:
+            self.pk_name = 'dog_id'
+        # owner table is linked to hles_dog via "owner_id"
+        elif self.table_name == 'hles_owner':
+            self.pk_name = 'owner_id'
+        else:
+            raise ValueError(f"Unrecognized table: {self.table_name}")
+
+    # this will return the firecloud entity names
+    def generate_entity_name(self):
+        if self.firecloud:
+            return f"{PRIMARY_KEY_PREFIX}:{self.table_name}_id"
+        return self.pk_name
+
+    # this will return row[entity_name]
+    def generate_primary_key(self, row):
+        # normal processing of IDs - PK is stored as PK
+        if not self.firecloud:
+            return row.pop(self.pk_name)
+        # generate ids for Firecloud compatibility
+        # hles_health_condition: read + copy dog_id and hs_condition and hs_condition_is_congenital
+        # concatenate and write out as entity_name, keep original PK
+        if self.table_name == "hles_health_condition":
+            # code to generate the value of primary key should be pulled out
+            # grab the congenital flag and convert to int
+            congenital_flag = row.get('hs_condition_is_congenital')
+            try:
+                congenital_flag = int(congenital_flag)
+            except TypeError:
+                log.info(f"Error, 'hs_condition_is_congenital' is not populated in {self.table_name}")
+            return '-'.join([str(component) for component in [row.get('dog_id'), row.get('hs_condition'), congenital_flag]])
+        # environment: read + copy dog_id and address fields to concatenate for generated uuid
+        elif self.table_name == "environment":
+            primary_key_fields = ['dog_id', 'address_1_or_2', 'address_month', 'address_year']
+            return '-'.join([str(row.get(field)) for field in primary_key_fields])
+        # all other tables: store the original PK to the new column, removing the original column
+        else:
+            return row.pop(self.pk_name)
+
 # Process the known (hardcoded) tables
 for table_name in table_names:
     log.info(f"PROCESSING {table_name}")
+    primary_key_gen = PrimaryKeyGenerator(table_name, args.firecloud)
     # set to hold all columns for this table, list to hold all the rows
     column_set = set()
     row_list = []
-    # most tables should have "dog_id" as a key
-    if table_name in {"hles_dog", "hles_cancer_condition", "hles_health_condition", "environment", "cslb"}:
-        pk_name = 'dog_id'
-    # owner table is linked to hles_dog via "owner_id"
-    elif table_name == 'hles_owner':
-        pk_name = 'owner_id'
-    else:
-        log.info(f"Unrecognized table: {table_name}")
-        break
     # generated PK column headers for Firecloud compatibility
-    if args.firecloud:
-        entity_name = f"{PRIMARY_KEY_PREFIX}:{table_name}_id"
-    # normal processing of IDs
-    else:
-        entity_name = pk_name
+    entity_name = primary_key_gen.generate_entity_name()
 
     # read json data
     for path in gcs.ls(os.path.join(args.input_dir, table_name)):
@@ -71,28 +109,7 @@ for table_name in table_names:
                 if not row:
                     raise RuntimeError(f'Encountered invalid JSON "{line}", aborting.')
 
-                # generate ids for Firecloud compatibility
-                if args.firecloud:
-                    # hles_health_condition: read + copy dog_id and hs_condition and hs_condition_is_congenital
-                    # concatenate and write out as entity_name, keep original PK
-                    if table_name == "hles_health_condition":
-                        # grab the congenital flag and convert to int
-                        congenital_flag = row.get('hs_condition_is_congenital')
-                        try:
-                            congenital_flag = int(congenital_flag)
-                        except TypeError:
-                            log.info(f"Error, 'hs_condition_is_congenital' is not populated in {table_name}")
-                        row[entity_name] = '-'.join([str(component) for component in [row.get('dog_id'), row.get('hs_condition'), congenital_flag]])
-                    # environment: read + copy dog_id and address fields to concatenate for generated uuid
-                    elif table_name == "environment":
-                        primary_key_fields = ['dog_id', 'address_1_or_2', 'address_month', 'address_year']
-                        row[entity_name] = '-'.join([str(row.get(field)) for field in primary_key_fields])
-                    # all other tables: store the original PK to the new column, removing the original column
-                    else:
-                        row[entity_name] = row.pop(pk_name)
-                # normal processing of IDs - PK is stored as PK
-                else:
-                    row[entity_name] = row.pop(pk_name)
+                row[entity_name] = primary_key_gen.generate_primary_key(row)
 
                 column_set.update(row.keys())
                 row_list.append(row)
@@ -102,8 +119,8 @@ for table_name in table_names:
     column_set.discard(entity_name)
     # logic to move the actual PK columns to beginning of file (where we have generated one)
     if args.firecloud and table_name in {"hles_health_condition", "environment"}:
-        column_set.discard(pk_name)
-        sorted_column_set = [entity_name] + [pk_name] + sorted(list(column_set))
+        column_set.discard(primary_key_gen.pk_name)
+        sorted_column_set = [entity_name] + [primary_key_gen.pk_name] + sorted(list(column_set))
     else:
         sorted_column_set = [entity_name] + sorted(list(column_set))
 
