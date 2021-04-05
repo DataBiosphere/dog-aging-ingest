@@ -142,5 +142,10 @@ class ReleaseValidationTestCase(unittest.TestCase):
         self.assertIn('hs_eye_condition_cause', affected_eye_condition_row)
         self.assertEqual(affected_eye_condition_row['hs_eye_condition_cause'], '99')
 
+    def test_single_activity_dog(self):
+        affected_single_activity_row = self.find_affected_row(self._hles_dog_data, '90766')
+        self.assertIn('dd_activities_companion_animal', affected_single_activity_row)
+        self.assertEqual(affected_single_activity_row['dd_activities_companion_animal'], '1')
+
 if __name__ == '__main__':
     unittest.main()

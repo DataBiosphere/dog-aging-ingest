@@ -264,7 +264,9 @@ object DemographicsTransformations {
 
     def activityLevel(activity: String): Option[Long] =
       if (allActivities.contains[Long](ActivityValues(activity))) {
-        rawRecord.getOptionalNumber(s"dd_${activity}_m").orElse(Some(3L))
+        // If dd_activities contains one activity, that should be the primary
+        if (allActivities.length.equals(1)) Some(1L)
+        else { rawRecord.getOptionalNumber(s"dd_${activity}_m").orElse(Some(3L)) }
       } else {
         None
       }
