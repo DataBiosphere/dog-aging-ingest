@@ -497,6 +497,9 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
       "dd_service_medical_other_1" -> Array("Medical!"),
       "dd_service_other_1" -> Array("Activity!")
     )
+    val companionDog = Map[String, Array[String]](
+      "dd_activities" -> Array("1")
+    )
 
     val serviceOut = DemographicsTransformations.mapActivities(
       RawRecord(1, serviceDog),
@@ -504,6 +507,10 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     )
     val assistanceOut = DemographicsTransformations.mapActivities(
       RawRecord(1, assistanceDog),
+      HlesDogDemographics.init()
+    )
+    val companionOut = DemographicsTransformations.mapActivities(
+      RawRecord(1, companionDog),
       HlesDogDemographics.init()
     )
 
@@ -535,5 +542,6 @@ class DemographicsTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     assistanceOut.ddActivitiesServiceOtherMedicalDescription.value shouldBe "Medical!"
     assistanceOut.ddActivitiesServiceOtherDescription.value shouldBe "Activity!"
 
+    companionOut.ddActivitiesCompanionAnimal.value shouldBe 1L
   }
 }
