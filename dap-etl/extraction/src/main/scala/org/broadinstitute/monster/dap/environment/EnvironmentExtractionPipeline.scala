@@ -60,7 +60,13 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
       "nov2020_arm_1",
       "nov2020_secondary_arm_1",
       "dec2020_arm_1",
-      "dec2020_secondary_arm_1"
+      "dec2020_secondary_arm_1",
+      "jan2021_arm_1",
+      "jan2021_secondary_arm_1",
+      "feb2021_arm_1",
+      "feb2021_secondary_arm_1",
+      "mar2021_arm_1",
+      "mar2021_secondary_arm_1",
     )
   val fieldList = List("baseline_complete")
 

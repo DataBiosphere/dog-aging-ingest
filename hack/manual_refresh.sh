@@ -78,33 +78,33 @@ env_automation=$(vault read -field=token secret/dsde/monster/${ENV}/dog-aging/re
 # EXTRACTION
 #   HLES
 if [ "$(pipeline_requested hles)" -eq 1 ]; then
-	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.HLESurveyExtractionPipeline --apiToken=$automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2020-12-31T23:59:59-05:00"
+	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.hles.HLESurveyExtractionPipeline --apiToken=$automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service"
 fi
 
 #   CSLB
 if [ "$(pipeline_requested cslb)" -eq 1 ]; then
-	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.CslbExtractionPipeline --apiToken=$automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2020-12-31T23:59:59-05:00"
+	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.cslb.CslbExtractionPipeline --apiToken=$automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service"
 fi
 
 #   ENVIRONMENT
 if [ "$(pipeline_requested environment)" -eq 1 ]; then
-	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.EnvironmentExtractionPipeline --apiToken=$env_automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service --endTime=2020-12-31T23:59:59-05:00"
+	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.environment.EnvironmentExtractionPipeline --apiToken=$env_automation --pullDataDictionaries=false --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service"
 fi
 
 # TRANSFORMATION
 #   HLES
 if [ "$(pipeline_requested hles)" -eq 1 ]; then
-	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.HLESurveyTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/hles --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service"
+	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/hles --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service"
 fi
 
 #   CSLB
 if [ "$(pipeline_requested cslb)" -eq 1 ]; then
-	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.CslbTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/cslb --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service"
+	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.cslb.CslbTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/cslb --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service"
 fi
 
 #   ENVIRONMENT
 if [ "$(pipeline_requested environment)" -eq 1 ]; then
-	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.EnvironmentTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/environment --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service --dumpHeapOnOOM --saveHeapDumpsToGcsPath=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/transform/OOMlogs"
+	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.environment.EnvironmentTransformationPipeline --inputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/environment --outputPrefix=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service --dumpHeapOnOOM --saveHeapDumpsToGcsPath=gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/transform/OOMlogs"
 fi
 
 # convert transformed results to TSV

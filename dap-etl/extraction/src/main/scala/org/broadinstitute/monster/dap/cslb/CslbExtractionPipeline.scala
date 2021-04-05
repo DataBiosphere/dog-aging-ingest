@@ -30,7 +30,9 @@ object CslbExtractionPipeline extends ScioApp[Args] {
         .getOrElse(List())
 
   val subdir = "cslb"
-  val arm = List("annual_2020_arm_1")
+
+  val arm =
+    List("annual_2020_arm_1", "annual_2021_arm_1")
   val fieldList = List("co_consent")
 
   def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
