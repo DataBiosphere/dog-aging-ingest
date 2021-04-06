@@ -17,6 +17,7 @@ object SampleExtractionPipeline extends ScioApp[Args] {
   // NB: We are purposefully excluding the recruitment_fields_complete -> 2
   // mapping, as that conflicts with the CSLB data
   def extractionFiltersGenerator(args: Args): List[FilterDirective] =
+    //  TODO: filter directives need to be confirmed
     List(
       FilterDirective("dna_kit_tracker_complete", FilterOps.==, "2")
     ) ++
@@ -31,6 +32,7 @@ object SampleExtractionPipeline extends ScioApp[Args] {
         )
         .getOrElse(List())
 
+  // TODO: Need to confirm the fieldlist to pull from
   val subdir = "sample";
   val arm = List("baseline_arm_1")
   val fieldList = List("co_consent")
