@@ -56,15 +56,13 @@ class PrimaryKeyGenerator:
         else:
             raise ValueError(f"Unrecognized table: {self.table_name}")
 
-    # this will return the firecloud entity names
     def generate_entity_name(self):
         if self.firecloud:
             return f"{PRIMARY_KEY_PREFIX}:{self.table_name}_id"
         return self.pk_name
 
-    # this will return row[entity_name]
     def generate_primary_key(self, row):
-        # normal processing of IDs - PK is stored as PK
+        # normal processing of IDs - the original primary key is returned
         if not self.firecloud:
             return row.pop(self.pk_name)
         # generate ids for Firecloud compatibility
@@ -77,7 +75,7 @@ class PrimaryKeyGenerator:
             try:
                 congenital_flag = int(congenital_flag)
             except TypeError:
-                log.info(f"Error, 'hs_condition_is_congenital' is not populated in {self.table_name}")
+                log.warning(f"Error, 'hs_condition_is_congenital' is not populated in {self.table_name}")
             return '-'.join([str(component) for component in [row.get('dog_id'), row.get('hs_condition'), congenital_flag]])
         # environment: read + copy dog_id and address fields to concatenate for generated uuid
         elif self.table_name == "environment":
