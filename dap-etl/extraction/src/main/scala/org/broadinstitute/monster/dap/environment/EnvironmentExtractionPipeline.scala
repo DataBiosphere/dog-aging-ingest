@@ -15,9 +15,7 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
     "temperature_and_precipitation_variables",
     "walkability_variables"
   )
-
-  // Magic marker for "completed".
-  // NB: We are looking for baseline_complete -> 2
+  
   def extractionFiltersGenerator(args: Args): List[FilterDirective] =
     List(FilterDirective("baseline_complete", FilterOps.==, "2")) ++
       args.startTime
