@@ -12,10 +12,7 @@ object SampleExtractionPipeline extends ScioApp[Args] {
     "dna_kit_tracker",
     "sample_kit_tracker"
   )
-
-  // Magic marker for "completed".
-  // NB: We are purposefully excluding the recruitment_fields_complete -> 2
-  // mapping, as that conflicts with the CSLB data
+  
   def extractionFiltersGenerator(args: Args): List[FilterDirective] =
     //  TODO: filter directives need to be confirmed
     List(
