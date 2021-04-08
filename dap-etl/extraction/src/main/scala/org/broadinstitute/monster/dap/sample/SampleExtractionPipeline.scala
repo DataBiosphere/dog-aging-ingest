@@ -12,7 +12,7 @@ object SampleExtractionPipeline extends ScioApp[Args] {
     "dna_kit_tracker",
     "sample_kit_tracker"
   )
-  
+
   def extractionFiltersGenerator(args: Args): List[FilterDirective] =
     //  TODO: filter directives need to be confirmed
     List(
