@@ -24,7 +24,6 @@ class LocalBeamRunner:
         args = f'{target_module}/runMain {target_class} ' \
                f'--apiToken={self.api_token} ' \
                f'--outputPrefix={output_prefix} ' \
-               f'--inputPrefix={input_prefix} ' \
                f'--pullDataDictionaries=false ' \
                f'--runner=dataflow  ' \
                f'--project={self.project} ' \
@@ -33,7 +32,9 @@ class LocalBeamRunner:
                f'--autoscalingAlgorithm=THROUGHPUT_BASED ' \
                f'--numWorkers=4 ' \
                f'--maxNumWorkers=8 ' \
-               f'--experiments=shuffle_mode=service"'
+               f'--experiments=shuffle_mode=service'
+        if input_prefix:
+            args += f" --inputPrefix={input_prefix}"
         subprocess.run(
             ["sbt", args],
             check=True,
