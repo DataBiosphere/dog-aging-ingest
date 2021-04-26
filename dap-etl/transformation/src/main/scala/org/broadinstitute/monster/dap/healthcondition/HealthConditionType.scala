@@ -17,6 +17,11 @@ sealed abstract class HealthConditionType(
   val dxKey: Option[HealthConditionType.DxKey]
 ) extends LongEnumEntry
 
+trait HealthConditionKey {
+  def categoryGate: String
+  def dataPrefix: String
+}
+
 object HealthConditionType extends LongEnum[HealthConditionType] {
 
   /**
@@ -27,7 +32,7 @@ object HealthConditionType extends LongEnum[HealthConditionType] {
     * @param disorder flag for whether or not the RedCap data uses a '_disorders' suffix
     *                 in the Y/N flag for the category
     */
-  case class CgKey(abbreviation: String, disorder: Boolean = true) {
+  case class CgKey(abbreviation: String, disorder: Boolean = true) extends HealthConditionKey {
 
     /** Name of the Y/N field marking if there is any data in this congential category. */
     def categoryGate: String = s"hs_cg_$abbreviation${if (disorder) "_disorders" else ""}_yn"
@@ -44,7 +49,7 @@ object HealthConditionType extends LongEnum[HealthConditionType] {
     * @param typePrefixed flag for whether or not the RedCap data uses the category
     *                     abbreviation as a piece of field names for individual conditions
     */
-  case class DxKey(abbreviation: String, typePrefixed: Boolean = true) {
+  case class DxKey(abbreviation: String, typePrefixed: Boolean = true) extends HealthConditionKey {
 
     /** Name of the Y/N field marking if there is any data in this non-congential category. */
     def categoryGate: String = s"hs_dx_${abbreviation}_yn"

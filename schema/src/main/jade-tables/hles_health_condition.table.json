@@ -13,8 +13,7 @@
     },
     {
       "name": "hs_condition",
-      "datatype": "integer",
-      "type": "required"
+      "datatype": "integer"
     },
     {
       "name": "hs_condition_other_description",

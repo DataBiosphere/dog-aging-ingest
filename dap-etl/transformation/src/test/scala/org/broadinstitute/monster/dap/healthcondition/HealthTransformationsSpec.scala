@@ -8,6 +8,123 @@ import org.scalatest.matchers.should.Matchers
 class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
   behavior of "HealthTransformations"
 
+  it should "correctly include congential health condition type when no specific condition present " in {
+    val congentialEyeConditionNoConditionFilled = Map[String, Array[String]](
+      "hs_congenital_yn" -> Array("1"),
+      "hs_cg_eye_disorders_yn" -> Array("1"),
+      "hs_cg_skin_disorders_yn" -> Array("1"),
+      "hs_cg_resp_disorders_yn" -> Array("1"),
+      "hs_cg_resp_st_nares" -> Array("1"),
+      "hs_dx_skin_yn" -> Array("1"),
+      "hs_dx_infectious_yn" -> Array("1"),
+      "hs_dx_anaplasmosis" -> Array("1")
+    )
+    val exampleRecord = RawRecord(id = 1, congentialEyeConditionNoConditionFilled)
+
+    val output = HealthTransformations.mapHealthConditions(exampleRecord)
+
+    val truth = List(
+      HlesHealthCondition( // hs_cg_eye_disorders_yn
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Eye.value,
+        hsCondition = None,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsEyeConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsNeurologicalConditionVestibularDiseaseType = None,
+        hsDiagnosisYear = None,
+        hsDiagnosisMonth = None,
+        hsRequiredSurgeryOrHospitalization = None,
+        hsFollowUpOngoing = None
+      ),
+      HlesHealthCondition( // hs_cg_skin_disorders_yn
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Skin.value,
+        hsCondition = None,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsEyeConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsNeurologicalConditionVestibularDiseaseType = None,
+        hsDiagnosisYear = None,
+        hsDiagnosisMonth = None,
+        hsRequiredSurgeryOrHospitalization = None,
+        hsFollowUpOngoing = None
+      ),
+      HlesHealthCondition( // hs_cg_resp_disorders_yn + hs_dx_anaplasmosis
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Respiratory.value,
+        hsCondition = Some(601L),
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = true,
+        hsEyeConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsNeurologicalConditionVestibularDiseaseType = None,
+        hsDiagnosisYear = None,
+        hsDiagnosisMonth = None,
+        hsRequiredSurgeryOrHospitalization = None,
+        hsFollowUpOngoing = None
+      ),
+      HlesHealthCondition( //  hs_dx_skin_yn
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Skin.value,
+        hsCondition = None,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsEyeConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsNeurologicalConditionVestibularDiseaseType = None,
+        hsDiagnosisYear = None,
+        hsDiagnosisMonth = None,
+        hsRequiredSurgeryOrHospitalization = None,
+        hsFollowUpOngoing = None
+      ),
+      HlesHealthCondition( //  hs_dx_infectious_yn + hs_dx_infectious_yn
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Infection.value,
+        hsCondition = Some(1601L),
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsEyeConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsNeurologicalConditionVestibularDiseaseType = None,
+        hsDiagnosisYear = None,
+        hsDiagnosisMonth = None,
+        hsRequiredSurgeryOrHospitalization = None,
+        hsFollowUpOngoing = None
+      )
+    )
+    output should contain theSameElementsAs truth
+  }
+
+  it should "correctly include dx health condition type when no specific condition present " in {
+    val congentialEyeConditionNoConditionFilled = Map[String, Array[String]](
+      "hs_dx_skin_yn" -> Array("1")
+    )
+    val exampleRecord = RawRecord(id = 1, congentialEyeConditionNoConditionFilled)
+
+    val output = HealthTransformations.mapHealthConditions(exampleRecord)
+
+    val truth = List(
+      HlesHealthCondition(
+        dogId = 1L,
+        hsConditionType = HealthConditionType.Skin.value,
+        hsCondition = None,
+        hsConditionOtherDescription = None,
+        hsConditionIsCongenital = false,
+        hsEyeConditionCause = None,
+        hsConditionCauseOtherDescription = None,
+        hsNeurologicalConditionVestibularDiseaseType = None,
+        hsDiagnosisYear = None,
+        hsDiagnosisMonth = None,
+        hsRequiredSurgeryOrHospitalization = None,
+        hsFollowUpOngoing = None
+      )
+    )
+    output should contain theSameElementsAs truth
+  }
+
   it should "correctly map infectious disease values when values are defined for a single infectious disease" in {
     val singleInfectiousDisease = Map[String, Array[String]](
       "hs_dx_infectious_yn" -> Array("1"),
@@ -23,7 +140,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Infection.value,
-        hsCondition = HealthCondition.Anaplasmosis.value,
+        hsCondition = Some(HealthCondition.Anaplasmosis.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -66,7 +183,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Infection.value,
-        hsCondition = HealthCondition.Anaplasmosis.value,
+        hsCondition = Some(HealthCondition.Anaplasmosis.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -80,7 +197,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Infection.value,
-        hsCondition = HealthCondition.Plague.value,
+        hsCondition = Some(HealthCondition.Plague.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -94,7 +211,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Infection.value,
-        hsCondition = HealthCondition.OtherInfection.value,
+        hsCondition = Some(HealthCondition.OtherInfection.value),
         hsConditionOtherDescription = Some("falafel"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -125,7 +242,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Eye.value,
-        hsCondition = HealthCondition.Cataracts.value,
+        hsCondition = Some(HealthCondition.Cataracts.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -157,7 +274,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Eye.value,
-        hsCondition = HealthCondition.Blindness.value,
+        hsCondition = Some(HealthCondition.Blindness.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = Some(99),
@@ -188,7 +305,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 2L,
         hsConditionType = HealthConditionType.Eye.value,
-        hsCondition = HealthCondition.Blindness.value,
+        hsCondition = Some(HealthCondition.Blindness.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = Some(5),
@@ -220,7 +337,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 2L,
         hsConditionType = HealthConditionType.Eye.value,
-        hsCondition = HealthCondition.Blindness.value,
+        hsCondition = Some(HealthCondition.Blindness.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = Some(98),
@@ -266,7 +383,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Eye.value,
-        hsCondition = HealthCondition.Cataracts.value,
+        hsCondition = Some(HealthCondition.Cataracts.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -280,7 +397,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Eye.value,
-        hsCondition = HealthCondition.Blindness.value,
+        hsCondition = Some(HealthCondition.Blindness.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = Some(98),
@@ -294,7 +411,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Eye.value,
-        hsCondition = HealthCondition.OtherEye.value,
+        hsCondition = Some(HealthCondition.OtherEye.value),
         hsConditionOtherDescription = Some("falafel"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -326,7 +443,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Eye.value,
-        hsCondition = HealthCondition.Cataracts.value,
+        hsCondition = Some(HealthCondition.Cataracts.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -365,7 +482,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Eye.value,
-        hsCondition = HealthCondition.Cataracts.value,
+        hsCondition = Some(HealthCondition.Cataracts.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -379,7 +496,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Eye.value,
-        hsCondition = HealthCondition.OtherEye.value,
+        hsCondition = Some(HealthCondition.OtherEye.value),
         hsConditionOtherDescription = Some("olives"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -411,7 +528,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.OtherCongenital.value,
-        hsCondition = HealthCondition.OtherCG.value,
+        hsCondition = Some(HealthCondition.OtherCG.value),
         hsConditionOtherDescription = Some("spongebob"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -450,7 +567,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Ear.value,
-        hsCondition = HealthCondition.Deafness.value,
+        hsCondition = Some(HealthCondition.Deafness.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -464,7 +581,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Ear.value,
-        hsCondition = HealthCondition.OtherEar.value,
+        hsCondition = Some(HealthCondition.OtherEar.value),
         hsConditionOtherDescription = Some("olives"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -506,7 +623,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Ear.value,
-        hsCondition = HealthCondition.Deafness.value,
+        hsCondition = Some(HealthCondition.Deafness.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -520,7 +637,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Ear.value,
-        hsCondition = HealthCondition.EarMites.value,
+        hsCondition = Some(HealthCondition.EarMites.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -534,7 +651,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Ear.value,
-        hsCondition = HealthCondition.OtherEar.value,
+        hsCondition = Some(HealthCondition.OtherEar.value),
         hsConditionOtherDescription = Some("ohno"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -582,7 +699,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.CleftLip.value,
+        hsCondition = Some(HealthCondition.CleftLip.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -596,7 +713,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.CleftPalate.value,
+        hsCondition = Some(HealthCondition.CleftPalate.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -610,7 +727,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.MissingTeeth.value,
+        hsCondition = Some(HealthCondition.MissingTeeth.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -624,7 +741,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.OtherOral.value,
+        hsCondition = Some(HealthCondition.OtherOral.value),
         hsConditionOtherDescription = Some("wisdom teeth"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -706,7 +823,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.DentalCalculus.value,
+        hsCondition = Some(HealthCondition.DentalCalculus.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -720,7 +837,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.ExtractedTeeth.value,
+        hsCondition = Some(HealthCondition.ExtractedTeeth.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -734,7 +851,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.FracturedTeeth.value,
+        hsCondition = Some(HealthCondition.FracturedTeeth.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -748,7 +865,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.Gingivitis.value,
+        hsCondition = Some(HealthCondition.Gingivitis.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -762,7 +879,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.MasticatoryMyositis.value,
+        hsCondition = Some(HealthCondition.MasticatoryMyositis.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -776,7 +893,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.OronasalFistula.value,
+        hsCondition = Some(HealthCondition.OronasalFistula.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -790,7 +907,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.Overbite.value,
+        hsCondition = Some(HealthCondition.Overbite.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -804,7 +921,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.RetainedDeciduousTeeth.value,
+        hsCondition = Some(HealthCondition.RetainedDeciduousTeeth.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -818,7 +935,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.Sialocele.value,
+        hsCondition = Some(HealthCondition.Sialocele.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -832,7 +949,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.Underbite.value,
+        hsCondition = Some(HealthCondition.Underbite.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -846,7 +963,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Oral.value,
-        hsCondition = HealthCondition.OtherOral.value,
+        hsCondition = Some(HealthCondition.OtherOral.value),
         hsConditionOtherDescription = Some("cavities"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -889,7 +1006,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Trauma.value,
-        hsCondition = HealthCondition.DogBite.value,
+        hsCondition = Some(HealthCondition.DogBite.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -903,7 +1020,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Trauma.value,
-        hsCondition = HealthCondition.FractureLongLimb.value,
+        hsCondition = Some(HealthCondition.FractureLongLimb.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -917,7 +1034,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Trauma.value,
-        hsCondition = HealthCondition.FractureSpine.value,
+        hsCondition = Some(HealthCondition.FractureSpine.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -931,7 +1048,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Trauma.value,
-        hsCondition = HealthCondition.OtherTrauma.value,
+        hsCondition = Some(HealthCondition.OtherTrauma.value),
         hsConditionOtherDescription = Some("ohno"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -970,7 +1087,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Skin.value,
-        hsCondition = HealthCondition.DermoidCysts.value,
+        hsCondition = Some(HealthCondition.DermoidCysts.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -984,7 +1101,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Skin.value,
-        hsCondition = HealthCondition.OtherSkin.value,
+        hsCondition = Some(HealthCondition.OtherSkin.value),
         hsConditionOtherDescription = Some("olives"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1026,7 +1143,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Skin.value,
-        hsCondition = HealthCondition.Alopecia.value,
+        hsCondition = Some(HealthCondition.Alopecia.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1040,7 +1157,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Skin.value,
-        hsCondition = HealthCondition.ContactDermatitis.value,
+        hsCondition = Some(HealthCondition.ContactDermatitis.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1054,7 +1171,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Skin.value,
-        hsCondition = HealthCondition.OtherSkin.value,
+        hsCondition = Some(HealthCondition.OtherSkin.value),
         hsConditionOtherDescription = Some("ohno"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1093,7 +1210,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Gastrointestinal.value,
-        hsCondition = HealthCondition.Megaesophagus.value,
+        hsCondition = Some(HealthCondition.Megaesophagus.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1107,7 +1224,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Gastrointestinal.value,
-        hsCondition = HealthCondition.OtherGI.value,
+        hsCondition = Some(HealthCondition.OtherGI.value),
         hsConditionOtherDescription = Some("olives"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1149,7 +1266,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Gastrointestinal.value,
-        hsCondition = HealthCondition.Megaesophagus.value,
+        hsCondition = Some(HealthCondition.Megaesophagus.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1163,7 +1280,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Gastrointestinal.value,
-        hsCondition = HealthCondition.HGE.value,
+        hsCondition = Some(HealthCondition.HGE.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1177,7 +1294,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Gastrointestinal.value,
-        hsCondition = HealthCondition.OtherGI.value,
+        hsCondition = Some(HealthCondition.OtherGI.value),
         hsConditionOtherDescription = Some("ohno"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1216,7 +1333,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Liver.value,
-        hsCondition = HealthCondition.LiverPS.value,
+        hsCondition = Some(HealthCondition.LiverPS.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1230,7 +1347,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Liver.value,
-        hsCondition = HealthCondition.OtherLiver.value,
+        hsCondition = Some(HealthCondition.OtherLiver.value),
         hsConditionOtherDescription = Some("olives"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1272,7 +1389,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Liver.value,
-        hsCondition = HealthCondition.LiverPS.value,
+        hsCondition = Some(HealthCondition.LiverPS.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1286,7 +1403,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Liver.value,
-        hsCondition = HealthCondition.GBM.value,
+        hsCondition = Some(HealthCondition.GBM.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1300,7 +1417,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Liver.value,
-        hsCondition = HealthCondition.OtherLiver.value,
+        hsCondition = Some(HealthCondition.OtherLiver.value),
         hsConditionOtherDescription = Some("ohno"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1351,7 +1468,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Respiratory.value,
-        hsCondition = HealthCondition.SNN.value,
+        hsCondition = Some(HealthCondition.SNN.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1365,7 +1482,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Respiratory.value,
-        hsCondition = HealthCondition.OtherRespiratory.value,
+        hsCondition = Some(HealthCondition.OtherRespiratory.value),
         hsConditionOtherDescription = Some("olives"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1379,7 +1496,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Respiratory.value,
-        hsCondition = HealthCondition.ARDS.value,
+        hsCondition = Some(HealthCondition.ARDS.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1393,7 +1510,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Respiratory.value,
-        hsCondition = HealthCondition.OtherRespiratory.value,
+        hsCondition = Some(HealthCondition.OtherRespiratory.value),
         hsConditionOtherDescription = Some("ohno"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1431,7 +1548,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Cardiac.value,
-        hsCondition = HealthCondition.Murmur.value,
+        hsCondition = Some(HealthCondition.Murmur.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1445,7 +1562,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Cardiac.value,
-        hsCondition = HealthCondition.OtherCardiac.value,
+        hsCondition = Some(HealthCondition.OtherCardiac.value),
         hsConditionOtherDescription = Some("waffles"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1488,7 +1605,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Cardiac.value,
-        hsCondition = HealthCondition.Murmur.value,
+        hsCondition = Some(HealthCondition.Murmur.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1502,7 +1619,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Cardiac.value,
-        hsCondition = HealthCondition.ValveDisease.value,
+        hsCondition = Some(HealthCondition.ValveDisease.value),
         hsConditionOtherDescription = Some("pesto"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1516,7 +1633,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Cardiac.value,
-        hsCondition = HealthCondition.OtherCardiac.value,
+        hsCondition = Some(HealthCondition.OtherCardiac.value),
         hsConditionOtherDescription = Some("zucchini"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1567,7 +1684,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Kidney.value,
-        hsCondition = HealthCondition.EctopicUreter.value,
+        hsCondition = Some(HealthCondition.EctopicUreter.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1581,7 +1698,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Kidney.value,
-        hsCondition = HealthCondition.OtherKidney.value,
+        hsCondition = Some(HealthCondition.OtherKidney.value),
         hsConditionOtherDescription = Some("olives"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1595,7 +1712,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Kidney.value,
-        hsCondition = HealthCondition.AKF.value,
+        hsCondition = Some(HealthCondition.AKF.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1609,7 +1726,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Kidney.value,
-        hsCondition = HealthCondition.OtherKidney.value,
+        hsCondition = Some(HealthCondition.OtherKidney.value),
         hsConditionOtherDescription = Some("ohno"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1642,7 +1759,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Kidney.value,
-        hsCondition = HealthCondition.UrinaryIncontinence.value,
+        hsCondition = Some(HealthCondition.UrinaryIncontinence.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1675,7 +1792,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Kidney.value,
-        hsCondition = HealthCondition.UrinaryIncontinence.value,
+        hsCondition = Some(HealthCondition.UrinaryIncontinence.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1726,7 +1843,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Hematopoietic.value,
-        hsCondition = HealthCondition.Dyserythropoiesis.value,
+        hsCondition = Some(HealthCondition.Dyserythropoiesis.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1740,7 +1857,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Hematopoietic.value,
-        hsCondition = HealthCondition.OtherHematopoietic.value,
+        hsCondition = Some(HealthCondition.OtherHematopoietic.value),
         hsConditionOtherDescription = Some("potatoes"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1754,7 +1871,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Hematopoietic.value,
-        hsCondition = HealthCondition.Anemia.value,
+        hsCondition = Some(HealthCondition.Anemia.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1768,7 +1885,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Hematopoietic.value,
-        hsCondition = HealthCondition.OtherHematopoietic.value,
+        hsCondition = Some(HealthCondition.OtherHematopoietic.value),
         hsConditionOtherDescription = Some("yams"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1819,7 +1936,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Reproductive.value,
-        hsCondition = HealthCondition.Cryptorchid.value,
+        hsCondition = Some(HealthCondition.Cryptorchid.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1833,7 +1950,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Reproductive.value,
-        hsCondition = HealthCondition.OtherReproductive.value,
+        hsCondition = Some(HealthCondition.OtherReproductive.value),
         hsConditionOtherDescription = Some("olives"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1847,7 +1964,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Reproductive.value,
-        hsCondition = HealthCondition.BPH.value,
+        hsCondition = Some(HealthCondition.BPH.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1861,7 +1978,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Reproductive.value,
-        hsCondition = HealthCondition.OtherReproductive.value,
+        hsCondition = Some(HealthCondition.OtherReproductive.value),
         hsConditionOtherDescription = Some("ohno"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1906,7 +2023,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.ToxinConsumption.value,
-        hsCondition = HealthCondition.HumanMedications.value,
+        hsCondition = Some(HealthCondition.HumanMedications.value),
         hsConditionOtherDescription = Some("mentos"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1920,7 +2037,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.ToxinConsumption.value,
-        hsCondition = HealthCondition.RecreationalDrugs.value,
+        hsCondition = Some(HealthCondition.RecreationalDrugs.value),
         hsConditionOtherDescription = Some("oregano"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1934,7 +2051,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.ToxinConsumption.value,
-        hsCondition = HealthCondition.OtherToxin.value,
+        hsCondition = Some(HealthCondition.OtherToxin.value),
         hsConditionOtherDescription = Some("other tasty looking things"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -1985,7 +2102,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Orthopedic.value,
-        hsCondition = HealthCondition.MissingLimb.value,
+        hsCondition = Some(HealthCondition.MissingLimb.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -1999,7 +2116,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Orthopedic.value,
-        hsCondition = HealthCondition.OtherOrthopedic.value,
+        hsCondition = Some(HealthCondition.OtherOrthopedic.value),
         hsConditionOtherDescription = Some("olives"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -2013,7 +2130,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Orthopedic.value,
-        hsCondition = HealthCondition.CSS.value,
+        hsCondition = Some(HealthCondition.CSS.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -2027,7 +2144,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Orthopedic.value,
-        hsCondition = HealthCondition.OtherOrthopedic.value,
+        hsCondition = Some(HealthCondition.OtherOrthopedic.value),
         hsConditionOtherDescription = Some("ohno"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -2079,7 +2196,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Neurologic.value,
-        hsCondition = HealthCondition.CerebellarHypoplasia.value,
+        hsCondition = Some(HealthCondition.CerebellarHypoplasia.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -2093,7 +2210,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Neurologic.value,
-        hsCondition = HealthCondition.OtherNeurologic.value,
+        hsCondition = Some(HealthCondition.OtherNeurologic.value),
         hsConditionOtherDescription = Some("olives"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -2107,7 +2224,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Neurologic.value,
-        hsCondition = HealthCondition.VestibularDisease.value,
+        hsCondition = Some(HealthCondition.VestibularDisease.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -2121,7 +2238,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Neurologic.value,
-        hsCondition = HealthCondition.OtherNeurologic.value,
+        hsCondition = Some(HealthCondition.OtherNeurologic.value),
         hsConditionOtherDescription = Some("ohno"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -2172,7 +2289,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Endocrine.value,
-        hsCondition = HealthCondition.CongenitalHypothyroidism.value,
+        hsCondition = Some(HealthCondition.CongenitalHypothyroidism.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -2186,7 +2303,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Endocrine.value,
-        hsCondition = HealthCondition.OtherEndocrine.value,
+        hsCondition = Some(HealthCondition.OtherEndocrine.value),
         hsConditionOtherDescription = Some("olives"),
         hsConditionIsCongenital = true,
         hsEyeConditionCause = None,
@@ -2200,7 +2317,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Endocrine.value,
-        hsCondition = HealthCondition.AddisonsDisease.value,
+        hsCondition = Some(HealthCondition.AddisonsDisease.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -2214,7 +2331,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Endocrine.value,
-        hsCondition = HealthCondition.OtherEndocrine.value,
+        hsCondition = Some(HealthCondition.OtherEndocrine.value),
         hsConditionOtherDescription = Some("ohno"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -2252,7 +2369,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Immune.value,
-        hsCondition = HealthCondition.AutoimmuneThyroiditis.value,
+        hsCondition = Some(HealthCondition.AutoimmuneThyroiditis.value),
         hsConditionOtherDescription = None,
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
@@ -2266,7 +2383,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       HlesHealthCondition(
         dogId = 1L,
         hsConditionType = HealthConditionType.Immune.value,
-        hsCondition = HealthCondition.OtherImmune.value,
+        hsCondition = Some(HealthCondition.OtherImmune.value),
         hsConditionOtherDescription = Some("sriracha"),
         hsConditionIsCongenital = false,
         hsEyeConditionCause = None,
