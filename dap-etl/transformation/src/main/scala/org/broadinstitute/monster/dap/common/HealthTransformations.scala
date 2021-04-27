@@ -1,6 +1,10 @@
 package org.broadinstitute.monster.dap.common
 
-import org.broadinstitute.monster.dap.healthcondition.{HealthCondition, HealthConditionType}
+import org.broadinstitute.monster.dap.healthcondition.{
+  HealthCondition,
+  HealthConditionKey,
+  HealthConditionType
+}
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesHealthCondition
 
 object HealthTransformations {
@@ -29,7 +33,7 @@ object HealthTransformations {
             rawRecord,
             prefix,
             healthCondition.conditionType.value,
-            healthCondition.value,
+            Some(healthCondition.value),
             isCongenital = true
           )
           if (healthCondition.isOther) {
@@ -67,7 +71,7 @@ object HealthTransformations {
           rawRecord,
           prefix,
           healthCondition.conditionType.value,
-          healthCondition.value,
+          Some(healthCondition.value),
           isCongenital = false
         )
         // If [hs_dx_eye_cause_yn]=Yes, define [hs_eye_condition_cause] using the options in [hs_dx_eye_cause];
@@ -105,7 +109,44 @@ object HealthTransformations {
       }
     }
 
-    Iterable.concat(cgs, dxs)
+    // Fill in with dummy health condition records for instances where the top level condition question
+    // answered "yes" but no specific health conditions were filled in
+    val cgsFillIn =
+      createFillInConditionRecords(
+        cgs,
+        rawRecord,
+        isCongenital = true,
+        (h: HealthConditionType) => h.cgKey
+      )
+    val dxsFillIn =
+      createFillInConditionRecords(
+        dxs,
+        rawRecord,
+        isCongenital = false,
+        (h: HealthConditionType) => h.dxKey
+      )
+
+    Iterable.concat(cgs, dxs, cgsFillIn, dxsFillIn)
+  }
+
+  def createFillInConditionRecords(
+    base: Iterable[HlesHealthCondition],
+    rawRecord: RawRecord,
+    isCongenital: Boolean,
+    keyGetter: (HealthConditionType) => Option[HealthConditionKey]
+  ): Iterable[HlesHealthCondition] = {
+    HealthConditionType.values
+      .filterNot(h => base.exists(c => c.hsConditionType == h.value) || keyGetter(h).isEmpty)
+      .filter(h => rawRecord.getBoolean(keyGetter(h).get.categoryGate))
+      .map { hc =>
+        createHealthConditionRow(
+          rawRecord,
+          keyGetter(hc).get.dataPrefix,
+          hc.value,
+          None,
+          isCongenital = isCongenital
+        )
+      }
   }
 
   /** Generic helper method for creating Hles Health Condition rows. */
@@ -113,7 +154,7 @@ object HealthTransformations {
     rawRecord: RawRecord,
     fieldPrefix: String,
     conditionType: Long,
-    condition: Long,
+    condition: Option[Long],
     isCongenital: Boolean
   ): HlesHealthCondition =
     HlesHealthCondition(
