@@ -9,7 +9,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
   behavior of "HealthTransformations"
 
   it should "correctly include congential health condition type when no specific condition present " in {
-    val congentialEyeConditionNoConditionFilled = Map[String, Array[String]](
+    val conditions = Map[String, Array[String]](
       "hs_congenital_yn" -> Array("1"),
       "hs_cg_eye_disorders_yn" -> Array("1"),
       "hs_cg_skin_disorders_yn" -> Array("1"),
@@ -19,7 +19,7 @@ class HealthTransformationsSpec extends AnyFlatSpec with Matchers {
       "hs_dx_infectious_yn" -> Array("1"),
       "hs_dx_anaplasmosis" -> Array("1")
     )
-    val exampleRecord = RawRecord(id = 1, congentialEyeConditionNoConditionFilled)
+    val exampleRecord = RawRecord(id = 1, conditions)
 
     val output = HealthTransformations.mapHealthConditions(exampleRecord)
 

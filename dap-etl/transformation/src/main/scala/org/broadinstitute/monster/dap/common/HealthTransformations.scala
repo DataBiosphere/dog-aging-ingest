@@ -7,8 +7,6 @@ import org.broadinstitute.monster.dap.healthcondition.{
 }
 import org.broadinstitute.monster.dogaging.jadeschema.table.HlesHealthCondition
 
-import scala.collection.immutable
-
 object HealthTransformations {
 
   /** Parse all health-condition-related fields out of a raw RedCap record. */
@@ -50,77 +48,83 @@ object HealthTransformations {
           }
         }
       }
-
     } else {
       Iterable.empty
     }
 
-    val dxs: immutable.Seq[HlesHealthCondition] = HealthCondition.dxValues.flatMap {
-      healthCondition =>
-        for {
-          dxKey <- healthCondition.conditionType.dxKey
-          if rawRecord.getBoolean(dxKey.categoryGate)
-          prefix <- healthCondition.both.orElse(healthCondition.dx).map { abbrev =>
-            s"${dxKey.dataPrefix}_$abbrev"
-          }
-          if rawRecord.getBoolean(prefix) && healthCondition.subcategory
-            .map(subcategoryId =>
-              // if a condition has a subcategory, only include it if that subcategory was selected in the
-              // supplemental "check all that apply" question
-              rawRecord.getArray(s"${prefix}_spec").contains(subcategoryId.toString)
-            )
-            .getOrElse(true)
-        } yield {
-          val base = createHealthConditionRow(
-            rawRecord,
-            prefix,
-            healthCondition.conditionType.value,
-            Some(healthCondition.value),
-            isCongenital = false
-          )
-          // If [hs_dx_eye_cause_yn]=Yes, define [hs_eye_condition_cause] using the options in [hs_dx_eye_cause];
-          // If [hs_dx_eye_cause_yn]=No,  define [hs_eye_condition_cause] as 99 for TDR_Raw_value
-          if (healthCondition == HealthCondition.Blindness) {
-            val isCauseKnown = rawRecord.getBoolean("hs_dx_eye_cause_yn")
-            val conditionCause =
-              if (isCauseKnown) rawRecord.getOptionalNumber("hs_dx_eye_cause") else Some(99L)
-            base.copy(
-              hsEyeConditionCause = conditionCause,
-              hsConditionCauseOtherDescription = if (conditionCause.contains(98)) {
-                rawRecord.getOptionalStripped("hs_dx_eye_cause_other")
-              } else {
-                None
-              }
-            )
-          } else if (healthCondition == HealthCondition.UrinaryIncontinence) {
-            val isCauseKnown = rawRecord.getBoolean("hs_dx_kidney_ui_fu_cause")
-            base.copy(
-              hsConditionCauseOtherDescription =
-                if (isCauseKnown) rawRecord.getOptionalStripped("hs_dx_kidney_ui_fu_why") else None
-            )
-          } else if (healthCondition == HealthCondition.VestibularDisease) {
-            base.copy(hsNeurologicalConditionVestibularDiseaseType =
-              rawRecord.getOptionalNumber("hs_dx_neuro_vd_type")
-            )
-          } else if (healthCondition.isOther) {
-            val descriptionFieldName = healthCondition.descriptionSuffixOverride
-              .map(suffix => s"${dxKey.dataPrefix}_$suffix")
-              .getOrElse(s"${prefix}_spec")
-            base.copy(hsConditionOtherDescription =
-              rawRecord.getOptionalStripped(descriptionFieldName)
-            )
-          } else {
-            base
-          }
+    val dxs = HealthCondition.dxValues.flatMap { healthCondition =>
+      for {
+        dxKey <- healthCondition.conditionType.dxKey
+        if rawRecord.getBoolean(dxKey.categoryGate)
+        prefix <- healthCondition.both.orElse(healthCondition.dx).map { abbrev =>
+          s"${dxKey.dataPrefix}_$abbrev"
         }
+        if rawRecord.getBoolean(prefix) && healthCondition.subcategory
+          .map(subcategoryId =>
+            // if a condition has a subcategory, only include it if that subcategory was selected in the
+            // supplemental "check all that apply" question
+            rawRecord.getArray(s"${prefix}_spec").contains(subcategoryId.toString)
+          )
+          .getOrElse(true)
+      } yield {
+        val base = createHealthConditionRow(
+          rawRecord,
+          prefix,
+          healthCondition.conditionType.value,
+          Some(healthCondition.value),
+          isCongenital = false
+        )
+        // If [hs_dx_eye_cause_yn]=Yes, define [hs_eye_condition_cause] using the options in [hs_dx_eye_cause];
+        // If [hs_dx_eye_cause_yn]=No,  define [hs_eye_condition_cause] as 99 for TDR_Raw_value
+        if (healthCondition == HealthCondition.Blindness) {
+          val isCauseKnown = rawRecord.getBoolean("hs_dx_eye_cause_yn")
+          val conditionCause =
+            if (isCauseKnown) rawRecord.getOptionalNumber("hs_dx_eye_cause") else Some(99L)
+          base.copy(
+            hsEyeConditionCause = conditionCause,
+            hsConditionCauseOtherDescription = if (conditionCause.contains(98)) {
+              rawRecord.getOptionalStripped("hs_dx_eye_cause_other")
+            } else {
+              None
+            }
+          )
+        } else if (healthCondition == HealthCondition.UrinaryIncontinence) {
+          val isCauseKnown = rawRecord.getBoolean("hs_dx_kidney_ui_fu_cause")
+          base.copy(
+            hsConditionCauseOtherDescription =
+              if (isCauseKnown) rawRecord.getOptionalStripped("hs_dx_kidney_ui_fu_why") else None
+          )
+        } else if (healthCondition == HealthCondition.VestibularDisease) {
+          base.copy(hsNeurologicalConditionVestibularDiseaseType =
+            rawRecord.getOptionalNumber("hs_dx_neuro_vd_type")
+          )
+        } else if (healthCondition.isOther) {
+          val descriptionFieldName = healthCondition.descriptionSuffixOverride
+            .map(suffix => s"${dxKey.dataPrefix}_$suffix")
+            .getOrElse(s"${prefix}_spec")
+          base.copy(hsConditionOtherDescription = rawRecord.getOptionalStripped(descriptionFieldName))
+        } else {
+          base
+        }
+      }
     }
 
     // Fill in with dummy health condition records for instances where the top level condition question
     // answered "yes" but no specific health conditions were filled in
     val cgsFillIn =
-      createFillInConditionRecords(cgs, rawRecord, isCongenital = true, (h: HealthConditionType) => h.cgKey)
+      createFillInConditionRecords(
+        cgs,
+        rawRecord,
+        isCongenital = true,
+        (h: HealthConditionType) => h.cgKey
+      )
     val dxsFillIn =
-      createFillInConditionRecords(dxs, rawRecord, isCongenital = false, (h: HealthConditionType) => h.dxKey)
+      createFillInConditionRecords(
+        dxs,
+        rawRecord,
+        isCongenital = false,
+        (h: HealthConditionType) => h.dxKey
+      )
 
     Iterable.concat(cgs, dxs, cgsFillIn, dxsFillIn)
   }
