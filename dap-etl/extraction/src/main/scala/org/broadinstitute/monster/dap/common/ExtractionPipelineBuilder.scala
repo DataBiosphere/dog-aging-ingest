@@ -30,7 +30,7 @@ object ExtractionPipelineBuilder {
   *
   * @param formsForExtraction List of forms to be pulled from RedCap
   * @param extractionFiltersGenerator Function that builds a list of filters to be applied whenn pulling RedCap data
-  * @param arms List of event arms to be pulled from RedCap (optional)
+  * @param extractionArmsGenerator Function that builds a list of event arms to be pulled from RedCap
   * @param fieldList List of fields be pulled from RedCap (optional)
   * @param subDir             : Sub directory name where data from this pipeline should be
   *                           written
@@ -42,7 +42,7 @@ object ExtractionPipelineBuilder {
 class ExtractionPipelineBuilder(
   formsForExtraction: List[String],
   extractionFiltersGenerator: Args => List[FilterDirective],
-  arms: List[String],
+  extractionArmsGenerator: Args => List[String],
   fieldList: List[String],
   subDir: String,
   idBatchSize: Int,
@@ -57,7 +57,7 @@ class ExtractionPipelineBuilder(
 
     val lookupFn =
       new ScalaAsyncLookupDoFn[RedcapRequest, Msg, RedCapClient](MaxConcurrentRequests) {
-        override def newClient(): RedCapClient = getClient(arms)
+        override def newClient(): RedCapClient = getClient(extractionArmsGenerator(args))
         override def asyncLookup(
           client: RedCapClient,
           input: RedcapRequest
@@ -66,11 +66,11 @@ class ExtractionPipelineBuilder(
       }
 
     // Dispatch requests for the list of records in each provided arm
-    val initRequests: Seq[GetRecords] = arms.map(arms =>
+    val initRequests: Seq[GetRecords] = extractionArmsGenerator(args).map(arms =>
       GetRecords(
         fields = List("study_id"),
         filters = extractionFiltersGenerator(args),
-        arm = List(arms)
+        arm = extractionArmsGenerator(args)
       )
     )
     val idsToExtract: SCollection[String] = ctx
