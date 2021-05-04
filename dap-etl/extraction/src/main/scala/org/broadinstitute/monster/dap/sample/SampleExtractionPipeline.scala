@@ -31,14 +31,13 @@ object SampleExtractionPipeline extends ScioApp[Args] {
 
   // TODO: Need to confirm the fieldlist to pull from
   val subdir = "sample";
-  val arm = List("baseline_arm_1")
   val fieldList = List("co_consent")
 
   def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
       forms,
       extractionFiltersGenerator,
-      arm,
+      (_, _) => List("baseline_arm_1"),
       fieldList,
       subdir,
       100,

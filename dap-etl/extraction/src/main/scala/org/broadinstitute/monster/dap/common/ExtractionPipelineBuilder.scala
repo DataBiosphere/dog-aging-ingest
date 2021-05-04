@@ -10,6 +10,7 @@ import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.slf4j.LoggerFactory
 import upack.Msg
 
+import java.time.OffsetDateTime
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
@@ -42,7 +43,7 @@ object ExtractionPipelineBuilder {
 class ExtractionPipelineBuilder(
   formsForExtraction: List[String],
   extractionFiltersGenerator: Args => List[FilterDirective],
-  extractionArmsGenerator: Args => List[String],
+  extractionArmsGenerator: (Option[OffsetDateTime], Option[OffsetDateTime]) => List[String],
   fieldList: List[String],
   subDir: String,
   idBatchSize: Int,
@@ -57,7 +58,8 @@ class ExtractionPipelineBuilder(
 
     val lookupFn =
       new ScalaAsyncLookupDoFn[RedcapRequest, Msg, RedCapClient](MaxConcurrentRequests) {
-        override def newClient(): RedCapClient = getClient(extractionArmsGenerator(args))
+        override def newClient(): RedCapClient =
+          getClient(extractionArmsGenerator(args.startTime, args.endTime))
         override def asyncLookup(
           client: RedCapClient,
           input: RedcapRequest
@@ -66,13 +68,14 @@ class ExtractionPipelineBuilder(
       }
 
     // Dispatch requests for the list of records in each provided arm
-    val initRequests: Seq[GetRecords] = extractionArmsGenerator(args).map(arms =>
-      GetRecords(
-        fields = List("study_id"),
-        filters = extractionFiltersGenerator(args),
-        arm = extractionArmsGenerator(args)
+    val initRequests: Seq[GetRecords] =
+      extractionArmsGenerator(args.startTime, args.endTime).map(_ =>
+        GetRecords(
+          fields = List("study_id"),
+          filters = extractionFiltersGenerator(args),
+          arm = extractionArmsGenerator(args.startTime, args.endTime)
+        )
       )
-    )
     val idsToExtract: SCollection[String] = ctx
     // massaging data to get back an SCollection[]
       .parallelize(initRequests)

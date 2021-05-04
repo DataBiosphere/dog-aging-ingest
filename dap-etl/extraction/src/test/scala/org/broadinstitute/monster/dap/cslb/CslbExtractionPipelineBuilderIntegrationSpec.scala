@@ -31,7 +31,7 @@ class CslbExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
 
   val studyIdsRequest = RedcapRequestGeneratorParams(
     testArgs.apiToken,
-    CslbExtractionPipeline.arm,
+    CslbExtractionPipeline.extractionArmsGenerator(testArgs.startTime, testArgs.endTime),
     GetRecords(
       fields = List("study_id"),
       filters = CslbExtractionPipeline.extractionFiltersGenerator(testArgs)
@@ -40,7 +40,7 @@ class CslbExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
 
   val followUpRecords = common.RedcapRequestGeneratorParams(
     testArgs.apiToken,
-    CslbExtractionPipeline.arm,
+    CslbExtractionPipeline.extractionArmsGenerator(testArgs.startTime, testArgs.endTime),
     GetRecords(
       ids = expectedStudyIds,
       fields = CslbExtractionPipeline.fieldList,
