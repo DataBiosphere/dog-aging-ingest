@@ -55,6 +55,8 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
   }
 
   val subdir = "hles"
+  // Limit to the initial HLE event.
+  val arm = "baseline_arm_1"
   val fieldList = List("co_consent")
 
   def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
@@ -63,7 +65,7 @@ object HLESurveyExtractionPipeline extends ScioApp[Args] {
     new ExtractionPipelineBuilder(
       forms,
       extractionFiltersGenerator,
-      (_, _) => List("baseline_arm_1"), // Limit to the initial HLE event.
+      (_, _) => List(arm),
       fieldList,
       subdir,
       100,

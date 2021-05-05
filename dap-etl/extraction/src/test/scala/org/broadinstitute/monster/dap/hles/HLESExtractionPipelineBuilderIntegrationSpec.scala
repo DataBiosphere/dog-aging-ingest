@@ -33,7 +33,7 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
 
   val studyIdsRequest = RedcapRequestGeneratorParams(
     testArgs.apiToken,
-    List("baseline_arm_1"),
+    List(HLESurveyExtractionPipeline.arm),
     GetRecords(
       fields = List("study_id"),
       filters = HLESurveyExtractionPipeline.extractionFiltersGenerator(testArgs)
@@ -42,7 +42,7 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
 
   val followUpRecords = common.RedcapRequestGeneratorParams(
     testArgs.apiToken,
-    List("baseline_arm_1"),
+    List(HLESurveyExtractionPipeline.arm),
     GetRecords(
       ids = expectedStudyIds,
       fields = HLESurveyExtractionPipeline.fieldList,

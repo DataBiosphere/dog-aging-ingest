@@ -7,7 +7,7 @@ import java.time.{OffsetDateTime, ZoneOffset}
 
 // Ignore IntelliJ, this is used to make the implicit parser compile.
 import Args._
-class CslbExtractionFailException() extends scala.Exception {}
+class CslbExtractionFailException() extends Exception
 
 object CslbExtractionPipeline extends ScioApp[Args] {
 

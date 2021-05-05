@@ -9,13 +9,13 @@ import java.time.format.DateTimeFormatter
 // Ignore IntelliJ, this is used to make the implicit parser compile.
 import Args._
 
-class EnvironmentExtractionFailException() extends scala.Exception {}
+class EnvironmentExtractionFailException() extends Exception
 
 object EnvironmentExtractionPipeline extends ScioApp[Args] {
 
   val formatter = DateTimeFormatter.ofPattern("MMMyyyy")
 
-  val ENVEpoch = OffsetDateTime.of(2020, 1, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
+  val EnvironmentEpoch = OffsetDateTime.of(2020, 1, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
 
   val forms = List(
     "geocoding_metadata",
@@ -55,7 +55,7 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
     endTime: Option[OffsetDateTime]
   ): List[String] = {
     // use first year of environment if startTime was not provided
-    val startDate = startTime.getOrElse(ENVEpoch)
+    val startDate = startTime.getOrElse(EnvironmentEpoch)
     // use current date if endTime was not provided
     val endDate = endTime.getOrElse(OffsetDateTime.now())
     // environment has two arms per month
