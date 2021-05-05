@@ -56,10 +56,12 @@ class ExtractionPipelineBuilder(
     import org.broadinstitute.monster.common.msg.MsgOps
     val logger = LoggerFactory.getLogger("extraction_pipeline")
 
+    val arms = extractionArmsGenerator(args.startTime, args.endTime)
+
     val lookupFn =
       new ScalaAsyncLookupDoFn[RedcapRequest, Msg, RedCapClient](MaxConcurrentRequests) {
         override def newClient(): RedCapClient =
-          getClient(extractionArmsGenerator(args.startTime, args.endTime))
+          getClient(arms)
         override def asyncLookup(
           client: RedCapClient,
           input: RedcapRequest
@@ -67,13 +69,13 @@ class ExtractionPipelineBuilder(
           client.get(args.apiToken, input)
       }
 
-    // Dispatch requests for the list of records in each provided arm
+    // Dispatch requests for the list of records for all arms
     val initRequests: Seq[GetRecords] =
-      extractionArmsGenerator(args.startTime, args.endTime).map(_ =>
+      Seq(
         GetRecords(
           fields = List("study_id"),
           filters = extractionFiltersGenerator(args),
-          arm = extractionArmsGenerator(args.startTime, args.endTime)
+          arm = arms
         )
       )
     val idsToExtract: SCollection[String] = ctx

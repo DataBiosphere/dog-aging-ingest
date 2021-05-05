@@ -29,9 +29,12 @@ class EnvironmentExtractionPipelineBuilderIntegrationSpec extends PipelineBuilde
 
   val expectedStudyIds = List("some_study_id", "some_other_id")
 
+  val arms =
+    EnvironmentExtractionPipeline.extractionArmsGenerator(testArgs.startTime, testArgs.endTime)
+
   val studyIdsRequest = RedcapRequestGeneratorParams(
     testArgs.apiToken,
-    EnvironmentExtractionPipeline.extractionArmsGenerator(testArgs.startTime, testArgs.endTime),
+    arms,
     GetRecords(
       fields = List("study_id"),
       filters = EnvironmentExtractionPipeline.extractionFiltersGenerator(testArgs)
@@ -40,7 +43,7 @@ class EnvironmentExtractionPipelineBuilderIntegrationSpec extends PipelineBuilde
 
   val followUpRecords = common.RedcapRequestGeneratorParams(
     testArgs.apiToken,
-    EnvironmentExtractionPipeline.extractionArmsGenerator(testArgs.startTime, testArgs.endTime),
+    arms,
     GetRecords(
       ids = expectedStudyIds,
       fields = EnvironmentExtractionPipeline.fieldList,
