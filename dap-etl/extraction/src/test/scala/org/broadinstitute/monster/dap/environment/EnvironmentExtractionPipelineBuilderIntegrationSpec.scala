@@ -1,4 +1,4 @@
-package org.broadinstitute.monster.dap.cslb
+package org.broadinstitute.monster.dap.environment
 
 import better.files.File
 import org.broadinstitute.monster.common.PipelineBuilderSpec
@@ -7,9 +7,9 @@ import org.broadinstitute.monster.dap.common
 
 import java.time.{LocalDate, LocalTime, OffsetDateTime, ZoneOffset}
 
-class CslbExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
+class EnvironmentExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
   val outputDir = File.newTemporaryDirectory()
-  val cslbOutputDir = File(outputDir, CslbExtractionPipeline.subdir)
+  val envOutputDir = File(outputDir, EnvironmentExtractionPipeline.subdir)
   override def afterAll(): Unit = outputDir.delete()
 
   val start =
@@ -29,14 +29,15 @@ class CslbExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
 
   val expectedStudyIds = List("some_study_id", "some_other_id")
 
-  val arms = CslbExtractionPipeline.extractionArmsGenerator(testArgs.startTime, testArgs.endTime)
+  val arms =
+    EnvironmentExtractionPipeline.extractionArmsGenerator(testArgs.startTime, testArgs.endTime)
 
   val studyIdsRequest = RedcapRequestGeneratorParams(
     testArgs.apiToken,
     arms,
     GetRecords(
       fields = List("study_id"),
-      filters = CslbExtractionPipeline.extractionFiltersGenerator(testArgs)
+      filters = EnvironmentExtractionPipeline.extractionFiltersGenerator(testArgs)
     )
   )
 
@@ -45,8 +46,8 @@ class CslbExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
     arms,
     GetRecords(
       ids = expectedStudyIds,
-      fields = CslbExtractionPipeline.fieldList,
-      forms = CslbExtractionPipeline.forms
+      fields = EnvironmentExtractionPipeline.fieldList,
+      forms = EnvironmentExtractionPipeline.forms
     )
   )
 
@@ -59,17 +60,17 @@ class CslbExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
       }),
       followUpRecords -> RedcapMsgGenerator.toRedcapFormat(expectedStudyIds.map { _ =>
         Map(
-          "canine_social_and_learned_behavior_complete" -> "2"
+          "baseline_complete" -> "2"
         )
       })
     )
   )
 
-  override val builder = CslbExtractionPipeline.buildPipelineWithWrapper(mockWrapper)
+  override val builder = EnvironmentExtractionPipeline.buildPipelineWithWrapper(mockWrapper)
 
-  behavior of "CslbSurveyExtractionPipelineBuilder"
+  behavior of "EnvironmentSurveyExtractionPipelineBuilder"
 
   it should "successfully download records from RedCap" in {
-    readMsgs(cslbOutputDir, "records/*.json") shouldNot be(empty)
+    readMsgs(envOutputDir, "records/*.json") shouldNot be(empty)
   }
 }

@@ -3,10 +3,19 @@ package org.broadinstitute.monster.dap.environment
 import org.broadinstitute.monster.common.{PipelineBuilder, ScioApp}
 import org.broadinstitute.monster.dap.common._
 
+import java.time.{OffsetDateTime, ZoneOffset}
+import java.time.format.DateTimeFormatter
+
 // Ignore IntelliJ, this is used to make the implicit parser compile.
 import Args._
 
+class EnvironmentExtractionFailException() extends Exception
+
 object EnvironmentExtractionPipeline extends ScioApp[Args] {
+
+  val formatter = DateTimeFormatter.ofPattern("MMMyyyy")
+
+  val EnvironmentEpoch = OffsetDateTime.of(2020, 1, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
 
   val forms = List(
     "geocoding_metadata",
@@ -33,42 +42,36 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
 
   val subdir = "environment"
 
-  val arm =
-    List(
-      "dec2019_arm_1",
-      "dec2019_secondary_arm_1",
-      "jan2020_arm_1",
-      "jan2020_secondary_arm_1",
-      "feb2020_arm_1",
-      "feb2020_secondary_arm_1",
-      "mar2020_arm_1",
-      "mar2020_secondary_arm_1",
-      "apr2020_arm_1",
-      "apr2020_secondary_arm_1",
-      "may2020_arm_1",
-      "may2020_secondary_arm_1",
-      "june2020_arm_1",
-      "june2020_secondary_arm_1",
-      "july2020_arm_1",
-      "july2020_secondary_arm_1",
-      "aug2020_arm_1",
-      "aug2020_secondary_arm_1",
-      "sept2020_arm_1",
-      "sept2020_secondary_arm_1",
-      "oct2020_arm_1",
-      "oct2020_secondary_arm_1",
-      "nov2020_arm_1",
-      "nov2020_secondary_arm_1",
-      "dec2020_arm_1",
-      "dec2020_secondary_arm_1"
-    )
+  // get list of individual dates, then get the set of years and return a list of distinct monthYears
+  def getMonthYearList(start: OffsetDateTime, end: OffsetDateTime): List[String] = {
+    if (start.isAfter(end)) throw new EnvironmentExtractionFailException
+    val dateList =
+      (Iterator.iterate(start)(_ plusDays 1) takeWhile (_ isBefore end.plusDays(1))).toList
+    dateList.map(date => date.format(formatter).toLowerCase).distinct
+  }
+
+  def extractionArmsGenerator(
+    startTime: Option[OffsetDateTime],
+    endTime: Option[OffsetDateTime]
+  ): List[String] = {
+    // use first year of environment if startTime was not provided
+    val startDate = startTime.getOrElse(EnvironmentEpoch)
+    // use current date if endTime was not provided
+    val endDate = endTime.getOrElse(OffsetDateTime.now())
+    // environment has two arms per month
+    // ("annual_{MMMyyyy}_arm_1", "annual_{MMMyyyy}_secondary_arm_1")
+    getMonthYearList(startDate, endDate).flatMap { date =>
+      List(s"annual_${date}_arm_1", s"annual_${date}_secondary_arm_1")
+    }
+  }
+
   val fieldList = List("baseline_complete")
 
   def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
       forms,
       extractionFiltersGenerator,
-      arm,
+      extractionArmsGenerator,
       fieldList,
       subdir,
       // RedCap times out at the default batch size of 100

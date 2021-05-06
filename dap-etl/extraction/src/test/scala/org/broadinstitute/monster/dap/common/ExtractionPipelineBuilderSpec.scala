@@ -13,6 +13,8 @@ object ExtractionPipelineBuilderSpec {
   val end = start.plusDays(3).plusHours(10).minusSeconds(100)
   val event = List("fake_event_1")
 
+  val arm = "fake_event_1"
+
   val fakeIds = 1 to 50
   val forms = List("fake_form_1", "fake_form_2")
   val filters = List(FilterDirective("foo", FilterOps.==, "Bar"))
@@ -77,7 +79,7 @@ class ExtractionPipelineBuilderSpec extends PipelineBuilderSpec[Args] {
     new ExtractionPipelineBuilder(
       forms,
       _ => filters,
-      event,
+      (_, _) => List(arm),
       fields,
       "",
       idBatchSize = 1,
