@@ -10,6 +10,7 @@ import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.slf4j.LoggerFactory
 import upack.Msg
 
+import java.time.OffsetDateTime
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
@@ -30,7 +31,7 @@ object ExtractionPipelineBuilder {
   *
   * @param formsForExtraction List of forms to be pulled from RedCap
   * @param extractionFiltersGenerator Function that builds a list of filters to be applied whenn pulling RedCap data
-  * @param arms List of event arms to be pulled from RedCap (optional)
+  * @param extractionArmsGenerator Function that builds a list of event arms to be pulled from RedCap
   * @param fieldList List of fields be pulled from RedCap (optional)
   * @param subDir             : Sub directory name where data from this pipeline should be
   *                           written
@@ -42,7 +43,7 @@ object ExtractionPipelineBuilder {
 class ExtractionPipelineBuilder(
   formsForExtraction: List[String],
   extractionFiltersGenerator: Args => List[FilterDirective],
-  arms: List[String],
+  extractionArmsGenerator: (Option[OffsetDateTime], Option[OffsetDateTime]) => List[String],
   fieldList: List[String],
   subDir: String,
   idBatchSize: Int,
@@ -55,9 +56,12 @@ class ExtractionPipelineBuilder(
     import org.broadinstitute.monster.common.msg.MsgOps
     val logger = LoggerFactory.getLogger("extraction_pipeline")
 
+    val arms = extractionArmsGenerator(args.startTime, args.endTime)
+
     val lookupFn =
       new ScalaAsyncLookupDoFn[RedcapRequest, Msg, RedCapClient](MaxConcurrentRequests) {
-        override def newClient(): RedCapClient = getClient(arms)
+        override def newClient(): RedCapClient =
+          getClient(arms)
         override def asyncLookup(
           client: RedCapClient,
           input: RedcapRequest
@@ -65,14 +69,15 @@ class ExtractionPipelineBuilder(
           client.get(args.apiToken, input)
       }
 
-    // Dispatch requests for the list of records in each provided arm
-    val initRequests: Seq[GetRecords] = arms.map(arms =>
-      GetRecords(
-        fields = List("study_id"),
-        filters = extractionFiltersGenerator(args),
-        arm = List(arms)
+    // Dispatch requests for the list of records for all arms
+    val initRequests: Seq[GetRecords] =
+      Seq(
+        GetRecords(
+          fields = List("study_id"),
+          filters = extractionFiltersGenerator(args),
+          arm = arms
+        )
       )
-    )
     val idsToExtract: SCollection[String] = ctx
     // massaging data to get back an SCollection[]
       .parallelize(initRequests)
