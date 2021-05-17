@@ -5,8 +5,9 @@ description = "This is the dagster orchestration project for DAP pipelines"
 authors = ["Quazi Hoque <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "~3.9"
 dagster = "^0.11.2"
+broad_dagster_utils = "^0.2.3"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.5"
