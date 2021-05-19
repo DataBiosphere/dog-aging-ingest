@@ -13,7 +13,6 @@ class LocalBeamRunner:
     scala_project: str
     target_class: str
     #todo: **kwargs param to local beam runner + dataflow beam runner when we refactor this to use dagster_utils
-    additional_args: List[str] # don't include this arg bc it is DAP specific
     region: str
     worker_machine_type: str
     autoscaling_algorithm: str
@@ -36,8 +35,7 @@ class LocalBeamRunner:
             # To use the service-based Dataflow Shuffle in your batch pipelines
             "experiments": "shuffle_mode=service",
         }
-        if self.additional_args("api_token"):
-            self.arg_dict["api_token"]: self.additional_args.api_token.env
+
 
     def run(
             self,
@@ -48,19 +46,16 @@ class LocalBeamRunner:
         self.logger.info("Local beam runner")
         # list comprehension over args_dict to get flags
         flags = " ".join([f'--{arg}={value}' for arg, value in dataflow_run_flags.items()])
-        return ["sbt", f'{self.scala_project}/runMain {self.target_class} {flags}']
-        #subprocess.run(
-        #    ["sbt", f'{self.scala_project}/runMain {self.target_class} {flags}'],
-        #    check=True,
-        #    cwd=self.working_dir
-        #)
+        subprocess.run(
+            ["sbt", f'{self.scala_project}/runMain {self.target_class} {flags}'],
+            check=True,
+            cwd=self.working_dir
+        )
 
-# todo: remove this and import dagster_utils in pipelines
 @resource({
     "working_dir": Field(StringSource),
     "scala_project": Field(StringSource),
     "target_class": Field(StringSource),
-    "additional_args": Field(Array(StringSource)),
     "region": Field(StringSource),
     "worker_machine_type": Field(StringSource),
     "autoscaling_algorithm": Field(StringSource),
@@ -73,7 +68,6 @@ def local_beam_runner(init_context: InitResourceContext) -> LocalBeamRunner:
         working_dir=init_context.resource_config["working_dir"],
         scala_project=init_context.resource_config["scala_project"],
         target_class=init_context.resource_config["target_class"],
-        additional_args=init_context.resource_config["additional_args"],
         region=init_context.resource_config["region"],
         worker_machine_type=init_context.resource_config["worker_machine_type"],
         autoscaling_algorithm=init_context.resource_config["autoscaling_algorithm"],

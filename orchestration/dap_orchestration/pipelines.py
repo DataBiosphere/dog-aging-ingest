@@ -1,8 +1,8 @@
 from dagster import pipeline, ModeDefinition
-from dap_orchestration.solids import extract_records, transform_records
-from dap_orchestration.resources import local_beam_runner #todo remove
+
 from dap_orchestration.config import preconfigure_resource_for_mode
-#from dagster_utils.resources.beam import local_beam_runner #todo use this one
+from dap_orchestration.resources import local_beam_runner
+from dap_orchestration.solids import extract_records, transform_records, write_outfiles
 
 local_beam_runner_run_schema = {"working_dir": str}
 
@@ -26,6 +26,5 @@ prod_mode = ModeDefinition(
     mode_defs=[dev_mode, prod_mode]
 )
 def refresh_data() -> None:
-    transform_output = transform_records(extract_records())
-    return transform_output
+    write_outfiles(transform_records(extract_records()))
 

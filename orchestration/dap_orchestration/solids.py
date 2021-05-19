@@ -1,3 +1,4 @@
+import subprocess
 
 from dagster import Bool, String, solid
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
@@ -28,22 +29,34 @@ def extract_records(context: AbstractComputeExecutionContext) -> str:
 @solid(
     required_resource_keys={"beam_runner"},
     config_schema = {
-        "input_prefix": String,
         "output_prefix": String,
     }
 )
-def transform_records(context: AbstractComputeExecutionContext) -> str:
+def transform_records(context: AbstractComputeExecutionContext, input_prefix: str) -> str:
     """
     :return: Returns the path to the transformation output json files.
     """
     context.resources.beam_runner.run({
-        "inputPrefix": context.solid_config["input_prefix"],
+        "inputPrefix": input_prefix,
         "outputPrefix": context.solid_config["output_prefix"],
     })
     return context.solid_config["output_prefix"]
 
 ## todo: TSV Outfiles
-#def write_outfiles(context: AbstractComputeExecutionContext, input_prefix: str) -> str:
-#    """
-#    :return: Returns the path to the tsv outfiles.
-#    """
+@solid(
+    config_schema = {
+        "output_prefix": String,
+    }
+)
+def write_outfiles(context: AbstractComputeExecutionContext, input_prefix: str) -> str:
+    """
+    :return: Returns the path to the tsv outfiles.
+    """
+    # todo: add a step to create tsv subdir
+
+    subprocess.run(
+        ["python", "hack/convert-output-to-tsv.py", input_prefix, context.solid_config["output_prefix"], "--debug"],
+        check=True,
+        cwd="../../../../../GIT/dog-aging-ingest"
+    )
+    return context.solid_config["output_prefix"]
