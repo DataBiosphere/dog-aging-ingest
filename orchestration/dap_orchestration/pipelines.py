@@ -2,7 +2,8 @@ from dagster import pipeline, ModeDefinition
 
 from dap_orchestration.config import preconfigure_resource_for_mode
 from dap_orchestration.resources import local_beam_runner
-from dap_orchestration.solids import extract_records, transform_records, write_outfiles
+from dap_orchestration.solids import hles_extract_records, cslb_extract_records, env_extract_records,\
+    transform_records, write_outfiles
 
 local_beam_runner_run_schema = {"working_dir": str}
 
@@ -25,6 +26,8 @@ prod_mode = ModeDefinition(
 @pipeline(
     mode_defs=[dev_mode, prod_mode]
 )
-def refresh_data() -> None:
-    write_outfiles(transform_records(extract_records()))
-
+def refresh_data_all() -> None:
+    # hles
+    write_outfiles(transform_records(hles_extract_records()))
+    write_outfiles(transform_records(cslb_extract_records()))
+    write_outfiles(transform_records(env_extract_records()))

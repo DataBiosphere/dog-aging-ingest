@@ -1,7 +1,8 @@
 import subprocess
 
-from dagster import Bool, String, solid
+from dagster import Bool, String, solid, configured
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
+
 
 ## A solid is a unit of computation that yields a stream of events (similar to a function), while a composite is a collection of solids.
 ## Shared function to call SBT calls
@@ -9,27 +10,76 @@ from dagster.core.execution.context.compute import AbstractComputeExecutionConte
 ## Extraction Pipeline
 @solid(
     required_resource_keys={"beam_runner"},
-    config_schema = {
+    config_schema={
         "pull_data_dictionaries": Bool,
         "output_prefix": String,
         "end_time": String,
+        "target_class": String,
+        "api_token": String,
     }
 )
 def extract_records(context: AbstractComputeExecutionContext) -> str:
     """
     :return: Returns the path to extracted files.
     """
-    context.resources.beam_runner.run({
+    arg_dict = {
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
         "outputPrefix": context.solid_config["output_prefix"],
         "endTime": context.solid_config["end_time"],
-    })
+        "target_class": context.solid_config["target_class"],
+        "apiToken": context.solid_config["api_token"],
+        "scala_project": "dog-aging-hles-extraction"
+    }
+    context.resources.beam_runner.run(arg_dict)
     return context.solid_config["output_prefix"]
+
+BASE_CONFIG_SCHEMA={
+                "pull_data_dictionaries": Bool,
+                "output_prefix": String,
+                "end_time": String,
+                "api_token": String,
+            }
+@configured(extract_records,
+            config_schema=BASE_CONFIG_SCHEMA)
+def hles_extract_records(config):
+    return {
+        "pull_data_dictionaries": config["pull_data_dictionaries"],
+        "output_prefix": config["output_prefix"],
+        "end_time": config["end_time"],
+        "api_token": config["api_token"],
+        "target_class": "org.broadinstitute.monster.dap.hles.HLESurveyExtractionPipeline",
+    }
+
+
+@configured(extract_records,
+            config_schema=BASE_CONFIG_SCHEMA)
+def cslb_extract_records(config):
+    return {
+        "pull_data_dictionaries": config["pull_data_dictionaries"],
+        "output_prefix": config["output_prefix"],
+        "end_time": config["end_time"],
+        "api_token": config["api_token"],
+        "target_class": "org.broadinstitute.monster.dap.cslb.CslbExtractionPipeline",
+    }
+
+
+@configured(extract_records,
+            config_schema=BASE_CONFIG_SCHEMA)
+def env_extract_records(config):
+    return {
+        "pull_data_dictionaries": config["pull_data_dictionaries"],
+        "output_prefix": config["output_prefix"],
+        "end_time": config["end_time"],
+        "api_token": config["api_token"],
+        "target_class": "org.broadinstitute.monster.dap.environment.EnvironmentExtractionPipeline",
+    }
+
 
 @solid(
     required_resource_keys={"beam_runner"},
-    config_schema = {
+    config_schema={
         "output_prefix": String,
+        "target_class": String,
     }
 )
 def transform_records(context: AbstractComputeExecutionContext, input_prefix: str) -> str:
@@ -39,12 +89,39 @@ def transform_records(context: AbstractComputeExecutionContext, input_prefix: st
     context.resources.beam_runner.run({
         "inputPrefix": input_prefix,
         "outputPrefix": context.solid_config["output_prefix"],
+        "target_class": context.solid_config["target_class"],
+        "scala_project": "dog-aging-hles-transformation"
     })
     return context.solid_config["output_prefix"]
 
+
+@configured(transform_records,
+            config_schema={
+                "output_prefix": String,
+            })
+def hles_transform_records(_):
+    return {
+        "target_class": "org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipeline"
+    }
+
+
+@configured(transform_records)
+def cslb_transform_records(_):
+    return {
+        "target_class": "org.broadinstitute.monster.dap.cslb.CslbTransformationPipeline"
+    }
+
+
+@configured(transform_records)
+def env_transform_records(_):
+    return {
+        "target_class": "org.broadinstitute.monster.dap.environment.EnvironmentTransformationPipeline"
+    }
+
+
 ## todo: TSV Outfiles
 @solid(
-    config_schema = {
+    config_schema={
         "output_prefix": String,
     }
 )

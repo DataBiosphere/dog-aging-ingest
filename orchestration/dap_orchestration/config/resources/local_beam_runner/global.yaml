@@ -1,6 +1,3 @@
-scala_project: dog-aging-hles-extraction
-# todo: should this be "target_class: org.broadinstitute.monster.dap"?
-target_class: org.broadinstitute.monster.dap.cslb.CslbExtractionPipeline
 additional_args:
   - api_token:
       env: REDCAP_API_TOKEN
