@@ -8,6 +8,7 @@ import dap_orchestration.solids
 
 import os
 
+
 class PipelineTestCase(unittest.TestCase):
     def setUp(self):
         self.base_solid_config = {
@@ -19,6 +20,12 @@ class PipelineTestCase(unittest.TestCase):
                 }
             }
         }
+        self.extract_config = {
+            "pull_data_dictionaries": False,
+            "output_prefix": "gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/dagster_test_20210513/raw",
+            "end_time": "2020-05-19T23:59:59-05:00",
+            "api_token": "fake_api_token"
+        }
         self.mode = ModeDefinition(
             resource_defs={
                 "beam_runner": dap_orchestration.resources.test_beam_runner,
@@ -29,12 +36,7 @@ class PipelineTestCase(unittest.TestCase):
         hles_extract_config = {
             "solids": {
                 "hles_extract_records": {
-                    "config": {
-                        "pull_data_dictionaries": False,
-                        "output_prefix": "gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/dagster_test_20210513/raw",
-                        "end_time": "2020-05-19T23:59:59-05:00",
-                        "api_token": os.environ["API_TOKEN"],
-                    }
+                    "config": self.extract_config
                 }
             }
         }
@@ -51,12 +53,7 @@ class PipelineTestCase(unittest.TestCase):
         cslb_extract_config = {
             "solids": {
                 "cslb_extract_records": {
-                    "config": {
-                        "pull_data_dictionaries": False,
-                        "output_prefix": "gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/dagster_test_20210513/raw",
-                        "end_time": "2020-05-19T23:59:59-05:00",
-                        "api_token": os.environ["API_TOKEN"],
-                    }
+                    "config": self.extract_config
                 }
             }
         }
@@ -69,17 +66,11 @@ class PipelineTestCase(unittest.TestCase):
 
         self.assertTrue(result.success)
 
-
     def test_environment_extract(self):
         env_extract_config = {
             "solids": {
                 "env_extract_records": {
-                    "config": {
-                        "pull_data_dictionaries": False,
-                        "output_prefix": "gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/dagster_test_20210513/raw",
-                        "end_time": "2020-05-19T23:59:59-05:00",
-                        "api_token": os.environ["API_TOKEN_ENV"],
-                    }
+                    "config": self.extract_config
                 }
             }
         }
@@ -94,22 +85,14 @@ class PipelineTestCase(unittest.TestCase):
 
         # todo test hles transform
 
-
         # todo test cslb transform
 
-
         # todo test env transform
-
 
         # todo test hles write outfiles
 
-
         # todo test cslb write outfiles
-
 
         # todo test env transform
 
-
         # todo e2e to run everything
-
-
