@@ -20,14 +20,20 @@ class PipelineTestCase(unittest.TestCase):
                 }
             }
         }
+        # todo we should not have the output prefix hardcoded into these solid configs
         self.extract_config = {
             "pull_data_dictionaries": False,
-            "output_prefix": "gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/dagster_test_20210513/raw",
+            "output_prefix": "gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/dagster_test_20210511/raw",
             "end_time": "2020-05-19T23:59:59-05:00",
             "api_token": os.environ["API_TOKEN"]
         }
         self.transform_config = {
-            "output_prefix": "gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/dagster_test_20210513/transform",
+            "output_prefix": "gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/dagster_test_20210511/transform",
+        }
+        # todo factor this out (repeated from working_dir in the base_solid_config)
+        # todo also this should not have my user file path hardcoded like this
+        self.outfiles_config = {
+            "working_dir": "/Users/qhoque/GIT/dog-aging-ingest",
         }
         self.mode = ModeDefinition(
             resource_defs={
@@ -89,8 +95,6 @@ class PipelineTestCase(unittest.TestCase):
     # todo: the transform tests should not be dependent on the extract ones
 
     def test_hles_transform(self):
-        # todo: factor out repeated hardcoding of raw file path
-        raw_files = self.extract_config["output_prefix"]
         hles_transform_config = {
             "solids": {
                 "hles_transform_records": {
@@ -103,7 +107,7 @@ class PipelineTestCase(unittest.TestCase):
             dap_orchestration.solids.hles_transform_records,
             mode_def=self.mode,
             input_values={
-                "input_prefix": f"{raw_files}/hles"
+                "input_prefix": self.extract_config["output_prefix"]+"/hles"
             },
             run_config=dataflow_config
         )
@@ -111,7 +115,6 @@ class PipelineTestCase(unittest.TestCase):
         self.assertTrue(result.success)
 
     def test_cslb_transform(self):
-        raw_files = self.extract_config["output_prefix"]
         cslb_transform_config = {
             "solids": {
                 "cslb_transform_records": {
@@ -124,7 +127,7 @@ class PipelineTestCase(unittest.TestCase):
             dap_orchestration.solids.cslb_transform_records,
             mode_def=self.mode,
             input_values={
-                "input_prefix": f"{raw_files}/cslb"
+                "input_prefix": self.extract_config["output_prefix"]+"/cslb"
             },
             run_config=dataflow_config
         )
@@ -132,7 +135,6 @@ class PipelineTestCase(unittest.TestCase):
         self.assertTrue(result.success)
 
     def test_env_transform(self):
-        raw_files = self.extract_config["output_prefix"]
         env_transform_config = {
             "solids": {
                 "env_transform_records": {
@@ -145,7 +147,7 @@ class PipelineTestCase(unittest.TestCase):
             dap_orchestration.solids.env_transform_records,
             mode_def=self.mode,
             input_values={
-                "input_prefix": f"{raw_files}/environment"
+                "input_prefix": self.extract_config["output_prefix"]+"/environment"
             },
             run_config=dataflow_config
         )
@@ -153,5 +155,26 @@ class PipelineTestCase(unittest.TestCase):
         self.assertTrue(result.success)
 
     # todo test write outfiles
+    def test_write_outfiles(self):
+        write_outfiles_config = {
+            "solids": {
+                "write_outfiles": {
+                    "config": self.outfiles_config
+                }
+            }
+        }
+        dataflow_config = {**self.base_solid_config, **write_outfiles_config}
+        result: SolidExecutionResult = execute_solid(
+            dap_orchestration.solids.write_outfiles,
+            mode_def=self.mode,
+            input_values={
+                # this is dependent on the transform output
+                #"input_prefix": self.transform_config["output_prefix"]
+                "input_prefix": "gs://broad-dsp-monster-dap-dev-storage/weekly_refresh/20210329/transform"
+            },
+            run_config=dataflow_config
+        )
+
+        self.assertTrue(result.success)
 
     # todo e2e to run everything

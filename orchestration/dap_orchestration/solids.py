@@ -1,3 +1,4 @@
+import os
 import subprocess
 
 from dagster import Bool, String, solid, configured
@@ -104,7 +105,7 @@ def env_transform_records(config):
 ## todo: TSV Outfiles
 @solid(
     config_schema={
-        "output_prefix": String,
+        "working_dir": String,
     }
 )
 def write_outfiles(context: AbstractComputeExecutionContext, input_prefix: str) -> str:
@@ -112,10 +113,10 @@ def write_outfiles(context: AbstractComputeExecutionContext, input_prefix: str) 
     :return: Returns the path to the tsv outfiles.
     """
     # todo: add a step to create tsv subdir
-
+    os.mkdir("tsv_output")
     subprocess.run(
-        ["python", "hack/convert-output-to-tsv.py", input_prefix, context.solid_config["output_prefix"], "--debug"],
+        ["python", "hack/convert-output-to-tsv.py", input_prefix, context.solid_config["working_dir"]+"/tsv_output", "--debug"],
         check=True,
-        cwd="../../../../../GIT/dog-aging-ingest"
+        cwd=context.solid_config["working_dir"]
     )
-    return context.solid_config["output_prefix"]
+    return context.solid_config["working_dir"]+"/tsv_output"
