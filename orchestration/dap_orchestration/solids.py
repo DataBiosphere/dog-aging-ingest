@@ -33,46 +33,30 @@ def extract_records(context: AbstractComputeExecutionContext) -> str:
     context.resources.beam_runner.run(arg_dict)
     return context.solid_config["output_prefix"]
 
-BASE_CONFIG_SCHEMA={
-                "pull_data_dictionaries": Bool,
-                "output_prefix": String,
-                "end_time": String,
-                "api_token": String,
-            }
-@configured(extract_records,
-            config_schema=BASE_CONFIG_SCHEMA)
+
+def _build_extract_config(config: dict[str, str], target_class: str):
+    return {
+        "pull_data_dictionaries": config["pull_data_dictionaries"],
+        "output_prefix": config["output_prefix"],
+        "end_time": config["end_time"],
+        "api_token": config["api_token"],
+        "target_class": target_class
+    }
+
+
+@configured(extract_records)
 def hles_extract_records(config):
-    return {
-        "pull_data_dictionaries": config["pull_data_dictionaries"],
-        "output_prefix": config["output_prefix"],
-        "end_time": config["end_time"],
-        "api_token": config["api_token"],
-        "target_class": "org.broadinstitute.monster.dap.hles.HLESurveyExtractionPipeline",
-    }
+    return _build_extract_config(config, "org.broadinstitute.monster.dap.hles.HLESurveyExtractionPipeline")
 
 
-@configured(extract_records,
-            config_schema=BASE_CONFIG_SCHEMA)
+@configured(extract_records)
 def cslb_extract_records(config):
-    return {
-        "pull_data_dictionaries": config["pull_data_dictionaries"],
-        "output_prefix": config["output_prefix"],
-        "end_time": config["end_time"],
-        "api_token": config["api_token"],
-        "target_class": "org.broadinstitute.monster.dap.cslb.CslbExtractionPipeline",
-    }
+    return _build_extract_config(config,"org.broadinstitute.monster.dap.cslb.CslbExtractionPipeline")
 
 
-@configured(extract_records,
-            config_schema=BASE_CONFIG_SCHEMA)
+@configured(extract_records)
 def env_extract_records(config):
-    return {
-        "pull_data_dictionaries": config["pull_data_dictionaries"],
-        "output_prefix": config["output_prefix"],
-        "end_time": config["end_time"],
-        "api_token": config["api_token"],
-        "target_class": "org.broadinstitute.monster.dap.environment.EnvironmentExtractionPipeline",
-    }
+    return _build_extract_config(config, "org.broadinstitute.monster.dap.environment.EnvironmentExtractionPipeline")
 
 
 @solid(
