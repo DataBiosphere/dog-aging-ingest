@@ -33,7 +33,7 @@ def extract_records(context: AbstractComputeExecutionContext) -> str:
     context.resources.beam_runner.run(arg_dict)
     return context.solid_config["output_prefix"]
 
-
+# todo: create a builder method that returns a SolidDefintion
 def _build_extract_config(config: dict[str, str], target_class: str):
     return {
         "pull_data_dictionaries": config["pull_data_dictionaries"],
@@ -70,37 +70,35 @@ def transform_records(context: AbstractComputeExecutionContext, input_prefix: st
     """
     :return: Returns the path to the transformation output json files.
     """
-    context.resources.beam_runner.run({
+    arg_dict = {
         "inputPrefix": input_prefix,
         "outputPrefix": context.solid_config["output_prefix"],
         "target_class": context.solid_config["target_class"],
         "scala_project": "dog-aging-hles-transformation"
-    })
+    }
+    context.resources.beam_runner.run(arg_dict)
     return context.solid_config["output_prefix"]
 
-
-@configured(transform_records,
-            config_schema={
-                "output_prefix": String,
-            })
-def hles_transform_records(_):
+# todo: transform config builder
+def _build_transform_config(config: dict[str, str], target_class: str):
     return {
-        "target_class": "org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipeline"
+        "output_prefix": config["output_prefix"],
+        "target_class": target_class
     }
+
 
 
 @configured(transform_records)
-def cslb_transform_records(_):
-    return {
-        "target_class": "org.broadinstitute.monster.dap.cslb.CslbTransformationPipeline"
-    }
-
+def hles_transform_records(config):
+    return _build_transform_config(config, "org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipeline")
 
 @configured(transform_records)
-def env_transform_records(_):
-    return {
-        "target_class": "org.broadinstitute.monster.dap.environment.EnvironmentTransformationPipeline"
-    }
+def cslb_transform_records(config):
+    return _build_transform_config(config, "org.broadinstitute.monster.dap.cslb.CslbTransformationPipeline")
+
+@configured(transform_records)
+def env_transform_records(config):
+    return _build_transform_config(config, "org.broadinstitute.monster.dap.environment.EnvironmentTransformationPipeline")
 
 
 ## todo: TSV Outfiles
