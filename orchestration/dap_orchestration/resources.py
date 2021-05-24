@@ -18,7 +18,8 @@ class DataflowBeamRunner:
     max_num_workers: int
     google_project: str
 
-    def __post_init__(self):
+    # note: Use "-> None" if function does not return a value
+    def __post_init__(self) -> None:
         self.arg_dict = {
             # resource config - how stuff behaves
             # will not affect what is returned - will only affect run performance/success
@@ -86,7 +87,7 @@ class LocalBeamRunner:
 
     # todo: **kwargs param to local beam runner + dataflow beam runner when we refactor this to use dagster_utils
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.arg_dict = {
             "runner": "direct",
         }

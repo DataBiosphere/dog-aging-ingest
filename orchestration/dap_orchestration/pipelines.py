@@ -3,7 +3,7 @@ from dagster import pipeline, ModeDefinition
 from dap_orchestration.config import preconfigure_resource_for_mode
 from dap_orchestration.resources import local_beam_runner
 from dap_orchestration.solids import hles_extract_records, cslb_extract_records, env_extract_records,\
-    transform_records, write_outfiles
+    hles_transform_records, cslb_transform_records, env_transform_records, write_outfiles
 
 local_beam_runner_run_schema = {"working_dir": str}
 
@@ -27,7 +27,8 @@ prod_mode = ModeDefinition(
     mode_defs=[dev_mode, prod_mode]
 )
 def refresh_data_all() -> None:
-    # hles
-    write_outfiles(transform_records(hles_extract_records()))
-    write_outfiles(transform_records(cslb_extract_records()))
-    write_outfiles(transform_records(env_extract_records()))
+    # the transform output should be in the same directory for all 3 pipelines
+    hles_transform_records(hles_extract_records())
+    cslb_transform_records(cslb_extract_records())
+    transform_files=env_transform_records(env_extract_records())
+    write_outfiles(transform_files)

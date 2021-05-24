@@ -32,10 +32,11 @@ def extract_records(context: AbstractComputeExecutionContext) -> str:
         "scala_project": "dog-aging-hles-extraction"
     }
     context.resources.beam_runner.run(arg_dict)
+    # todo: resolve mypy error: Returning Any from function declared to return "str"
     return context.solid_config["output_prefix"]
 
 # todo: create a builder method that returns a SolidDefintion
-def _build_extract_config(config: dict[str, str], target_class: str):
+def _build_extract_config(config: dict[str, str], target_class: str) -> dict[str, str]:
     return {
         "pull_data_dictionaries": config["pull_data_dictionaries"],
         "output_prefix": config["output_prefix"],
@@ -46,17 +47,17 @@ def _build_extract_config(config: dict[str, str], target_class: str):
 
 
 @configured(extract_records)
-def hles_extract_records(config):
+def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(config, "org.broadinstitute.monster.dap.hles.HLESurveyExtractionPipeline")
 
 
 @configured(extract_records)
-def cslb_extract_records(config):
+def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(config,"org.broadinstitute.monster.dap.cslb.CslbExtractionPipeline")
 
 
 @configured(extract_records)
-def env_extract_records(config):
+def env_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(config, "org.broadinstitute.monster.dap.environment.EnvironmentExtractionPipeline")
 
 
@@ -78,31 +79,30 @@ def transform_records(context: AbstractComputeExecutionContext, input_prefix: st
         "scala_project": "dog-aging-hles-transformation"
     }
     context.resources.beam_runner.run(arg_dict)
+    # todo: resolve mypy error: Returning Any from function declared to return "str"
     return context.solid_config["output_prefix"]
 
-# todo: transform config builder
-def _build_transform_config(config: dict[str, str], target_class: str):
+def _build_transform_config(config: dict[str, str], target_class: str) -> dict[str, str]:
     return {
         "output_prefix": config["output_prefix"],
         "target_class": target_class
     }
 
 
-
+# todo: how do I specify the input_values (output_prefix) for a configured function?
 @configured(transform_records)
-def hles_transform_records(config):
+def hles_transform_records(config: dict[str, str]) -> dict[str, str]:
     return _build_transform_config(config, "org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipeline")
 
 @configured(transform_records)
-def cslb_transform_records(config):
+def cslb_transform_records(config: dict[str, str]) -> dict[str, str]:
     return _build_transform_config(config, "org.broadinstitute.monster.dap.cslb.CslbTransformationPipeline")
 
 @configured(transform_records)
-def env_transform_records(config):
+def env_transform_records(config: dict[str, str]) -> dict[str, str]:
     return _build_transform_config(config, "org.broadinstitute.monster.dap.environment.EnvironmentTransformationPipeline")
 
 
-## todo: TSV Outfiles
 @solid(
     config_schema={
         "working_dir": String,
@@ -112,11 +112,11 @@ def write_outfiles(context: AbstractComputeExecutionContext, input_prefix: str) 
     """
     :return: Returns the path to the tsv outfiles.
     """
-    # todo: add a step to create tsv subdir
     os.mkdir("tsv_output")
     subprocess.run(
         ["python", "hack/convert-output-to-tsv.py", input_prefix, context.solid_config["working_dir"]+"/tsv_output", "--debug"],
         check=True,
         cwd=context.solid_config["working_dir"]
     )
+    # todo: resolve mypy error: Returning Any from function declared to return "str"
     return context.solid_config["working_dir"]+"/tsv_output"

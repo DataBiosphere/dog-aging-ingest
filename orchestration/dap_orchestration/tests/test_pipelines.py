@@ -49,6 +49,9 @@ class PipelineTestCase(unittest.TestCase):
                 }
             }
         }
+        # todo: resolve mypy error: Argument 1 to "update" of "dict" has incompatible type
+        # "Dict[str, Dict[str, Dict[str, Dict[str, object]]]]";
+        # expected "Mapping[str, Dict[str, Dict[str, Dict[str, str]]]]"
         dataflow_config = {**self.base_solid_config, **hles_extract_config}
         result: SolidExecutionResult = execute_solid(
             dap_orchestration.solids.hles_extract_records,
@@ -66,6 +69,9 @@ class PipelineTestCase(unittest.TestCase):
                 }
             }
         }
+        # todo: resolve mypy error: Argument 1 to "update" of "dict" has incompatible type
+        # "Dict[str, Dict[str, Dict[str, Dict[str, object]]]]";
+        # expected "Mapping[str, Dict[str, Dict[str, Dict[str, str]]]]"
         dataflow_config = {**self.base_solid_config, **cslb_extract_config}
         result: SolidExecutionResult = execute_solid(
             dap_orchestration.solids.cslb_extract_records,
@@ -83,6 +89,9 @@ class PipelineTestCase(unittest.TestCase):
                 }
             }
         }
+        # todo: resolve mypy error: Argument 1 to "update" of "dict" has incompatible type
+        # "Dict[str, Dict[str, Dict[str, Dict[str, object]]]]";
+        # expected "Mapping[str, Dict[str, Dict[str, Dict[str, str]]]]"
         dataflow_config = {**self.base_solid_config, **env_extract_config}
         result: SolidExecutionResult = execute_solid(
             dap_orchestration.solids.env_extract_records,
@@ -102,6 +111,7 @@ class PipelineTestCase(unittest.TestCase):
                 }
             }
         }
+        # todo fix mypy error: Unsupported left operand type for + ("object")
         dataflow_config = {**self.base_solid_config, **hles_transform_config}
         result: SolidExecutionResult = execute_solid(
             dap_orchestration.solids.hles_transform_records,
@@ -122,6 +132,7 @@ class PipelineTestCase(unittest.TestCase):
                 }
             }
         }
+        # todo fix mypy error: Unsupported left operand type for + ("object")
         dataflow_config = {**self.base_solid_config, **cslb_transform_config}
         result: SolidExecutionResult = execute_solid(
             dap_orchestration.solids.cslb_transform_records,
@@ -142,6 +153,7 @@ class PipelineTestCase(unittest.TestCase):
                 }
             }
         }
+        # todo fix mypy error: Unsupported left operand type for + ("object")
         dataflow_config = {**self.base_solid_config, **env_transform_config}
         result: SolidExecutionResult = execute_solid(
             dap_orchestration.solids.env_transform_records,
@@ -154,7 +166,6 @@ class PipelineTestCase(unittest.TestCase):
 
         self.assertTrue(result.success)
 
-    # todo test write outfiles
     def test_write_outfiles(self):
         write_outfiles_config = {
             "solids": {
