@@ -17,7 +17,7 @@ from dagster.core.execution.context.compute import AbstractComputeExecutionConte
         "api_token": String,
     }
 )
-def extract_records(context: AbstractComputeExecutionContext) -> str:
+def extract_records(context: AbstractComputeExecutionContext) -> None:
     """
     :return: Returns the path to extracted files.
     """
@@ -30,8 +30,6 @@ def extract_records(context: AbstractComputeExecutionContext) -> str:
         "scala_project": "dog-aging-hles-extraction"
     }
     context.resources.beam_runner.run(arg_dict)
-    # todo: resolve mypy error: Returning Any from function declared to return "str"
-    return context.solid_config["output_prefix"]
 
 def _build_extract_config(config: dict[str, str], target_class: str) -> dict[str, str]:
     return {
@@ -61,30 +59,29 @@ def env_extract_records(config: dict[str, str]) -> dict[str, str]:
 @solid(
     required_resource_keys={"beam_runner"},
     config_schema={
+        "input_prefix": String,
         "output_prefix": String,
         "target_class": String,
     }
 )
-def transform_records(context: AbstractComputeExecutionContext, input_prefix: str) -> str:
+def transform_records(context: AbstractComputeExecutionContext) -> None:
     """
     :return: Returns the path to the transformation output json files.
     """
     arg_dict = {
-        "inputPrefix": input_prefix,
+        "inputPrefix": context.solid_config["input_prefix"],
         "outputPrefix": context.solid_config["output_prefix"],
         "target_class": context.solid_config["target_class"],
         "scala_project": "dog-aging-hles-transformation"
     }
     context.resources.beam_runner.run(arg_dict)
-    # todo: resolve mypy error: Returning Any from function declared to return "str"
-    return context.solid_config["output_prefix"]
 
 def _build_transform_config(config: dict[str, str], target_class: str) -> dict[str, str]:
     return {
+        "input_prefix": config["input_prefix"],
         "output_prefix": config["output_prefix"],
         "target_class": target_class
     }
-
 
 # todo: how do I specify the input_values (output_prefix) for a configured function?
 @configured(transform_records)
@@ -102,19 +99,18 @@ def env_transform_records(config: dict[str, str]) -> dict[str, str]:
 
 @solid(
     config_schema={
+        "input_prefix": String,
         "working_dir": String,
     }
 )
-def write_outfiles(context: AbstractComputeExecutionContext, input_prefix: str) -> str:
+def write_outfiles(context: AbstractComputeExecutionContext) -> None:
     """
     :return: Returns the path to the tsv outfiles.
     """
     os.mkdir("tsv_output")
     outfile_path = f'{context.solid_config["working_dir"]}/tsv_output'
     subprocess.run(
-        ["python", "hack/convert-output-to-tsv.py", input_prefix, outfile_path, "--debug"],
+        ["python", "hack/convert-output-to-tsv.py", context.solid_config["input_prefix"], outfile_path, "--debug"],
         check=True,
         cwd=context.solid_config["working_dir"]
     )
-    # todo: resolve mypy error: Returning Any from function declared to return "str"
-    return outfile_path

@@ -28,7 +28,13 @@ prod_mode = ModeDefinition(
 )
 def refresh_data_all() -> None:
     # the transform output should be in the same directory for all 3 pipelines
-    hles_transform_records(hles_extract_records())
-    cslb_transform_records(cslb_extract_records())
-    transform_files=env_transform_records(env_extract_records())
-    write_outfiles(transform_files)
+    #hles_extract_records()
+    #hles_transform_records()
+
+    cslb_extract_records()
+    cslb_transform_records()
+
+    #env_extract_records()
+    #env_transform_records()
+
+    write_outfiles()
