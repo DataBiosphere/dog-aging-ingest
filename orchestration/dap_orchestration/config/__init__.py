@@ -6,7 +6,7 @@ from dagster_utils.typing import DagsterObjectConfigSchema
 
 preconfigure_for_mode = configurator_aimed_at_directory(os.path.dirname(__file__))
 
-
+# todo: import Dagster utils version
 def preconfigure_resource_for_mode(
         resource: ResourceDefinition,
         mode_name: str,

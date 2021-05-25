@@ -5,10 +5,8 @@ from dagster import Bool, String, solid, configured
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
 
 
-## A solid is a unit of computation that yields a stream of events (similar to a function), while a composite is a collection of solids.
 ## Shared function to call SBT calls
 ## shared local beam runner resource
-## Extraction Pipeline
 @solid(
     required_resource_keys={"beam_runner"},
     config_schema={
@@ -35,7 +33,6 @@ def extract_records(context: AbstractComputeExecutionContext) -> str:
     # todo: resolve mypy error: Returning Any from function declared to return "str"
     return context.solid_config["output_prefix"]
 
-# todo: create a builder method that returns a SolidDefintion
 def _build_extract_config(config: dict[str, str], target_class: str) -> dict[str, str]:
     return {
         "pull_data_dictionaries": config["pull_data_dictionaries"],
@@ -113,10 +110,11 @@ def write_outfiles(context: AbstractComputeExecutionContext, input_prefix: str) 
     :return: Returns the path to the tsv outfiles.
     """
     os.mkdir("tsv_output")
+    outfile_path = f'{context.solid_config["working_dir"]}/tsv_output'
     subprocess.run(
-        ["python", "hack/convert-output-to-tsv.py", input_prefix, context.solid_config["working_dir"]+"/tsv_output", "--debug"],
+        ["python", "hack/convert-output-to-tsv.py", input_prefix, outfile_path, "--debug"],
         check=True,
         cwd=context.solid_config["working_dir"]
     )
     # todo: resolve mypy error: Returning Any from function declared to return "str"
-    return context.solid_config["working_dir"]+"/tsv_output"
+    return outfile_path

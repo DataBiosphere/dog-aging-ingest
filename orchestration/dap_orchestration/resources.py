@@ -10,7 +10,6 @@ from dagster.core.execution.context.init import InitResourceContext
 class DataflowBeamRunner:
     working_dir: str
     logger: DagsterLogManager
-    # todo: **kwargs param to local beam runner + dataflow beam runner when we refactor this to use dagster_utils
     region: str
     worker_machine_type: str
     autoscaling_algorithm: str
@@ -18,7 +17,6 @@ class DataflowBeamRunner:
     max_num_workers: int
     google_project: str
 
-    # note: Use "-> None" if function does not return a value
     def __post_init__(self) -> None:
         self.arg_dict = {
             # resource config - how stuff behaves
@@ -29,13 +27,9 @@ class DataflowBeamRunner:
             "numWorkers": str(self.num_workers),
             "maxNumWorkers": str(self.max_num_workers),
             "project": self.google_project,
-            # hardcode anything that doesn't fall into solids/resources ie. dataflow
             "runner": "dataflow",
-            # To use the service-based Dataflow Shuffle in your batch pipelines
             "experiments": "shuffle_mode=service",
         }
-
-    # pull the target_class out of the resource config
 
     def run(
             self,
@@ -44,14 +38,13 @@ class DataflowBeamRunner:
         # create a new dictionary containing the keys and values of arg_dict + solid arguments
         dataflow_run_flags = {**self.arg_dict, **run_arg_dict}
         self.logger.info("Dataflow beam runner")
-        # pull target_class out of list of flags
+        # special case target_class and scala_project as those cannot be placed in the args list of the sbt invocation`
         target_class = dataflow_run_flags.pop("target_class")
         scala_project = dataflow_run_flags.pop("scala_project")
 
         # list comprehension over args_dict to get flags
         flags = " ".join([f'--{arg}={value}' for arg, value in dataflow_run_flags.items()])
         subprocess.run(
-            # ["sbt", f'{self.scala_project}/runMain {self.target_class} {flags}'],
             ["sbt", f'{scala_project}/runMain {target_class} {flags}'],
             check=True,
             cwd=self.working_dir
@@ -85,28 +78,24 @@ class LocalBeamRunner:
     working_dir: str
     logger: DagsterLogManager
 
-    # todo: **kwargs param to local beam runner + dataflow beam runner when we refactor this to use dagster_utils
-
     def __post_init__(self) -> None:
         self.arg_dict = {
             "runner": "direct",
         }
-
-    # pull the target_class out of the resource config
 
     def run(
             self,
             run_arg_dict: dict[str, Any],
     ) -> None:
         # create a new dictionary containing the keys and values of arg_dict + solid arguments
-        dataflow_run_flags = {**self.arg_dict, **run_arg_dict}
+        local_run_flags = {**self.arg_dict, **run_arg_dict}
         self.logger.info("Local beam runner")
-        # pull target_class out of list of flags
-        target_class = dataflow_run_flags.pop("target_class")
-        scala_project = dataflow_run_flags.pop("scala_project")
+        # special case target_class and scala_project as those cannot be placed in the args list of the sbt invocation`
+        target_class = local_run_flags.pop("target_class")
+        scala_project = local_run_flags.pop("scala_project")
 
         # list comprehension over args_dict to get flags
-        flags = " ".join([f'--{arg}={value}' for arg, value in dataflow_run_flags.items()])
+        flags = " ".join([f'--{arg}={value}' for arg, value in local_run_flags.items()])
         subprocess.run(
             ["sbt", f'{scala_project}/runMain {target_class} {flags}'],
             check=True,
@@ -126,7 +115,6 @@ def local_beam_runner(init_context: InitResourceContext) -> LocalBeamRunner:
 
 class TestBeamRunner:
     def run(self, arg_dict: dict[str, Any]) -> None:
-        # no thoughts, head empty
         pass
 
 

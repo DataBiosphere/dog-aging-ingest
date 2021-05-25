@@ -102,7 +102,6 @@ class PipelineTestCase(unittest.TestCase):
         self.assertTrue(result.success)
 
     # todo: the transform tests should not be dependent on the extract ones
-
     def test_hles_transform(self):
         hles_transform_config = {
             "solids": {
@@ -111,13 +110,12 @@ class PipelineTestCase(unittest.TestCase):
                 }
             }
         }
-        # todo fix mypy error: Unsupported left operand type for + ("object")
         dataflow_config = {**self.base_solid_config, **hles_transform_config}
         result: SolidExecutionResult = execute_solid(
             dap_orchestration.solids.hles_transform_records,
             mode_def=self.mode,
             input_values={
-                "input_prefix": self.extract_config["output_prefix"]+"/hles"
+                "input_prefix": f'{self.extract_config["output_prefix"]}/hles'
             },
             run_config=dataflow_config
         )
@@ -132,13 +130,12 @@ class PipelineTestCase(unittest.TestCase):
                 }
             }
         }
-        # todo fix mypy error: Unsupported left operand type for + ("object")
         dataflow_config = {**self.base_solid_config, **cslb_transform_config}
         result: SolidExecutionResult = execute_solid(
             dap_orchestration.solids.cslb_transform_records,
             mode_def=self.mode,
             input_values={
-                "input_prefix": self.extract_config["output_prefix"]+"/cslb"
+                "input_prefix": f'{self.extract_config["output_prefix"]}/cslb'
             },
             run_config=dataflow_config
         )
@@ -153,13 +150,12 @@ class PipelineTestCase(unittest.TestCase):
                 }
             }
         }
-        # todo fix mypy error: Unsupported left operand type for + ("object")
         dataflow_config = {**self.base_solid_config, **env_transform_config}
         result: SolidExecutionResult = execute_solid(
             dap_orchestration.solids.env_transform_records,
             mode_def=self.mode,
             input_values={
-                "input_prefix": self.extract_config["output_prefix"]+"/environment"
+                "input_prefix": f'{self.extract_config["output_prefix"]}/environment'
             },
             run_config=dataflow_config
         )
