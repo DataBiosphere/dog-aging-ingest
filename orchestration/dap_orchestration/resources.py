@@ -1,5 +1,6 @@
+import os
 import subprocess
-from typing import Any, List
+from typing import Any
 from dataclasses import dataclass
 
 from dagster import DagsterLogManager, Array, Field, resource, StringSource, IntSource
@@ -121,3 +122,41 @@ class TestBeamRunner:
 @resource
 def test_beam_runner(init_context: InitResourceContext) -> TestBeamRunner:
     return TestBeamRunner()
+
+@resource({
+    "refresh_directory": Field(StringSource)
+})
+def refresh_directory(init_context: InitResourceContext) -> str:
+    directory: str = init_context.resource_config["refresh_directory"]
+    return directory
+
+@resource
+def test_refresh_directory(init_context: InitResourceContext) -> str:
+    return "fake"
+
+
+class OutfilesWriter:
+    def run(self, working_dir: str, refresh_dir: str) -> None:
+        # todo: maybe check to see if the dir already exists
+        os.mkdir("tsv_output")
+        outfile_path = f'{working_dir}/tsv_output'
+        subprocess.run(
+            ["python", "hack/convert-output-to-tsv.py",refresh_dir, outfile_path, "--debug"],
+            check=True,
+            cwd=working_dir
+        )
+
+
+@resource
+def outfiles_writer(init_context: InitResourceContext) -> OutfilesWriter:
+    return OutfilesWriter()
+
+
+class TestOutfilesWriter:
+    def run(self, working_dir: str, refresh_dir: str) -> None:
+        pass
+
+
+@resource
+def test_outfiles_writer(init_context: InitResourceContext) -> TestOutfilesWriter:
+    return TestOutfilesWriter()
