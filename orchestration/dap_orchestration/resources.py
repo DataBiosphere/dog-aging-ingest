@@ -20,8 +20,6 @@ class DataflowBeamRunner:
 
     def __post_init__(self) -> None:
         self.arg_dict = {
-            # resource config - how stuff behaves
-            # will not affect what is returned - will only affect run performance/success
             "region": self.region,
             "workerMachineType": self.worker_machine_type,
             "autoscalingAlgorithm": self.autoscaling_algorithm,
