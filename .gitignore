@@ -5,3 +5,7 @@ target/
 project/metals.sbt
 .bloop/
 hack/virtualenvs/
+__pycache__
+poetry.lock
+.mypy_cache
+.pytest_cache
