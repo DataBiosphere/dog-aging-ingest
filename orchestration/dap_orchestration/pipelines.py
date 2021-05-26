@@ -33,22 +33,18 @@ prod_mode = ModeDefinition(
     }
 )
 
-# use manual aliasing to differentiate between the two pipelines
-# that way we can call the 3 pipelines separately
-
-
 @pipeline(
     mode_defs=[local_mode, dev_mode, prod_mode]
 )
 def refresh_data_all() -> None:
-    # the transform output should be in the same directory for all 3 pipelines
     hles_extract_records()
     hles_transform_records()
 
     cslb_extract_records()
     cslb_transform_records()
 
-    # env_extract_records()
-    # env_transform_records()
+    env_extract_records()
+    env_transform_records()
 
+    # the transform output should be in the same directory for all 3 pipelines
     write_outfiles()
