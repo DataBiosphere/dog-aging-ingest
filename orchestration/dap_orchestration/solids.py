@@ -13,6 +13,10 @@ from dagster.core.execution.context.compute import AbstractComputeExecutionConte
     }
 )
 def extract_records(context: AbstractComputeExecutionContext) -> None:
+    """
+    This solid will take in the arguments provided in context and run the sbt extraction code
+    for the predefined pipeline (HLES, CSLB, or ENVIRONMENT) using the specified runner.
+    """
     arg_dict = {
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
         "outputPrefix": f"{context.resources.refresh_directory}/{context.solid_config['output_prefix']}",
@@ -70,6 +74,10 @@ def env_extract_records(config: dict[str, str]) -> dict[str, str]:
     }
 )
 def transform_records(context: AbstractComputeExecutionContext) -> None:
+    """
+    This solid will take in the arguments provided in context and run the sbt transformation code
+    for the predefined pipeline (HLES, CSLB, or ENVIORONMENT) using the specified runner.
+    """
     arg_dict = {
         "inputPrefix": f'{context.resources.refresh_directory}/{context.solid_config["input_prefix"]}',
         "outputPrefix": f'{context.resources.refresh_directory}/{context.solid_config["output_prefix"]}',
@@ -122,6 +130,8 @@ def env_transform_records(config: dict[str, str]) -> dict[str, str]:
 )
 def write_outfiles(context: AbstractComputeExecutionContext) -> None:
     """
-    :return: Returns the path to the tsv outfiles.
+    This solid will take in the arguments provided in context and call the convert-output-to-tsv script
+    on the transform outputs. The script is currently expecting transform outputs from all 3 pipelines and will
+    error if one of them is not found at the input directory.
     """
     context.resources.outfiles_writer.run(context.solid_config["working_dir"], context.resources.refresh_directory)
