@@ -33,6 +33,7 @@ prod_mode = ModeDefinition(
     }
 )
 
+
 @pipeline(
     mode_defs=[local_mode, dev_mode, prod_mode]
 )
