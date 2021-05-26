@@ -2,7 +2,7 @@
 name = "dap_orchestration"
 version = "0.0.1"
 description = "This is the dagster orchestration project for DAP pipelines"
-authors = ["Quazi Hoque <you@example.com>"]
+authors = ["Quazi Hoque <qhoque@broadinstitute.org>"]
 
 [tool.poetry.dependencies]
 python = "~3.9"

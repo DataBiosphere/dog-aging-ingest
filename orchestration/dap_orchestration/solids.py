@@ -13,9 +13,6 @@ from dagster.core.execution.context.compute import AbstractComputeExecutionConte
     }
 )
 def extract_records(context: AbstractComputeExecutionContext) -> None:
-    """
-    :return: Returns the path to extracted files.
-    """
     arg_dict = {
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
         "outputPrefix": f"{context.resources.refresh_directory}/{context.solid_config['output_prefix']}",
@@ -33,7 +30,7 @@ def _build_extract_config(config: dict[str, str], target_class: str, output_pref
         "output_prefix": output_prefix,
         "end_time": config["end_time"],
         "api_token": config["api_token"],
-        "target_class": target_class,
+        "target_class": target_class
     }
 
 
@@ -42,7 +39,7 @@ def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(
         config,
         "org.broadinstitute.monster.dap.hles.HLESurveyExtractionPipeline",
-        f"/extract/hles"
+        "raw"
     )
 
 
@@ -51,7 +48,7 @@ def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(
         config,
         "org.broadinstitute.monster.dap.cslb.CslbExtractionPipeline",
-        "/extract/cslb"
+        "raw"
     )
 
 
@@ -60,7 +57,7 @@ def env_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(
         config,
         "org.broadinstitute.monster.dap.environment.EnvironmentExtractionPipeline",
-        "/extract/env"
+        "raw"
     )
 
 
@@ -73,9 +70,6 @@ def env_extract_records(config: dict[str, str]) -> dict[str, str]:
     }
 )
 def transform_records(context: AbstractComputeExecutionContext) -> None:
-    """
-    :return: Returns the path to the transformation output json files.
-    """
     arg_dict = {
         "inputPrefix": f'{context.resources.refresh_directory}/{context.solid_config["input_prefix"]}',
         "outputPrefix": f'{context.resources.refresh_directory}/{context.solid_config["output_prefix"]}',
@@ -97,8 +91,8 @@ def _build_transform_config(target_class: str, input_prefix: str, output_prefix:
 def hles_transform_records(config: dict[str, str]) -> dict[str, str]:
     return _build_transform_config(
         "org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipeline",
-        "hles_extract",
-        "/transform/hles"
+        "raw/hles",
+        "transform"
     )
 
 
@@ -106,8 +100,8 @@ def hles_transform_records(config: dict[str, str]) -> dict[str, str]:
 def cslb_transform_records(config: dict[str, str]) -> dict[str, str]:
     return _build_transform_config(
         "org.broadinstitute.monster.dap.cslb.CslbTransformationPipeline",
-        "cslb_extract",
-        "/transform/cslb"
+        "raw/cslb",
+        "transform"
     )
 
 
@@ -115,8 +109,8 @@ def cslb_transform_records(config: dict[str, str]) -> dict[str, str]:
 def env_transform_records(config: dict[str, str]) -> dict[str, str]:
     return _build_transform_config(
         "org.broadinstitute.monster.dap.environment.EnvironmentTransformationPipeline",
-        "env_extract",
-        "/transform/env"
+        "raw/environment",
+        "transform"
     )
 
 

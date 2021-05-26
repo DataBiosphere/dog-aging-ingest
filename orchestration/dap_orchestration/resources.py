@@ -3,7 +3,7 @@ import subprocess
 from typing import Any
 from dataclasses import dataclass
 
-from dagster import DagsterLogManager, Array, Field, resource, StringSource, IntSource
+from dagster import DagsterLogManager, Field, resource, StringSource, IntSource
 from dagster.core.execution.context.init import InitResourceContext
 
 
@@ -30,10 +30,7 @@ class DataflowBeamRunner:
             "experiments": "shuffle_mode=service",
         }
 
-    def run(
-            self,
-            run_arg_dict: dict[str, Any],
-    ) -> None:
+    def run(self, run_arg_dict: dict[str, Any]) -> None:
         # create a new dictionary containing the keys and values of arg_dict + solid arguments
         dataflow_run_flags = {**self.arg_dict, **run_arg_dict}
         self.logger.info("Dataflow beam runner")
@@ -51,7 +48,6 @@ class DataflowBeamRunner:
 
 
 @resource({
-    "working_dir": Field(StringSource),
     "region": Field(StringSource),
     "worker_machine_type": Field(StringSource),
     "autoscaling_algorithm": Field(StringSource),
@@ -121,12 +117,12 @@ class TestBeamRunner:
 def test_beam_runner(init_context: InitResourceContext) -> TestBeamRunner:
     return TestBeamRunner()
 
-@resource({
-    "refresh_directory": Field(StringSource)
-})
+
+@resource({"refresh_directory": Field(StringSource)})
 def refresh_directory(init_context: InitResourceContext) -> str:
     directory: str = init_context.resource_config["refresh_directory"]
     return directory
+
 
 @resource
 def test_refresh_directory(init_context: InitResourceContext) -> str:
@@ -139,7 +135,7 @@ class OutfilesWriter:
         os.mkdir("tsv_output")
         outfile_path = f'{working_dir}/tsv_output'
         subprocess.run(
-            ["python", "hack/convert-output-to-tsv.py",refresh_dir, outfile_path, "--debug"],
+            ["python", "hack/convert-output-to-tsv.py", refresh_dir, outfile_path, "--debug"],
             check=True,
             cwd=working_dir
         )

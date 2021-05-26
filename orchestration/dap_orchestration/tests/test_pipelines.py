@@ -13,12 +13,12 @@ class PipelineTestCase(unittest.TestCase):
             "resources": {
                 "beam_runner": {
                     "config": {
-                        "working_dir": "/example/foo/bar",
+                        "working_dir": "/example/local_beam_runner/bar",
                     }
                 },
                 "refresh_directory": {
                     "config": {
-                        "refresh_dir": "/example/foo/bar",
+                        "refresh_dir": "/example/local_beam_runner/bar",
                     }
                 }
             }
@@ -30,7 +30,7 @@ class PipelineTestCase(unittest.TestCase):
         }
 
         self.outfiles_config = {
-            "working_dir": "/example/foo/bar",
+            "working_dir": "/example/local_beam_runner/bar",
 
         }
         self.mode = ModeDefinition(
@@ -124,7 +124,7 @@ class PipelineTestCase(unittest.TestCase):
             "solids": {
                 "write_outfiles": {
                     "config": {
-                        "working_dir": "/example/foo/bar",
+                        "working_dir": "/example/local_beam_runner/bar",
                     }
                 }
             }
