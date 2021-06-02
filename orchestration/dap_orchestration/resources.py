@@ -72,6 +72,8 @@ def dataflow_beam_runner(init_context: InitResourceContext) -> DataflowBeamRunne
 class LocalBeamRunner:
     working_dir: str
     logger: DagsterLogManager
+    scala_project: str
+    target_class: str
 
     def __post_init__(self) -> None:
         self.arg_dict = {
@@ -85,14 +87,11 @@ class LocalBeamRunner:
         # create a new dictionary containing the keys and values of arg_dict + solid arguments
         local_run_flags = {**self.arg_dict, **run_arg_dict}
         self.logger.info("Local beam runner")
-        # special case target_class and scala_project as those cannot be placed in the args list of the sbt invocation`
-        target_class = local_run_flags.pop("target_class")
-        scala_project = local_run_flags.pop("scala_project")
 
         # list comprehension over args_dict to get flags
         flags = " ".join([f'--{arg}={value}' for arg, value in local_run_flags.items()])
         subprocess.run(
-            ["sbt", f'{scala_project}/runMain {target_class} {flags}'],
+            ["sbt", f'{self.scala_project}/runMain {self.target_class} {flags}'],
             check=True,
             cwd=self.working_dir
         )
@@ -105,6 +104,8 @@ def local_beam_runner(init_context: InitResourceContext) -> LocalBeamRunner:
     return LocalBeamRunner(
         working_dir=init_context.resource_config["working_dir"],
         logger=init_context.log_manager,
+        scala_project=init_context.resource_config["scala_project"],
+        target_class=init_context.resource_config["target_class"],
     )
 
 
@@ -131,11 +132,11 @@ def test_refresh_directory(init_context: InitResourceContext) -> str:
 
 class OutfilesWriter:
     def run(self, working_dir: str, refresh_dir: str) -> None:
-        # todo: maybe check to see if the dir already exists
-        os.mkdir("tsv_output")
         outfile_path = f'{working_dir}/tsv_output'
+        if not os.path.isdir(outfile_path):
+            os.mkdir(outfile_path)
         subprocess.run(
-            ["python", "hack/convert-output-to-tsv.py", refresh_dir, outfile_path, "--debug"],
+            ["python", "hack/convert-output-to-tsv.py", f"{refresh_dir}/transform", outfile_path, "--debug"],
             check=True,
             cwd=working_dir
         )
