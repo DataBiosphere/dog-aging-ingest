@@ -2,22 +2,12 @@
   "name": "sample_lookup",
   "columns": [
     {
-      "name": "sample_id",
+      "name": "dog_id",
       "datatype": "integer",
       "type": "primary_key"
     },
     {
-      "name": "dog_id",
-      "datatype": "string",
-      "type": "required"
-    },
-    {
-      "name": "kit_id",
-      "datatype": "string",
-      "type": "required"
-    },
-    {
-      "name": "kit_type",
+      "name": "cohort",
       "datatype": "string",
       "type": "required"
     },
@@ -27,18 +17,12 @@
       "type": "required"
     },
     {
-      "name": "lab_id",
-      "datatype": "string",
-      "type": "required"
+      "name": "sample_id",
+      "datatype": "integer"
     },
     {
-      "name": "lab_name",
-      "datatype": "string",
-      "type": "required"
-    },
-    {
-      "name": "date_sent",
-      "datatype": "string",
+      "name": "date_collected",
+      "datatype": "date",
       "type": "required"
     },
     {
