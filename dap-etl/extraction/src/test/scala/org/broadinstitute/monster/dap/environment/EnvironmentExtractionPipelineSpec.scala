@@ -58,30 +58,6 @@ class EnvironmentExtractionPipelineSpec extends AnyFlatSpec with Matchers {
     )
   }
 
-  it should "use current date as the endTime when none is provided" in {
-    val startTime =
-      OffsetDateTime.of(2020, 11, 1, 1, 0, 0, 0, ZoneOffset.ofHours(-5))
-    val envArms = EnvironmentExtractionPipeline.extractionArmsGenerator(Some(startTime), None)
-
-    // note: using contain instead of equals because this will increase over time
-    envArms should contain theSameElementsAs List(
-      "annual_nov2020_arm_1",
-      "annual_nov2020_secondary_arm_1",
-      "annual_dec2020_arm_1",
-      "annual_dec2020_secondary_arm_1",
-      "annual_jan2021_arm_1",
-      "annual_jan2021_secondary_arm_1",
-      "annual_feb2021_arm_1",
-      "annual_feb2021_secondary_arm_1",
-      "annual_mar2021_arm_1",
-      "annual_mar2021_secondary_arm_1",
-      "annual_apr2021_arm_1",
-      "annual_apr2021_secondary_arm_1",
-      "annual_may2021_arm_1",
-      "annual_may2021_secondary_arm_1"
-    )
-  }
-
   it should "create a list of arms inclusive of the last date in the range (endTime)" in {
     val startTime =
       OffsetDateTime.of(2020, 3, 2, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
