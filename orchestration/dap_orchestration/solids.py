@@ -1,6 +1,10 @@
 from dagster import Bool, String, solid, configured
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
 
+extract_project = "dog-aging-hles-extraction"
+transform_project = "dog-aging-hles-transformation"
+class_prefix = "org.broadinstitute.monster.dap"
+
 
 @solid(
     required_resource_keys={"beam_runner", "refresh_directory"},
@@ -46,8 +50,8 @@ def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(
         config=config,
         output_prefix="raw",
-        target_class="org.broadinstitute.monster.dap.hles.HLESurveyExtractionPipeline",
-        scala_project="dog-aging-hles-extraction"
+        target_class=f"{class_prefix}.hles.HLESurveyExtractionPipeline",
+        scala_project=extract_project
     )
 
 
@@ -56,8 +60,8 @@ def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(
         config=config,
         output_prefix="raw",
-        target_class="org.broadinstitute.monster.dap.cslb.CslbExtractionPipeline",
-        scala_project="dog-aging-hles-extraction"
+        target_class=f"{class_prefix}.cslb.CslbExtractionPipeline",
+        scala_project=extract_project
     )
 
 
@@ -66,8 +70,8 @@ def env_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(
         config=config,
         output_prefix="raw",
-        target_class="org.broadinstitute.monster.dap.environment.EnvironmentExtractionPipeline",
-        scala_project="dog-aging-hles-extraction"
+        target_class=f"{class_prefix}.environment.EnvironmentExtractionPipeline",
+        scala_project=extract_project
     )
 
 
@@ -109,8 +113,8 @@ def hles_transform_records(config: dict[str, str]) -> dict[str, str]:
     return _build_transform_config(
         input_prefix="raw/hles",
         output_prefix="transform",
-        target_class="org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipeline",
-        scala_project="dog-aging-hles-transformation"
+        target_class=f"{class_prefix}.hles.HLESurveyTransformationPipeline",
+        scala_project=transform_project
     )
 
 
@@ -119,8 +123,8 @@ def cslb_transform_records(config: dict[str, str]) -> dict[str, str]:
     return _build_transform_config(
         input_prefix="raw/cslb",
         output_prefix="transform",
-        target_class="org.broadinstitute.monster.dap.cslb.CslbTransformationPipeline",
-        scala_project="dog-aging-hles-transformation"
+        target_class=f"{class_prefix}.cslb.CslbTransformationPipeline",
+        scala_project=transform_project
     )
 
 
@@ -129,8 +133,8 @@ def env_transform_records(config: dict[str, str]) -> dict[str, str]:
     return _build_transform_config(
         input_prefix="raw/environment",
         output_prefix="transform",
-        target_class="org.broadinstitute.monster.dap.environment.EnvironmentTransformationPipeline",
-        scala_project="dog-aging-hles-transformation"
+        target_class=f"{class_prefix}.environment.EnvironmentTransformationPipeline",
+        scala_project=transform_project
     )
 
 
