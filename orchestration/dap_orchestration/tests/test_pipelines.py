@@ -6,6 +6,8 @@ from dagster import ModeDefinition, execute_solid, SolidExecutionResult
 import dap_orchestration.resources
 import dap_orchestration.solids
 
+from dagster_utils.resources.beam.noop_beam_runner import noop_beam_runner
+
 
 class PipelineTestCase(unittest.TestCase):
     def setUp(self):
@@ -26,16 +28,14 @@ class PipelineTestCase(unittest.TestCase):
         self.extract_config = {
             "pull_data_dictionaries": False,
             "end_time": "2020-05-19T23:59:59-05:00",
-            "api_token": "ddddd"
+            "api_token": "ddddd",
         }
-
         self.outfiles_config = {
             "working_dir": "/example/local_beam_runner/bar",
-
         }
         self.mode = ModeDefinition(
             resource_defs={
-                "beam_runner": dap_orchestration.resources.test_beam_runner,
+                "beam_runner": noop_beam_runner,
                 "refresh_directory": dap_orchestration.resources.test_refresh_directory,
                 "outfiles_writer": dap_orchestration.resources.test_outfiles_writer
             }

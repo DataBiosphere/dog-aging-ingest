@@ -1,7 +1,10 @@
 from dagster import pipeline, ModeDefinition
 
+from dagster_utils.resources.beam.local_beam_runner import local_beam_runner
+from dagster_utils.resources.beam.dataflow_beam_runner import dataflow_beam_runner
+
 from dap_orchestration.config import preconfigure_resource_for_mode
-from dap_orchestration.resources import local_beam_runner, dataflow_beam_runner, refresh_directory, outfiles_writer
+from dap_orchestration.resources import refresh_directory, outfiles_writer
 from dap_orchestration.solids import hles_extract_records, cslb_extract_records, env_extract_records,\
     hles_transform_records, cslb_transform_records, env_transform_records, write_outfiles
 
