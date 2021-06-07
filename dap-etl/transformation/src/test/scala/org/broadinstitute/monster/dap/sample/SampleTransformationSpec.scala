@@ -25,7 +25,6 @@ class SampleTransformationSpec extends AnyFlatSpec {
   }
 
   it should "raise when date is invalid" in {
-    for ((k, v) <- exampleSampleFields) printf("key: %s, value: %s\n", k, v)
     val invalidDateRecord = RawRecord(id = 1, Map("k1_rtn_tracking_date" -> Array("2020-142-124")))
     assertThrows[DateTimeParseException] {
       SampleTransformations.mapSampleData(invalidDateRecord)
