@@ -8,7 +8,7 @@
     },
     {
       "name": "cohort",
-      "datatype": "string",
+      "datatype": "integer",
       "type": "required"
     },
     {
@@ -23,11 +23,6 @@
     {
       "name": "date_collected",
       "datatype": "date",
-      "type": "required"
-    },
-    {
-      "name": "event_name",
-      "datatype": "string",
       "type": "required"
     }
   ]
