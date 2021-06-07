@@ -1,0 +1,25 @@
+resources:
+  refresh_directory:
+    config:
+      refresh_directory: "/refresh_output"
+solids:
+  write_outfiles:
+    config:
+      working_dir: "../"
+  hles_extract_records:
+    config:
+      api_token: ""
+      pull_data_dictionaries: false
+      end_time: "2020-03-30T23:59:59-05:00"
+  cslb_extract_records:
+    config:
+      api_token: ""
+      pull_data_dictionaries: false
+      end_time: "2020-03-30T23:59:59-05:00"
+  env_extract_records:
+    config:
+      api_token: ""
+      pull_data_dictionaries: false
+      end_time: "2020-03-30T23:59:59-05:00"
+
+
