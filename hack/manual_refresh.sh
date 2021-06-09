@@ -111,6 +111,11 @@ if [ "$(pipeline_requested environment)" -eq 1 ]; then
 	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.environment.EnvironmentExtractionPipeline --apiToken=$env_automation --pullDataDictionaries=false --outputPrefix=gs://$TARGET_BUCKET/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service$START_TIME$END_TIME"
 fi
 
+#   SAMPLE
+if [ "$(pipeline_requested sample)" -eq 1 ]; then
+	sbt "dog-aging-hles-extraction/runMain org.broadinstitute.monster.dap.sample.SampleExtractionPipeline --apiToken=$env_automation --pullDataDictionaries=false --outputPrefix=gs://$TARGET_BUCKET/weekly_refresh/$REFRESH_SUBDIRECTORY/raw --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=4 --maxNumWorkers=8 --experiments=shuffle_mode=service$START_TIME$END_TIME"
+fi
+
 # TRANSFORMATION
 #   HLES
 if [ "$(pipeline_requested hles)" -eq 1 ]; then
@@ -125,6 +130,11 @@ fi
 #   ENVIRONMENT
 if [ "$(pipeline_requested environment)" -eq 1 ]; then
 	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.environment.EnvironmentTransformationPipeline --inputPrefix=gs://$TARGET_BUCKET/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/environment --outputPrefix=gs://$TARGET_BUCKET/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service --dumpHeapOnOOM --saveHeapDumpsToGcsPath=gs://$TARGET_BUCKET/weekly_refresh/transform/OOMlogs"
+fi
+
+#   SAMPLE
+if [ "$(pipeline_requested sample)" -eq 1 ]; then
+	sbt "dog-aging-hles-transformation/runMain org.broadinstitute.monster.dap.sample.SampleTransformationPipeline --inputPrefix=gs://$TARGET_BUCKET/weekly_refresh/$REFRESH_SUBDIRECTORY/raw/sample --outputPrefix=gs://$TARGET_BUCKET/weekly_refresh/$REFRESH_SUBDIRECTORY/transform --runner=dataflow --project=broad-dsp-monster-dap-dev --region=us-central1 --workerMachineType=n1-standard-1 --autoscalingAlgorithm=THROUGHPUT_BASED --numWorkers=6 --maxNumWorkers=10 --experiments=shuffle_mode=service"
 fi
 
 # convert transformed results to TSV
