@@ -89,13 +89,13 @@ so it's unlikely we'll ever need to rewrite large chunks of this processing logi
 ### CSLB Data
 The Canine Social and Learned Behavior is a followup survey to HLES that is administered annually. 
 The goal of this survey is to assess age-related cognitive and behavioral changes in dogs. The first 
-time a participant fills out the CSLB survey, a baseline score for  is established. Participants will 
+time a participant fills out the CSLB survey, a baseline score is established. Participants will 
 have the opportunity to complete the survey again every year. This repeated design allows us to learn 
 how the dogs in the study change over time. Answers to all questions are required.
 
 #### CSLB Extraction Criteria
 * Pull all records from each yearly arm *"annual_{yyyy}_arm_1"*
-* _canine_social_and_learned_behavior_complete_ is marked as complete
+where _canine_social_and_learned_behavior_complete_ is marked as complete
 
 #### CSLB Schema Design
 * A single `cslb` table which contains a single CSLB record per dog per year. 
@@ -113,12 +113,12 @@ data are calculated using the HLES primary and secondary addresses.
 * where _baseline_complete_ is marked as complete
 
 #### Environment Schema Design
-The Environmental data was pretty straightforward as DAP provided us with a proto-schema which we
+Environmental data is modeled closely on what the DAP provided us, with a proto-schema which we
 converted to a repo schema. We decided to break the larger table up into smaller fragments: 
 _geocoding, census, pollutants, temperature_precipitation, and walkability_ variables.
 
 * A single `environment` table which contains a single Environment record per dog per month per address. 
-* The table includes 147 environmental variables and a foreign key to the dog table. 
+* The table includes all environmental variables and a foreign key to the dog table. 
 * Rows in the final Environment table will be unique on _dog_id_ and _address_month_year_.
 
 
@@ -149,17 +149,18 @@ parse a proto-schema provided by DAP into usable code for ingest in the form of 
 
 #### Creating Outfiles 
 DAP's long term future would include an official TDR<->Workspace integration but we are currently still building that out.
-To give ourselves some breathing room, we've written a [script](./hack/convert-output-to-tsv.py) to convert
+Until that integration is live, we've written a [script](./hack/convert-output-to-tsv.py) to convert
 the outputs of our transformation pipeline into workspace-compatible TSVs. 
 The script takes two positional arguments:
 1. Path to the top-level directory containing the outputs of the transformation pipeline
 2. Path to a directory where converted TSVs should be written
 There are additional arguments to that script to add some flexibility to the tool:
-* Can take in a list of tables to process (currently looks for all tables)
+* List of tables to process (currently looks for all tables)
+* Whether to output primary keys with a modified column name for Firecloud compatibility: *entity:{table_name}_id*<br class="Apple-interchange-newline">
 * Can output primary keys with a modified column name for Firecloud compatibility: *entity:{table_name}_id*
 * Call Format:
     * `python convert-output-to-tsv.py {transform GS path} {tsv outfile local path} -d`
-    * `python convert-output-to-tsv.py gs://broad-dsp-monster/weekly_refresh/20210525/transform /Users/DATA/DAP/tsv -d`
+    * `python convert-output-to-tsv.py gs://example-bucket/weekly_refresh/20210525/transform /Users/DATA/DAP/tsv -d`
 
 #### Validation
 We have a set of validation tests that we run to QA new TSVs. These validation tests are used to look for specific data
@@ -188,8 +189,8 @@ Alternatively we can also execute a Dagster pipeline which will run all the pipe
 use a runner based on the mode.
 
 ### Manual Refresh (Dagster)
-1. Navigate to the *orhcestration* subdirectory
-2. Poetry installation
+1. Navigate to the *orchestration* subdirectory
+2. Setup python virtual environment
     * `poetry install` to install your project’s package
     * `poetry update` to get the latest versions of the dependencies and to update the poetry.lock file
 2. Update config entries in orchestration/dev_refresh.yaml:
@@ -204,4 +205,4 @@ use a runner based on the mode.
 ### Data Delivery to DAP
 When the hles_data volume was much smaller, we were able to load the final TSVs directly to Terra using the UI prompts.
 Once the data grew too big to load via browser UI, we started utilizing the field engineering script to upload large entities. 
-While still building out the TDR - workspace integration for DAP, we are using a Google bucket to deliver refreshed TSVs.
+While still building out the TDR <-> workspace integration for DAP, we are using a Google bucket to deliver refreshed TSVs.
