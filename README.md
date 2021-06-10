@@ -95,7 +95,7 @@ how the dogs in the study change over time. Answers to all questions are require
 
 #### CSLB Extraction Criteria
 * Pull all records from each yearly arm *"annual_{yyyy}_arm_1"*
-where _canine_social_and_learned_behavior_complete_ is marked as complete
+where _canine_social_and_learned_behavior_complete_ is marked as complete.
 
 #### CSLB Schema Design
 * A single `cslb` table which contains a single CSLB record per dog per year. 
@@ -110,7 +110,7 @@ data are calculated using the HLES primary and secondary addresses.
 
 #### Environmental Extraction Criteria
 * Pull all records from each monthly arm for each address: *"annual_{MMMyyyy}_arm_1"*, *"annual_{MMMyyyy}_secondary_arm_1* 
-* where _baseline_complete_ is marked as complete
+* where _baseline_complete_ is marked as complete.
 
 #### Environment Schema Design
 Environmental data is modeled closely on what the DAP provided us, with a proto-schema which we
@@ -129,7 +129,7 @@ sample_id as well as some other metadata about the sample.
 
 #### Sample Extraction Criteria
 * Pull all records from the baseline arm (*baseline_arm_1*) 
-* where _k1_tube_serial_ and _k1_rtn_tracking_date_ must be populated
+* where _k1_tube_serial_ and _k1_rtn_tracking_date_ are populated.
 
 #### Sample Schema Design
 * A single `sample` table which contains multiple samples per dog.
