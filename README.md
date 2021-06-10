@@ -93,7 +93,7 @@ time a participant fills out the CSLB survey, a baseline score for  is establish
 have the opportunity to complete the survey again every year. This repeated design allows us to learn 
 how the dogs in the study change over time. Answers to all questions are required.
 
-#### CSLB Extraction
+#### CSLB Extraction Criteria
 * Pull all records from each yearly arm *"annual_{yyyy}_arm_1"*
 * _canine_social_and_learned_behavior_complete_ is marked as complete
 
@@ -108,9 +108,9 @@ collected in the HLES survey. It seeks to capture a snapshot of key environmenta
 dog's health over time so it can be used in conjunction with the other datasets. All fields from environmental 
 data are calculated using the HLES primary and secondary addresses.
 
-#### Environmental Extraction
+#### Environmental Extraction Criteria
 * Pull all records from each monthly arm for each address: *"annual_{MMMyyyy}_arm_1"*, *"annual_{MMMyyyy}_secondary_arm_1* 
-* _baseline_complete_ is marked as complete
+* where _baseline_complete_ is marked as complete
 
 #### Environment Schema Design
 The Environmental data was pretty straightforward as DAP provided us with a proto-schema which we
@@ -127,9 +127,9 @@ Sample Data in the Dog Aging Project is populated as different cohorts of partic
 sample kits. Our extraction of this data seeks to capture the linkage between study_id (_dog_id_) and 
 sample_id as well as some other metadata about the sample.
 
-#### Sample Extraction
+#### Sample Extraction Criteria
 * Pull all records from the baseline arm (*baseline_arm_1*) 
-* _k1_tube_serial_ and _k1_rtn_tracking_date_ must be populated
+* where _k1_tube_serial_ and _k1_rtn_tracking_date_ must be populated
 
 #### Sample Schema Design
 * A single `sample` table which contains multiple samples per dog.
