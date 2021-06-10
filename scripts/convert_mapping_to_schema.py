@@ -30,6 +30,7 @@ def parse_csv(mapping_csv: str) -> dict[str, list[JadeColumn]]:
         for row in csv_reader:
             raw_type_id = row[TDR_MAPPING_COLUMN_TYPE_ID]
             raw_column_name_id = row[TDR_MAPPING_FILE_COLUMN_NAME_ID]
+
             if not raw_type_id and not row[TDR_MAPPING_FILE_JADE_FRAGMENT]:
                 continue
 
@@ -91,7 +92,7 @@ def render_schemas(fragments: dict[str, list[JadeColumn]], table_name: str):
         with open(f"schema/{table_name}_{fragment}.fragment.json", "w") as f:
             f.write(rendered_json)
 
-    general_schema = render_general_fragment(general_fragment, fragments.keys(), table_name)
+    general_schema = render_general_fragment(general_fragment, [f"{table_name}_{key}" for key in fragments.keys()], table_name)
     with open(f"schema/{table_name}.table.json", "w") as f:
         f.write(json.dumps(general_schema, indent=4))
 
