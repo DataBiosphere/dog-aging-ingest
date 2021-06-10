@@ -71,11 +71,10 @@ def render_schema_fragment(fragment: str, fields: list[JadeColumn], table_name: 
 
 
 def render_general_fragment(general_fragment, table_fragments: Iterable[str], table_name: str):
-    dog_id_field = {"dog_id": {
+    dog_id_field = {
         "name": "dog_id",
         "datatype": "integer",
         "type": "primary_key",
-    }
     }
     schema = render_schema_fragment(TDR_FRAGMENT_GENERAL, general_fragment, table_name)
     schema["columns"].append(dog_id_field)
