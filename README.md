@@ -189,6 +189,7 @@ Alternatively we can also execute a Dagster pipeline which will run all the pipe
 use a runner based on the mode.
 
 ### Manual Refresh (Dagster)
+*Make sure to install [Poetry](https://python-poetry.org/docs/) before getting started.*
 1. Navigate to the *orchestration* subdirectory
 2. Setup python virtual environment
     * `poetry install` to install your project’s package
