@@ -148,7 +148,7 @@ parse a proto-schema provided by DAP into usable code for ingest in the form of 
 
 
 #### Creating Outfiles 
-DAP's long term future would include an official TDR<->Workspace integration but we are currently still building that out.
+The DAP ingest's long term roadmap includes a TDR<->Workspace integration. Until that is integration is live...
 Until that integration is live, we've written a [script](./hack/convert-output-to-tsv.py) to convert
 the outputs of our transformation pipeline into workspace-compatible TSVs. 
 The script takes two positional arguments:
