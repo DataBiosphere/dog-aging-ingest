@@ -4,12 +4,12 @@ import com.spotify.scio.ScioContext
 import com.spotify.scio.values.SCollection
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.common.msg._
-import org.broadinstitute.monster.dap.EolsTransformations
+import org.broadinstitute.monster.dap.EolsTransformations //todo: why is this needed here?
 import org.broadinstitute.monster.dap.common.{Args, RawRecord}
 import org.slf4j.{Logger, LoggerFactory}
 import upack.Msg
 
-package object EolsTransformationPipelineBuilder extends PipelineBuilder[Args] {
+object EolsTransformationPipelineBuilder extends PipelineBuilder[Args] {
   /**
     * Schedule all the steps for the Dog Aging transformation in the given pipeline context.
     *
