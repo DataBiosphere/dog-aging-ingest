@@ -1,0 +1,117 @@
+{
+    "name": "eols_recent_symptom",
+    "columns": [
+        {
+            "name": "eol_recent_symptom_none",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_lethargy",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_vomiting",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_diarrhea",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_appetite",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_weight",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_coughing",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_sneezing",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_breathing",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_bleeding_bruising",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_drink_lot",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_drink_little",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_urinating",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_incontinence",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_sores",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_seizures",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_swolen_abdomen",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_other",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_symptom_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_recent_qol",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_qol_declined",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_qol_declined_reason",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_qol_declined_reason_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_recent_vet_discuss",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_recent_vet_stay",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_recent_vet_stay_length",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_recent_sedation",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_understand_prognosis",
+            "datatype": "integer"
+        }
+    ]
+}

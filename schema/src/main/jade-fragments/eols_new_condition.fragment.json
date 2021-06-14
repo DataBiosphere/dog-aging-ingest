@@ -1,0 +1,329 @@
+{
+    "name": "eols_new_condition",
+    "columns": [
+        {
+            "name": "eol_new_condition_none",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_infectious_disease",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_toxin_consumption",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_trauma",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_cancer",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_eye",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_ear",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_oral",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_skin",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_cardiac",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_respiratory",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_gastrointestinal",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_liver",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_kidney",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_reproductive",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_orthopedic",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_neurological",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_endocrine",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_homatologic",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_immune",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_other",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_new_condition_infectious_disease_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_infectious_disease_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_infectious_disease_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_toxin_consumption_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_toxin_consumption_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_toxin_consumption_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_trauma_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_trauma_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_trauma_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_cancer_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_cancer_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_cancer_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_eye_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_eye_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_eye_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_ear_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_ear_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_ear_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_oral_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_oral_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_oral_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_skin_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_skin_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_skin_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_cardiac_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_cardiac_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_cardiac_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_respiratory_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_respiratory_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_respiratory_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_gastrointestinal_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_gastrointestinal_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_gastrointestinal_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_liver_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_liver_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_liver_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_kidney_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_kidney_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_kidney_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_reproductive_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_reproductive_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_reproductive_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_orthopedic_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_orthopedic_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_orthopedic_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_neurological_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_neurological_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_neurological_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_endocrine_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_endocrine_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_endocrine_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_homatologic_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_homatologic_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_homatologic_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_immune_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_immune_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_immune_specify",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_new_condition_other_month",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_other_year",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_new_condition_other_specify",
+            "datatype": "string"
+        }
+    ]
+}

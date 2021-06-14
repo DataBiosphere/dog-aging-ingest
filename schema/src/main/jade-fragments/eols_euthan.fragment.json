@@ -1,0 +1,69 @@
+{
+    "name": "eols_euthan",
+    "columns": [
+        {
+            "name": "eol_euthan",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_euthan_who",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_euthan_who_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_euthan_main_reason",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_euthan_main_reason_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_euthan_add_reason_none",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_euthan_add_reason_quality_of_life",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_euthan_add_reason_pain",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_euthan_add_reason_prognosis",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_euthan_add_reason_medic_prob",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_euthan_add_reason_behavior_prob",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_euthan_add_reason_harm_to_another",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_euthan_add_reason_incompatible",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_euthan_add_reason_cost",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_euthan_add_reason_other",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_euthan_add_reason_other_description",
+            "datatype": "string"
+        }
+    ]
+}

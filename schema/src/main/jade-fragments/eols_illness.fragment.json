@@ -1,0 +1,217 @@
+{
+    "name": "eols_illness",
+    "columns": [
+        {
+            "name": "eol_illness_type",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_illness_cancer_adrenal",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_anal_sac",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_bladder_urethra",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_blood",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_bone_joint",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_brain",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_mammary",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_cardiac",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_ear",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_esophagus",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_eye",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_gallbladder",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_gastro",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_kidney",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_liver",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_lung",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_lymph_nodes",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_muscle",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_nose",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_nerve_sheath",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_oral",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_ovary_uterus",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_pancreas",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_perianal",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_pituitary",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_prostate",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_rectum",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_skin_trunk_body_head",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_skin_limb_food",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_spinal_cord",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_spleen",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_testicle",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_thyroid",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_venereal",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_unidentified_thorax",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_unidentified_abdomen",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_unknown",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_other",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_cancer_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_illlness_cancer_name_known",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_illness_cancer_name_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_illness_infection",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_illness_infection_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_illness_infection_system",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_illness_infection_system_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_illness_other",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_illness_other_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_illness_other_diagnosis",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_illness_other_diagnosis_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_illness_awareness_timeframe",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_illness_treatment",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_illness_treatment_other_description",
+            "datatype": "string"
+        }
+    ]
+}

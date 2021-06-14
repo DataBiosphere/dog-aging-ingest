@@ -1,0 +1,89 @@
+{
+    "name": "eols_recent_aging_char",
+    "columns": [
+        {
+            "name": "eol_recent_aging_char_none",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_blind",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_deaf",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_weightloss",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_mobility_weak",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_mobility_pain",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_other_pain",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_cleanliness",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_confusion",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_interaction_change",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_sleep",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_housesoiling",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_anxiety",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_eat_drink",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_inactivity",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_repetitive_activity",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_memory",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_recognition",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_sundowning",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_other",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_recent_aging_char_other_description",
+            "datatype": "string"
+        }
+    ]
+}

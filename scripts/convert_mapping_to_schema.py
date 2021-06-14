@@ -1,6 +1,6 @@
 import argparse
 from collections import defaultdict
-
+import os
 import csv
 import json
 from typing import NamedTuple, Any, Iterable
@@ -72,12 +72,18 @@ def render_schema_fragment(fragment: str, fields: list[JadeColumn], table_name: 
 
 def render_general_fragment(general_fragment, table_fragments: Iterable[str], table_name: str):
     dog_id_field = {
-        "name": "dog_id",
-        "datatype": "integer",
-        "type": "primary_key",
+      "name": "dog_id",
+      "datatype": "integer",
+      "type": "primary_key",
+      "links": [
+        {
+          "table_name": "hles_dog",
+          "column_name": "dog_id"
+        }
+      ]
     }
     schema = render_schema_fragment(TDR_FRAGMENT_GENERAL, general_fragment, table_name)
-    schema["columns"].append(dog_id_field)
+    schema["columns"].insert(0,dog_id_field)
     schema["table_fragments"] = list(table_fragments)
 
     return schema
@@ -88,6 +94,7 @@ def render_schemas(fragments: dict[str, list[JadeColumn]], table_name: str):
     for fragment, fields in fragments.items():
         schema = render_schema_fragment(fragment, fields, table_name)
         rendered_json = json.dumps(schema, indent=4)
+        print(os.getcwd())
         with open(f"schema/{table_name}_{fragment}.fragment.json", "w") as f:
             f.write(rendered_json)
 
