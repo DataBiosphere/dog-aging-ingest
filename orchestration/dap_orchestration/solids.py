@@ -45,7 +45,14 @@ def _build_extract_config(config: dict[str, str], output_prefix: str,
     }
 
 
-@configured(extract_records)
+@configured(
+    extract_records,
+    config_schema={
+        "pull_data_dictionaries": Bool,
+        "end_time": String,
+        "api_token": String,
+    }
+)
 def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(
         config=config,
@@ -55,7 +62,14 @@ def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
     )
 
 
-@configured(extract_records)
+@configured(
+    extract_records,
+    config_schema={
+        "pull_data_dictionaries": Bool,
+        "end_time": String,
+        "api_token": String,
+    }
+)
 def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(
         config=config,
@@ -65,7 +79,14 @@ def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
     )
 
 
-@configured(extract_records)
+@configured(
+    extract_records,
+    config_schema={
+        "pull_data_dictionaries": Bool,
+        "end_time": String,
+        "api_token": String,
+    }
+)
 def env_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(
         config=config,

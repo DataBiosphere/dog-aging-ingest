@@ -1,4 +1,4 @@
-from dagster import pipeline, ModeDefinition
+from dagster import pipeline, ModeDefinition, ResourceDefinition
 
 from dagster_utils.resources.beam.local_beam_runner import local_beam_runner
 from dagster_utils.resources.beam.dataflow_beam_runner import dataflow_beam_runner
@@ -36,9 +36,18 @@ prod_mode = ModeDefinition(
     }
 )
 
+test_mode = ModeDefinition(
+    name="test",
+    resource_defs={
+        "beam_runner": ResourceDefinition.mock_resource(),
+        "refresh_directory": refresh_directory,
+        "outfiles_writer": ResourceDefinition.mock_resource()
+    }
+)
+
 
 @pipeline(
-    mode_defs=[local_mode, dev_mode, prod_mode]
+    mode_defs=[local_mode, dev_mode, prod_mode, test_mode]
 )
 def refresh_data_all() -> None:
     collected_outputs = [
