@@ -133,7 +133,8 @@ class PipelineTestCase(unittest.TestCase):
         result: SolidExecutionResult = execute_solid(
             dap_orchestration.solids.write_outfiles,
             mode_def=self.mode,
-            run_config=dataflow_config
+            run_config=dataflow_config,
+            input_values={"fan_in_results": []}
         )
 
         self.assertTrue(result.success)

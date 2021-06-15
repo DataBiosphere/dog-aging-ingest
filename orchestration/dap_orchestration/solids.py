@@ -1,4 +1,4 @@
-from dagster import Bool, String, solid, configured
+from dagster import Bool, String, solid, configured, InputDefinition, Nothing
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
 
 extract_project = "dog-aging-hles-extraction"
@@ -82,7 +82,8 @@ def env_extract_records(config: dict[str, str]) -> dict[str, str]:
         "output_prefix": String,
         "target_class": String,
         "scala_project": String
-    }
+    },
+    input_defs=[InputDefinition("start", Nothing)]
 )
 def transform_records(context: AbstractComputeExecutionContext) -> None:
     """
@@ -144,10 +145,13 @@ def env_transform_records(config: dict[str, str]) -> dict[str, str]:
         "working_dir": String,
     }
 )
-def write_outfiles(context: AbstractComputeExecutionContext) -> None:
+def write_outfiles(context: AbstractComputeExecutionContext, fan_in_results: list[object]) -> None:
     """
     This solid will take in the arguments provided in context and call the convert-output-to-tsv script
     on the transform outputs. The script is currently expecting transform outputs from all 3 pipelines and will
     error if one of them is not found at the input directory.
+
+    NOTE: The fan_in_results param allows to introduce a fan-in dependency from upstream transformation
+    solids, but is ignored by this solid.
     """
     context.resources.outfiles_writer.run(context.solid_config["working_dir"], context.resources.refresh_directory)
