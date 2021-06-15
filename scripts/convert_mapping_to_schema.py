@@ -1,3 +1,11 @@
+"""
+This tool takes in a csv of the mapping schema and creates json schema files
+for the new tables, including Jade fragments.
+The tool takes in arguments two arguments:
+table_name - Name of the general table and prefix used for the fragments.
+mapping_csv - Path to the mapping schema file that the tool will parse.
+"""
+
 import argparse
 from collections import defaultdict
 import os
@@ -12,7 +20,7 @@ class JadeColumn(NamedTuple):
 
 
 TDR_MAPPING_FILE_COLUMN_NAME_ID = "TDR_Column_Name"
-TDR_MAPPING_FILE_JADE_FRAGMENT = "Jade Fragment?"
+TDR_MAPPING_FILE_JADE_FRAGMENT = "Jade_Fragment"
 TDR_MAPPING_COLUMN_TYPE_ID = "TDR_Variable_Type"
 TDR_FRAGMENT_GENERAL = "GENERAL"
 TDR_RC_TO_COLUMN_TYPES = {
@@ -89,29 +97,29 @@ def render_general_fragment(general_fragment, table_fragments: Iterable[str], ta
     return schema
 
 
-def render_schemas(fragments: dict[str, list[JadeColumn]], table_name: str):
-    general_fragment = fragments.pop(TDR_FRAGMENT_GENERAL)
+def render_schemas(fragments: dict[str, list[JadeColumn]], table_name: str, output_path: str):
+    general_fragment = fragments.pop(TDR_FRAGMENT_GENERAL, {})
     for fragment, fields in fragments.items():
         schema = render_schema_fragment(fragment, fields, table_name)
         rendered_json = json.dumps(schema, indent=4)
-        print(os.getcwd())
-        with open(f"schema/{table_name}_{fragment}.fragment.json", "w") as f:
+        with open(f"{output_path}/{table_name}_{fragment}.fragment.json", "w") as f:
             f.write(rendered_json)
 
     general_schema = render_general_fragment(general_fragment, [f"{table_name}_{key}" for key in fragments.keys()], table_name)
-    with open(f"schema/{table_name}.table.json", "w") as f:
+    with open(f"{output_path}/{table_name}.table.json", "w") as f:
         f.write(json.dumps(general_schema, indent=4))
 
 
-def run(table_name: str, mapping_csv: str) -> None:
+def render_jade_table_schemas(table_name: str, mapping_csv: str, output_path: str) -> None:
     fragments = parse_csv(mapping_csv)
-    render_schemas(fragments, table_name)
+    render_schemas(fragments, table_name, output_path)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--table_name", required=True)
     parser.add_argument("-f", "--mapping_csv", required=True)
+    parser.add_argument("-o", "--output_path", required=True)
     args = parser.parse_args()
 
-    run(args.table_name, args.mapping_csv)
+    render_jade_table_schemas(args.table_name, args.mapping_csv, args.output_path)
