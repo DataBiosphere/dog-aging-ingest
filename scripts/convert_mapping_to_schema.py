@@ -1,7 +1,7 @@
 """
 This tool takes in a csv of the mapping schema and creates json schema files
 for the new tables, including Jade fragments.
-The tool takes in arguments two arguments:
+The tool takes in two arguments:
 table_name - Name of the general table and prefix used for the fragments.
 mapping_csv - Path to the mapping schema file that the tool will parse.
 """
