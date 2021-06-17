@@ -1,0 +1,92 @@
+{
+    "name": "eols",
+    "columns": [
+        {
+            "name": "dog_id",
+            "datatype": "integer",
+            "type": "primary_key",
+            "links": [
+                {
+                    "table_name": "hles_dog",
+                    "column_name": "dog_id"
+                }
+            ]
+        },
+        {
+            "name": "eol_willing_to_complete",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_exact_death_date_known",
+            "datatype": "boolean"
+        },
+        {
+            "name": "eol_death_date",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_cause_of_death_primary",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_cause_of_death_primary_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_cause_of_death_secondary",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_cause_of_death_secondary_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_old_age_primary",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_old_age_primary_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_trauma",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_trauma_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_toxin",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_toxin_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_old_age_secondary",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_old_age_secondary_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_notes_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_add_vemr",
+            "datatype": "boolean"
+        }
+    ],
+    "table_fragments": [
+        "eols_new_condition",
+        "eols_recent_aging_char",
+        "eols_recent_symptom",
+        "eols_death",
+        "eols_euthan",
+        "eols_illness"
+    ]
+}

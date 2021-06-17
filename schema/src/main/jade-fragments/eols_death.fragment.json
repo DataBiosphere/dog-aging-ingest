@@ -1,0 +1,45 @@
+{
+    "name": "eols_death",
+    "columns": [
+        {
+            "name": "eol_death_location",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_death_location_other_description",
+            "datatype": "string"
+        },
+        {
+            "name": "eol_death_witness",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_death_witness_who_you",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_death_witness_who_family",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_death_witness_who_acquaintance",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_death_witness_who_vet",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_death_witness_who_boarder",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_death_witness_who_other",
+            "datatype": "integer"
+        },
+        {
+            "name": "eol_death_witness_who_other_description",
+            "datatype": "string"
+        }
+    ]
+}
