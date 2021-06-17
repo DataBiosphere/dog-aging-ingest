@@ -2,6 +2,7 @@ package org.broadinstitute.monster.dap.cslb
 
 import org.broadinstitute.monster.dap.common.RawRecord
 import org.broadinstitute.monster.dogaging.jadeschema.table.Cslb
+import com.spotify.scio.ScioMetrics.counter
 
 object CslbTransformations {
 
@@ -29,7 +30,9 @@ object CslbTransformations {
             cslbOtherChanges = rawRecord.getOptionalStripped("cslb_other_changes")
           )
         )
-      case _ =>
+      case _ => {
+        counter("cslb", "missing_cslb_date").inc()
         None
+      }
     }
 }
