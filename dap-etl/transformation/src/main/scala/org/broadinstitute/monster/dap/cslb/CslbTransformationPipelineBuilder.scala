@@ -41,12 +41,12 @@ object CslbTransformationPipelineBuilder extends PipelineBuilder[Args] {
         s"${args.inputPrefix}/records/*.json"
       )
 
-    // Group by study ID (record number) and field name
-    // to get the format: (studyId, Iterable((fieldName, Iterable(value))))
+    // Group by study ID (record number) and arm (address_year_month)
+    // to get the format: (studyId, arm_id, Iterable((fieldName, Iterable(value))))
     rawRecords
       .groupBy(record => {
         (record.read[String]("record"), record.read[String]("redcap_event_name"))
-      }) // <-- record, redcap_event_name
+      })
       .map {
         case ((id, eventName), rawRecordValues) =>
           val fields = rawRecordValues

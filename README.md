@@ -100,6 +100,7 @@ where _canine_social_and_learned_behavior_complete_ is marked as complete.
 #### CSLB Schema Design
 * A single `cslb` table which contains a single CSLB record per dog per year. 
 * The table includes the 16 CSLB question responses and a foreign key to the dog table. 
+* Rows in the final Cslb table will be unique on _dog_id_ and _cslb_date_.
 
 
 ## Environmental Data
