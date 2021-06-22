@@ -38,8 +38,18 @@ class SampleTransformationSpec extends AnyFlatSpec {
     val output = SampleTransformations.mapSampleData(exampleSampleRecord).get
     output.dogId shouldBe 12345L
     output.cohort shouldBe 9L
-    output.sampleId shouldBe Some(54321L)
+    output.sampleId shouldBe 54321L
     output.sampleType shouldBe "saliva_DNA_lowcov"
-    output.dateCollected shouldBe LocalDate.parse("2021-05-20 00:00:00", DAPDateTimeFormatter)
+    output.dateSwabArrivalLaboratory shouldBe LocalDate.parse(
+      "2021-05-20 00:00:00",
+      DAPDateTimeFormatter
+    )
+  }
+
+  it should "raise when serial number is not provided" in {
+    val invalidSerialRecord = RawRecord(id = 1, exampleSampleFields.-("k1_tube_serial"))
+    assertThrows[IllegalStateException] {
+      SampleTransformations.mapSampleData(invalidSerialRecord)
+    }
   }
 }
