@@ -41,7 +41,7 @@ object CslbTransformationPipelineBuilder extends PipelineBuilder[Args] {
         s"${args.inputPrefix}/records/*.json"
       )
 
-    // Group by study ID (record number) and arm (address_year_month)
+    // Group by study ID (record) and arm (redcap_event_name)
     // to get the format: (studyId, arm_id, Iterable((fieldName, Iterable(value))))
     rawRecords
       .groupBy(record => {
