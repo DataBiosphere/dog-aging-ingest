@@ -49,12 +49,13 @@ class PrimaryKeyGenerator:
     # this will calculate pk_name during init
     def __post_init__(self):
         # most tables should have "dog_id" as a key
-        if self.table_name in {"hles_dog", "hles_cancer_condition", "hles_health_condition", "environment", "cslb",
-                               "sample"}:
+        if self.table_name in {"hles_dog", "hles_cancer_condition", "hles_health_condition", "environment", "cslb"}:
             self.pk_name = 'dog_id'
         # owner table is linked to hles_dog via "owner_id"
         elif self.table_name == 'hles_owner':
             self.pk_name = 'owner_id'
+        elif self.table_name == 'sample':
+            self.pk_name = 'sample_id'
         else:
             raise ValueError(f"Unrecognized table: {self.table_name}")
 
