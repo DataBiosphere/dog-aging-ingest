@@ -8,15 +8,6 @@ import upack.Msg
 
 object TransformationHelper extends PipelineCoders {
 
-  def readJsonLists(ctx: ScioContext, inputPrefix: String): SCollection[Msg] = {
-    StorageIO
-      .readJsonLists(
-        ctx,
-        "Raw Records",
-        s"${inputPrefix}/records/*.json"
-      )
-  }
-
   def readRecords(
     ctx: ScioContext,
     inputPrefix: String
@@ -58,6 +49,15 @@ object TransformationHelper extends PipelineCoders {
             }
           RawRecord(id.toLong, fields + ("redcap_event_name" -> Array(eventName)))
       }
+  }
+
+  private def readJsonLists(ctx: ScioContext, inputPrefix: String): SCollection[Msg] = {
+    StorageIO
+      .readJsonLists(
+        ctx,
+        "Raw Records",
+        s"${inputPrefix}/records/*.json"
+      )
   }
 
 }
