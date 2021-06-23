@@ -12,9 +12,9 @@ object SampleTransformations {
           Sample(
             dogId = rawRecord.getRequired("study_id").toLong,
             cohort = rawRecord.getRequired("ce_enroll_stat").toLong,
-            sampleId = Some(rawRecord.getRequired("k1_tube_serial").toLong),
+            sampleId = rawRecord.getRequired("k1_tube_serial").toLong,
             sampleType = "saliva_DNA_lowcov",
-            dateCollected = dateCollected
+            dateSwabArrivalLaboratory = dateCollected
           )
         )
       case _ =>

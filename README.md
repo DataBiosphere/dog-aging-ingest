@@ -134,8 +134,8 @@ sample_id as well as some other metadata about the sample.
 
 #### Sample Schema Design
 * A single `sample` table which contains multiple samples per dog.
-* Simple lookup table with 6 fields and a foreign key to the dog table.
-* Rows in the final Environment table will be unique on _dog_id_ and _sample_id_.
+* Simple lookup table with 5 fields including a foreign key to the dog table.
+* Rows in the final Environment table will be unique on _sample_id_.
 
 
 ## Label Mapping Table

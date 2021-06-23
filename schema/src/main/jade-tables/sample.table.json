@@ -2,9 +2,20 @@
   "name": "sample",
   "columns": [
     {
-      "name": "dog_id",
+      "name": "sample_id",
       "datatype": "integer",
       "type": "primary_key"
+    },
+    {
+      "name": "dog_id",
+      "datatype": "integer",
+      "type": "required",
+      "links": [
+        {
+          "table_name": "hles_dog",
+          "column_name": "dog_id"
+        }
+      ]
     },
     {
       "name": "cohort",
@@ -17,11 +28,7 @@
       "type": "required"
     },
     {
-      "name": "sample_id",
-      "datatype": "integer"
-    },
-    {
-      "name": "date_collected",
+      "name": "date_swab_arrival_laboratory",
       "datatype": "date",
       "type": "required"
     }
