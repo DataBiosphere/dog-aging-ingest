@@ -6,7 +6,6 @@ import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.dap.common._
 import org.broadinstitute.monster.dap.dog.DogTransformations
 import org.slf4j.{Logger, LoggerFactory}
-import org.broadinstitute.monster.common.msg._
 
 object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
   /**
@@ -49,27 +48,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
 
   /** Read in records and group by study Id, with field name subgroups. */
   def readRecords(ctx: ScioContext, args: Args): SCollection[RawRecord] = {
-    val rawRecords = StorageIO
-      .readJsonLists(
-        ctx,
-        "Raw Records",
-        s"${args.inputPrefix}/records/*.json"
-      )
-
-    // Group by study ID (record number) and field name
-    // to get the format: (studyId, Iterable((fieldName, Iterable(value))))
-    rawRecords
-      .groupBy(_.read[String]("record"))
-      .map {
-        case (id, rawRecordValues) =>
-          val fields = rawRecordValues
-            .groupBy(_.read[String]("field_name"))
-            .map {
-              case (fieldName, rawValues) =>
-                (fieldName, rawValues.map(_.read[String]("value")).toArray.sorted)
-            }
-          RawRecord(id.toLong, fields)
-      }
+    TransformationHelper.readRecords(ctx, args.inputPrefix)
   }
 
 }
