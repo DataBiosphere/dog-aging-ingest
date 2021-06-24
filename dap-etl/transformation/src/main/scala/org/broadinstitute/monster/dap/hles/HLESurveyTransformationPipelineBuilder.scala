@@ -48,7 +48,7 @@ object HLESurveyTransformationPipelineBuilder extends PipelineBuilder[Args] {
 
   /** Read in records and group by study Id, with field name subgroups. */
   def readRecords(ctx: ScioContext, args: Args): SCollection[RawRecord] = {
-    TransformationHelper.readRecords(ctx, args.inputPrefix)
+    TransformationHelper.readRecordsGroupByEventName(ctx, args.inputPrefix)
   }
 
 }

@@ -8,29 +8,6 @@ import upack.Msg
 
 object TransformationHelper extends PipelineCoders {
 
-  def readRecords(
-    ctx: ScioContext,
-    inputPrefix: String
-  ): SCollection[RawRecord] = {
-    val rawRecords = readJsonLists(ctx, inputPrefix)
-    val groupByPredicate: Msg => String = { record: Msg =>
-      record.read[String]("record")
-    }
-
-    rawRecords
-      .groupBy(groupByPredicate)
-      .map {
-        case (id, rawRecordValues) =>
-          val fields = rawRecordValues
-            .groupBy(_.read[String]("field_name"))
-            .map {
-              case (fieldName, rawValues) =>
-                (fieldName, rawValues.map(_.read[String]("value")).toArray.sorted)
-            }
-          RawRecord(id.toLong, fields)
-      }
-  }
-
   def readRecordsGroupByEventName(ctx: ScioContext, inputPrefix: String): SCollection[RawRecord] = {
     val rawRecords = readJsonLists(ctx, inputPrefix)
     val groupByPredicate = { record: Msg =>
