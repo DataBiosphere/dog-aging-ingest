@@ -36,7 +36,8 @@ object EolsTransformations {
           eolAddVemr = rawRecord.getOptionalBoolean("eol_add_med_record_yn"),
           // todo: add transformation logic for additional fragments
           eolsNewCondition = None,
-          eolsRecentAgingChar = None,
+          eolsRecentAgingChar =
+            Some(RecentAgingCharsTransformations.mapRecentAgingChars(rawRecord)),
           eolsRecentSymptom = None,
           eolsDeath = None,
           eolsEuthan = None,
