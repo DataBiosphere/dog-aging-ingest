@@ -35,8 +35,8 @@ object EolsTransformations {
           eolNotesDescription = rawRecord.getOptional("eol_notes"),
           eolAddVemr = rawRecord.getOptionalBoolean("eol_add_med_record_yn"),
           // todo: add eolsNewCondition
-          eolsRecentAgingChar = Some(RecentAgingCharsTransformations.mapRecentAgingChars(rawRecord))
-          // todo: add eolsRecentSymptom
+          eolsRecentAgingChar = Some(RecentAgingCharsTransformations.mapRecentAgingChars(rawRecord)),
+          eolsRecentSymptom = Some(RecentSymptomsTransformations.mapRecentSymptoms(rawRecord))
           // todo: add eolsDeath
           // todo: add eolsEuthan
           // todo: add eolsIllness
