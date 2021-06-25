@@ -34,14 +34,12 @@ object EolsTransformations {
           eolOldAgeSecondaryOtherDescription = rawRecord.getOptional("eol_old_age_cod_2_specify"),
           eolNotesDescription = rawRecord.getOptional("eol_notes"),
           eolAddVemr = rawRecord.getOptionalBoolean("eol_add_med_record_yn"),
-          // todo: add transformation logic for additional fragments
-          eolsNewCondition = None,
-          eolsRecentAgingChar =
-            Some(RecentAgingCharsTransformations.mapRecentAgingChars(rawRecord)),
-          eolsRecentSymptom = None,
-          eolsDeath = None,
-          eolsEuthan = None,
-          eolsIllness = None
+          // todo: add eolsNewCondition
+          eolsRecentAgingChar = Some(RecentAgingCharsTransformations.mapRecentAgingChars(rawRecord))
+          // todo: add eolsRecentSymptom
+          // todo: add eolsDeath
+          // todo: add eolsEuthan
+          // todo: add eolsIllness
         )
       )
     } else {

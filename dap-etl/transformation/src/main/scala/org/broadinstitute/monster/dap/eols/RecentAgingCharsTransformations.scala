@@ -6,8 +6,8 @@ import org.broadinstitute.monster.dogaging.jadeschema.fragment.EolsRecentAgingCh
 object RecentAgingCharsTransformations {
 
   /**
-    * Parse all geocoding_metadata variables out of a raw RedCap record,
-    * injecting them into a partially-modeled environment record.
+    * Parse all eol_aging_characteristics data out of a raw RedCap record,
+    * injecting them into a partially-modeled Eols record.
     */
   def mapRecentAgingChars(rawRecord: RawRecord): EolsRecentAgingChar = {
     val agingChars = Some(rawRecord.getArray("eol_aging_characteristics").map(_.toLong))

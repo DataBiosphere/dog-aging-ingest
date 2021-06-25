@@ -82,11 +82,6 @@
         }
     ],
     "table_fragments": [
-        "eols_new_condition",
-        "eols_recent_aging_char",
-        "eols_recent_symptom",
-        "eols_death",
-        "eols_euthan",
-        "eols_illness"
+        "eols_recent_aging_char"
     ]
 }
