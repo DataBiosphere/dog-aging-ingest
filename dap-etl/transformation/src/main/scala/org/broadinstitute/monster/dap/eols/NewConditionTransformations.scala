@@ -5,7 +5,7 @@ import org.broadinstitute.monster.dogaging.jadeschema.fragment.EolsNewCondition
 
 object NewConditionTransformations {
 
-  def mapNewConditionsMetadata(rawRecord: RawRecord): EolsNewCondition = {
+  def mapNewConditionMetadata(rawRecord: RawRecord): EolsNewCondition = {
     //    val ToxinConsumption = Some(diagnosisType.contains("2"))
     val diagnosisType = rawRecord.fields.get("eol_dx")
     val InfectiousDisease = diagnosisType.map(_.contains("1"))
