@@ -36,11 +36,11 @@ object EolsTransformations {
           eolAddVemr = rawRecord.getOptionalBoolean("eol_add_med_record_yn"),
           // todo: add transformation logic for additional fragments
           eolsNewCondition = Some(NewConditionTransformations.mapNewConditionMetadata(rawRecord)),
-          eolsRecentAgingChar = None,
-          eolsRecentSymptom = None,
-          eolsDeath = None,
-          eolsEuthan = None,
-          eolsIllness = None
+          eolsRecentAgingChar = Some(RecentAgingCharsTransformations.mapRecentAgingChars(rawRecord))
+          // todo: add eolsRecentSymptom
+          // todo: add eolsDeath
+          // todo: add eolsEuthan
+          // todo: add eolsIllness
         )
       )
     } else {
