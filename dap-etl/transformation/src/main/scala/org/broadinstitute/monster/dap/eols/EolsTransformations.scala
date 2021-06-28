@@ -38,9 +38,9 @@ object EolsTransformations {
           eolsNewCondition = Some(NewConditionTransformations.mapNewConditionMetadata(rawRecord)),
           eolsRecentAgingChar =
             Some(RecentAgingCharsTransformations.mapRecentAgingChars(rawRecord)),
-          eolsRecentSymptom = Some(RecentSymptomsTransformations.mapRecentSymptoms(rawRecord))
+          eolsRecentSymptom = Some(RecentSymptomsTransformations.mapRecentSymptoms(rawRecord)),
           // todo: add eolsDeath
-          // todo: add eolsEuthan
+          eolsEuthan = Some(EuthanasiaTransformations.mapEuthanasiaFields(rawRecord))
           // todo: add eolsIllness
         )
       )

@@ -1,7 +1,6 @@
-package org.broadinstitute.monster.dap.dog
+package org.broadinstitute.monster.dap.eols
 
 import org.broadinstitute.monster.dap.common.RawRecord
-import org.broadinstitute.monster.dap.eols.RecentSymptomsTransformations
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
