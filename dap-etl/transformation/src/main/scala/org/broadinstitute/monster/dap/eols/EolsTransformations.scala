@@ -34,7 +34,8 @@ object EolsTransformations {
           eolOldAgeSecondaryOtherDescription = rawRecord.getOptional("eol_old_age_cod_2_specify"),
           eolNotesDescription = rawRecord.getOptional("eol_notes"),
           eolAddVemr = rawRecord.getOptionalBoolean("eol_add_med_record_yn"),
-          // todo: add eolsNewCondition
+          // todo: add transformation logic for additional fragments
+          eolsNewCondition = Some(NewConditionTransformations.mapNewConditionMetadata(rawRecord)),
           eolsRecentAgingChar =
             Some(RecentAgingCharsTransformations.mapRecentAgingChars(rawRecord)),
           eolsRecentSymptom = Some(RecentSymptomsTransformations.mapRecentSymptoms(rawRecord))
