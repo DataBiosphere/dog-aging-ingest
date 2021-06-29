@@ -34,7 +34,7 @@ log = logging.getLogger(__name__)
 TERRA_COLUMN_LIMIT = 1000
 
 table_names = args.table or ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition', 'hles_owner',
-                             'environment', 'sample']
+                             'environment', 'sample', 'eols']
 PRIMARY_KEY_PREFIX = 'entity'
 
 gcs = GCSFileSystem()
@@ -49,7 +49,7 @@ class PrimaryKeyGenerator:
     # this will calculate pk_name during init
     def __post_init__(self):
         # most tables should have "dog_id" as a key
-        if self.table_name in {"hles_dog", "hles_cancer_condition", "hles_health_condition", "environment", "cslb"}:
+        if self.table_name in {"hles_dog", "hles_cancer_condition", "hles_health_condition", "environment", "cslb", "eols"}:
             self.pk_name = 'dog_id'
         # owner table is linked to hles_dog via "owner_id"
         elif self.table_name == 'hles_owner':
