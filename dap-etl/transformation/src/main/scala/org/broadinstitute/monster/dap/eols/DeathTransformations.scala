@@ -8,6 +8,7 @@ object DeathTransformations {
   def mapDeathTransformations(rawRecord: RawRecord): EolsDeath = {
     val deathLocation = rawRecord.getOptionalNumber("eol_death_location")
     val deathWitness = rawRecord.fields.get("eol_who_present")
+    val deathWitnessOther = deathWitness.map(_.contains("98"))
     EolsDeath(
       eolDeathLocation = deathLocation,
       eolDeathLocationOtherDescription =
@@ -20,9 +21,9 @@ object DeathTransformations {
       eolDeathWitnessWhoAcquaintance = deathWitness.map(_.contains("3")),
       eolDeathWitnessWhoVet = deathWitness.map(_.contains("4")),
       eolDeathWitnessWhoBoarder = deathWitness.map(_.contains("5")),
-      eolDeathWitnessWhoOther = deathWitness.map(_.contains("98")),
+      eolDeathWitnessWhoOther = deathWitnessOther,
       eolDeathWitnessWhoOtherDescription =
-        if (deathWitness.map(_.contains("98")).contains(true))
+        if (deathWitness.contains(true))
           rawRecord.getOptional("eol_who_present_specify")
         else None
     )
