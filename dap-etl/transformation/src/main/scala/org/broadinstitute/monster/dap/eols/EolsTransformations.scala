@@ -40,8 +40,8 @@ object EolsTransformations {
             Some(RecentAgingCharsTransformations.mapRecentAgingChars(rawRecord)),
           eolsRecentSymptom = Some(RecentSymptomsTransformations.mapRecentSymptoms(rawRecord)),
           // todo: add eolsDeath
-          eolsEuthan = Some(EuthanasiaTransformations.mapEuthanasiaFields(rawRecord))
-          // todo: add eolsIllness
+          eolsEuthan = Some(EuthanasiaTransformations.mapEuthanasiaFields(rawRecord)),
+          eolsIllness = Some(IllnessTransformations.mapIllnessFields(rawRecord))
         )
       )
     } else {
