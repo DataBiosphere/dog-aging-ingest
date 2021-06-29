@@ -138,6 +138,25 @@ sample_id as well as some other metadata about the sample.
 * Rows in the final Environment table will be unique on _sample_id_.
 
 
+## EOLS Data
+The End of Life Survey is administered when a dog enrolled in the study has passed away.
+The goal of this survey is to collect information about the circumstances surrounding 
+the end of the dog's life and any information available regarding the cause of death.
+
+#### EOLS Extraction Criteria
+* Pull all records from the baseline arm (*baseline_arm_1*) 
+* where _eol_willing_to_complete_ is marked as complete.
+
+#### EOLS Schema Design
+Eols data is also modeled closely to a DAP provided proto-schema which we converted to a repo schema. 
+We decided to break the larger table up into smaller fragments: 
+_new_condition, recent_aging_char, recent_symptom, death, euthan, and illness_ variables.
+
+* A single `eols` table which contains a single Eols record per dog. 
+* The table includes all eols variables and a foreign key to the dog table. 
+* Rows in the final eols table will be unique on _dog_id_.
+
+
 ## Label Mapping Table
 We have a manually maintained lookup table that we are constructing using the Terra JSON schema for the DAP tables and 
 the DAP data dictionaries provided from RedCap. The table contains a row for each field in the the final dog aging tables.
