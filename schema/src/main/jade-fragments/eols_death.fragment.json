@@ -15,27 +15,27 @@
         },
         {
             "name": "eol_death_witness_who_you",
-            "datatype": "integer"
+            "datatype": "boolean"
         },
         {
             "name": "eol_death_witness_who_family",
-            "datatype": "integer"
+            "datatype": "boolean"
         },
         {
             "name": "eol_death_witness_who_acquaintance",
-            "datatype": "integer"
+            "datatype": "boolean"
         },
         {
             "name": "eol_death_witness_who_vet",
-            "datatype": "integer"
+            "datatype": "boolean"
         },
         {
             "name": "eol_death_witness_who_boarder",
-            "datatype": "integer"
+            "datatype": "boolean"
         },
         {
             "name": "eol_death_witness_who_other",
-            "datatype": "integer"
+            "datatype": "boolean"
         },
         {
             "name": "eol_death_witness_who_other_description",
