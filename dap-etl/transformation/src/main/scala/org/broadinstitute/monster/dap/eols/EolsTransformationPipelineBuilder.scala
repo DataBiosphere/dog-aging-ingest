@@ -20,7 +20,8 @@ object EolsTransformationPipelineBuilder extends PipelineBuilder[Args] {
   override def buildPipeline(ctx: ScioContext, args: Args): Unit = {
     val rawRecords = readRecords(ctx, args)
 
-    val eols = rawRecords.transform("EOLS data")(_.map(EolsTransformations.mapEols))
+    val eols =
+      rawRecords.transform("EOLS data")(_.map(EolsTransformations.mapEols).filter(_.isDefined))
 
     StorageIO.writeJsonLists(
       eols,

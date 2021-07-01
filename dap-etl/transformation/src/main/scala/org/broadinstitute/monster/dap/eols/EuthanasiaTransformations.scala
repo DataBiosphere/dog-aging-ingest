@@ -18,10 +18,12 @@ object EuthanasiaTransformations {
       eolEuthan = rawRecord.getOptionalBoolean("eol_euthan_yn"),
       eolEuthanWho = euthanasiaWho,
       eolEuthanWhoOtherDescription =
-        if (euthanasiaWho.contains(98)) rawRecord.getOptional("eol_euthan_who_specify") else None,
+        if (euthanasiaWho.contains(98)) rawRecord.getOptionalStripped("eol_euthan_who_specify")
+        else None,
       eolEuthanMainReason = euthanasiaWhy,
       eolEuthanMainReasonOtherDescription =
-        if (euthanasiaWhy.contains(98)) rawRecord.getOptional("eol_euthan_why1_specify") else None,
+        if (euthanasiaWhy.contains(98)) rawRecord.getOptionalStripped("eol_euthan_why1_specify")
+        else None,
       eolEuthanAddReasonNone = euthanasiaWhy2.map(_.contains(0L)),
       eolEuthanAddReasonQualityOfLife = euthanasiaWhy2.map(_.contains(1L)),
       eolEuthanAddReasonPain = euthanasiaWhy2.map(_.contains(2L)),
@@ -34,7 +36,7 @@ object EuthanasiaTransformations {
       eolEuthanAddReasonOther = euthanasiaWhyOther,
       eolEuthanAddReasonOtherDescription =
         if (euthanasiaWhyOther.contains(true))
-          rawRecord.getOptional("eol_euthan_why2_specify")
+          rawRecord.getOptionalStripped("eol_euthan_why2_specify")
         else None
     )
   }

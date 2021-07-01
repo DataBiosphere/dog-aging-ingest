@@ -60,38 +60,38 @@ object IllnessTransformations {
       eolIllnessCancerOther = otherCancerCondition,
       eolIllnessCancerOtherDescription =
         if (otherCancerCondition.contains(true))
-          rawRecord.getOptional("eol_cancer_a_specify")
+          rawRecord.getOptionalStripped("eol_cancer_a_specify")
         else None,
       eolIlllnessCancerNameKnown = cancerNameKnown,
       eolIllnessCancerNameDescription =
         if (cancerNameKnown.contains(1L))
-          rawRecord.getOptional("eol_cancer_b_specify")
+          rawRecord.getOptionalStripped("eol_cancer_b_specify")
         else None,
       eolIllnessInfection = infectionName,
       eolIllnessInfectionOtherDescription =
         if (infectionName.contains(98L))
-          rawRecord.getOptional("eol_infection_a_specify")
+          rawRecord.getOptionalStripped("eol_infection_a_specify")
         else None,
       eolIllnessInfectionSystem = infectionSystem,
       eolIllnessInfectionSystemOtherDescription =
         if (infectionSystem.contains(98L))
-          rawRecord.getOptional("eol_infection_b_specify")
+          rawRecord.getOptionalStripped("eol_infection_b_specify")
         else None,
       eolIllnessOther = otherIllness,
       eolIllnessOtherOtherDescription =
         if (otherIllness.contains(98L))
-          rawRecord.getOptional("eol_otherillness_a_specify")
+          rawRecord.getOptionalStripped("eol_otherillness_a_specify")
         else None,
       eolIllnessOtherDiagnosis = diagnosisKnown,
       eolIllnessOtherDiagnosisDescription =
         if (diagnosisKnown.contains(true))
-          rawRecord.getOptional("eol_otherillness_b_specify")
+          rawRecord.getOptionalStripped("eol_otherillness_b_specify")
         else None,
       eolIllnessAwarenessTimeframe = rawRecord.getOptionalNumber("eol_illness_b"),
       eolIllnessTreatment = illnessTreatment,
       eolIllnessTreatmentOtherDescription =
         if (illnessTreatment.contains(98L))
-          rawRecord.getOptional("eol_illness_c_explain")
+          rawRecord.getOptionalStripped("eol_illness_c_explain")
         else None
     )
   }
