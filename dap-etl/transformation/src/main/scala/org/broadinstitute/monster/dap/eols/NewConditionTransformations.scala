@@ -55,122 +55,127 @@ object NewConditionTransformations {
       eolNewConditionInfectiousDiseaseYear =
         if (infectiousDisease.contains(true)) rawRecord.getOptionalNumber("eol_dx_year1") else None,
       eolNewConditionInfectiousDiseaseSpecify =
-        if (infectiousDisease.contains(true)) rawRecord.getOptional("eol_dx_specify1") else None,
+        if (infectiousDisease.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify1")
+        else None,
       eolNewConditionToxinConsumptionMonth =
         if (toxinConsumption.contains(true)) rawRecord.getOptionalNumber("eol_dx_month2") else None,
       eolNewConditionToxinConsumptionYear =
         if (toxinConsumption.contains(true)) rawRecord.getOptionalNumber("eol_dx_year2") else None,
       eolNewConditionToxinConsumptionSpecify =
-        if (toxinConsumption.contains(true)) rawRecord.getOptional("eol_dx_specify2") else None,
+        if (toxinConsumption.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify2")
+        else None,
       eolNewConditionTraumaMonth =
         if (trauma.contains(true)) rawRecord.getOptionalNumber("eol_dx_month3") else None,
       eolNewConditionTraumaYear =
         if (trauma.contains(true)) rawRecord.getOptionalNumber("eol_dx_year3") else None,
       eolNewConditionTraumaSpecify =
-        if (trauma.contains(true)) rawRecord.getOptional("eol_dx_specify3") else None,
+        if (trauma.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify3") else None,
       eolNewConditionCancerMonth =
         if (cancer.contains(true)) rawRecord.getOptionalNumber("eol_dx_month4") else None,
       eolNewConditionCancerYear =
         if (cancer.contains(true)) rawRecord.getOptionalNumber("eol_dx_year4") else None,
       eolNewConditionCancerSpecify =
-        if (cancer.contains(true)) rawRecord.getOptional("eol_dx_specify4") else None,
+        if (cancer.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify4") else None,
       eolNewConditionEyeMonth =
         if (eye.contains(true)) rawRecord.getOptionalNumber("eol_dx_month5") else None,
       eolNewConditionEyeYear =
         if (eye.contains(true)) rawRecord.getOptionalNumber("eol_dx_year5") else None,
       eolNewConditionEyeSpecify =
-        if (eye.contains(true)) rawRecord.getOptional("eol_dx_specify5") else None,
+        if (eye.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify5") else None,
       eolNewConditionEarMonth =
         if (ear.contains(true)) rawRecord.getOptionalNumber("eol_dx_month6") else None,
       eolNewConditionEarYear =
         if (ear.contains(true)) rawRecord.getOptionalNumber("eol_dx_year6") else None,
       eolNewConditionEarSpecify =
-        if (ear.contains(true)) rawRecord.getOptional("eol_dx_specify6") else None,
+        if (ear.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify6") else None,
       eolNewConditionOralMonth =
         if (oral.contains(true)) rawRecord.getOptionalNumber("eol_dx_month7") else None,
       eolNewConditionOralYear =
         if (oral.contains(true)) rawRecord.getOptionalNumber("eol_dx_year7") else None,
       eolNewConditionOralSpecify =
-        if (oral.contains(true)) rawRecord.getOptional("eol_dx_specify7") else None,
+        if (oral.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify7") else None,
       eolNewConditionSkinMonth =
         if (skin.contains(true)) rawRecord.getOptionalNumber("eol_dx_month8") else None,
       eolNewConditionSkinYear =
         if (skin.contains(true)) rawRecord.getOptionalNumber("eol_dx_year8") else None,
       eolNewConditionSkinSpecify =
-        if (skin.contains(true)) rawRecord.getOptional("eol_dx_specify8") else None,
+        if (skin.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify8") else None,
       eolNewConditionCardiacMonth =
         if (cardiac.contains(true)) rawRecord.getOptionalNumber("eol_dx_month9") else None,
       eolNewConditionCardiacYear =
         if (cardiac.contains(true)) rawRecord.getOptionalNumber("eol_dx_year9") else None,
       eolNewConditionCardiacSpecify =
-        if (cardiac.contains(true)) rawRecord.getOptional("eol_dx_specify9") else None,
+        if (cardiac.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify9") else None,
       eolNewConditionRespiratoryMonth =
         if (respiratory.contains(true)) rawRecord.getOptionalNumber("eol_dx_month10") else None,
       eolNewConditionRespiratoryYear =
         if (respiratory.contains(true)) rawRecord.getOptionalNumber("eol_dx_year10") else None,
       eolNewConditionRespiratorySpecify =
-        if (respiratory.contains(true)) rawRecord.getOptional("eol_dx_specify10") else None,
+        if (respiratory.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify10") else None,
       eolNewConditionGastrointestinalMonth =
         if (gastrointestinal.contains(true)) rawRecord.getOptionalNumber("eol_dx_month11")
         else None,
       eolNewConditionGastrointestinalYear =
         if (gastrointestinal.contains(true)) rawRecord.getOptionalNumber("eol_dx_year11") else None,
       eolNewConditionGastrointestinalSpecify =
-        if (gastrointestinal.contains(true)) rawRecord.getOptional("eol_dx_specify11") else None,
+        if (gastrointestinal.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify11")
+        else None,
       eolNewConditionLiverMonth =
         if (liver.contains(true)) rawRecord.getOptionalNumber("eol_dx_month12") else None,
       eolNewConditionLiverYear =
         if (liver.contains(true)) rawRecord.getOptionalNumber("eol_dx_year12") else None,
       eolNewConditionLiverSpecify =
-        if (liver.contains(true)) rawRecord.getOptional("eol_dx_specify12") else None,
+        if (liver.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify12") else None,
       eolNewConditionKidneyMonth =
         if (kidney.contains(true)) rawRecord.getOptionalNumber("eol_dx_month13") else None,
       eolNewConditionKidneyYear =
         if (kidney.contains(true)) rawRecord.getOptionalNumber("eol_dx_year13") else None,
       eolNewConditionKidneySpecify =
-        if (kidney.contains(true)) rawRecord.getOptional("eol_dx_specify13") else None,
+        if (kidney.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify13") else None,
       eolNewConditionReproductiveMonth =
         if (reproductive.contains(true)) rawRecord.getOptionalNumber("eol_dx_month14") else None,
       eolNewConditionReproductiveYear =
         if (reproductive.contains(true)) rawRecord.getOptionalNumber("eol_dx_year14") else None,
       eolNewConditionReproductiveSpecify =
-        if (reproductive.contains(true)) rawRecord.getOptional("eol_dx_specify14") else None,
+        if (reproductive.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify14")
+        else None,
       eolNewConditionOrthopedicMonth =
         if (orthopedic.contains(true)) rawRecord.getOptionalNumber("eol_dx_month15") else None,
       eolNewConditionOrthopedicYear =
         if (orthopedic.contains(true)) rawRecord.getOptionalNumber("eol_dx_year15") else None,
       eolNewConditionOrthopedicSpecify =
-        if (orthopedic.contains(true)) rawRecord.getOptional("eol_dx_specify15") else None,
+        if (orthopedic.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify15") else None,
       eolNewConditionNeurologicalMonth =
         if (neurological.contains(true)) rawRecord.getOptionalNumber("eol_dx_month16") else None,
       eolNewConditionNeurologicalYear =
         if (neurological.contains(true)) rawRecord.getOptionalNumber("eol_dx_year16") else None,
       eolNewConditionNeurologicalSpecify =
-        if (neurological.contains(true)) rawRecord.getOptional("eol_dx_specify16") else None,
+        if (neurological.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify16")
+        else None,
       eolNewConditionEndocrineMonth =
         if (endocrine.contains(true)) rawRecord.getOptionalNumber("eol_dx_month17") else None,
       eolNewConditionEndocrineYear =
         if (endocrine.contains(true)) rawRecord.getOptionalNumber("eol_dx_year17") else None,
       eolNewConditionEndocrineSpecify =
-        if (endocrine.contains(true)) rawRecord.getOptional("eol_dx_specify17") else None,
+        if (endocrine.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify17") else None,
       eolNewConditionHomatologicMonth =
         if (homatologic.contains(true)) rawRecord.getOptionalNumber("eol_dx_month18") else None,
       eolNewConditionHomatologicYear =
         if (homatologic.contains(true)) rawRecord.getOptionalNumber("eol_dx_year18") else None,
       eolNewConditionHomatologicSpecify =
-        if (homatologic.contains(true)) rawRecord.getOptional("eol_dx_specify18") else None,
+        if (homatologic.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify18") else None,
       eolNewConditionImmuneMonth =
         if (immune.contains(true)) rawRecord.getOptionalNumber("eol_dx_month19") else None,
       eolNewConditionImmuneYear =
         if (immune.contains(true)) rawRecord.getOptionalNumber("eol_dx_year19") else None,
       eolNewConditionImmuneSpecify =
-        if (immune.contains(true)) rawRecord.getOptional("eol_dx_specify19") else None,
+        if (immune.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify19") else None,
       eolNewConditionOtherMonth =
         if (other.contains(true)) rawRecord.getOptionalNumber("eol_dx_month20") else None,
       eolNewConditionOtherYear =
         if (other.contains(true)) rawRecord.getOptionalNumber("eol_dx_year20") else None,
       eolNewConditionOtherSpecify =
-        if (other.contains(true)) rawRecord.getOptional("eol_dx_specify20") else None
+        if (other.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify20") else None
     )
   }
 }

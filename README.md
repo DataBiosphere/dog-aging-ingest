@@ -145,7 +145,7 @@ the end of the dog's life and any information available regarding the cause of d
 
 #### EOLS Extraction Criteria
 * Pull all records from the baseline arm (*baseline_arm_1*) 
-* where _eol_willing_to_complete_ is marked as complete.
+* where _end_of_life_complete_ and _eol_willing_to_complete_ are marked as complete.
 
 #### EOLS Schema Design
 Eols data is also modeled closely to a DAP provided proto-schema which we converted to a repo schema. 

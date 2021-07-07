@@ -23,21 +23,32 @@ object EolsExtractionPipeline extends ScioApp[Args] {
     "end_of_life"
   )
 
-  def extractionFiltersGenerator(args: Args): List[FilterDirective] =
-    args.startTime
-      .map(start =>
-        List(
-          FilterDirective("eol_date_dog_died", FilterOps.>, RedCapClient.redcapFormatDate(start))
-        )
-      )
-      .getOrElse(List()) ++
-      args.endTime
-        .map(end =>
+  def extractionFiltersGenerator(args: Args): List[FilterDirective] = {
+    // make sure we are only collecting completed survey forms
+    val completionFilters: List[FilterDirective] = forms
+      .map(form => FilterDirective(s"${form}_complete", FilterOps.==, "2"))
+    // EOLS consent
+    val standardDirectives: List[FilterDirective] = List(
+      FilterDirective("eol_willing_to_complete", FilterOps.==, "1")
+    )
+    val dateFilters: List[FilterDirective] =
+      args.startTime
+        .map(start =>
           List(
-            FilterDirective("eol_date_dog_died", FilterOps.<, RedCapClient.redcapFormatDate(end))
+            FilterDirective("eol_date_dog_died", FilterOps.>, RedCapClient.redcapFormatDate(start))
           )
         )
-        .getOrElse(List())
+        .getOrElse(List()) ++
+        args.endTime
+          .map(end =>
+            List(
+              FilterDirective("eol_date_dog_died", FilterOps.<, RedCapClient.redcapFormatDate(end))
+            )
+          )
+          .getOrElse(List())
+
+    completionFilters ++ standardDirectives ++ dateFilters
+  }
 
   val subdir = "eols";
   val arm = "baseline_arm_1"

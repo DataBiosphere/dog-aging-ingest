@@ -34,14 +34,14 @@ object RecentSymptomsTransformations {
       eolRecentSymptomOther = otherRecentSymptoms,
       eolRecentSymptomOtherDescription =
         if (otherRecentSymptoms.contains(true))
-          rawRecord.getOptional("eol_med_symptoms_specify")
+          rawRecord.getOptionalStripped("eol_med_symptoms_specify")
         else None,
       eolRecentQol = rawRecord.getOptionalNumber("eol_qol"),
       eolQolDeclined = rawRecord.getOptionalNumber("eol_qol_declined"),
       eolQolDeclinedReason = qolDeclineReason,
       eolQolDeclinedReasonOtherDescription =
         if (qolDeclineReason.contains(98L))
-          rawRecord.getOptional("eol_qol_declined_specify")
+          rawRecord.getOptionalStripped("eol_qol_declined_specify")
         else None,
       eolRecentVetDiscuss = rawRecord.getOptionalNumber("eol_vet_discuss_yn"),
       eolRecentVetStay = rawRecord.getOptionalNumber("eol_stayed_at_vet"),

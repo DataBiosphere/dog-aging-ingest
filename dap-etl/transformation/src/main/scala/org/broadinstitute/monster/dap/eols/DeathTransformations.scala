@@ -13,7 +13,7 @@ object DeathTransformations {
       eolDeathLocation = deathLocation,
       eolDeathLocationOtherDescription =
         if (deathLocation.contains(98))
-          rawRecord.getOptional("eol_death_location_specify")
+          rawRecord.getOptionalStripped("eol_death_location_specify")
         else None,
       eolDeathWitness = rawRecord.getOptionalNumber("eol_anyone_present"),
       eolDeathWitnessWhoYou = deathWitness.map(_.contains("1")),
@@ -24,7 +24,7 @@ object DeathTransformations {
       eolDeathWitnessWhoOther = deathWitnessOther,
       eolDeathWitnessWhoOtherDescription =
         if (deathWitness.contains(true))
-          rawRecord.getOptional("eol_who_present_specify")
+          rawRecord.getOptionalStripped("eol_who_present_specify")
         else None
     )
   }

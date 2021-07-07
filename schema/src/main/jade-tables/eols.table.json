@@ -22,7 +22,7 @@
         },
         {
             "name": "eol_death_date",
-            "datatype": "string"
+            "datatype": "date"
         },
         {
             "name": "eol_cause_of_death_primary",

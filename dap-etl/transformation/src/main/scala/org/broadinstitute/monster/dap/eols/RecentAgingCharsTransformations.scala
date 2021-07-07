@@ -35,7 +35,7 @@ object RecentAgingCharsTransformations {
       eolRecentAgingCharOther = otherChar,
       eolRecentAgingCharOtherDescription =
         if (otherChar.contains(true))
-          rawRecord.getOptional("eol_aging_characteristics_specify")
+          rawRecord.getOptionalStripped("eol_aging_characteristics_specify")
         else None
     )
   }
