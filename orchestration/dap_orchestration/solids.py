@@ -20,7 +20,7 @@ class_prefix = "org.broadinstitute.monster.dap"
 def extract_records(context: AbstractComputeExecutionContext) -> None:
     """
     This solid will take in the arguments provided in context and run the sbt extraction code
-    for the predefined pipeline (HLES, CSLB, or ENVIRONMENT) using the specified runner.
+    for the predefined pipeline (HLES, CSLB, ENVIRONMENT, Sample, EOLS) using the specified runner.
     """
     arg_dict = {
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
