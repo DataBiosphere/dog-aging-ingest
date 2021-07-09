@@ -21,5 +21,15 @@ solids:
       api_token: ""
       pull_data_dictionaries: false
       end_time: "2020-03-30T23:59:59-05:00"
+    sample_extract_records:
+      config:
+        api_token: ""
+        pull_data_dictionaries: false
+        end_time: "2020-03-30T23:59:59-05:00"
+    eols_extract_records:
+      config:
+        api_token: ""
+        pull_data_dictionaries: false
+        end_time: "2020-03-30T23:59:59-05:00"
 
 

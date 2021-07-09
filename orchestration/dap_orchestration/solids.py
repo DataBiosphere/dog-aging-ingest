@@ -20,7 +20,7 @@ class_prefix = "org.broadinstitute.monster.dap"
 def extract_records(context: AbstractComputeExecutionContext) -> None:
     """
     This solid will take in the arguments provided in context and run the sbt extraction code
-    for the predefined pipeline (HLES, CSLB, or ENVIRONMENT) using the specified runner.
+    for the predefined pipeline (HLES, CSLB, ENVIRONMENT, Sample, EOLS) using the specified runner.
     """
     arg_dict = {
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
@@ -96,6 +96,40 @@ def env_extract_records(config: dict[str, str]) -> dict[str, str]:
     )
 
 
+@configured(
+    extract_records,
+    config_schema={
+        "pull_data_dictionaries": Bool,
+        "end_time": String,
+        "api_token": String,
+    }
+)
+def sample_extract_records(config: dict[str, str]) -> dict[str, str]:
+    return _build_extract_config(
+        config=config,
+        output_prefix="raw",
+        target_class=f"{class_prefix}.sample.SampleExtractionPipeline",
+        scala_project=extract_project
+    )
+
+
+@configured(
+    extract_records,
+    config_schema={
+        "pull_data_dictionaries": Bool,
+        "end_time": String,
+        "api_token": String,
+    }
+)
+def eols_extract_records(config: dict[str, str]) -> dict[str, str]:
+    return _build_extract_config(
+        config=config,
+        output_prefix="raw",
+        target_class=f"{class_prefix}.eols.EolsExtractionPipeline",
+        scala_project=extract_project
+    )
+
+
 @solid(
     required_resource_keys={"beam_runner", "refresh_directory"},
     config_schema={
@@ -156,6 +190,26 @@ def env_transform_records(config: dict[str, str]) -> dict[str, str]:
         input_prefix="raw/environment",
         output_prefix="transform",
         target_class=f"{class_prefix}.environment.EnvironmentTransformationPipeline",
+        scala_project=transform_project
+    )
+
+
+@configured(transform_records)
+def sample_transform_records(config: dict[str, str]) -> dict[str, str]:
+    return _build_transform_config(
+        input_prefix="raw/sample",
+        output_prefix="transform",
+        target_class=f"{class_prefix}.sample.SampleTransformationPipeline",
+        scala_project=transform_project
+    )
+
+
+@configured(transform_records)
+def eols_transform_records(config: dict[str, str]) -> dict[str, str]:
+    return _build_transform_config(
+        input_prefix="raw/eols",
+        output_prefix="transform",
+        target_class=f"{class_prefix}.eols.EolsTransformationPipeline",
         scala_project=transform_project
     )
 

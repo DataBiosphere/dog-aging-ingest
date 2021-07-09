@@ -36,6 +36,20 @@ def run_config():
                     'pull_data_dictionaries': True
                 }
             },
+            'sample_extract_records': {
+                'config': {
+                    'api_token': 'fake_token',
+                    'end_time': 'fake_time',
+                    'pull_data_dictionaries': True
+                }
+            },
+            'eols_extract_records': {
+                'config': {
+                    'api_token': 'fake_token',
+                    'end_time': 'fake_time',
+                    'pull_data_dictionaries': True
+                }
+            },
             'write_outfiles': {
                 'config': {
                     'working_dir': 'fake_dir'
