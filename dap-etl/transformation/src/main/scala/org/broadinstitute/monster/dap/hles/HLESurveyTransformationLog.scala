@@ -29,8 +29,22 @@ class HLESurveyTransformationError(msg: String) extends HLESurveyTransformationL
     )
 }
 
+class HLESurveyTransformationWarning(msg: String) extends HLESurveyTransformationLog {
+
+  def log(implicit logger: Logger): Unit = {
+    logger.error(jsonMsg.toString())
+    counter("hles", "hles_transformation_warning").inc()
+  }
+
+  val jsonMsg: Obj = ujson
+    .Obj(
+      "errorType" -> ujson.Str(this.getClass.getSimpleName),
+      "message" -> ujson.Str(msg)
+    )
+}
+
 // case classes for all the different actual warnings and errors we want to raise during the workflow
 case class MissingOwnerIdError(msg: String) extends HLESurveyTransformationError(msg)
-case class TruncatedDecimalError(msg: String) extends HLESurveyTransformationError(msg)
+case class TruncatedDecimalError(msg: String) extends HLESurveyTransformationWarning(msg)
 case class MissingCalcFieldError(msg: String) extends HLESurveyTransformationError(msg)
 case class InvalidArmMonthError(msg: String) extends HLESurveyTransformationError(msg)
