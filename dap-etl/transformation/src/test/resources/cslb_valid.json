@@ -1,0 +1,18 @@
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"study_id","value":"45678"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_score","value":"34"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_date","value":"2020-11-05"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"canine_social_and_learned_behavior_complete","value":"2"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_pace","value":"1"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_stare","value":"1"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_stuck","value":"1"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_recognize","value":"1"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_walk_walls","value":"1"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_avoid","value":"1"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_find_food","value":"1"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_pace_6mo","value":"3"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_stare_6mo","value":"3"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_defecate_6mo","value":"3"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_food_6mo","value":"3"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_recognize_6mo","value":"3"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_active_6mo","value":"3"}
+{"record":"45678","redcap_event_name":"annual_2020_arm_1","field_name":"cslb_other_changes","value":"Some other CSLB changes."}
