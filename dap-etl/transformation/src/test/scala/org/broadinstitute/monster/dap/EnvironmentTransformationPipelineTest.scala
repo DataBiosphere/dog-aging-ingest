@@ -22,8 +22,7 @@ class EnvironmentTransformationPipelineTest extends PipelineSpec with Matchers {
       .run()
   }
 
-  // todo: missing redcap_event_name
-  it should "not process a environment record with an invalid redcap_event_name" in {
+  it should "not process a environment record without a valid redcap_event_name" in {
     val lines =
       Source.fromResource("environment_missing_event.json").getLines().toSeq
     val expected_environment = Source.fromResource("environment_valid_output.json").getLines().toSeq

@@ -1,0 +1,112 @@
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"recruitment_fields_complete","value":"2"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_birth_year","value":"2004"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_birth_year_certain","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_breed_mix_1","value":"45"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_breed_mix_2","value":"65"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_pure_or_mixed","value":"2"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_sex","value":"2"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_sleep","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_spay_neuter","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_vet_freq","value":"2"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_weight","value":"5"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_id","value":"3"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_num_dogs_hh","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_num_people_hh","value":"2"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_timestamp","value":"2019-05-05 10:15"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_zip","value":"02134"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"study_id","value":"12345"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_select_stat","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"cohort_enrollment_complete","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_vemr_review","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_race_non_white","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_interest_f","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_interest_p","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_incl_interest","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_triad_potential","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_incl_age","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_incl_wgt","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_incl_triad","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_intact","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_hw_exempt_state","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_hw","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_vacc","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_coop","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_congen_liver_ps","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_babesiosis","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_blasto","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_brucellosis","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_ccdio","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_crypto","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_ehrlich","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_hrtworm","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_histo","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_hepato","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_leish","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_pythium","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_cancer","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_lupus","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_cardiac","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_diarrhea","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_vomit","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_colitis","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_lymph","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_ple","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_cild","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_md","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_ps","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_ckd","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_pro","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_ds","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_cushing","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_diab","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_hypth","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_sle","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_excl_triad","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_enroll_stat","value":"10"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_enroll_stat_date","value":"2021-02-20 00:15:28"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_p_invite_date","value":"2020-01-01 00:00"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_p_due_date","value":"2021-02-17"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_batch_label","value":"Precision-BATCH-2020-01-01"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_req_invite_date","value":"2021-01-09 00:00"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_req_due_date","value":"2021-02-18"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_reqform_date","value":"2021-01-09 03:40:43"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_order_date","value":"2021-01-09 03:40:44"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_order","value":"KIT-1-222222-3"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_order_status","value":"7"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_order_status_date","value":"2021-05-13"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_tracking_url","value":"https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=fake_tracking_number"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_rtn_tracking_url","value":"https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=fake_tracking_number"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_tracking","value":"fake_tracking_number"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_shipper","value":"fake_shipper_number"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_ship_via","value":"USPS Prioriy Mail"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_ship_date","value":"2021-01-13 00:00"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_expire_date","value":"2021-02-22 00:00"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_rtn_tracking","value":"fake_tracking_number"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_shipped_qty","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_item","value":"KIT-1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_lot","value":"some-lot-info"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_serial","value":"123456"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_tube_serial","value":"123456789"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_kit_barcode","value":"BarcodeDataHere"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_tracking_date","value":"2020-03-11 09:12:00"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_tracking_status","value":"Delivered, In/At Mailbox"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_tracking_exp_date","value":"February 1, 2021"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_rec_date","value":"2021-01-15 00:00"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_ret_due_date","value":"2021-02-24"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_ret_timeout_date","value":"2021-03-16"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_rtn_tracking_date","value":"2021-01-19 13:16:00"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_rtn_tracking_status","value":"Delivered, In/At Mailbox"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_ret_send_date","value":"2021-01-19 00:00"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_gen_arrv_date","value":"2021-01-19 00:00"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_invite_age_yrs","value":"12"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_invite_age_stratum","value":"4"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_invite_sex_stratum","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_invite_intact_stratum","value":"3"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_invite_weight_kgs","value":"55.01551"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_invite_weight_stratum","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_invite_division_stratum","value":"9"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_invite_stratum_sort","value":"1212121212"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_invite_division_sort","value":"264"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"k1_tube_status","value":"succeeded"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_p_invite_days","value":"-174"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ce_p_due_days","value":"-134"}

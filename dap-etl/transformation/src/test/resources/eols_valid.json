@@ -1,0 +1,44 @@
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_willing_to_complete","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"end_of_life_complete","value":"2"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_dx","value":"5"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_dx","value":"9"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_dx_year5","value":"2019"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_dx_specify5","value":"Some eye disorder"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_dx_year9","value":"2020"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_dx_specify9","value":"Some cardiac disease"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_know_date_dog_died_yn","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_date_dog_died","value":"2020-11-10"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_aging_characteristics","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_aging_characteristics","value":"4"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_aging_characteristics","value":"5"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_aging_characteristics","value":"8"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_aging_characteristics","value":"11"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_aging_characteristics","value":"15"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_aging_characteristics","value":"18"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_med_symptoms","value":"15"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_qol","value":"6"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_qol_declined","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_contribute_qol_decined","value":"3"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_vet_discuss_yn","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_stayed_at_vet","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_length_stayed_at_vet","value":"2"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_sedation_yn","value":"0"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_understand_prognosis","value":"3"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_death_location","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_anyone_present","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_who_present","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_who_present","value":"2"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_who_present","value":"4"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_euthan_yn","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_euthan_who","value":"98"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_euthan_who_specify","value":"Other euthan"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_euthan_why1","value":"2"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_euthan_why2","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_euthan_why2","value":"3"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_cause1_death","value":"2"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_cause2_death","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_illness_a","value":"99"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_illness_b","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_illness_c","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_old_age_cod_2","value":"8"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"eol_notes","value":"Other EOLS notes"}
