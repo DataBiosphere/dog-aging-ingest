@@ -1,0 +1,16 @@
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"study_id","value":"12345"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_id","value":"11111"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_zip","value":"02134"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_num_people_hh","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_num_dogs_hh","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_pure_or_mixed","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_breed","value":"45"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_birth_year_certain","value":"2"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_age","value":"10"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_sex","value":"2"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_spay_neuter","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_weight","value":"4"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_vet_freq","value":"3"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_dog_sleep","value":"1"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"ss_timestamp","value":"2021-04-10 9:15"}
+{"record":"12345","redcap_event_name":"baseline_arm_1","field_name":"recruitment_fields_complete","value":"2"}

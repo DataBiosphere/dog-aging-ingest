@@ -1,0 +1,4 @@
+{"dog_id":12345,"hs_condition_type":4,"hs_condition":411,"hs_condition_is_congenital":false,"hs_diagnosis_year":2015,"hs_diagnosis_month":7,"hs_required_surgery_or_hospitalization":4,"hs_follow_up_ongoing":false}
+{"dog_id":12345,"hs_condition_type":4,"hs_condition":432,"hs_condition_is_congenital":false,"hs_diagnosis_year":2014,"hs_diagnosis_month":8,"hs_required_surgery_or_hospitalization":4,"hs_follow_up_ongoing":false}
+{"dog_id":12345,"hs_condition_type":10,"hs_condition":1014,"hs_condition_is_congenital":false,"hs_diagnosis_year":2011,"hs_diagnosis_month":11,"hs_required_surgery_or_hospitalization":2,"hs_follow_up_ongoing":false}
+{"dog_id":12345,"hs_condition_type":18,"hs_condition":1801,"hs_condition_is_congenital":false,"hs_diagnosis_year":2016,"hs_diagnosis_month":9,"hs_required_surgery_or_hospitalization":4,"hs_follow_up_ongoing":false}
