@@ -62,7 +62,7 @@ object IllnessTransformations {
         if (otherCancerCondition.contains(true))
           rawRecord.getOptionalStripped("eol_cancer_a_specify")
         else None,
-      eolIlllnessCancerNameKnown = cancerNameKnown,
+      eolIllnessCancerNameKnown = cancerNameKnown,
       eolIllnessCancerNameDescription =
         if (cancerNameKnown.contains(1L))
           rawRecord.getOptionalStripped("eol_cancer_b_specify")

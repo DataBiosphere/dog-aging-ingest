@@ -162,7 +162,7 @@
             "datatype": "string"
         },
         {
-            "name": "eol_illlness_cancer_name_known",
+            "name": "eol_illness_cancer_name_known",
             "datatype": "integer"
         },
         {

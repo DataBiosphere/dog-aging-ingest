@@ -32,7 +32,7 @@ class IllnessTransformationsSpec extends AnyFlatSpec with Matchers with OptionVa
     cancerMapped.eolIllnessCancerVenereal shouldBe Some(true)
     cancerMapped.eolIllnessCancerOther shouldBe Some(true)
     cancerMapped.eolIllnessCancerOtherDescription shouldBe Some("Some other type of cancer")
-    cancerMapped.eolIlllnessCancerNameKnown shouldBe Some(1L)
+    cancerMapped.eolIllnessCancerNameKnown shouldBe Some(1L)
     cancerMapped.eolIllnessCancerNameDescription shouldBe Some("New type of cancer")
     cancerMapped.eolIllnessAwarenessTimeframe shouldBe Some(0L)
     cancerMapped.eolIllnessTreatment shouldBe Some(7L)
