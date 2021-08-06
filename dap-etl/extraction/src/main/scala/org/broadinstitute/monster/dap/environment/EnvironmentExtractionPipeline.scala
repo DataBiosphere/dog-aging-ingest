@@ -14,7 +14,8 @@ class EnvironmentExtractionFailException() extends Exception
 object EnvironmentExtractionPipeline extends ScioApp[Args] {
 
   val formatter = DateTimeFormatter.ofPattern("MMMyyyy")
-  val formatterAlt = DateTimeFormatter.ofPattern("MMMMyyyy")
+  val formatter_month = DateTimeFormatter.ofPattern("MMMM")
+  val formatter_year = DateTimeFormatter.ofPattern("yyyy")
 
   val EnvironmentEpoch = OffsetDateTime.of(2020, 1, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
 
@@ -51,8 +52,10 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
     dateList
       .map(date =>
         // event names for June, July, and Sept have 4 alpha characters before the year
-        if (List(6,7,9).contains(date.getMonthValue) ) {
-          date.format(formatterAlt).toLowerCase.distinct
+        if (List(6, 7, 9).contains(date.getMonthValue)) {
+          date.format(formatter_month).toLowerCase.slice(0, 4) + date
+            .format(formatter_year)
+            .toLowerCase
         } else date.format(formatter).toLowerCase
       )
       .distinct
