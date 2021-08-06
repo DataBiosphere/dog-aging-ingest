@@ -11,7 +11,7 @@ class ApiTokenClass:
     base_api_token: str
     env_api_token: str
 
-    def __init__(self, base_token, env_token) -> None:
+    def __init__(self, base_token: str, env_token: str) -> None:
         self.base_api_token = base_token
         self.env_api_token = env_token
 
