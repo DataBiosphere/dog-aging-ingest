@@ -23,7 +23,7 @@ object DeathTransformations {
       eolDeathWitnessWhoBoarder = deathWitness.map(_.contains("5")),
       eolDeathWitnessWhoOther = deathWitnessOther,
       eolDeathWitnessWhoOtherDescription =
-        if (deathWitness.contains(true))
+        if (deathWitnessOther.contains(true))
           rawRecord.getOptionalStripped("eol_who_present_specify")
         else None
     )

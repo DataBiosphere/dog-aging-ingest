@@ -26,4 +26,20 @@ class DeathTransformationsSpec extends AnyFlatSpec with Matchers with OptionValu
     deathMapped.eolDeathWitnessWhoYou.value shouldBe true
     deathMapped.eolDeathWitnessWhoFamily.value shouldBe true
   }
+
+  it should "map death transformations for others present at death" in {
+    val DeathTransform = Map(
+      "eol_anyone_present" -> Array("1"),
+      "eol_who_present" -> Array("98"),
+      "eol_who_present_specify" -> Array("Someone else")
+    )
+
+    val deathMapped = DeathTransformations.mapDeathTransformations(
+      RawRecord(1, DeathTransform)
+    )
+
+    deathMapped.eolDeathWitness.value shouldBe 1L
+    deathMapped.eolDeathWitnessWhoOther.value shouldBe true
+    deathMapped.eolDeathWitnessWhoOtherDescription.value shouldBe "Someone else"
+  }
 }
