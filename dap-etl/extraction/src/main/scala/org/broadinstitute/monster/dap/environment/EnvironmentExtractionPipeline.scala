@@ -14,6 +14,7 @@ class EnvironmentExtractionFailException() extends Exception
 object EnvironmentExtractionPipeline extends ScioApp[Args] {
 
   val formatter = DateTimeFormatter.ofPattern("MMMyyyy")
+  val formatterAlt = DateTimeFormatter.ofPattern("MMMMyyyy")
 
   val EnvironmentEpoch = OffsetDateTime.of(2020, 1, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
 
@@ -47,7 +48,14 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
     if (start.isAfter(end)) throw new EnvironmentExtractionFailException
     val dateList =
       (Iterator.iterate(start)(_ plusDays 1) takeWhile (_ isBefore end.plusDays(1))).toList
-    dateList.map(date => date.format(formatter).toLowerCase).distinct
+    dateList
+      .map(date =>
+        // event names for June, July, and Sept have 4 alpha characters before the year
+        if (List(6,7,9).contains(date.getMonthValue) ) {
+          date.format(formatterAlt).toLowerCase.distinct
+        } else date.format(formatter).toLowerCase
+      )
+      .distinct
   }
 
   def extractionArmsGenerator(
@@ -59,9 +67,8 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
     // use current date if endTime was not provided
     val endDate = endTime.getOrElse(OffsetDateTime.now())
     // environment has two arms per month
-    // ("annual_{MMMyyyy}_arm_1", "annual_{MMMyyyy}_secondary_arm_1")
     getMonthYearList(startDate, endDate).flatMap { date =>
-      List(s"annual_${date}_arm_1", s"annual_${date}_secondary_arm_1")
+      List(s"${date}_arm_1", s"${date}_secondary_arm_1")
     }
   }
 
