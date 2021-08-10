@@ -7,7 +7,7 @@ from dagster.core.execution.context.init import InitResourceContext
 
 
 @dataclass
-class ApiTokenClass:
+class ApiTokenConfig:
     base_api_token: str
     env_api_token: str
 
@@ -20,8 +20,8 @@ class ApiTokenClass:
     "base_api_token": StringSource,
     "env_api_token": StringSource
 })
-def api_token(init_context: InitResourceContext) -> ApiTokenClass:
-    return ApiTokenClass(init_context.resource_config['base_api_token'], init_context.resource_config['env_api_token'])
+def api_token(init_context: InitResourceContext) -> ApiTokenConfig:
+    return ApiTokenConfig(init_context.resource_config['base_api_token'], init_context.resource_config['env_api_token'])
 
 
 @resource({"refresh_directory": Field(StringSource)})
