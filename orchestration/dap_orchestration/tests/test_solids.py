@@ -1,5 +1,5 @@
 import pytest
-from dagster import ModeDefinition, execute_solid, SolidExecutionResult
+from dagster import ModeDefinition, execute_solid, SolidExecutionResult, ResourceDefinition
 from dagster_utils.resources.beam.noop_beam_runner import noop_beam_runner
 
 import dap_orchestration
@@ -30,7 +30,6 @@ def extract_config():
     return {
         "pull_data_dictionaries": False,
         "end_time": "2020-05-19T23:59:59-05:00",
-        "api_token": "ddddd",
     }
 
 
@@ -47,7 +46,8 @@ def mode():
         resource_defs={
             "beam_runner": noop_beam_runner,
             "refresh_directory": dap_orchestration.resources.test_refresh_directory,
-            "outfiles_writer": dap_orchestration.resources.test_outfiles_writer
+            "outfiles_writer": dap_orchestration.resources.test_outfiles_writer,
+            "api_token": ResourceDefinition.mock_resource()
         }
     )
 

@@ -1,8 +1,27 @@
 import os
 import subprocess
 
+from dataclasses import dataclass
 from dagster import Field, resource, StringSource
 from dagster.core.execution.context.init import InitResourceContext
+
+
+@dataclass
+class ApiTokenConfig:
+    base_api_token: str
+    env_api_token: str
+
+    def __init__(self, base_token: str, env_token: str) -> None:
+        self.base_api_token = base_token
+        self.env_api_token = env_token
+
+
+@resource({
+    "base_api_token": StringSource,
+    "env_api_token": StringSource
+})
+def api_token(init_context: InitResourceContext) -> ApiTokenConfig:
+    return ApiTokenConfig(init_context.resource_config['base_api_token'], init_context.resource_config['env_api_token'])
 
 
 @resource({"refresh_directory": Field(StringSource)})
