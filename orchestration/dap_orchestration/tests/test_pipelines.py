@@ -10,42 +10,44 @@ def run_config():
         'resources': {
             'refresh_directory': {
                 'config': {
-                    'refresh_directory': 'fake_dir'}
+                    'refresh_directory': 'fake_dir'
+                }
+            },
+            'api_token': {
+                'config': {
+                    'base_api_token': 'fake_api_token1',
+                    'env_api_token': 'fake_api_token1',
+                }
             }
         },
         'solids': {
             'cslb_extract_records': {
                 'config':
                     {
-                        'api_token': 'fake_token',
                         'end_time': 'fake_time',
                         'pull_data_dictionaries': True
                     }
             },
             'env_extract_records': {
                 'config': {
-                    'api_token': 'fake_token',
                     'end_time': 'fake_time',
                     'pull_data_dictionaries': True
                 }
             },
             'hles_extract_records': {
                 'config': {
-                    'api_token': 'fake_token',
                     'end_time': 'fake_time',
                     'pull_data_dictionaries': True
                 }
             },
             'sample_extract_records': {
                 'config': {
-                    'api_token': 'fake_token',
                     'end_time': 'fake_time',
                     'pull_data_dictionaries': True
                 }
             },
             'eols_extract_records': {
                 'config': {
-                    'api_token': 'fake_token',
                     'end_time': 'fake_time',
                     'pull_data_dictionaries': True
                 }

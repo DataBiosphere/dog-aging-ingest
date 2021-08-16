@@ -7,17 +7,16 @@ class_prefix = "org.broadinstitute.monster.dap"
 
 
 @solid(
-    required_resource_keys={"beam_runner", "refresh_directory"},
+    required_resource_keys={"beam_runner", "refresh_directory", "api_token"},
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
-        "api_token": String,
         "output_prefix": String,
         "target_class": String,
         "scala_project": String
     }
 )
-def extract_records(context: AbstractComputeExecutionContext) -> None:
+def base_extract_records(context: AbstractComputeExecutionContext) -> None:
     """
     This solid will take in the arguments provided in context and run the sbt extraction code
     for the predefined pipeline (HLES, CSLB, ENVIRONMENT, Sample, EOLS) using the specified runner.
@@ -26,7 +25,7 @@ def extract_records(context: AbstractComputeExecutionContext) -> None:
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
         "outputPrefix": f"{context.resources.refresh_directory}/{context.solid_config['output_prefix']}",
         "endTime": context.solid_config["end_time"],
-        "apiToken": context.solid_config["api_token"]
+        "apiToken": context.resources.api_token.base_api_token
     }
     context.resources.beam_runner.run(arg_dict,
                                       target_class=context.solid_config["target_class"],
@@ -39,18 +38,16 @@ def _build_extract_config(config: dict[str, str], output_prefix: str,
         "pull_data_dictionaries": config["pull_data_dictionaries"],
         "output_prefix": output_prefix,
         "end_time": config["end_time"],
-        "api_token": config["api_token"],
         "target_class": target_class,
         "scala_project": scala_project,
     }
 
 
 @configured(
-    extract_records,
+    base_extract_records,
     config_schema={
         "pull_data_dictionaries": Bool,
-        "end_time": String,
-        "api_token": String,
+        "end_time": String
     }
 )
 def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
@@ -63,11 +60,10 @@ def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
 
 
 @configured(
-    extract_records,
+    base_extract_records,
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
-        "api_token": String,
     }
 )
 def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
@@ -79,29 +75,31 @@ def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
     )
 
 
-@configured(
-    extract_records,
+@solid(
+    required_resource_keys={"beam_runner", "refresh_directory", "api_token"},
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
-        "api_token": String,
     }
 )
-def env_extract_records(config: dict[str, str]) -> dict[str, str]:
-    return _build_extract_config(
-        config=config,
-        output_prefix="raw",
-        target_class=f"{class_prefix}.environment.EnvironmentExtractionPipeline",
-        scala_project=extract_project
-    )
+def env_extract_records(context: AbstractComputeExecutionContext) -> None:
+    arg_dict = {
+        "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
+        "outputPrefix": f"{context.resources.refresh_directory}/raw",
+        "endTime": context.solid_config["end_time"],
+        "apiToken": context.resources.api_token.env_api_token,
+
+    }
+    context.resources.beam_runner.run(arg_dict,
+                                      target_class=f"{class_prefix}.environment.EnvironmentExtractionPipeline",
+                                      scala_project=extract_project)
 
 
 @configured(
-    extract_records,
+    base_extract_records,
     config_schema={
         "pull_data_dictionaries": Bool,
-        "end_time": String,
-        "api_token": String,
+        "end_time": String
     }
 )
 def sample_extract_records(config: dict[str, str]) -> dict[str, str]:
@@ -114,11 +112,10 @@ def sample_extract_records(config: dict[str, str]) -> dict[str, str]:
 
 
 @configured(
-    extract_records,
+    base_extract_records,
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
-        "api_token": String,
     }
 )
 def eols_extract_records(config: dict[str, str]) -> dict[str, str]:

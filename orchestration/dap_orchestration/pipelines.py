@@ -4,7 +4,7 @@ from dagster_utils.resources.beam.local_beam_runner import local_beam_runner
 from dagster_utils.resources.beam.dataflow_beam_runner import dataflow_beam_runner
 
 from dap_orchestration.config import preconfigure_resource_for_mode
-from dap_orchestration.resources import refresh_directory, outfiles_writer
+from dap_orchestration.resources import refresh_directory, outfiles_writer, api_token
 from dap_orchestration.solids import hles_extract_records, cslb_extract_records, env_extract_records, \
     sample_extract_records, eols_extract_records, hles_transform_records, cslb_transform_records, \
     env_transform_records, write_outfiles, sample_transform_records, eols_transform_records
@@ -15,7 +15,8 @@ local_mode = ModeDefinition(
     resource_defs={
         "beam_runner": local_beam_runner,
         "refresh_directory": refresh_directory,
-        "outfiles_writer": outfiles_writer
+        "outfiles_writer": outfiles_writer,
+        "api_token": preconfigure_resource_for_mode(api_token, "local")
     }
 )
 
@@ -24,7 +25,8 @@ dev_mode = ModeDefinition(
     resource_defs={
         "beam_runner": preconfigure_resource_for_mode(dataflow_beam_runner, "dev"),
         "refresh_directory": refresh_directory,
-        "outfiles_writer": outfiles_writer
+        "outfiles_writer": outfiles_writer,
+        "api_token": preconfigure_resource_for_mode(api_token, "dev")
     }
 )
 
@@ -33,7 +35,8 @@ prod_mode = ModeDefinition(
     resource_defs={
         "beam_runner": preconfigure_resource_for_mode(dataflow_beam_runner, "prod"),
         "refresh_directory": refresh_directory,
-        "outfiles_writer": outfiles_writer
+        "outfiles_writer": outfiles_writer,
+        "api_token": preconfigure_resource_for_mode(api_token, "prod")
     }
 )
 
@@ -42,7 +45,8 @@ test_mode = ModeDefinition(
     resource_defs={
         "beam_runner": ResourceDefinition.mock_resource(),
         "refresh_directory": refresh_directory,
-        "outfiles_writer": ResourceDefinition.mock_resource()
+        "outfiles_writer": ResourceDefinition.mock_resource(),
+        "api_token": ResourceDefinition.mock_resource()
     }
 )
 
