@@ -15,10 +15,6 @@ class EnvironmentExtractionFailException() extends Exception
 
 object EnvironmentExtractionPipeline extends ScioApp[Args] {
 
-  //val formatter = DateTimeFormatter.ofPattern("MMMyyyy")
-  //val formatter_month = DateTimeFormatter.ofPattern("MMMM")
-  //val formatter_year = DateTimeFormatter.ofPattern("yyyy")
-
   val EnvironmentEpoch = OffsetDateTime.of(2020, 1, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
 
   val forms = List(
