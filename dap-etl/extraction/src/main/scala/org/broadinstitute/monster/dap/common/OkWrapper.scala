@@ -26,7 +26,7 @@ class OkWrapper extends HttpWrapper {
         override def log(s: String): Unit = {
           logger.info(s)
         }
-      }).setLevel(Level.BASIC))
+      }).setLevel(Level.HEADERS))
       .build()
 
   def makeRequest(request: Request): Future[Msg] = {

@@ -15,30 +15,30 @@ class EnvironmentExtractionPipelineSpec extends AnyFlatSpec with Matchers {
       EnvironmentExtractionPipeline.extractionArmsGenerator(Some(startTime), Some(endTime))
 
     envArms shouldBe List(
-      "annual_feb2020_arm_1",
-      "annual_feb2020_secondary_arm_1",
-      "annual_mar2020_arm_1",
-      "annual_mar2020_secondary_arm_1",
-      "annual_apr2020_arm_1",
-      "annual_apr2020_secondary_arm_1",
-      "annual_may2020_arm_1",
-      "annual_may2020_secondary_arm_1",
-      "annual_jun2020_arm_1",
-      "annual_jun2020_secondary_arm_1",
-      "annual_jul2020_arm_1",
-      "annual_jul2020_secondary_arm_1",
-      "annual_aug2020_arm_1",
-      "annual_aug2020_secondary_arm_1",
-      "annual_sep2020_arm_1",
-      "annual_sep2020_secondary_arm_1",
-      "annual_oct2020_arm_1",
-      "annual_oct2020_secondary_arm_1",
-      "annual_nov2020_arm_1",
-      "annual_nov2020_secondary_arm_1",
-      "annual_dec2020_arm_1",
-      "annual_dec2020_secondary_arm_1",
-      "annual_jan2021_arm_1",
-      "annual_jan2021_secondary_arm_1"
+      "feb2020_arm_1",
+      "feb2020_secondary_arm_1",
+      "mar2020_arm_1",
+      "mar2020_secondary_arm_1",
+      "apr2020_arm_1",
+      "apr2020_secondary_arm_1",
+      "may2020_arm_1",
+      "may2020_secondary_arm_1",
+      "june2020_arm_1",
+      "june2020_secondary_arm_1",
+      "july2020_arm_1",
+      "july2020_secondary_arm_1",
+      "aug2020_arm_1",
+      "aug2020_secondary_arm_1",
+      "sept2020_arm_1",
+      "sept2020_secondary_arm_1",
+      "oct2020_arm_1",
+      "oct2020_secondary_arm_1",
+      "nov2020_arm_1",
+      "nov2020_secondary_arm_1",
+      "dec2020_arm_1",
+      "dec2020_secondary_arm_1",
+      "jan2021_arm_1",
+      "jan2021_secondary_arm_1"
     )
   }
 
@@ -49,12 +49,12 @@ class EnvironmentExtractionPipelineSpec extends AnyFlatSpec with Matchers {
     val envArms = EnvironmentExtractionPipeline.extractionArmsGenerator(None, Some(endTime))
 
     envArms shouldBe List(
-      "annual_jan2020_arm_1",
-      "annual_jan2020_secondary_arm_1",
-      "annual_feb2020_arm_1",
-      "annual_feb2020_secondary_arm_1",
-      "annual_mar2020_arm_1",
-      "annual_mar2020_secondary_arm_1"
+      "jan2020_arm_1",
+      "jan2020_secondary_arm_1",
+      "feb2020_arm_1",
+      "feb2020_secondary_arm_1",
+      "mar2020_arm_1",
+      "mar2020_secondary_arm_1"
     )
   }
 
@@ -68,10 +68,10 @@ class EnvironmentExtractionPipelineSpec extends AnyFlatSpec with Matchers {
       EnvironmentExtractionPipeline.extractionArmsGenerator(Some(startTime), Some(endTime))
 
     envArms shouldBe List(
-      "annual_mar2020_arm_1",
-      "annual_mar2020_secondary_arm_1",
-      "annual_apr2020_arm_1",
-      "annual_apr2020_secondary_arm_1"
+      "mar2020_arm_1",
+      "mar2020_secondary_arm_1",
+      "apr2020_arm_1",
+      "apr2020_secondary_arm_1"
     )
   }
 

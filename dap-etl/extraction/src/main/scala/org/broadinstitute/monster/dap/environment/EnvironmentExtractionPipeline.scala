@@ -4,7 +4,9 @@ import org.broadinstitute.monster.common.{PipelineBuilder, ScioApp}
 import org.broadinstitute.monster.dap.common._
 
 import java.time.{OffsetDateTime, ZoneOffset}
-import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoField
+import java.time.format.DateTimeFormatterBuilder
+import collection.JavaConverters._
 
 // Ignore IntelliJ, this is used to make the implicit parser compile.
 import Args._
@@ -12,8 +14,6 @@ import Args._
 class EnvironmentExtractionFailException() extends Exception
 
 object EnvironmentExtractionPipeline extends ScioApp[Args] {
-
-  val formatter = DateTimeFormatter.ofPattern("MMMyyyy")
 
   val EnvironmentEpoch = OffsetDateTime.of(2020, 1, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
 
@@ -42,12 +42,35 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
 
   val subdir = "environment"
 
+  // Utilizing the custom date formatter since June, July, and Sept have non standard abbreviations
+  val monthMap: java.util.Map[java.lang.Long, String] = Map(
+    Long.box(1L) -> "Jan",
+    Long.box(2L) -> "Feb",
+    Long.box(3L) -> "Mar",
+    Long.box(4L) -> "Apr",
+    Long.box(5L) -> "May",
+    Long.box(6L) -> "June",
+    Long.box(7L) -> "July",
+    Long.box(8L) -> "Aug",
+    Long.box(9L) -> "Sept",
+    Long.box(10L) -> "Oct",
+    Long.box(11L) -> "Nov",
+    Long.box(12L) -> "Dec"
+  ).asJava
+
+  val formatter = new DateTimeFormatterBuilder()
+    .appendText(ChronoField.MONTH_OF_YEAR, monthMap)
+    .appendPattern("yyyy")
+    .toFormatter()
+
   // get list of individual dates, then get the set of years and return a list of distinct monthYears
   def getMonthYearList(start: OffsetDateTime, end: OffsetDateTime): List[String] = {
     if (start.isAfter(end)) throw new EnvironmentExtractionFailException
     val dateList =
       (Iterator.iterate(start)(_ plusDays 1) takeWhile (_ isBefore end.plusDays(1))).toList
-    dateList.map(date => date.format(formatter).toLowerCase).distinct
+    dateList
+      .map(date => date.format(formatter).toLowerCase)
+      .distinct
   }
 
   def extractionArmsGenerator(
@@ -59,9 +82,8 @@ object EnvironmentExtractionPipeline extends ScioApp[Args] {
     // use current date if endTime was not provided
     val endDate = endTime.getOrElse(OffsetDateTime.now())
     // environment has two arms per month
-    // ("annual_{MMMyyyy}_arm_1", "annual_{MMMyyyy}_secondary_arm_1")
     getMonthYearList(startDate, endDate).flatMap { date =>
-      List(s"annual_${date}_arm_1", s"annual_${date}_secondary_arm_1")
+      List(s"${date}_arm_1", s"${date}_secondary_arm_1")
     }
   }
 
