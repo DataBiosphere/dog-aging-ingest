@@ -133,11 +133,12 @@ def eols_extract_records(config: dict[str, str]) -> dict[str, str]:
         "input_prefix": String,
         "output_prefix": String,
         "target_class": String,
-        "scala_project": String
+        "scala_project": String,
+        "survey_type": String
     },
     input_defs=[InputDefinition("start", Nothing)]
 )
-def transform_records(context: AbstractComputeExecutionContext) -> None:
+def transform_records(context: AbstractComputeExecutionContext) -> str:
     """
     This solid will take in the arguments provided in context and run the sbt transformation code
     for the predefined pipeline (HLES, CSLB, or ENVIORONMENT) using the specified runner.
@@ -149,15 +150,18 @@ def transform_records(context: AbstractComputeExecutionContext) -> None:
     context.resources.beam_runner.run(arg_dict,
                                       target_class=context.solid_config["target_class"],
                                       scala_project=context.solid_config["scala_project"])
+    return context.solid_config['survey_type']
+
 
 
 def _build_transform_config(input_prefix: str, output_prefix: str,
-                            target_class: str, scala_project: str) -> dict[str, str]:
+                            target_class: str, scala_project: str, survey_type: str) -> dict[str, str]:
     return {
         "input_prefix": input_prefix,
         "output_prefix": output_prefix,
         "target_class": target_class,
         "scala_project": scala_project,
+        "survey_type": survey_type
     }
 
 
@@ -167,7 +171,8 @@ def hles_transform_records(config: dict[str, str]) -> dict[str, str]:
         input_prefix="raw/hles",
         output_prefix="transform",
         target_class=f"{class_prefix}.hles.HLESurveyTransformationPipeline",
-        scala_project=transform_project
+        scala_project=transform_project,
+        survey_type="hles"
     )
 
 
@@ -177,7 +182,8 @@ def cslb_transform_records(config: dict[str, str]) -> dict[str, str]:
         input_prefix="raw/cslb",
         output_prefix="transform",
         target_class=f"{class_prefix}.cslb.CslbTransformationPipeline",
-        scala_project=transform_project
+        scala_project=transform_project,
+        survey_type="cslb"
     )
 
 
@@ -187,7 +193,8 @@ def env_transform_records(config: dict[str, str]) -> dict[str, str]:
         input_prefix="raw/environment",
         output_prefix="transform",
         target_class=f"{class_prefix}.environment.EnvironmentTransformationPipeline",
-        scala_project=transform_project
+        scala_project=transform_project,
+        survey_type="env"
     )
 
 
@@ -197,7 +204,8 @@ def sample_transform_records(config: dict[str, str]) -> dict[str, str]:
         input_prefix="raw/sample",
         output_prefix="transform",
         target_class=f"{class_prefix}.sample.SampleTransformationPipeline",
-        scala_project=transform_project
+        scala_project=transform_project,
+        survey_type="sample"
     )
 
 
@@ -207,7 +215,8 @@ def eols_transform_records(config: dict[str, str]) -> dict[str, str]:
         input_prefix="raw/eols",
         output_prefix="transform",
         target_class=f"{class_prefix}.eols.EolsTransformationPipeline",
-        scala_project=transform_project
+        scala_project=transform_project,
+        survey_type="eols"
     )
 
 
@@ -217,7 +226,8 @@ def eols_transform_records(config: dict[str, str]) -> dict[str, str]:
         "working_dir": String,
     }
 )
-def write_outfiles(context: AbstractComputeExecutionContext, fan_in_results: list[object]) -> None:
+def write_outfiles(context: AbstractComputeExecutionContext,
+                   list_tables: list[str]) -> None:
     """
     This solid will take in the arguments provided in context and call the convert-output-to-tsv script
     on the transform outputs. The script is currently expecting transform outputs from all 3 pipelines and will
@@ -226,4 +236,6 @@ def write_outfiles(context: AbstractComputeExecutionContext, fan_in_results: lis
     NOTE: The fan_in_results param allows to introduce a fan-in dependency from upstream transformation
     solids, but is ignored by this solid.
     """
-    context.resources.outfiles_writer.run(context.solid_config["working_dir"], context.resources.refresh_directory)
+    context.resources.outfiles_writer.run(context.solid_config["working_dir"],
+                                          context.resources.refresh_directory,
+                                          list_tables)

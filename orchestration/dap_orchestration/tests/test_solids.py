@@ -151,7 +151,7 @@ def test_write_outfiles(base_solid_config, mode):
         dap_orchestration.solids.write_outfiles,
         mode_def=mode,
         run_config=dataflow_config,
-        input_values={"fan_in_results": []}
+        input_values={"list_tables": []}
     )
 
     assert result.success

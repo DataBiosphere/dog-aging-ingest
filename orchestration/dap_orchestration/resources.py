@@ -36,12 +36,13 @@ def test_refresh_directory(init_context: InitResourceContext) -> str:
 
 
 class OutfilesWriter:
-    def run(self, working_dir: str, refresh_dir: str) -> None:
+    def run(self, working_dir: str, refresh_dir: str, list_tables: list[str]) -> None:
         outfile_path = f'{working_dir}/tsv_output'
         if not os.path.isdir(outfile_path):
             os.mkdir(outfile_path)
         subprocess.run(
-            ["python", "hack/convert-output-to-tsv.py", f"{refresh_dir}/transform", outfile_path, "--debug"],
+            ["python", "hack/convert-output-to-tsv.py", f"{refresh_dir}/transform", outfile_path, "--debug",
+             "--table", list_tables],
             check=True,
             cwd=working_dir
         )
@@ -53,7 +54,7 @@ def outfiles_writer(init_context: InitResourceContext) -> OutfilesWriter:
 
 
 class TestOutfilesWriter:
-    def run(self, working_dir: str, refresh_dir: str) -> None:
+    def run(self, working_dir: str, refresh_dir: str, table_names: list[str]) -> None:
         pass
 
 
