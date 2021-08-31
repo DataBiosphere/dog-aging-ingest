@@ -5,7 +5,7 @@ from dagster_utils.resources.beam.noop_beam_runner import noop_beam_runner
 import dap_orchestration
 import dap_orchestration.resources
 import dap_orchestration.solids
-
+from dap_orchestration.typing import DapSurveyType
 
 @pytest.fixture
 def base_solid_config():
@@ -74,7 +74,7 @@ def test_cslb_extract(extract_config, base_solid_config, mode):
     cslb_extract_config = {
         "solids": {
             "cslb_extract_records": {
-                "config": extract_config
+                "config": extract_config,
             }
         }
     }
@@ -110,7 +110,8 @@ def test_hles_transform(base_solid_config, mode):
     result: SolidExecutionResult = execute_solid(
         dap_orchestration.solids.hles_transform_records,
         mode_def=mode,
-        run_config=base_solid_config
+        run_config=base_solid_config,
+        input_values={"dap_survey_type": DapSurveyType("hles")}
     )
 
     assert result.success
@@ -120,7 +121,8 @@ def test_cslb_transform(base_solid_config, mode):
     result: SolidExecutionResult = execute_solid(
         dap_orchestration.solids.cslb_transform_records,
         mode_def=mode,
-        run_config=base_solid_config
+        run_config=base_solid_config,
+        input_values={"dap_survey_type": DapSurveyType("cslb")}
     )
 
     assert result.success
@@ -130,7 +132,8 @@ def test_env_transform(base_solid_config, mode):
     result: SolidExecutionResult = execute_solid(
         dap_orchestration.solids.env_transform_records,
         mode_def=mode,
-        run_config=base_solid_config
+        run_config=base_solid_config,
+        input_values={"dap_survey_type": DapSurveyType("env")}
     )
 
     assert result.success
@@ -151,7 +154,7 @@ def test_write_outfiles(base_solid_config, mode):
         dap_orchestration.solids.write_outfiles,
         mode_def=mode,
         run_config=dataflow_config,
-        input_values={"fan_in_results": []}
+        input_values={"fan_in_results": [DapSurveyType("hles")]}
     )
 
     assert result.success

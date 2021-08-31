@@ -1,4 +1,4 @@
-from dagster import pipeline, ModeDefinition, ResourceDefinition
+from dagster import pipeline, ModeDefinition, ResourceDefinition, fs_io_manager
 
 from dagster_utils.resources.beam.local_beam_runner import local_beam_runner
 from dagster_utils.resources.beam.dataflow_beam_runner import dataflow_beam_runner
@@ -16,7 +16,8 @@ local_mode = ModeDefinition(
         "beam_runner": local_beam_runner,
         "refresh_directory": refresh_directory,
         "outfiles_writer": outfiles_writer,
-        "api_token": preconfigure_resource_for_mode(api_token, "local")
+        "api_token": preconfigure_resource_for_mode(api_token, "local"),
+        "io_manager": fs_io_manager
     }
 )
 
