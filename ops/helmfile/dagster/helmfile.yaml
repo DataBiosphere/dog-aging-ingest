@@ -1,0 +1,32 @@
+---
+repositories:
+  - name: dagster
+    url: https://dagster-io.github.io/helm
+  - name: datarepo-helm
+    url: https://broadinstitute.github.io/datarepo-helm
+
+releases:
+  - name: monster-dog-aging-ingest
+    namespace: dagster
+    chart: dagster/dagster-user-deployments
+    values:
+      - deployments:
+        - name: "monster-dap-ingest"
+          image:
+            repository: "us.gcr.io/broad-dsp-gcr-public/monster-dap-dagster"
+            tag: {{ requiredEnv "GIT_SHORTHASH" | quote }}
+            pullPolicy: Always
+          dagsterApiGrpcArgs:
+            - "-f"
+            - "/repositories.py"
+          port: 3030
+          envSecrets:
+            - name: monster-dagster-secrets
+          envConfigMaps:
+            # we can't use values.yaml to insert env vars into deployments, since overwriting lists
+            # doesn't work in helmfiles. instead, like above, we just tell it to use the daemon's config map.
+            - name: monster-dagster-daemon-env
+
+        serviceAccount:
+          create: false
+          name: monster-dagster

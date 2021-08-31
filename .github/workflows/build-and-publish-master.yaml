@@ -43,3 +43,13 @@ jobs:
         run: sbt publish
         env:
           JVM_OPTS: -Xmx6144m -Xms6144m -Xss16m
+      - name: Get artifact slug
+        id: get-artifact-slug
+        run: 'echo ::set-output name=slug::$(git rev-parse --short "$GITHUB_SHA")'
+      - name: Push Dagster User Code Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./orchestration
+          push: true
+          tags: us.gcr.io/broad-dsp-gcr-public/monster-dap-dagster:${{steps.get-artifact-slug.outputs.slug}}
+
