@@ -22,6 +22,11 @@ releases:
           port: 3030
           envSecrets:
             - name: monster-dagster-secrets
+          envConfigMaps:
+            # we can't use values.yaml to insert env vars into deployments, since overwriting lists
+            # doesn't work in helmfiles. instead, like above, we just tell it to use the daemon's config map.
+            - name: monster-dagster-daemon-env
+
         serviceAccount:
           create: false
           name: monster-dagster
