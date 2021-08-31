@@ -36,7 +36,7 @@ def extract_config():
 @pytest.fixture
 def outfiles_config():
     return {
-        "working_dir": "/example/local_beam_runner/bar",
+        "output_dir": "/example/local_beam_runner/bar",
     }
 
 
@@ -141,7 +141,7 @@ def test_write_outfiles(base_solid_config, mode):
         "solids": {
             "write_outfiles": {
                 "config": {
-                    "working_dir": "/example/local_beam_runner/bar",
+                    "output_dir": "/example/local_beam_runner/bar",
                 }
             }
         }

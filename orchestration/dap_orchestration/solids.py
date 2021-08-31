@@ -214,7 +214,7 @@ def eols_transform_records(config: dict[str, str]) -> dict[str, str]:
 @solid(
     required_resource_keys={"refresh_directory", "outfiles_writer"},
     config_schema={
-        "working_dir": String,
+        "output_dir": String,
     }
 )
 def write_outfiles(context: AbstractComputeExecutionContext, fan_in_results: list[object]) -> None:
@@ -226,4 +226,4 @@ def write_outfiles(context: AbstractComputeExecutionContext, fan_in_results: lis
     NOTE: The fan_in_results param allows to introduce a fan-in dependency from upstream transformation
     solids, but is ignored by this solid.
     """
-    context.resources.outfiles_writer.run(context.solid_config["working_dir"], context.resources.refresh_directory)
+    context.resources.outfiles_writer.run(context.solid_config["output_dir"], context.resources.refresh_directory)
