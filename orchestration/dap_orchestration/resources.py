@@ -47,6 +47,7 @@ def outfiles_writer(init_context: InitResourceContext) -> OutfilesWriter:
     return OutfilesWriter()
 
 
+
 class TestOutfilesWriter:
     def run(self, output_dir: str, refresh_dir: str, table_names: list[DapSurveyType]) -> None:
         pass
