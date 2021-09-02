@@ -31,8 +31,8 @@ def base_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyT
         "apiToken": context.resources.api_token.base_api_token
     }
     context.resources.extract_beam_runner.run(arg_dict,
-                                      target_class=context.solid_config["target_class"],
-                                      scala_project=context.solid_config["scala_project"])
+                                              target_class=context.solid_config["target_class"],
+                                              scala_project=context.solid_config["scala_project"])
 
     return DapSurveyType(context.solid_config["dap_survey_type"])
 
@@ -99,8 +99,8 @@ def env_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyTy
 
     }
     context.resources.extract_beam_runner.run(arg_dict,
-                                      target_class=f"{class_prefix}.environment.EnvironmentExtractionPipeline",
-                                      scala_project=extract_project)
+                                              target_class=f"{class_prefix}.environment.EnvironmentExtractionPipeline",
+                                              scala_project=extract_project)
     return DapSurveyType("environment")
 
 
@@ -157,8 +157,8 @@ def transform_records(context: AbstractComputeExecutionContext, dap_survey_type:
         "outputPrefix": f'{context.resources.refresh_directory}/{context.solid_config["output_prefix"]}',
     }
     context.resources.transform_beam_runner.run(arg_dict,
-                                      target_class=context.solid_config["target_class"],
-                                      scala_project=context.solid_config["scala_project"])
+                                                target_class=context.solid_config["target_class"],
+                                                scala_project=context.solid_config["scala_project"])
 
     return dap_survey_type
 
