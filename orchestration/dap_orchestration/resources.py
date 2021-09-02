@@ -38,14 +38,13 @@ def test_refresh_directory(init_context: InitResourceContext) -> str:
 
 class OutfilesWriter:
     def run(self, output_dir: str, refresh_dir: str, table_names: list[DapSurveyType]) -> None:
-        convert_to_tsv(f"gs://{refresh_dir}/transform", f'gs://{output_dir}/tsv_output', firecloud=False, table_names=table_names)
-
+        convert_to_tsv(f"gs://{refresh_dir}/transform", f'gs://{output_dir}/tsv_output', firecloud=False,
+                       table_names=table_names)
 
 
 @resource
 def outfiles_writer(init_context: InitResourceContext) -> OutfilesWriter:
     return OutfilesWriter()
-
 
 
 class TestOutfilesWriter:
