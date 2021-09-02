@@ -18,8 +18,10 @@ log = logging.getLogger(__name__)
 PRIMARY_KEY_PREFIX = 'entity'
 TERRA_COLUMN_LIMIT = 1000
 
-DEFAULT_TABLE_NAMES: list[DapSurveyType] = [DapSurveyType(table_name) for table_name in ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition', 'hles_owner',
-                       'environment', 'sample', 'eols']]
+DEFAULT_TABLE_NAMES: list[DapSurveyType] = [DapSurveyType(table_name) for table_name in
+                                            ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition',
+                                             'hles_owner',
+                                             'environment', 'sample', 'eols']]
 
 
 def remove_prefix(text: str, prefix: str) -> str:
@@ -91,7 +93,8 @@ def _open_output_location(output_location: str, gcs: GCSFileSystem) -> Union[Any
     return open(output_location, 'w')
 
 
-def convert_to_tsv(input_dir: str, output_dir: str, firecloud: bool, table_names: Optional[list[DapSurveyType]] = None) -> None:
+def convert_to_tsv(input_dir: str, output_dir: str, firecloud: bool,
+                   table_names: Optional[list[DapSurveyType]] = None) -> None:
     # Process the known (hardcoded) tables
     if table_names is None:
         table_names = DEFAULT_TABLE_NAMES
