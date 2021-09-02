@@ -2,11 +2,14 @@
 
 import argparse
 import csv
+import io
 import json
 import logging
 import os
 from dataclasses import dataclass, field
 from math import ceil
+from typing import Optional, Union, Any
+from dap_orchestration.types import DapSurveyType
 
 from gcsfs.core import GCSFileSystem
 
@@ -15,11 +18,11 @@ log = logging.getLogger(__name__)
 PRIMARY_KEY_PREFIX = 'entity'
 TERRA_COLUMN_LIMIT = 1000
 
-DEFAULT_TABLE_NAMES = ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition', 'hles_owner',
-                       'environment', 'sample', 'eols']
+DEFAULT_TABLE_NAMES: list[DapSurveyType] = [DapSurveyType(table_name) for table_name in ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition', 'hles_owner',
+                       'environment', 'sample', 'eols']]
 
 
-def remove_prefix(text, prefix):
+def remove_prefix(text: str, prefix: str) -> str:
     if text.startswith(prefix):
         return text[len(prefix):]
 
@@ -34,7 +37,7 @@ class PrimaryKeyGenerator:
     firecloud: bool
 
     # this will calculate pk_name during init
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         # most tables should have "dog_id" as a key
         if self.table_name in {"hles_dog", "hles_cancer_condition", "hles_health_condition", "environment", "cslb",
                                "eols"}:
@@ -47,12 +50,12 @@ class PrimaryKeyGenerator:
         else:
             raise ValueError(f"Unrecognized table: {self.table_name}")
 
-    def generate_entity_name(self):
+    def generate_entity_name(self) -> str:
         if self.firecloud:
             return f"{PRIMARY_KEY_PREFIX}:{self.table_name}_id"
         return self.pk_name
 
-    def generate_primary_key(self, row):
+    def generate_primary_key(self, row: dict[str, str]) -> str:
         # normal processing of IDs - the original primary key is returned
         if not self.firecloud:
             return row.pop(self.pk_name)
@@ -64,7 +67,7 @@ class PrimaryKeyGenerator:
             # grab the congenital flag and convert to int
             congenital_flag = row.get('hs_condition_is_congenital')
             try:
-                congenital_flag = int(congenital_flag)
+                congenital_flag = int(congenital_flag)  # type: ignore
             except TypeError:
                 log.warning(f"Error, 'hs_condition_is_congenital' is not populated in {self.table_name}")
             return '-'.join(
@@ -78,7 +81,7 @@ class PrimaryKeyGenerator:
             return row.pop(self.pk_name)
 
 
-def _open_output_location(output_location: str, gcs: GCSFileSystem):
+def _open_output_location(output_location: str, gcs: GCSFileSystem) -> Union[Any, io.TextIOWrapper]:
     if output_location.startswith("gs://"):
         return gcs.open(output_location, 'w')
 
@@ -88,7 +91,7 @@ def _open_output_location(output_location: str, gcs: GCSFileSystem):
     return open(output_location, 'w')
 
 
-def convert_to_tsv(input_dir, output_dir, firecloud, table_names=None):
+def convert_to_tsv(input_dir: str, output_dir: str, firecloud: bool, table_names: Optional[list[DapSurveyType]] = None) -> None:
     # Process the known (hardcoded) tables
     if table_names is None:
         table_names = DEFAULT_TABLE_NAMES
@@ -162,7 +165,7 @@ def convert_to_tsv(input_dir, output_dir, firecloud, table_names=None):
                 log.debug(f"cols in split: {len(split_column_list)}")
                 log.debug(f"cols left to split: {len(column_set)}")
 
-                def clean_up_string_whitespace(val):
+                def clean_up_string_whitespace(val: str) -> str:
                     try:
                         return val.replace('\r\n', ' ').strip()
                     except AttributeError:
@@ -179,7 +182,7 @@ def convert_to_tsv(input_dir, output_dir, firecloud, table_names=None):
                 ]
 
                 # output to tsv
-                with _open_output_location(output_location) as output_file:
+                with _open_output_location(output_location, gcs) as output_file:
                     dw = csv.DictWriter(output_file, split_column_list, delimiter='\t')
                     dw.writeheader()
                     dw.writerows(split_row_dict_list)
@@ -215,6 +218,9 @@ if __name__ == '__main__':
     log_level = logging.DEBUG if parsed.debug else logging.INFO
     logging.basicConfig(level=log_level)
 
-    table_names = parsed.table or DEFAULT_TABLE_NAMES
+    if parsed.table:
+        table_names = [DapSurveyType(parsed.table)]
+    else:
+        table_names = DEFAULT_TABLE_NAMES
 
     convert_to_tsv(parsed.input_dir, parsed.output_dir, parsed.firecloud, table_names)

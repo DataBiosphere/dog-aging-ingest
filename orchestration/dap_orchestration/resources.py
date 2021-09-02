@@ -4,7 +4,7 @@ from dagster import Field, resource, StringSource
 from dagster.core.execution.context.init import InitResourceContext
 
 from dap_orchestration.tsv_convert import convert_to_tsv
-from dap_orchestration.typing import DapSurveyType
+from dap_orchestration.types import DapSurveyType
 
 
 @dataclass

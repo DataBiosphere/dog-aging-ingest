@@ -5,7 +5,7 @@ from dagster_utils.resources.beam.noop_beam_runner import noop_beam_runner
 import dap_orchestration
 import dap_orchestration.resources
 import dap_orchestration.solids
-from dap_orchestration.typing import DapSurveyType
+from dap_orchestration.types import DapSurveyType
 
 @pytest.fixture
 def base_solid_config():

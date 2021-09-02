@@ -1,7 +1,7 @@
-from dagster import Bool, String, solid, configured, InputDefinition, Nothing
+from dagster import Bool, String, solid, configured, InputDefinition
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
 
-from dap_orchestration.typing import DapSurveyType
+from dap_orchestration.types import DapSurveyType
 
 extract_project = "dog-aging-hles-extraction"
 transform_project = "dog-aging-hles-transformation"
@@ -62,7 +62,7 @@ def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
         output_prefix="raw",
         target_class=f"{class_prefix}.hles.HLESurveyExtractionPipeline",
         scala_project=extract_project,
-        dap_survey_type="hles"
+        dap_survey_type=DapSurveyType("hles")
     )
 
 
@@ -79,7 +79,7 @@ def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
         output_prefix="raw",
         target_class=f"{class_prefix}.cslb.CslbExtractionPipeline",
         scala_project=extract_project,
-        dap_survey_type="cslb"
+        dap_survey_type=DapSurveyType("cslb")
     )
 
 
