@@ -1,4 +1,5 @@
 from dagster import pipeline, ModeDefinition, ResourceDefinition, fs_io_manager
+from dagster_utils.resources.beam.k8s_beam_runner import k8s_dataflow_beam_runner
 
 from dagster_utils.resources.beam.local_beam_runner import local_beam_runner
 from dagster_utils.resources.beam.dataflow_beam_runner import dataflow_beam_runner
@@ -24,7 +25,7 @@ local_mode = ModeDefinition(
 dev_mode = ModeDefinition(
     name="dev",
     resource_defs={
-        "beam_runner": preconfigure_resource_for_mode(dataflow_beam_runner, "dev"),
+        "beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "dev"),
         "refresh_directory": refresh_directory,
         "outfiles_writer": outfiles_writer,
         "api_token": preconfigure_resource_for_mode(api_token, "dev")
@@ -34,7 +35,7 @@ dev_mode = ModeDefinition(
 prod_mode = ModeDefinition(
     name="prod",
     resource_defs={
-        "beam_runner": preconfigure_resource_for_mode(dataflow_beam_runner, "prod"),
+        "beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod"),
         "refresh_directory": refresh_directory,
         "outfiles_writer": outfiles_writer,
         "api_token": preconfigure_resource_for_mode(api_token, "prod")
