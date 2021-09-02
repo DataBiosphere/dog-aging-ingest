@@ -7,6 +7,7 @@ import dap_orchestration.resources
 import dap_orchestration.solids
 from dap_orchestration.types import DapSurveyType
 
+
 @pytest.fixture
 def base_solid_config():
     return {
