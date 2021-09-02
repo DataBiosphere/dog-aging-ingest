@@ -11,7 +11,12 @@ from dap_orchestration.typing import DapSurveyType
 def base_solid_config():
     return {
         "resources": {
-            "beam_runner": {
+            "extract_beam_runner": {
+                "config": {
+                    "working_dir": "/example/local_beam_runner/bar",
+                }
+            },
+            "transform_beam_runner": {
                 "config": {
                     "working_dir": "/example/local_beam_runner/bar",
                 }
@@ -44,7 +49,8 @@ def outfiles_config():
 def mode():
     return ModeDefinition(
         resource_defs={
-            "beam_runner": noop_beam_runner,
+            "extract_beam_runner": noop_beam_runner,
+            "transform_beam_runner": noop_beam_runner,
             "refresh_directory": dap_orchestration.resources.test_refresh_directory,
             "outfiles_writer": dap_orchestration.resources.test_outfiles_writer,
             "api_token": ResourceDefinition.mock_resource()

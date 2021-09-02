@@ -9,7 +9,7 @@ class_prefix = "org.broadinstitute.monster.dap"
 
 
 @solid(
-    required_resource_keys={"beam_runner", "refresh_directory", "api_token"},
+    required_resource_keys={"extract_beam_runner", "refresh_directory", "api_token"},
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
@@ -30,7 +30,7 @@ def base_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyT
         "endTime": context.solid_config["end_time"],
         "apiToken": context.resources.api_token.base_api_token
     }
-    context.resources.beam_runner.run(arg_dict,
+    context.resources.extract_beam_runner.run(arg_dict,
                                       target_class=context.solid_config["target_class"],
                                       scala_project=context.solid_config["scala_project"])
 
@@ -84,7 +84,7 @@ def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
 
 
 @solid(
-    required_resource_keys={"beam_runner", "refresh_directory", "api_token"},
+    required_resource_keys={"extract_beam_runner", "refresh_directory", "api_token"},
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
@@ -98,7 +98,7 @@ def env_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyTy
         "apiToken": context.resources.api_token.env_api_token,
 
     }
-    context.resources.beam_runner.run(arg_dict,
+    context.resources.extract_beam_runner.run(arg_dict,
                                       target_class=f"{class_prefix}.environment.EnvironmentExtractionPipeline",
                                       scala_project=extract_project)
     return DapSurveyType("environment")
@@ -139,7 +139,7 @@ def eols_extract_records(config: dict[str, str]) -> dict[str, str]:
 
 
 @solid(
-    required_resource_keys={"beam_runner", "refresh_directory"},
+    required_resource_keys={"transform_beam_runner", "refresh_directory"},
     config_schema={
         "output_prefix": String,
         "target_class": String,
@@ -156,7 +156,7 @@ def transform_records(context: AbstractComputeExecutionContext, dap_survey_type:
         "inputPrefix": f'{context.resources.refresh_directory}/raw/{dap_survey_type}',
         "outputPrefix": f'{context.resources.refresh_directory}/{context.solid_config["output_prefix"]}',
     }
-    context.resources.beam_runner.run(arg_dict,
+    context.resources.transform_beam_runner.run(arg_dict,
                                       target_class=context.solid_config["target_class"],
                                       scala_project=context.solid_config["scala_project"])
 

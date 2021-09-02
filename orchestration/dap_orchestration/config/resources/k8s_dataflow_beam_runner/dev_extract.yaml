@@ -1,3 +1,4 @@
 temp_bucket: broad-dsp-monster-dap-dev-temp-storage
 service_account: dap-dataflow-runner@broad-dsp-monster-dap-dev.iam.gserviceaccount.com
 project: broad-dsp-monster-dap-dev
+image_name: us.gcr.io/broad-dsp-gcr-public/dog-aging-hles-extraction

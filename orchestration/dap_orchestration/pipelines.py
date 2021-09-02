@@ -14,7 +14,8 @@ from dap_orchestration.solids import hles_extract_records, cslb_extract_records,
 local_mode = ModeDefinition(
     name="local",
     resource_defs={
-        "beam_runner": local_beam_runner,
+        "extract_beam_runner": local_beam_runner,
+        "transform_beam_runner": local_beam_runner,
         "refresh_directory": refresh_directory,
         "outfiles_writer": outfiles_writer,
         "api_token": preconfigure_resource_for_mode(api_token, "local"),
@@ -25,7 +26,8 @@ local_mode = ModeDefinition(
 dev_mode = ModeDefinition(
     name="dev",
     resource_defs={
-        "beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "dev"),
+        "extract_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "dev_extract"),
+        "transform_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "dev_transform"),
         "refresh_directory": refresh_directory,
         "outfiles_writer": outfiles_writer,
         "api_token": preconfigure_resource_for_mode(api_token, "dev")
@@ -35,7 +37,8 @@ dev_mode = ModeDefinition(
 prod_mode = ModeDefinition(
     name="prod",
     resource_defs={
-        "beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod"),
+        "extract_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_extract"),
+        "transform_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_transform"),
         "refresh_directory": refresh_directory,
         "outfiles_writer": outfiles_writer,
         "api_token": preconfigure_resource_for_mode(api_token, "prod")
@@ -45,7 +48,8 @@ prod_mode = ModeDefinition(
 test_mode = ModeDefinition(
     name="test",
     resource_defs={
-        "beam_runner": ResourceDefinition.mock_resource(),
+        "extract_beam_runner": ResourceDefinition.mock_resource(),
+        "transform_beam_runner": ResourceDefinition.mock_resource(),
         "refresh_directory": refresh_directory,
         "outfiles_writer": ResourceDefinition.mock_resource(),
         "api_token": ResourceDefinition.mock_resource()
