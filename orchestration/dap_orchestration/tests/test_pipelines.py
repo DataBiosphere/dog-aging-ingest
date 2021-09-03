@@ -54,7 +54,7 @@ def run_config():
             },
             'write_outfiles': {
                 'config': {
-                    'working_dir': 'fake_dir'
+                    'output_dir': 'fake_dir'
                 }
             }
         }

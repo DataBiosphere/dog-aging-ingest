@@ -6,10 +6,14 @@ authors = ["Quazi Hoque <qhoque@broadinstitute.org>"]
 
 [tool.poetry.dependencies]
 python = "~3.9"
-dagster = "^0.11.2"
+dagster = "^0.12.8"
+dagster-gcp = "^0.12.8"
+dagster-k8s = "^0.12.8"
+dagster-postgres = "^0.12.8"
 gcsfs = "^2021.5.0"
-broad-dagster-utils = "^0.5.0"
-dagit = "^0.11.12"
+broad-dagster-utils = "0.6.2"
+dagit = "^0.12.8"
+graphql-ws = "<0.4.0"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.5"

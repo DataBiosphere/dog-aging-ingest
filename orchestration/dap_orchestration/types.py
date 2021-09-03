@@ -1,0 +1,4 @@
+
+
+class DapSurveyType(str):
+    pass

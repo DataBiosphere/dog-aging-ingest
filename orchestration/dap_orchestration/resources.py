@@ -1,9 +1,10 @@
-import os
-import subprocess
-
 from dataclasses import dataclass
+
 from dagster import Field, resource, StringSource
 from dagster.core.execution.context.init import InitResourceContext
+
+from dap_orchestration.tsv_convert import convert_to_tsv
+from dap_orchestration.types import DapSurveyType
 
 
 @dataclass
@@ -36,15 +37,9 @@ def test_refresh_directory(init_context: InitResourceContext) -> str:
 
 
 class OutfilesWriter:
-    def run(self, working_dir: str, refresh_dir: str) -> None:
-        outfile_path = f'{working_dir}/tsv_output'
-        if not os.path.isdir(outfile_path):
-            os.mkdir(outfile_path)
-        subprocess.run(
-            ["python", "hack/convert-output-to-tsv.py", f"{refresh_dir}/transform", outfile_path, "--debug"],
-            check=True,
-            cwd=working_dir
-        )
+    def run(self, output_dir: str, refresh_dir: str, table_names: list[DapSurveyType]) -> None:
+        convert_to_tsv(f"gs://{refresh_dir}/transform", f'gs://{output_dir}/tsv_output', firecloud=False,
+                       table_names=table_names)
 
 
 @resource
@@ -53,7 +48,7 @@ def outfiles_writer(init_context: InitResourceContext) -> OutfilesWriter:
 
 
 class TestOutfilesWriter:
-    def run(self, working_dir: str, refresh_dir: str) -> None:
+    def run(self, output_dir: str, refresh_dir: str, table_names: list[DapSurveyType]) -> None:
         pass
 
 
