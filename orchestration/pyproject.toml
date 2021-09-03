@@ -11,7 +11,7 @@ dagster-gcp = "^0.12.8"
 dagster-k8s = "^0.12.8"
 dagster-postgres = "^0.12.8"
 gcsfs = "^2021.5.0"
-broad-dagster-utils = "^0.6.1"
+broad-dagster-utils = {path = "/Users/aherbst/src/dagster-utils", develop = true }
 dagit = "^0.12.8"
 graphql-ws = "<0.4.0"
 

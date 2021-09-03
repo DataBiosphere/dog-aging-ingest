@@ -28,11 +28,15 @@ def base_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyT
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
         "outputPrefix": f"{context.resources.refresh_directory}/{context.solid_config['output_prefix']}",
         "endTime": context.solid_config["end_time"],
-        "apiToken": context.resources.api_token.base_api_token
+        "apiToken": context.resources.api_token.base_api_token,
     }
+
     context.resources.extract_beam_runner.run(arg_dict,
                                               target_class=context.solid_config["target_class"],
-                                              scala_project=context.solid_config["scala_project"])
+                                              scala_project=context.solid_config["scala_project"],
+                                              command=[
+                                                  f"/app/bin/{context.solid_config['dap_survey_type']}-extraction-pipeline"]
+                                              )
 
     return DapSurveyType(context.solid_config["dap_survey_type"])
 
@@ -158,7 +162,9 @@ def transform_records(context: AbstractComputeExecutionContext, dap_survey_type:
     }
     context.resources.transform_beam_runner.run(arg_dict,
                                                 target_class=context.solid_config["target_class"],
-                                                scala_project=context.solid_config["scala_project"])
+                                                scala_project=context.solid_config["scala_project"],
+                                                command=[f"/app/bin/{dap_survey_type}-transformation-pipeline"]
+                                                )
 
     return dap_survey_type
 
