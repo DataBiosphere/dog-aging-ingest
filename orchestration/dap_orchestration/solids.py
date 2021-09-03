@@ -104,7 +104,9 @@ def env_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyTy
     }
     context.resources.extract_beam_runner.run(arg_dict,
                                               target_class=f"{class_prefix}.environment.EnvironmentExtractionPipeline",
-                                              scala_project=extract_project)
+                                              scala_project=extract_project,
+                                              command=[f"/app/bin/environment-transformation-pipeline"]
+                                              )
     return DapSurveyType("environment")
 
 
