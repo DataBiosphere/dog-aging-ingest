@@ -7,4 +7,4 @@ max_workers: 16
 namespace: dagster
 
 # flip this to false when testing locally
-load_incluster_config: false
+load_incluster_config: true
