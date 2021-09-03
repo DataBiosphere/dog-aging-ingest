@@ -56,7 +56,7 @@ function fire_slack_deployment_notification () {
 echo "Deploying Dog Aging to ${ENV}"
 
 if [ "$ENV" == "prod" ]; then
-	gcloud container clusters get-credentials command-center-cluster --project exemplary-proxy-308717 --region us-central1-c
+	gcloud container clusters get-credentials command-center-cluster --project broad-dsp-monster-prod --region us-central1-c
 else
 	gcloud container clusters get-credentials command-center-cluster --project broad-dsp-monster-dev --region us-central1-c
 fi
