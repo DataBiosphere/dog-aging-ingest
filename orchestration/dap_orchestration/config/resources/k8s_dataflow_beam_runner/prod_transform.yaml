@@ -1,4 +1,4 @@
-temp_bucket: broad-dsp-monster-dap-dev-temp-storage
-service_account: dap-dataflow-runner@broad-dsp-monster-dap-dev.iam.gserviceaccount.com
-project: broad-dsp-monster-dap-dev
+temp_bucket: broad-dsp-monster-dap-prod-temp-storage
+service_account: dap-dataflow-runner@exemplary-proxy-308717.iam.gserviceaccount.com
+project: exemplary-proxy-308717
 image_name: us.gcr.io/broad-dsp-gcr-public/dog-aging-hles-transformation
