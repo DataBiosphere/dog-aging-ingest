@@ -1,4 +1,5 @@
-from dagster import pipeline, ModeDefinition, ResourceDefinition, fs_io_manager, multiprocess_executor
+from dagster import pipeline, ModeDefinition, ResourceDefinition, fs_io_manager, multiprocess_executor, \
+    weekly_schedule, repository
 from dagster_utils.resources.beam.k8s_beam_runner import k8s_dataflow_beam_runner
 
 from dagster_utils.resources.beam.local_beam_runner import local_beam_runner
@@ -11,6 +12,7 @@ from dap_orchestration.solids import hles_extract_records, cslb_extract_records,
     sample_extract_records, eols_extract_records, hles_transform_records, cslb_transform_records, \
     env_transform_records, write_outfiles, sample_transform_records, eols_transform_records
 
+from datetime import datetime, time
 
 local_mode = ModeDefinition(
     name="local",
@@ -75,3 +77,44 @@ def refresh_data_all() -> None:
         eols_transform_records(eols_extract_records())
     ]
     write_outfiles(collected_outputs)
+
+
+@pipeline(
+    mode_defs=[local_mode, dev_mode, prod_mode, test_mode]
+)
+def refresh_sample_data() -> None:
+    collected_outputs = [
+        sample_transform_records(sample_extract_records())
+    ]
+    write_outfiles(collected_outputs)
+
+
+@weekly_schedule(
+    pipeline_name="refresh_sample_data",
+    start_date=datetime(2021, 9, 9),
+    execution_time=time(15, 00),
+    execution_timezone="US/Eastern",
+    mode="test_mode",
+    execution_day_of_week=1
+)
+def weekly_sample_refresh(date: datetime) -> dict[str, object]:
+    return {
+        "resources": {
+            "refresh_directory": {
+                "config": {"/refresh_output"}
+            }
+        },
+        "solids": {
+            "write_outfiles": {
+                "config": {
+                    "working_dir": ".."
+                }
+            },
+            "sample_extract_records": {
+                "config": {
+                    "pull_data_dictionaries": {"false"},
+                    "end_time": date.strftime("%Y-%m-%d %H")
+                }
+            }
+        }
+    }
