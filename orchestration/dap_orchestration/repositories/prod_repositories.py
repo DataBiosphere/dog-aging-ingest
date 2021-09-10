@@ -9,7 +9,7 @@ from datetime import datetime, time
 @weekly_schedule(
     pipeline_name="refresh_data_all",
     start_date=datetime(2021, 8, 5),
-    execution_time=time(10, 59),
+    execution_time=time(11, 45),
     execution_timezone="US/Eastern",
     mode="prod",
     execution_day_of_week=5,
