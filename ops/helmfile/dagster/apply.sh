@@ -62,4 +62,4 @@ else
 fi
 
 helmfile --interactive $COMMAND
-fire_slack_deployment_notification ${ENV} ${GIT_SHORTHASH}
+#fire_slack_deployment_notification ${ENV} ${GIT_SHORTHASH}
