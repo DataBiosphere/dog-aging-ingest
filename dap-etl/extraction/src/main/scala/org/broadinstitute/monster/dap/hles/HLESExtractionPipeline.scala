@@ -9,7 +9,7 @@ import java.time.{OffsetDateTime, ZoneOffset}
 import Args._
 
 /** Entry-point for the HLE extraction pipeline. */
-object HLESurveyExtractionPipeline extends ScioApp[Args] {
+object HLESExtractionPipeline extends ScioApp[Args] {
 
   // january 1, 2018 - we ignore any records before this by default (though there shouldn't be any)
   val HLESEpoch = OffsetDateTime.of(2018, 1, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))

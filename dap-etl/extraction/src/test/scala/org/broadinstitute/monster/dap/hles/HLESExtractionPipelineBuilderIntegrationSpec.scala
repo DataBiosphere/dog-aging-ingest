@@ -10,7 +10,7 @@ import java.time.{LocalDate, LocalTime, OffsetDateTime, ZoneOffset}
 
 class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[Args] {
   val outputDir = File.newTemporaryDirectory()
-  val hlesOutputDir = File(outputDir, HLESurveyExtractionPipeline.subdir)
+  val hlesOutputDir = File(outputDir, HLESExtractionPipeline.subdir)
   override def afterAll(): Unit = outputDir.delete()
 
   val start =
@@ -33,20 +33,20 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
 
   val studyIdsRequest = RedcapRequestGeneratorParams(
     testArgs.apiToken,
-    List(HLESurveyExtractionPipeline.arm),
+    List(HLESExtractionPipeline.arm),
     GetRecords(
       fields = List("study_id"),
-      filters = HLESurveyExtractionPipeline.extractionFiltersGenerator(testArgs)
+      filters = HLESExtractionPipeline.extractionFiltersGenerator(testArgs)
     )
   )
 
   val followUpRecords = common.RedcapRequestGeneratorParams(
     testArgs.apiToken,
-    List(HLESurveyExtractionPipeline.arm),
+    List(HLESExtractionPipeline.arm),
     GetRecords(
       ids = expectedStudyIds,
-      fields = HLESurveyExtractionPipeline.fieldList,
-      forms = HLESurveyExtractionPipeline.forms
+      fields = HLESExtractionPipeline.fieldList,
+      forms = HLESExtractionPipeline.forms
     )
   )
 
@@ -66,7 +66,7 @@ class HLESExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
   )
 
   override val builder =
-    HLESurveyExtractionPipeline.buildPipelineWithWrapper(mockWrapper)
+    HLESExtractionPipeline.buildPipelineWithWrapper(mockWrapper)
 
   behavior of "HLESurveyExtractionPipelineBuilder"
 

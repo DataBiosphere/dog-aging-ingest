@@ -37,9 +37,9 @@ def test_refresh_directory(init_context: InitResourceContext) -> str:
 
 
 class OutfilesWriter:
-    def run(self, output_dir: str, refresh_dir: str, table_names: list[DapSurveyType]) -> None:
+    def run(self, output_dir: str, refresh_dir: str, survey_types: list[DapSurveyType]) -> None:
         convert_to_tsv(f"gs://{refresh_dir}/transform", f'gs://{output_dir}/tsv_output', firecloud=False,
-                       table_names=table_names)
+                       survey_types=survey_types)
 
 
 @resource

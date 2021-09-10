@@ -18,10 +18,16 @@ log = logging.getLogger(__name__)
 PRIMARY_KEY_PREFIX = 'entity'
 TERRA_COLUMN_LIMIT = 1000
 
-DEFAULT_TABLE_NAMES: list[DapSurveyType] = [DapSurveyType(table_name) for table_name in
-                                            ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition',
-                                             'hles_owner',
-                                             'environment', 'sample', 'eols']]
+TABLES_BY_SURVEY = {
+    "hles": ['hles_cancer_condition', 'hles_dog', 'hles_health_condition',
+             'hles_owner'],
+    "cslb": ["cslb"],
+    "environment": ["environment"],
+    "sample": ["sample"],
+    "eols": ["eols"]
+}
+
+DEFAULT_TABLE_NAMES = [table_name for table_names in TABLES_BY_SURVEY.values() for table_name in table_names]
 
 
 def remove_prefix(text: str, prefix: str) -> str:
@@ -94,10 +100,14 @@ def _open_output_location(output_location: str, gcs: GCSFileSystem) -> Union[Any
 
 
 def convert_to_tsv(input_dir: str, output_dir: str, firecloud: bool,
-                   table_names: Optional[list[DapSurveyType]] = None) -> None:
+                   survey_types: Optional[list[DapSurveyType]] = None) -> None:
     # Process the known (hardcoded) tables
-    if table_names is None:
+    if survey_types is None:
         table_names = DEFAULT_TABLE_NAMES
+    else:
+        table_names = []
+        for survey_type in survey_types:
+            table_names = table_names + TABLES_BY_SURVEY[survey_type]
 
     for table_name in table_names:
         log.info(f"PROCESSING {table_name}")
@@ -210,8 +220,8 @@ if __name__ == '__main__':
         description="Convert the records in a specified bucket prefix to a Terra-compatible TSV")
     parser.add_argument('input_dir', metavar='I', help='The bucket prefix to read records from')
     parser.add_argument('output_dir', metavar='O', help='The local directory to write the resulting TSVs to')
-    parser.add_argument('table', nargs='*',
-                        help="One or more tables to process into TSVs. Processes all tables if none specified.")
+    parser.add_argument('survey_types', nargs='*',
+                        help="One or more survey types to process into TSVs. Processes all tables if none specified.")
     parser.add_argument('--firecloud', action='store_true',
                         help="Use logic to generate primary keys for Terra upload via Firecloud")
     parser.add_argument('--debug', action='store_true', help="Write additional logs for debugging")
@@ -221,9 +231,4 @@ if __name__ == '__main__':
     log_level = logging.DEBUG if parsed.debug else logging.INFO
     logging.basicConfig(level=log_level)
 
-    if parsed.table:
-        table_names = [DapSurveyType(parsed.table)]
-    else:
-        table_names = DEFAULT_TABLE_NAMES
-
-    convert_to_tsv(parsed.input_dir, parsed.output_dir, parsed.firecloud, table_names)
+    convert_to_tsv(parsed.input_dir, parsed.output_dir, parsed.firecloud, parsed.survey_types)
