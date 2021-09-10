@@ -64,7 +64,7 @@ def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
     return _build_extract_config(
         config=config,
         output_prefix="raw",
-        target_class=f"{class_prefix}.hles.HLESurveyExtractionPipeline",
+        target_class=f"{class_prefix}.hles.HLESExtractionPipeline",
         scala_project=extract_project,
         dap_survey_type=DapSurveyType("hles")
     )
@@ -104,7 +104,9 @@ def env_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyTy
     }
     context.resources.extract_beam_runner.run(arg_dict,
                                               target_class=f"{class_prefix}.environment.EnvironmentExtractionPipeline",
-                                              scala_project=extract_project)
+                                              scala_project=extract_project,
+                                              command=[f"/app/bin/environment-extraction-pipeline"]
+                                              )
     return DapSurveyType("environment")
 
 
@@ -183,7 +185,7 @@ def _build_transform_config(
 def hles_transform_records(config: dict[str, str]) -> dict[str, str]:
     return _build_transform_config(
         output_prefix="transform",
-        target_class=f"{class_prefix}.hles.HLESurveyTransformationPipeline",
+        target_class=f"{class_prefix}.hles.HLESTransformationPipeline",
         scala_project=transform_project
     )
 

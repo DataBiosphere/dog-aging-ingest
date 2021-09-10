@@ -3,7 +3,7 @@ package org.broadinstitute.monster.dap
 import com.spotify.scio.io.TextIO
 import com.spotify.scio.testing.PipelineSpec
 import org.broadinstitute.monster.dap.common.HLESurveyTransformationFailException
-import org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipeline
+import org.broadinstitute.monster.dap.hles.HLESTransformationPipeline
 import org.scalatest.matchers.should.Matchers
 
 import scala.io.Source
@@ -23,7 +23,7 @@ class HlesTransformationPipelineTest extends PipelineSpec with Matchers {
     val lines =
       Source.fromResource("hles_valid.json").getLines().toSeq
 
-    JobTest[HLESurveyTransformationPipeline.type]
+    JobTest[HLESTransformationPipeline.type]
       .args("--inputPrefix=in", "--outputPrefix=out")
       .input(TextIO("in/records/*.json"), lines)
       .output(TextIO("out/hles_dog"))(col => col should containInAnyOrder(expected_hles_dog))
@@ -42,7 +42,7 @@ class HlesTransformationPipelineTest extends PipelineSpec with Matchers {
       Source.fromResource("hles_missing_owner.json").getLines().toSeq
 
     assertThrows[HLESurveyTransformationFailException] {
-      JobTest[HLESurveyTransformationPipeline.type]
+      JobTest[HLESTransformationPipeline.type]
         .args("--inputPrefix=in", "--outputPrefix=out")
         .input(TextIO("in/records/*.json"), lines)
         .output(TextIO("out/hles_dog"))(col => col should beEmpty)
@@ -63,7 +63,7 @@ class HlesTransformationPipelineTest extends PipelineSpec with Matchers {
     val expected_hles_dog_no_cancer =
       Source.fromResource("hles_no_cancer_dog.json").getLines().toSeq
 
-    JobTest[HLESurveyTransformationPipeline.type]
+    JobTest[HLESTransformationPipeline.type]
       .args("--inputPrefix=in", "--outputPrefix=out")
       .input(TextIO("in/records/*.json"), lines)
       .output(TextIO("out/hles_dog"))(col =>
