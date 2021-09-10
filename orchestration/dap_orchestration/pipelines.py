@@ -49,7 +49,6 @@ prod_mode = ModeDefinition(
         "io_manager": preconfigure_resource_for_mode(gcs_pickle_io_manager, "prod"),
         "gcs": google_storage_client,
     }
-    #  executor_defs=[multiprocess_executor] quota issues, fixme
 )
 
 test_mode = ModeDefinition(

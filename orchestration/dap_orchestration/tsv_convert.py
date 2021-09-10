@@ -18,10 +18,16 @@ log = logging.getLogger(__name__)
 PRIMARY_KEY_PREFIX = 'entity'
 TERRA_COLUMN_LIMIT = 1000
 
-DEFAULT_TABLE_NAMES: list[DapSurveyType] = [DapSurveyType(table_name) for table_name in
-                                            ['cslb', 'hles_cancer_condition', 'hles_dog', 'hles_health_condition',
-                                             'hles_owner',
-                                             'environment', 'sample', 'eols']]
+TABLES_BY_SURVEY = {
+    "hles": [ 'hles_cancer_condition', 'hles_dog', 'hles_health_condition',
+              'hles_owner'],
+    "cslb": ["cslb"],
+    "environment": ["environment"],
+    "sample": ["sample"],
+    "eols": ["eols"]
+}
+
+DEFAULT_TABLE_NAMES = [table_name for table_names in TABLES_BY_SURVEY.values() for table_name in table_names]
 
 
 def remove_prefix(text: str, prefix: str) -> str:
@@ -94,10 +100,14 @@ def _open_output_location(output_location: str, gcs: GCSFileSystem) -> Union[Any
 
 
 def convert_to_tsv(input_dir: str, output_dir: str, firecloud: bool,
-                   table_names: Optional[list[DapSurveyType]] = None) -> None:
+                   survey_type: Optional[DapSurveyType] = None) -> None:
     # Process the known (hardcoded) tables
-    if table_names is None:
+    if survey_type is None:
         table_names = DEFAULT_TABLE_NAMES
+    else:
+        if survey_type not in TABLES_BY_SURVEY:
+            raise ValueError("Unknown survey type")
+        table_names = TABLES_BY_SURVEY[survey_type]
 
     for table_name in table_names:
         log.info(f"PROCESSING {table_name}")
