@@ -107,7 +107,7 @@ def convert_to_tsv(input_dir: str, output_dir: str, firecloud: bool,
     else:
         table_names = []
         for survey_type in survey_types:
-            table_names += TABLES_BY_SURVEY[survey_type]
+            table_names = table_names + TABLES_BY_SURVEY[survey_type]
 
     for table_name in table_names:
         log.info(f"PROCESSING {table_name}")
@@ -220,7 +220,7 @@ if __name__ == '__main__':
         description="Convert the records in a specified bucket prefix to a Terra-compatible TSV")
     parser.add_argument('input_dir', metavar='I', help='The bucket prefix to read records from')
     parser.add_argument('output_dir', metavar='O', help='The local directory to write the resulting TSVs to')
-    parser.add_argument('survey_type', nargs='*',
+    parser.add_argument('survey_types', nargs='*',
                         help="One or more survey types to process into TSVs. Processes all tables if none specified.")
     parser.add_argument('--firecloud', action='store_true',
                         help="Use logic to generate primary keys for Terra upload via Firecloud")
@@ -231,4 +231,4 @@ if __name__ == '__main__':
     log_level = logging.DEBUG if parsed.debug else logging.INFO
     logging.basicConfig(level=log_level)
 
-    convert_to_tsv(parsed.input_dir, parsed.output_dir, parsed.firecloud, [parsed.survey_type])
+    convert_to_tsv(parsed.input_dir, parsed.output_dir, parsed.firecloud, parsed.survey_types)
