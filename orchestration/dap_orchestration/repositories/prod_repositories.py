@@ -2,20 +2,22 @@ from dagster import PipelineDefinition, repository, weekly_schedule
 
 from dap_orchestration.pipelines import refresh_data_all
 from dap_orchestration.repositories.base_repositories import all_jobs
+from datetime import timezone
 from datetime import datetime, time
-
 
 
 @weekly_schedule(
     pipeline_name="refresh_data_all",
     start_date=datetime(2021, 8, 5),
-    execution_time=time(15, 00),
+    execution_time=time(11, 00),
     execution_timezone="US/Eastern",
     mode="prod",
-    execution_day_of_week=5,
+    execution_day_of_week=1,
     solid_selection=["sample_extract_records*"]
 )
 def weekly_sample_refresh(date: datetime) -> dict[str, object]:
+    tz = date.strftime("%z")
+    offset_time = f"{tz[0:3]}:{tz[3:]}"
     return {
         "resources": {
             "refresh_directory": {
@@ -33,12 +35,11 @@ def weekly_sample_refresh(date: datetime) -> dict[str, object]:
             "sample_extract_records": {
                 "config": {
                     "pull_data_dictionaries": False,
-                    "end_time": date.strftime("%Y-%m-%d %H")
+                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
                 }
             }
         }
     }
-
 
 
 @repository

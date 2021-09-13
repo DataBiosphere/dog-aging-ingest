@@ -77,4 +77,3 @@ def refresh_data_all() -> None:
         eols_transform_records(eols_extract_records())
     ]
     write_outfiles(collected_outputs)
-
