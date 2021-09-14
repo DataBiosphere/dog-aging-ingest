@@ -1,4 +1,4 @@
-from dagster import PipelineDefinition, repository, schedule
+from dagster import PipelineDefinition, repository, schedule, ScheduleEvaluationContext
 
 from dap_orchestration.pipelines import refresh_data_all
 from dap_orchestration.repositories.base_repositories import all_jobs
@@ -13,7 +13,8 @@ from datetime import datetime, time
     solid_selection=["sample_extract_records*"],
     mode="prod"
 )
-def weekly_sample_refresh(date: datetime) -> dict[str, object]:
+def weekly_sample_refresh(context: ScheduleEvaluationContext) -> dict[str, object]:
+    date = context.scheduled_execution_time
     tz = date.strftime("%z")
     offset_time = f"{tz[0:3]}:{tz[3:]}"
     return {
