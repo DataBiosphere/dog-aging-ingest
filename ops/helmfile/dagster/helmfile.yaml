@@ -18,7 +18,7 @@ releases:
             pullPolicy: Always
           dagsterApiGrpcArgs:
             - "-f"
-            - "/repositories.py"
+            - 'dap_orchestration/repositories/{{ requiredEnv "ENV" }}_repositories.py'
           port: 3030
           envSecrets:
             - name: monster-dagster-secrets

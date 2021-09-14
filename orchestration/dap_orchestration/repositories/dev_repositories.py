@@ -1,8 +1,8 @@
 from dagster import PipelineDefinition, repository
 
-from dap_orchestration.pipelines import refresh_data_all
+from dap_orchestration.repositories.base_repositories import all_jobs
 
 
 @repository
 def repositories() -> list[PipelineDefinition]:
-    return [refresh_data_all]
+    return all_jobs()
