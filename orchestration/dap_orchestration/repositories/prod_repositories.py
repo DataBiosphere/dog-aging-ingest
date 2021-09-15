@@ -7,7 +7,7 @@ from datetime import datetime, time
 
 
 @schedule(
-    cron_schedule="30 15 * * 2",
+    cron_schedule="00 04 * * 1",
     pipeline_name="refresh_data_all",
     execution_timezone="US/Eastern",
     solid_selection=["sample_extract_records*"],
