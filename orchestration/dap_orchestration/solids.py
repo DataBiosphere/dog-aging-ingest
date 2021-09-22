@@ -246,3 +246,44 @@ def write_outfiles(context: AbstractComputeExecutionContext, fan_in_results: lis
         context.resources.refresh_directory,
         fan_in_results
     )
+
+    return fan_in_results
+
+
+@solid(
+    required_resource_keys={"refresh_directory", "gcs"}, # todo: should gcs be a required resource key here?
+    config_schema={
+        "upload_dir": String,
+    }
+)
+def upload_to_gcs(context: AbstractComputeExecutionContext, fan_in_results: list[DapSurveyType]) -> None:
+    """
+    This solid will take upload the tsvs created from write_outfiles to the provided gs:// bucket. The script
+    will check that the file exists before uploading it and will error if it does not exist.
+
+    NOTE: The fan_in_results param allows to introduce a fan-in dependency from the upstream write_outfiles
+    solid and is used to iterate through TSV uploads for the surveys being refreshed.
+    # todo: handle having to upload with a different name as well? - sample.tsv + sample_MMDDYYYY.tsv
+    # todo: add firecloud flag to tsv script for sample outfile generation
+        # alternately we can hardcode entity:sample_id into the tsv script for the sample table
+        # the same could be done to handle the duplicate renamed file
+    """
+    for survey in fan_in_results:    # todo: handle surveyType? would this work as expected? or would
+        storage_client = context.resources.gcs
+        refresh_dir = context.resources.refresh_directory
+        outfile = f"({refresh_dir}/{survey})"
+
+        # todo: okay to use the same storage client for both? also is refresh_directory the correct type here?
+        bucket = storage_client.get_bucket(refresh_dir)
+        upload_bucket = storage_client.get_bucket(context.solid_config["upload_dir"])
+
+        # todo: check file exists (get_blob)
+        filesExist = bucket.get_blob(outfile)
+
+        if filesExist:
+            context.log.info(f"Uploading {survey} data files to {upload_bucket}")
+            blob = bucket.blob(outfile)
+            new_blob = bucket.copy_blob(blob, upload_bucket)
+            new_blob.acl.save(blob.acl)
+        else:
+            context.log.info(f"Error; No {survey} files found in {refresh_dir}")

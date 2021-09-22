@@ -61,6 +61,11 @@ def run_config():
                 'config': {
                     'output_dir': 'fake_dir'
                 }
+            },
+            'upload_to_gcs': {
+                'config': {
+                    'upload_dir': 'fake_dir'
+                }
             }
         }
     }

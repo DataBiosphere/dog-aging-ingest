@@ -165,3 +165,24 @@ def test_write_outfiles(base_solid_config, mode):
     )
 
     assert result.success
+
+
+def test_upload_to_gcs(base_solid_config, mode):
+    upload_to_gcs_config = {
+        "solids": {
+            "upload_to_gcs": {
+                "config": {
+                    "upload_dir": "fake_dir"
+                }
+            }
+        }
+    }
+    dataflow_config = {**base_solid_config, **upload_to_gcs_config}
+    result: SolidExecutionResult = execute_solid(
+        dap_orchestration.solids.upload_to_gcs,
+        mode_def=mode,
+        run_config=dataflow_config,
+        input_values={"fan_in_results": [DapSurveyType("sample")]}
+    )
+
+    assert result.success
