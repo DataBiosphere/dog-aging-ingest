@@ -232,7 +232,7 @@ def eols_transform_records(config: dict[str, str]) -> dict[str, str]:
         "output_dir": String,
     }
 )
-def write_outfiles(context: AbstractComputeExecutionContext, fan_in_results: list[DapSurveyType]) -> None:
+def write_outfiles(context: AbstractComputeExecutionContext, fan_in_results: list[DapSurveyType]) -> list[DapSurveyType]:
     """
     This solid will take in the arguments provided in context and call the convert-output-to-tsv script
     on the transform outputs. The script is currently expecting transform outputs from all 3 pipelines and will
@@ -271,19 +271,18 @@ def upload_to_gcs(context: AbstractComputeExecutionContext, fan_in_results: list
     for survey in fan_in_results:    # todo: handle surveyType? would this work as expected? or would
         storage_client = context.resources.gcs
         refresh_dir = context.resources.refresh_directory
-        outfile = f"({refresh_dir}/{survey})"
+        # todo: check if "gs://" prefix is needed + also in OutfilesWriter
+        outfile = f"gs://{refresh_dir}/tsv_output/{survey}.tsv"
 
         # todo: okay to use the same storage client for both? also is refresh_directory the correct type here?
         bucket = storage_client.get_bucket(refresh_dir)
         upload_bucket = storage_client.get_bucket(context.solid_config["upload_dir"])
 
-        # todo: check file exists (get_blob)
-        filesExist = bucket.get_blob(outfile)
-
-        if filesExist:
-            context.log.info(f"Uploading {survey} data files to {upload_bucket}")
-            blob = bucket.blob(outfile)
-            new_blob = bucket.copy_blob(blob, upload_bucket)
-            new_blob.acl.save(blob.acl)
-        else:
-            context.log.info(f"Error; No {survey} files found in {refresh_dir}")
+        #filesExist = bucket.get_blob(outfile) # todo: check file exists (get_blob)
+        #if filesExist:
+        context.log.info(f"Uploading {survey} data files to {upload_bucket}")
+        blob = bucket.blob(outfile)
+        new_blob = bucket.copy_blob(blob, upload_bucket)
+        new_blob.acl.save(blob.acl)
+        #else:
+        #    context.log.info(f"Error; No {survey} files found in {refresh_dir}")

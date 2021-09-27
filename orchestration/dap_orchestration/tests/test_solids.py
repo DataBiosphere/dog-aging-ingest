@@ -1,6 +1,7 @@
 import pytest
 from dagster import ModeDefinition, execute_solid, SolidExecutionResult, ResourceDefinition
 from dagster_utils.resources.beam.noop_beam_runner import noop_beam_runner
+from dagster_utils.resources.google_storage import mock_storage_client
 
 import dap_orchestration
 import dap_orchestration.resources
@@ -54,7 +55,8 @@ def mode():
             "transform_beam_runner": noop_beam_runner,
             "refresh_directory": dap_orchestration.resources.test_refresh_directory,
             "outfiles_writer": dap_orchestration.resources.test_outfiles_writer,
-            "api_token": ResourceDefinition.mock_resource()
+            "api_token": ResourceDefinition.mock_resource(),
+            "gcs": mock_storage_client
         }
     )
 
