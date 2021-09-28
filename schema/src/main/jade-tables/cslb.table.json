@@ -12,6 +12,11 @@
       "type": "primary_key"
     },
     {
+      "name": "cslb_year",
+      "datatype": "integer",
+      "type": "primary_key"
+    },
+    {
       "name": "cslb_pace",
       "datatype": "integer"
     },

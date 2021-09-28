@@ -6,13 +6,15 @@ import com.spotify.scio.ScioMetrics.counter
 
 object CslbTransformations {
 
-  def mapCslbData(rawRecord: RawRecord): Option[Cslb] =
+  def mapCslbData(rawRecord: RawRecord): Option[Cslb] = {
     rawRecord.getOptionalDate("cslb_date") match {
       case Some(cslbDate) =>
         Some(
           Cslb(
             dogId = rawRecord.getRequired("study_id").toLong,
             cslbDate = cslbDate,
+            cslbYear =
+              rawRecord.getRequired("redcap_event_name").split("_")(1).filter(_.isDigit).toLong,
             cslbPace = rawRecord.getOptionalNumber("cslb_pace"),
             cslbStare = rawRecord.getOptionalNumber("cslb_stare"),
             cslbStuck = rawRecord.getOptionalNumber("cslb_stuck"),
@@ -35,4 +37,5 @@ object CslbTransformations {
         None
       }
     }
+  }
 }
