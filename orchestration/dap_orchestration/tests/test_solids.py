@@ -56,7 +56,7 @@ def mode():
             "refresh_directory": dap_orchestration.resources.test_refresh_directory,
             "outfiles_writer": dap_orchestration.resources.test_outfiles_writer,
             "api_token": ResourceDefinition.mock_resource(),
-            "gcs": mock_storage_client
+            "gcs": ResourceDefinition.mock_resource()
         }
     )
 
