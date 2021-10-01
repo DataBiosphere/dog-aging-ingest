@@ -263,7 +263,7 @@ def upload_to_gcs(
         inputs: tuple
     ) -> None:
     """
-    This solid will take upload the tsvs created from write_outfiles to the provided gs:// bucket. The script
+    This solid will copy the tsvs created from write_outfiles to the provided GCS bucket. The script
     will check that the file exists before uploading it and will error if it does not exist.
 
     NOTE: The fan_in_results param allows to introduce a fan-in dependency from the upstream write_outfiles
@@ -281,13 +281,13 @@ def upload_to_gcs(
         upload_dir = context.solid_config["upload_dir"]
 
         tsvBucketWithPrefix = parse_gs_path(tsv_dir)
-        uploadBucketWithPrefix = parse_gs_path(upload_dir)
+        destBucketWithPrefix = parse_gs_path(upload_dir)
 
         outfilePrefix = f"{tsvBucketWithPrefix.prefix}/{survey}.tsv"
         destOutfilePrefix = f"{uploadBucketWithPrefix.prefix}/{survey}.tsv"
 
         source_bucket = storage_client.get_bucket(tsvBucketWithPrefix.bucket)
-        upload_bucket = storage_client.get_bucket(uploadBucketWithPrefix.bucket)
+        dest_bucket = storage_client.get_bucket(destBucketWithPrefix.bucket)
 
         blob = source_bucket.get_blob(outfilePrefix)
         if blob.size:
