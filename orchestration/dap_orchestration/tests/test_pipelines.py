@@ -4,7 +4,7 @@ import pytest
 from dagster import build_schedule_context, ResourceDefinition
 from pytz.reference import Eastern
 
-from dap_orchestration.pipelines import refresh_data_all, refresh_data_sample
+from dap_orchestration.pipelines import refresh_data_all
 from dap_orchestration.repositories.prod_repositories import weekly_sample_refresh
 
 
@@ -46,9 +46,9 @@ def run_config():
                 'output_dir': 'gs://fake_dir'
             }
         },
-        'upload_to_gcs': {
+        'copy_outfiles_to_terra': {
             'config': {
-                'upload_dir': 'gs://fake_dir'
+                'destination_gcs_path': 'gs://fake_dir'
             }
         }
 
@@ -69,9 +69,9 @@ def sample_run_config():
                 'output_dir': 'gs://fake_dir'
             }
         },
-        'upload_to_gcs': {
+        'copy_outfiles_to_terra': {
             'config': {
-                'upload_dir': 'gs://fake_dir'
+                'destination_gcs_path': 'gs://fake_dir'
             }
         }
 
@@ -81,21 +81,6 @@ def sample_run_config():
 def test_refresh_data_all(run_config):
     result = refresh_data_all.execute_in_process(
         config=run_config,
-        resources={
-            "extract_beam_runner": ResourceDefinition.mock_resource(),
-            "transform_beam_runner": ResourceDefinition.mock_resource(),
-            "refresh_directory": ResourceDefinition.mock_resource(),
-            "outfiles_writer": ResourceDefinition.mock_resource(),
-            "api_token": ResourceDefinition.mock_resource(),
-            "gcs": ResourceDefinition.mock_resource()
-        }
-    )
-    assert result.success, "Pipeline run should be successful"
-
-
-def test_refresh_sample_data(sample_run_config):
-    result = refresh_data_sample.execute_in_process(
-        config=sample_run_config,
         resources={
             "extract_beam_runner": ResourceDefinition.mock_resource(),
             "transform_beam_runner": ResourceDefinition.mock_resource(),

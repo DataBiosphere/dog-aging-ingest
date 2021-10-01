@@ -8,4 +8,4 @@ then
   mkdir dagster_home
 fi
 
-DAGSTER_HOME=${WORKING_DIR}/dagster_home dagit -f dap_orchestration/repositories/local_repositories.py
+DAGSTER_HOME=${WORKING_DIR}/dagster_home dagit -f dap_orchestration/repositories/dev_repositories.py

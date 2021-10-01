@@ -6,7 +6,7 @@ from dagster_utils.resources.google_storage import mock_storage_client
 import dap_orchestration
 import dap_orchestration.resources
 import dap_orchestration.solids
-from dap_orchestration.types import DapSurveyType
+from dap_orchestration.types import DapSurveyType, FanInResultsWithTsvDir
 
 
 @pytest.fixture
@@ -169,22 +169,23 @@ def test_write_outfiles(base_solid_config, mode):
     assert result.success
 
 
-def test_upload_to_gcs(base_solid_config, mode):
-    upload_to_gcs_config = {
+def test_copy_outfiles_to_terra(base_solid_config, mode):
+    copy_outfiles_to_terra_config = {
         "solids": {
-            "upload_to_gcs": {
+            "copy_outfiles_to_terra": {
                 "config": {
-                    "upload_dir": "gs://fake_dir"
+                    "destination_gcs_path": "gs://fake_dir"
                 }
             }
         }
     }
-    dataflow_config = {**base_solid_config, **upload_to_gcs_config}
+    dataflow_config = {**base_solid_config, **copy_outfiles_to_terra_config}
     result: SolidExecutionResult = execute_solid(
-        dap_orchestration.solids.upload_to_gcs,
+        dap_orchestration.solids.copy_outfiles_to_terra,
         mode_def=mode,
         run_config=dataflow_config,
-        input_values={"inputs": tuple(([DapSurveyType("sample")], "gs://fakepath/tsv_output"))}
+        input_values={"surveyTypesWithTsvDir": FanInResultsWithTsvDir(
+            [DapSurveyType("sample")], "gs://fakepath/tsv_output")}
     )
 
     assert result.success

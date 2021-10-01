@@ -42,7 +42,7 @@ def weekly_sample_refresh(context: ScheduleEvaluationContext) -> dict[str, objec
             "upload_to_gcs": {
                 "config": {
                     # todo: replace with {user_genetic_returns_bucket}
-                    "upload_dir": f"gs://broad-dsp-monster-dap-prod-storage/test/{date.strftime('%Y%m%d')}"
+                    "destination_gcs_path": f"gs://broad-dsp-monster-dap-prod-storage/test/{date.strftime('%Y%m%d')}"
                 }
             }
         }

@@ -1,7 +1,7 @@
 from dagster import Bool, Failure, String, solid, configured, InputDefinition, Any, Tuple, OutputDefinition
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
 from dagster_utils.contrib.google import gs_path_from_bucket_prefix, parse_gs_path, path_has_any_data
-from dap_orchestration.types import DapSurveyType
+from dap_orchestration.types import DapSurveyType, FanInResultsWithTsvDir
 
 extract_project = "dog-aging-hles-extraction"
 transform_project = "dog-aging-hles-transformation"
@@ -233,7 +233,7 @@ def eols_transform_records(config: dict[str, str]) -> dict[str, str]:
     }
 )
 def write_outfiles(context: AbstractComputeExecutionContext,
-                   fan_in_results: list[DapSurveyType]) -> tuple: # todo: can I somehow return "list[DapSurveyType], str"?
+                   fan_in_results: list[DapSurveyType]) -> FanInResultsWithTsvDir:
     """
     This solid will take in the arguments provided in context and call the convert-output-to-tsv script
     on the transform outputs. The script is currently expecting transform outputs from all 3 pipelines and will
@@ -249,19 +249,19 @@ def write_outfiles(context: AbstractComputeExecutionContext,
         fan_in_results
     )
 
-    return tuple((fan_in_results, tsv_directory))
+    return FanInResultsWithTsvDir(fan_in_results, tsv_directory)
 
 
 @solid(
     required_resource_keys={"refresh_directory", "gcs"},
     config_schema={
-        "upload_dir": String,
+        "destination_gcs_path": String,
     }
 )
-def upload_to_gcs(
-        context: AbstractComputeExecutionContext,
-        inputs: tuple
-    ) -> None:
+def copy_outfiles_to_terra(
+    context: AbstractComputeExecutionContext,
+    surveyTypesWithTsvDir: FanInResultsWithTsvDir
+) -> None:
     """
     This solid will copy the tsvs created from write_outfiles to the provided GCS bucket. The script
     will check that the file exists before uploading it and will error if it does not exist.
@@ -273,28 +273,26 @@ def upload_to_gcs(
         # alternately we can hardcode entity:sample_id into the tsv script for the sample table
         # the same could be done to handle the duplicate renamed file
     """
-    fan_in_results = inputs[0]
-    tsv_directory = inputs[1]
-    for survey in fan_in_results:
+    for survey in surveyTypesWithTsvDir.fan_in_results:
         storage_client = context.resources.gcs
-        tsv_dir = f"{tsv_directory}/tsv_output"
-        upload_dir = context.solid_config["upload_dir"]
+        tsv_dir = f"{surveyTypesWithTsvDir.tsv_dir}/tsv_output"
+        upload_dir = context.solid_config["destination_gcs_path"]
 
         tsvBucketWithPrefix = parse_gs_path(tsv_dir)
         destBucketWithPrefix = parse_gs_path(upload_dir)
 
         outfilePrefix = f"{tsvBucketWithPrefix.prefix}/{survey}.tsv"
-        destOutfilePrefix = f"{uploadBucketWithPrefix.prefix}/{survey}.tsv"
+        destOutfilePrefix = f"{destBucketWithPrefix.prefix}/{survey}.tsv"
 
         source_bucket = storage_client.get_bucket(tsvBucketWithPrefix.bucket)
         dest_bucket = storage_client.get_bucket(destBucketWithPrefix.bucket)
 
         blob = source_bucket.get_blob(outfilePrefix)
-        if blob.size:
-            context.log.info(f"Uploading {survey} data files to {upload_dir}")
-            new_blob = source_bucket.copy_blob(blob, upload_bucket, destOutfilePrefix)
-            new_blob.acl.save(blob.acl)
-            if new_blob.size:
-                context.log.info(f"{new_blob.name} successfully uploaded ({new_blob.size} bytes).")
-        else:
+        if not blob.size:
             raise Failure(f"Error; No {survey} files found in {tsv_dir}")
+        context.log.info(f"Uploading {survey} data files to {upload_dir}")
+        new_blob = source_bucket.copy_blob(blob, dest_bucket, destOutfilePrefix)
+        new_blob.acl.save(blob.acl)
+        if not new_blob.size:
+            raise Failure(f"ERROR uploading {survey} data files to {upload_dir}.")
+        context.log.info(f"{new_blob.name} successfully uploaded ({new_blob.size} bytes).")
