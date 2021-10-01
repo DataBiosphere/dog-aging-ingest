@@ -38,6 +38,12 @@ def weekly_sample_refresh(context: ScheduleEvaluationContext) -> dict[str, objec
                     "pull_data_dictionaries": False,
                     "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
                 }
+            },
+            "upload_to_gcs": {
+                "config": {
+                    # todo: replace with {user_genetic_returns_bucket}
+                    "upload_dir": f"gs://broad-dsp-monster-dap-prod-storage/test/{date.strftime('%Y%m%d')}"
+                }
             }
         }
     }

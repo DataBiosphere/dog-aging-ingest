@@ -15,3 +15,12 @@ def refresh_data_all() -> None:
         eols_transform_records(eols_extract_records())
     ]
     upload_to_gcs(write_outfiles(collected_outputs))
+
+
+@graph
+def refresh_data_sample() -> None:
+    collected_outputs = [
+        sample_transform_records(sample_extract_records()),
+    ]
+    upload_to_gcs(write_outfiles(collected_outputs))
+

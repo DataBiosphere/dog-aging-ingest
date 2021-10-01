@@ -174,7 +174,7 @@ def test_upload_to_gcs(base_solid_config, mode):
         "solids": {
             "upload_to_gcs": {
                 "config": {
-                    "upload_dir": "fake_dir"
+                    "upload_dir": "gs://fake_dir"
                 }
             }
         }
@@ -184,7 +184,7 @@ def test_upload_to_gcs(base_solid_config, mode):
         dap_orchestration.solids.upload_to_gcs,
         mode_def=mode,
         run_config=dataflow_config,
-        input_values={"fan_in_results": [DapSurveyType("sample")]}
+        input_values={"inputs": tuple(([DapSurveyType("sample")], "gs://fakepath/tsv_output"))}
     )
 
     assert result.success
