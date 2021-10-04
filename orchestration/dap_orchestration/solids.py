@@ -290,9 +290,6 @@ def copy_outfiles_to_terra(
     NOTE: The fan_in_results param allows to introduce a fan-in dependency from the upstream write_outfiles
     solid and is used to iterate through TSV uploads for the surveys being refreshed.
     # todo: handle having to upload with a different name as well? - sample.tsv + sample_MMDDYYYY.tsv
-    # todo: add firecloud flag to tsv script for sample outfile generation
-        # alternately we can hardcode entity:sample_id into the tsv script for the sample table
-        # the same could be done to handle the duplicate renamed file
     """
     for survey in surveyTypesWithTsvDir.fan_in_results:
         storage_client = context.resources.gcs
