@@ -254,8 +254,7 @@ def write_outfiles(context: AbstractComputeExecutionContext,
     return FanInResultsWithTsvDir(fan_in_results, tsv_directory)
 
 
-@configured(write_outfiles, config_schema={"output_dir": str,
-                                           })
+@configured(write_outfiles, config_schema={"output_dir": str})
 def write_outfiles_in_tsv_format(config: dict[str, str]):
     return {
         "output_dir": config["output_dir"],
@@ -263,8 +262,7 @@ def write_outfiles_in_tsv_format(config: dict[str, str]):
     }
 
 
-@configured(write_outfiles, config_schema={"output_dir": str}
-            )
+@configured(write_outfiles, config_schema={"output_dir": str})
 def write_outfiles_in_terra_format(config: dict[str, str]):
 
     return {
