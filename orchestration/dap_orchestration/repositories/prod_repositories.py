@@ -41,7 +41,6 @@ def weekly_sample_refresh(context: ScheduleEvaluationContext) -> dict[str, objec
             },
             "upload_to_gcs": {
                 "config": {
-                    # todo: replace with {user_genetic_returns_bucket}
                     "destination_gcs_path": f"gs://fc-6f3f8275-c9b4-4dcf-b2de-70f8d74f0874/ref"
                 }
             }
