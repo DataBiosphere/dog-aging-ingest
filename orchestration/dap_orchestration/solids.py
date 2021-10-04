@@ -229,11 +229,12 @@ def eols_transform_records(config: dict[str, str]) -> dict[str, str]:
 @solid(
     required_resource_keys={"refresh_directory", "outfiles_writer"},
     config_schema={
-        "output_dir": String,
+        "output_dir": str,
+        "output_in_firecloud_format": bool
     }
 )
 def write_outfiles(context: AbstractComputeExecutionContext,
-                   fan_in_results: list[DapSurveyType]) -> FanInResultsWithTsvDir:
+                                   fan_in_results: list[DapSurveyType]) -> FanInResultsWithTsvDir:
     """
     This solid will take in the arguments provided in context and call the convert-output-to-tsv script
     on the transform outputs. The script is currently expecting transform outputs from all 3 pipelines and will
@@ -246,10 +247,31 @@ def write_outfiles(context: AbstractComputeExecutionContext,
     context.resources.outfiles_writer.run(
         tsv_directory,
         context.resources.refresh_directory,
-        fan_in_results
+        fan_in_results,
+        context.solid_config["output_in_firecloud_format"]
     )
 
     return FanInResultsWithTsvDir(fan_in_results, tsv_directory)
+
+@configured(write_outfiles, config_schema={        "output_dir": str,
+                                                   })
+def write_outfiles_in_tsv_format(config: dict[str, str]):
+    return {
+        "output_dir": config["output_dir"],
+        "output_in_firecloud_format": False
+    }
+
+
+
+@configured(write_outfiles, config_schema={ "output_dir": str }
+)
+def write_outfiles_in_terra_format(config: dict[str, str]):
+
+    return {
+        "output_dir": config["output_dir"],
+        "output_in_firecloud_format": True
+    }
+
 
 
 @solid(

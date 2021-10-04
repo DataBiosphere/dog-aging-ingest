@@ -41,9 +41,14 @@ def run_config():
                 'pull_data_dictionaries': False
             }
         },
-        'write_outfiles': {
+        'write_outfiles_in_terra_format': {
             'config': {
                 'output_dir': 'gs://fake_dir'
+            }
+        },
+        'write_outfiles_in_tsv_format': {
+            'config': {
+                'output_dir': 'gs://fake_tsv_dir'
             }
         },
         'copy_outfiles_to_terra': {
@@ -64,9 +69,14 @@ def sample_run_config():
                 'pull_data_dictionaries': False
             }
         },
-        'write_outfiles': {
+        'write_outfiles_in_terra_format': {
             'config': {
                 'output_dir': 'gs://fake_dir'
+            }
+        },
+        'write_outfiles_in_tsv_format': {
+            'config': {
+                'output_dir': 'gs://fake_tsv_dir'
             }
         },
         'copy_outfiles_to_terra': {

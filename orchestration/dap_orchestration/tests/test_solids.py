@@ -151,7 +151,7 @@ def test_env_transform(base_solid_config, mode):
 def test_write_outfiles(base_solid_config, mode):
     write_outfiles_config = {
         "solids": {
-            "write_outfiles": {
+            "write_outfiles_in_terra_format": {
                 "config": {
                     "output_dir": "/example/local_beam_runner/bar",
                 }
@@ -160,7 +160,7 @@ def test_write_outfiles(base_solid_config, mode):
     }
     dataflow_config = {**base_solid_config, **write_outfiles_config}
     result: SolidExecutionResult = execute_solid(
-        dap_orchestration.solids.write_outfiles,
+        dap_orchestration.solids.write_outfiles_in_terra_format,
         mode_def=mode,
         run_config=dataflow_config,
         input_values={"fan_in_results": [DapSurveyType("hles")]}
