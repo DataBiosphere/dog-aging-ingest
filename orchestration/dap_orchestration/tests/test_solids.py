@@ -1,11 +1,12 @@
 import pytest
 from dagster import ModeDefinition, execute_solid, SolidExecutionResult, ResourceDefinition
 from dagster_utils.resources.beam.noop_beam_runner import noop_beam_runner
+from dagster_utils.resources.google_storage import mock_storage_client
 
 import dap_orchestration
 import dap_orchestration.resources
 import dap_orchestration.solids
-from dap_orchestration.types import DapSurveyType
+from dap_orchestration.types import DapSurveyType, FanInResultsWithTsvDir
 
 
 @pytest.fixture
@@ -54,7 +55,8 @@ def mode():
             "transform_beam_runner": noop_beam_runner,
             "refresh_directory": dap_orchestration.resources.test_refresh_directory,
             "outfiles_writer": dap_orchestration.resources.test_outfiles_writer,
-            "api_token": ResourceDefinition.mock_resource()
+            "api_token": ResourceDefinition.mock_resource(),
+            "gcs": ResourceDefinition.mock_resource()
         }
     )
 
@@ -149,7 +151,7 @@ def test_env_transform(base_solid_config, mode):
 def test_write_outfiles(base_solid_config, mode):
     write_outfiles_config = {
         "solids": {
-            "write_outfiles": {
+            "write_outfiles_in_terra_format": {
                 "config": {
                     "output_dir": "/example/local_beam_runner/bar",
                 }
@@ -158,10 +160,32 @@ def test_write_outfiles(base_solid_config, mode):
     }
     dataflow_config = {**base_solid_config, **write_outfiles_config}
     result: SolidExecutionResult = execute_solid(
-        dap_orchestration.solids.write_outfiles,
+        dap_orchestration.solids.write_outfiles_in_terra_format,
         mode_def=mode,
         run_config=dataflow_config,
         input_values={"fan_in_results": [DapSurveyType("hles")]}
+    )
+
+    assert result.success
+
+
+def test_copy_outfiles_to_terra(base_solid_config, mode):
+    copy_outfiles_to_terra_config = {
+        "solids": {
+            "copy_outfiles_to_terra": {
+                "config": {
+                    "destination_gcs_path": "gs://fake_dir"
+                }
+            }
+        }
+    }
+    dataflow_config = {**base_solid_config, **copy_outfiles_to_terra_config}
+    result: SolidExecutionResult = execute_solid(
+        dap_orchestration.solids.copy_outfiles_to_terra,
+        mode_def=mode,
+        run_config=dataflow_config,
+        input_values={"surveyTypesWithTsvDir": FanInResultsWithTsvDir(
+            [DapSurveyType("sample")], "gs://fakepath/tsv_output")}
     )
 
     assert result.success

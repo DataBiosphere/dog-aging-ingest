@@ -1,7 +1,9 @@
-from dagster import Bool, String, solid, configured, InputDefinition
-from dagster.core.execution.context.compute import AbstractComputeExecutionContext
+from typing import Union
 
-from dap_orchestration.types import DapSurveyType
+from dagster import Bool, Failure, String, solid, configured, InputDefinition, Any, Tuple, OutputDefinition
+from dagster.core.execution.context.compute import AbstractComputeExecutionContext
+from dagster_utils.contrib.google import gs_path_from_bucket_prefix, parse_gs_path, path_has_any_data
+from dap_orchestration.types import DapSurveyType, FanInResultsWithTsvDir
 
 extract_project = "dog-aging-hles-extraction"
 transform_project = "dog-aging-hles-transformation"
@@ -229,10 +231,12 @@ def eols_transform_records(config: dict[str, str]) -> dict[str, str]:
 @solid(
     required_resource_keys={"refresh_directory", "outfiles_writer"},
     config_schema={
-        "output_dir": String,
+        "output_dir": str,
+        "output_in_firecloud_format": bool
     }
 )
-def write_outfiles(context: AbstractComputeExecutionContext, fan_in_results: list[DapSurveyType]) -> None:
+def write_outfiles(context: AbstractComputeExecutionContext,
+                   fan_in_results: list[DapSurveyType]) -> FanInResultsWithTsvDir:
     """
     This solid will take in the arguments provided in context and call the convert-output-to-tsv script
     on the transform outputs. The script is currently expecting transform outputs from all 3 pipelines and will
@@ -241,8 +245,73 @@ def write_outfiles(context: AbstractComputeExecutionContext, fan_in_results: lis
     NOTE: The fan_in_results param allows to introduce a fan-in dependency from upstream transformation
     solids, but is ignored by this solid.
     """
+    tsv_directory = context.solid_config["output_dir"]
     context.resources.outfiles_writer.run(
-        context.solid_config["output_dir"],
+        tsv_directory,
         context.resources.refresh_directory,
-        fan_in_results
+        fan_in_results,
+        context.solid_config["output_in_firecloud_format"]
     )
+
+    return FanInResultsWithTsvDir(fan_in_results, tsv_directory)
+
+
+@configured(write_outfiles, config_schema={"output_dir": str})
+def write_outfiles_in_tsv_format(config: dict[str, str]) -> dict[str, Union[str, bool]]:
+    return {
+        "output_dir": config["output_dir"],
+        "output_in_firecloud_format": False
+    }
+
+
+@configured(write_outfiles, config_schema={"output_dir": str})
+def write_outfiles_in_terra_format(config: dict[str, str]) -> dict[str, Union[str, bool]]:
+
+    return {
+        "output_dir": config["output_dir"],
+        "output_in_firecloud_format": True
+    }
+
+
+@solid(
+    required_resource_keys={"refresh_directory", "gcs"},
+    config_schema={
+        "destination_gcs_path": String,
+    }
+)
+def copy_outfiles_to_terra(
+    context: AbstractComputeExecutionContext,
+    surveyTypesWithTsvDir: FanInResultsWithTsvDir
+) -> None:
+    """
+    This solid will copy the tsvs created from write_outfiles to the provided GCS bucket. The script
+    will check that the file exists before uploading it and will error if it does not exist.
+
+    NOTE: The fan_in_results param allows to introduce a fan-in dependency from the upstream write_outfiles
+    solid and is used to iterate through TSV uploads for the surveys being refreshed.
+    # todo: handle having to upload with a different name as well? - sample.tsv + sample_MMDDYYYY.tsv
+    """
+    for survey in surveyTypesWithTsvDir.fan_in_results:
+        storage_client = context.resources.gcs
+        tsv_dir = f"{surveyTypesWithTsvDir.tsv_dir}/tsv_output"
+        upload_dir = context.solid_config["destination_gcs_path"]
+
+        tsvBucketWithPrefix = parse_gs_path(tsv_dir)
+        destBucketWithPrefix = parse_gs_path(upload_dir)
+
+        outfilePrefix = f"{tsvBucketWithPrefix.prefix}/{survey}.tsv"
+        destOutfilePrefix = f"{destBucketWithPrefix.prefix}/{survey}.tsv"
+
+        source_bucket = storage_client.get_bucket(tsvBucketWithPrefix.bucket)
+        dest_bucket = storage_client.get_bucket(destBucketWithPrefix.bucket)
+
+        blob = source_bucket.get_blob(outfilePrefix)
+        if not blob.size:
+            raise Failure(f"Error; No {survey} files found in {tsv_dir}")
+
+        context.log.info(f"Uploading {survey} data files to {upload_dir}")
+        new_blob = source_bucket.copy_blob(blob, dest_bucket, destOutfilePrefix)
+        new_blob.acl.save(blob.acl)
+        if not new_blob.size:
+            raise Failure(f"ERROR uploading {survey} data files to {upload_dir}.")
+        context.log.info(f"{new_blob.name} successfully uploaded ({new_blob.size} bytes).")
