@@ -308,6 +308,7 @@ def copy_outfiles_to_terra(
         blob = source_bucket.get_blob(outfilePrefix)
         if not blob.size:
             raise Failure(f"Error; No {survey} files found in {tsv_dir}")
+            
         context.log.info(f"Uploading {survey} data files to {upload_dir}")
         new_blob = source_bucket.copy_blob(blob, dest_bucket, destOutfilePrefix)
         new_blob.acl.save(blob.acl)
