@@ -41,7 +41,6 @@ class OkWrapper extends HttpWrapper {
             throw new Exception(s"Non-successful HTTP error code received [response.code=${response.code()}]")
           }
 
-
           val responseBodyString = response.body().string()
           val maybeResult =
             JsonParser.parseEncodedJsonReturningFailure(responseBodyString)
