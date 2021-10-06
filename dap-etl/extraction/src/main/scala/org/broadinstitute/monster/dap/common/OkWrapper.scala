@@ -27,6 +27,16 @@ class OkWrapper extends HttpWrapper {
           logger.info(s)
         }
       }).setLevel(Level.HEADERS))
+      .addInterceptor((chain: Interceptor.Chain) => {
+        val request = chain.request()
+        var response = chain.proceed(request)
+        var tryCount = 0
+        while (!response.isSuccessful && tryCount < 3) {
+          tryCount += 1
+          response = chain.proceed(request)
+        }
+        response
+      })
       .build()
 
   def makeRequest(request: Request): Future[Msg] = {
@@ -38,7 +48,9 @@ class OkWrapper extends HttpWrapper {
           p.failure(e)
         override def onResponse(call: Call, response: Response): Unit = {
           if (!response.isSuccessful) {
-            throw new Exception(s"Non-successful HTTP error code received [response.code=${response.code()}]")
+            throw new Exception(
+              s"Non-successful HTTP error code received [response.code=${response.code()}]"
+            )
           }
 
           val responseBodyString = response.body().string()
