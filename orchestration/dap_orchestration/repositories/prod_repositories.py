@@ -1,4 +1,4 @@
-from dagster import PipelineDefinition, repository, schedule, ScheduleEvaluationContext
+from dagster import PipelineDefinition, repository, schedule, ScheduleEvaluationContext, in_process_executor
 from dagster_gcp.gcs import gcs_pickle_io_manager
 from dagster_utils.resources.beam.k8s_beam_runner import k8s_dataflow_beam_runner
 from dagster_utils.resources.google_storage import google_storage_client
@@ -28,22 +28,27 @@ def weekly_sample_refresh(context: ScheduleEvaluationContext) -> dict[str, objec
             }
         },
         "solids": {
-            "write_outfiles": {
-                "config": {
-                    "output_dir": f"gs://broad-dsp-monster-dap-prod-storage/weekly_refresh/{date.strftime('%Y%m%d')}"
-                }
-            },
             "sample_extract_records": {
                 "config": {
                     "pull_data_dictionaries": False,
                     "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
                 }
             },
-            "upload_to_gcs": {
+            "write_outfiles_in_terra_format": {
+                "config": {
+                    "output_dir": f"gs://broad-dsp-monster-dap-prod-storage/weekly_refresh/{date.strftime('%Y%m%d')}/terra_output"
+                }
+            },
+            "write_outfiles_in_tsv_format": {
+                "config": {
+                    "output_dir": f"gs://broad-dsp-monster-dap-prod-storage/weekly_refresh/{date.strftime('%Y%m%d')}/default_output"
+                }
+            },
+            "copy_outfiles_to_terra": {
                 "config": {
                     "destination_gcs_path": f"gs://fc-6f3f8275-c9b4-4dcf-b2de-70f8d74f0874/ref"
                 }
-            }
+            },
         }
     }
 
@@ -52,13 +57,17 @@ def weekly_sample_refresh(context: ScheduleEvaluationContext) -> dict[str, objec
 def repositories() -> list[PipelineDefinition]:
     return [
         weekly_sample_refresh,
-        refresh_data_all.to_job(resource_defs={
-            "extract_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_extract"),
-            "transform_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_transform"),
-            "refresh_directory": refresh_directory,
-            "outfiles_writer": outfiles_writer,
-            "api_token": preconfigure_resource_for_mode(api_token, "prod"),
-            "io_manager": preconfigure_resource_for_mode(gcs_pickle_io_manager, "prod"),
-            "gcs": google_storage_client,
-        })
+        refresh_data_all.to_job(
+            resource_defs={
+                "extract_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_extract"),
+                "transform_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_transform"),
+                "refresh_directory": refresh_directory,
+                "outfiles_writer": outfiles_writer,
+                "api_token": preconfigure_resource_for_mode(api_token, "prod"),
+                "io_manager": preconfigure_resource_for_mode(gcs_pickle_io_manager, "prod"),
+                "gcs": google_storage_client,
+            },
+            # the default multiprocess_executor dispatches all DAP surveys concurrently, exceeding resource quotas
+            executor_def=in_process_executor
+        )
     ]
