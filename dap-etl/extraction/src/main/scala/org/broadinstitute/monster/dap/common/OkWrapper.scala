@@ -38,7 +38,9 @@ class OkWrapper extends HttpWrapper {
           p.failure(e)
         override def onResponse(call: Call, response: Response): Unit = {
           if (!response.isSuccessful) {
-            throw new Exception(s"Non-successful HTTP error code received [response.code=${response.code()}]")
+            throw new Exception(
+              s"Non-successful HTTP error code received [response.code=${response.code()}]"
+            )
           }
 
           val responseBodyString = response.body().string()
