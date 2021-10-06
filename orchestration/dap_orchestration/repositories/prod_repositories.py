@@ -67,6 +67,7 @@ def repositories() -> list[PipelineDefinition]:
                 "io_manager": preconfigure_resource_for_mode(gcs_pickle_io_manager, "prod"),
                 "gcs": google_storage_client,
             },
+            # the default multiprocess_executor dispatches all DAP surveys concurrently, exceeding resource quotas
             executor_def=in_process_executor
         )
     ]
