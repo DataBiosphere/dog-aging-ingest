@@ -15,7 +15,7 @@ class_prefix = "org.broadinstitute.monster.dap"
 def send_pipeline_start_notification(context: AbstractComputeExecutionContext):
     message = [
         "Dog Aging Pipeline starting",
-        f"Name = {context.pipeline_def.name}"
+        f"Name = {context.pipeline_def.name}",
         f"Run ID = {context.run_id}"
     ]
     context.resources.slack_client.send_message("\n".join(message))
