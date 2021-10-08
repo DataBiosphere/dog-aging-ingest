@@ -1,6 +1,6 @@
 import os
 
-from dagster import PipelineDefinition, repository
+from dagster import PipelineDefinition, repository, in_process_executor
 from dagster.utils import load_yaml_from_globs, file_relative_path
 from dagster_gcp.gcs import gcs_pickle_io_manager
 from dagster_utils.resources.beam.k8s_beam_runner import k8s_dataflow_beam_runner
@@ -15,13 +15,19 @@ from dap_orchestration.resources import refresh_directory, outfiles_writer, api_
 
 @repository
 def repositories() -> list[PipelineDefinition]:
-    return [refresh_data_all.to_job(resource_defs={
-        "extract_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "dev_extract"),
-        "transform_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "dev_transform"),
-        "refresh_directory": refresh_directory,
-        "outfiles_writer": outfiles_writer,
-        "api_token": preconfigure_resource_for_mode(api_token, "dev"),
-        "io_manager": preconfigure_resource_for_mode(gcs_pickle_io_manager, "dev"),
-        "gcs": google_storage_client,
-        "slack_client": preconfigure_resource_for_mode(live_slack_client, "dev")
-    }), build_pipeline_failure_sensor()]
+    return [
+        refresh_data_all.to_job(
+            resource_defs={
+                "extract_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "dev_extract"),
+                "transform_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "dev_transform"),
+                "refresh_directory": refresh_directory,
+                "outfiles_writer": outfiles_writer,
+                "api_token": preconfigure_resource_for_mode(api_token, "dev"),
+                "io_manager": preconfigure_resource_for_mode(gcs_pickle_io_manager, "dev"),
+                "gcs": google_storage_client,
+                "slack_client": preconfigure_resource_for_mode(live_slack_client, "dev")
+            },
+            executor_def=in_process_executor
+        ),
+        build_pipeline_failure_sensor()
+    ]

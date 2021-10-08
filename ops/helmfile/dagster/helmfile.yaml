@@ -6,18 +6,6 @@ repositories:
     url: https://broadinstitute.github.io/datarepo-helm
 
 releases:
-  - name: monster-secrets
-    namespace: dagster
-    chart: datarepo-helm/create-secret-manager-secret
-    missingFileHandler: Warn
-    values:
-      - secrets:
-          - secretName: monster-dagster-secrets
-            nameSpace: dagster
-            vals:
-              - kubeSecretKey: SLACK_TOKEN
-                path: secret/dsde/monster/{{ requiredEnv "ENV" }}/ingest/dap/dagster
-                vaultKey: slack-token
   - name: monster-dog-aging-ingest
     namespace: dagster
     chart: dagster/dagster-user-deployments
