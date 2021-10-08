@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Any, Union
 
 from dagster import Bool, Failure, String, solid, configured, InputDefinition, Nothing
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
@@ -12,7 +12,7 @@ class_prefix = "org.broadinstitute.monster.dap"
 
 
 @solid(required_resource_keys={"slack_client"})
-def send_pipeline_start_notification(context: AbstractComputeExecutionContext):
+def send_pipeline_start_notification(context: AbstractComputeExecutionContext) -> None:
     message = [
         "Dog Aging Pipeline starting",
         f"Name = {context.pipeline_def.name}",
@@ -25,7 +25,8 @@ def send_pipeline_start_notification(context: AbstractComputeExecutionContext):
     required_resource_keys={"slack_client"},
     input_defs=[InputDefinition("ignore1"), InputDefinition("ignore2")]
 )
-def send_pipeline_finish_notification(context: AbstractComputeExecutionContext, ignore1, ignore2):
+def send_pipeline_finish_notification(
+        context: AbstractComputeExecutionContext, ignore1: Any, ignore2: Any) -> None:
     message = [
         "Dog Aging Pipeline finished",
         f"Name = {context.pipeline_def.name}"

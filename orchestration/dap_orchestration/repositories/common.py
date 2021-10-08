@@ -3,6 +3,7 @@ import os
 from dagster import file_relative_path
 from dagster.utils import load_yaml_from_globs
 from dagster_slack import make_slack_on_pipeline_failure_sensor
+from dagster.core.definitions.pipeline_sensor import pipeline_failure_sensor
 
 
 def config_path(relative_path: str) -> str:
@@ -12,7 +13,7 @@ def config_path(relative_path: str) -> str:
     return path
 
 
-def build_pipeline_failure_sensor():
+def build_pipeline_failure_sensor() -> pipeline_failure_sensor:
     config_dict = load_yaml_from_globs(config_path("resources/live_slack_client/global.yaml"))
     slack_on_pipeline_failure = make_slack_on_pipeline_failure_sensor(
         config_dict["channel"],
