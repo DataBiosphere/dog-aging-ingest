@@ -1,6 +1,6 @@
 from typing import Union
 
-from dagster import Bool, Failure, String, solid, configured, InputDefinition
+from dagster import Bool, Failure, String, solid, configured, InputDefinition, Nothing
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
 from dagster_utils.contrib.google import parse_gs_path
 
@@ -43,7 +43,8 @@ def send_pipeline_finish_notification(context: AbstractComputeExecutionContext, 
         "target_class": String,
         "scala_project": String,
         "dap_survey_type": String
-    }
+    },
+    input_defs=[InputDefinition("ignore", Nothing)]
 )
 def base_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyType:
     """
@@ -118,7 +119,8 @@ def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
-    }
+    },
+    input_defs=[InputDefinition("ignore", Nothing)]
 )
 def env_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyType:
     arg_dict = {
