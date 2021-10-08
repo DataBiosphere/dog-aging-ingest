@@ -84,7 +84,6 @@ def sample_run_config():
                 'destination_gcs_path': 'gs://fake_dir'
             }
         }
-
     }
 
 
@@ -97,7 +96,8 @@ def test_refresh_data_all(run_config):
             "refresh_directory": ResourceDefinition.mock_resource(),
             "outfiles_writer": ResourceDefinition.mock_resource(),
             "api_token": ResourceDefinition.mock_resource(),
-            "gcs": ResourceDefinition.mock_resource()
+            "gcs": ResourceDefinition.mock_resource(),
+            "slack_client": ResourceDefinition.mock_resource()
         }
     )
     assert result.success, "Pipeline run should be successful"

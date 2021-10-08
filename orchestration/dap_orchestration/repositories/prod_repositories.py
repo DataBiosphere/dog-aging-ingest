@@ -2,6 +2,7 @@ from dagster import PipelineDefinition, repository, schedule, ScheduleEvaluation
 from dagster_gcp.gcs import gcs_pickle_io_manager
 from dagster_utils.resources.beam.k8s_beam_runner import k8s_dataflow_beam_runner
 from dagster_utils.resources.google_storage import google_storage_client
+from dagster_utils.resources.slack import live_slack_client
 
 from dap_orchestration.config import preconfigure_resource_for_mode
 from dap_orchestration.pipelines import refresh_data_all
@@ -66,6 +67,7 @@ def repositories() -> list[PipelineDefinition]:
                 "api_token": preconfigure_resource_for_mode(api_token, "prod"),
                 "io_manager": preconfigure_resource_for_mode(gcs_pickle_io_manager, "prod"),
                 "gcs": google_storage_client,
+                "slack_client": preconfigure_resource_for_mode(live_slack_client, "prod")
             },
             # the default multiprocess_executor dispatches all DAP surveys concurrently, exceeding resource quotas
             executor_def=in_process_executor

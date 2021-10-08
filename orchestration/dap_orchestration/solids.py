@@ -10,6 +10,25 @@ transform_project = "dog-aging-hles-transformation"
 class_prefix = "org.broadinstitute.monster.dap"
 
 
+@solid(required_resource_keys={"slack_client"})
+def send_pipeline_start_notification(context: AbstractComputeExecutionContext):
+    message = [
+        "Pipeline starting"
+    ]
+    context.resources.slack_client.send_message(message)
+
+
+@solid(
+    required_resource_keys={"slack_client"},
+    input_defs=[InputDefinition("ignore1"), InputDefinition("ignore2")]
+)
+def send_pipeline_finish_notification(context: AbstractComputeExecutionContext, ignore1, ignore2):
+    message = [
+        "Pipeline finished"
+    ]
+    context.resources.slack_client.send_message(message)
+
+
 @solid(
     required_resource_keys={"extract_beam_runner", "refresh_directory", "api_token"},
     config_schema={
