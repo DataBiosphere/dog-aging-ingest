@@ -1,8 +1,9 @@
 from typing import Union
 
-from dagster import Bool, Failure, String, solid, configured, InputDefinition, Any, Tuple, OutputDefinition
+from dagster import Bool, Failure, String, solid, configured, InputDefinition
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
-from dagster_utils.contrib.google import gs_path_from_bucket_prefix, parse_gs_path, path_has_any_data
+from dagster_utils.contrib.google import parse_gs_path
+
 from dap_orchestration.types import DapSurveyType, FanInResultsWithTsvDir
 
 extract_project = "dog-aging-hles-extraction"
