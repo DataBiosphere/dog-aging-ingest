@@ -13,7 +13,9 @@ class_prefix = "org.broadinstitute.monster.dap"
 @solid(required_resource_keys={"slack_client"})
 def send_pipeline_start_notification(context: AbstractComputeExecutionContext):
     message = [
-        "Pipeline starting"
+        "Dog Aging Pipeline starting",
+        f"Name = {context.pipeline_def.name}"
+        f"Run ID = {context.run_id}"
     ]
     context.resources.slack_client.send_message(message)
 
@@ -24,9 +26,11 @@ def send_pipeline_start_notification(context: AbstractComputeExecutionContext):
 )
 def send_pipeline_finish_notification(context: AbstractComputeExecutionContext, ignore1, ignore2):
     message = [
-        "Pipeline finished"
+        "Dog Aging Pipeline finished",
+        f"Name = {context.pipeline_def.name}"
+        f"Run ID = {context.run_id}"
     ]
-    context.resources.slack_client.send_message(message)
+    context.resources.slack_client.send_message("\n".join(message))
 
 
 @solid(
