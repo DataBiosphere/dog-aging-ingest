@@ -6,6 +6,7 @@ from dagster_utils.resources.slack import live_slack_client
 
 from dap_orchestration.config import preconfigure_resource_for_mode
 from dap_orchestration.pipelines import refresh_data_all
+from dap_orchestration.repositories.common import build_pipeline_failure_sensor
 from dap_orchestration.resources import refresh_directory, outfiles_writer, api_token
 
 
@@ -57,6 +58,7 @@ def weekly_sample_refresh(context: ScheduleEvaluationContext) -> dict[str, objec
 @repository
 def repositories() -> list[PipelineDefinition]:
     return [
+        build_pipeline_failure_sensor(),
         weekly_sample_refresh,
         refresh_data_all.to_job(
             resource_defs={
