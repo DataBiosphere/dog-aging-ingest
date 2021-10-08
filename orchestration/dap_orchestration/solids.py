@@ -18,7 +18,7 @@ def send_pipeline_start_notification(context: AbstractComputeExecutionContext):
         f"Name = {context.pipeline_def.name}"
         f"Run ID = {context.run_id}"
     ]
-    context.resources.slack_client.send_message(message)
+    context.resources.slack_client.send_message("\n".join(message))
 
 
 @solid(
