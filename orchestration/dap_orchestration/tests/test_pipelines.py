@@ -5,7 +5,7 @@ from dagster import build_schedule_context, ResourceDefinition
 from pytz.reference import Eastern
 
 from dap_orchestration.pipelines import refresh_data_all
-from dap_orchestration.repositories.prod_repositories import weekly_sample_refresh
+from dap_orchestration.repositories.prod_repositories import weekly_data_refresh
 
 
 @pytest.fixture
@@ -84,7 +84,6 @@ def sample_run_config():
                 'destination_gcs_path': 'gs://fake_dir'
             }
         }
-
     }
 
 
@@ -97,7 +96,8 @@ def test_refresh_data_all(run_config):
             "refresh_directory": ResourceDefinition.mock_resource(),
             "outfiles_writer": ResourceDefinition.mock_resource(),
             "api_token": ResourceDefinition.mock_resource(),
-            "gcs": ResourceDefinition.mock_resource()
+            "gcs": ResourceDefinition.mock_resource(),
+            "slack_client": ResourceDefinition.mock_resource()
         }
     )
     assert result.success, "Pipeline run should be successful"
@@ -105,5 +105,5 @@ def test_refresh_data_all(run_config):
 
 def test_weekly_sample_refresh():
     context = build_schedule_context(scheduled_execution_time=datetime(2020, 1, 1, 13, 30, 30, tzinfo=Eastern))
-    run_config = weekly_sample_refresh(context)
+    run_config = weekly_data_refresh(context)
     assert run_config['solids']['sample_extract_records']['config']['end_time'] == "2020-01-01T13:30:30-05:00"

@@ -2,20 +2,39 @@ from dagster import PipelineDefinition, repository, schedule, ScheduleEvaluation
 from dagster_gcp.gcs import gcs_pickle_io_manager
 from dagster_utils.resources.beam.k8s_beam_runner import k8s_dataflow_beam_runner
 from dagster_utils.resources.google_storage import google_storage_client
+from dagster_utils.resources.slack import live_slack_client
 
 from dap_orchestration.config import preconfigure_resource_for_mode
 from dap_orchestration.pipelines import refresh_data_all
+from dap_orchestration.repositories.common import build_pipeline_failure_sensor
 from dap_orchestration.resources import refresh_directory, outfiles_writer, api_token
 
 
+def build_refresh_data_all_job(name: str) -> PipelineDefinition:
+    return refresh_data_all.to_job(
+        name=name,
+        resource_defs={
+            "extract_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_extract"),
+            "transform_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_transform"),
+            "refresh_directory": refresh_directory,
+            "outfiles_writer": outfiles_writer,
+            "api_token": preconfigure_resource_for_mode(api_token, "prod"),
+            "io_manager": preconfigure_resource_for_mode(gcs_pickle_io_manager, "prod"),
+            "gcs": google_storage_client,
+            "slack_client": preconfigure_resource_for_mode(live_slack_client, "prod")
+        },
+        # the default multiprocess_executor dispatches all DAP surveys concurrently, exceeding resource quotas
+        executor_def=in_process_executor
+    )
+
+
+# TODO run once a week
 @schedule(
-    cron_schedule="00 04 * * 1",
-    pipeline_name="refresh_data_all",
-    execution_timezone="US/Eastern",
-    solid_selection=["sample_extract_records*"],
-    mode="prod"
+    cron_schedule="0 4 * * *",
+    job=build_refresh_data_all_job("weekly_data_refresh"),
+    execution_timezone="US/Eastern"
 )
-def weekly_sample_refresh(context: ScheduleEvaluationContext) -> dict[str, object]:
+def weekly_data_refresh(context: ScheduleEvaluationContext) -> dict[str, object]:
     date = context.scheduled_execution_time
     tz = date.strftime("%z")
     offset_time = f"{tz[0:3]}:{tz[3:]}"
@@ -29,6 +48,30 @@ def weekly_sample_refresh(context: ScheduleEvaluationContext) -> dict[str, objec
         },
         "solids": {
             "sample_extract_records": {
+                "config": {
+                    "pull_data_dictionaries": False,
+                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
+                }
+            },
+            "cslb_extract_records": {
+                "config": {
+                    "pull_data_dictionaries": False,
+                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
+                }
+            },
+            "env_extract_records": {
+                "config": {
+                    "pull_data_dictionaries": False,
+                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
+                }
+            },
+            "eols_extract_records": {
+                "config": {
+                    "pull_data_dictionaries": False,
+                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
+                }
+            },
+            "hles_extract_records": {
                 "config": {
                     "pull_data_dictionaries": False,
                     "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
@@ -56,18 +99,7 @@ def weekly_sample_refresh(context: ScheduleEvaluationContext) -> dict[str, objec
 @repository
 def repositories() -> list[PipelineDefinition]:
     return [
-        weekly_sample_refresh,
-        refresh_data_all.to_job(
-            resource_defs={
-                "extract_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_extract"),
-                "transform_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_transform"),
-                "refresh_directory": refresh_directory,
-                "outfiles_writer": outfiles_writer,
-                "api_token": preconfigure_resource_for_mode(api_token, "prod"),
-                "io_manager": preconfigure_resource_for_mode(gcs_pickle_io_manager, "prod"),
-                "gcs": google_storage_client,
-            },
-            # the default multiprocess_executor dispatches all DAP surveys concurrently, exceeding resource quotas
-            executor_def=in_process_executor
-        )
+        build_pipeline_failure_sensor(),
+        build_refresh_data_all_job("refresh_data_all"),
+        weekly_data_refresh
     ]

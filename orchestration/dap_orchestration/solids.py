@@ -1,13 +1,38 @@
-from typing import Union
+from typing import Any, Union
 
-from dagster import Bool, Failure, String, solid, configured, InputDefinition, Any, Tuple, OutputDefinition
+from dagster import Bool, Failure, String, solid, configured, InputDefinition, Nothing
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
-from dagster_utils.contrib.google import gs_path_from_bucket_prefix, parse_gs_path, path_has_any_data
+from dagster_utils.contrib.google import parse_gs_path
+
 from dap_orchestration.types import DapSurveyType, FanInResultsWithTsvDir
 
 extract_project = "dog-aging-hles-extraction"
 transform_project = "dog-aging-hles-transformation"
 class_prefix = "org.broadinstitute.monster.dap"
+
+
+@solid(required_resource_keys={"slack_client"})
+def send_pipeline_start_notification(context: AbstractComputeExecutionContext) -> None:
+    message = [
+        "Dog Aging Pipeline starting",
+        f"Name = {context.pipeline_def.name}",
+        f"Run ID = {context.run_id}"
+    ]
+    context.resources.slack_client.send_message("\n".join(message))
+
+
+@solid(
+    required_resource_keys={"slack_client"},
+    input_defs=[InputDefinition("ignore1"), InputDefinition("ignore2")]
+)
+def send_pipeline_finish_notification(
+        context: AbstractComputeExecutionContext, ignore1: Any, ignore2: Any) -> None:
+    message = [
+        "Dog Aging Pipeline finished",
+        f"Name = {context.pipeline_def.name}"
+        f"Run ID = {context.run_id}"
+    ]
+    context.resources.slack_client.send_message("\n".join(message))
 
 
 @solid(
@@ -19,7 +44,8 @@ class_prefix = "org.broadinstitute.monster.dap"
         "target_class": String,
         "scala_project": String,
         "dap_survey_type": String
-    }
+    },
+    input_defs=[InputDefinition("ignore", Nothing)]
 )
 def base_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyType:
     """
@@ -94,7 +120,8 @@ def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
-    }
+    },
+    input_defs=[InputDefinition("ignore", Nothing)]
 )
 def env_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyType:
     arg_dict = {
