@@ -29,7 +29,7 @@ def build_refresh_data_all_job(name: str) -> PipelineDefinition:
 
 
 @schedule(
-    cron_schedule="28 15 * * *",
+    cron_schedule="30 15 * * *",
     job=arh_testing.to_job(
                              resource_defs={
                                  "extract_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_extract"),
