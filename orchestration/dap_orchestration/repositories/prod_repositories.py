@@ -27,6 +27,7 @@ def build_refresh_data_all_job(name: str) -> PipelineDefinition:
         executor_def=in_process_executor
     )
 
+
 @schedule(
     cron_schedule="45 09 * * *",
     job=build_refresh_data_all_job("weekly_data_refresh"),
