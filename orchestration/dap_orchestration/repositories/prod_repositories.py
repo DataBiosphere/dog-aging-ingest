@@ -10,7 +10,7 @@ from dap_orchestration.repositories.common import build_pipeline_failure_sensor
 from dap_orchestration.resources import refresh_directory, outfiles_writer, api_token
 
 
-def build_refresh_data_all_job(name):
+def build_refresh_data_all_job(name: str) -> PipelineDefinition:
     return refresh_data_all.to_job(
         name=name,
         resource_defs={
