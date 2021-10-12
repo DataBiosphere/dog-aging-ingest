@@ -19,3 +19,16 @@ def refresh_data_all() -> None:
     write_outfiles_result = write_outfiles_in_tsv_format(collected_outputs)
     copy_outfiles_result = copy_outfiles_to_terra(write_outfiles_in_terra_format(collected_outputs))
     send_pipeline_finish_notification(write_outfiles_result, copy_outfiles_result)
+
+
+
+
+@graph
+def arh_testing() -> None:
+    notification_result = send_pipeline_start_notification()
+    collected_outputs = [
+        hles_transform_records(hles_extract_records(notification_result)),
+    ]
+    write_outfiles_result = write_outfiles_in_tsv_format(collected_outputs)
+    copy_outfiles_result = copy_outfiles_to_terra(write_outfiles_in_terra_format(collected_outputs))
+    send_pipeline_finish_notification(write_outfiles_result, copy_outfiles_result)
