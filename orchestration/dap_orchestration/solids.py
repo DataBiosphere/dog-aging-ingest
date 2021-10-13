@@ -3,6 +3,7 @@ from typing import Any, Union
 from dagster import Bool, Failure, String, solid, configured, InputDefinition, Nothing
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
 from dagster_utils.contrib.google import parse_gs_path
+from datetime import datetime
 
 from dap_orchestration.types import DapSurveyType, FanInResultsWithTsvDir
 
@@ -35,6 +36,15 @@ def send_pipeline_finish_notification(
     context.resources.slack_client.send_message("\n".join(message))
 
 
+def check_date_format(input_date: str) -> String:
+    format = "%Y-%m-%dT%H:%M:%S%z"
+    try:
+        datetime.strptime(input_date, format)
+        return input_date
+    except ValueError:
+        raise Failure(f"{input_date} should be in the following format: '{format}'")
+
+
 @solid(
     required_resource_keys={"extract_beam_runner", "refresh_directory", "api_token"},
     config_schema={
@@ -55,7 +65,7 @@ def base_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyT
     arg_dict = {
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
         "outputPrefix": f"{context.resources.refresh_directory}/{context.solid_config['output_prefix']}",
-        "endTime": context.solid_config["end_time"],
+        "endTime": check_date_format(context.solid_config["end_time"]),
         "apiToken": context.resources.api_token.base_api_token,
     }
 

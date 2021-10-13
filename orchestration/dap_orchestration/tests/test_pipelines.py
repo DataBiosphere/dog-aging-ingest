@@ -13,31 +13,31 @@ def run_config():
     return {
         'cslb_extract_records': {
             'config': {
-                'end_time': 'fake_time',
+                'end_time': '2021-10-05T00:00:00-05:00',
                 'pull_data_dictionaries': False
             }
         },
         'env_extract_records': {
             'config': {
-                'end_time': 'fake_time',
+                'end_time': '2021-10-05T00:00:00-05:00',
                 'pull_data_dictionaries': False
             }
         },
         'hles_extract_records': {
             'config': {
-                'end_time': 'fake_time',
+                'end_time': '2021-10-05T00:00:00-05:00',
                 'pull_data_dictionaries': False
             }
         },
         'sample_extract_records': {
             'config': {
-                'end_time': 'fake_time',
+                'end_time': '2021-10-05T00:00:00-05:00',
                 'pull_data_dictionaries': False
             }
         },
         'eols_extract_records': {
             'config': {
-                'end_time': 'fake_time',
+                'end_time': '2021-10-05T00:00:00-05:00',
                 'pull_data_dictionaries': False
             }
         },
@@ -65,7 +65,7 @@ def sample_run_config():
     return {
         'sample_extract_records': {
             'config': {
-                'end_time': 'fake_time',
+                'end_time': '2021-10-05T00:00:00-05:00',
                 'pull_data_dictionaries': False
             }
         },
