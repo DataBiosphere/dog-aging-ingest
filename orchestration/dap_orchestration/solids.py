@@ -137,7 +137,7 @@ def env_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyTy
     arg_dict = {
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
         "outputPrefix": f"{context.resources.refresh_directory}/raw",
-        "endTime": context.solid_config["end_time"],
+        "endTime": check_date_format(context.solid_config["end_time"]),
         "apiToken": context.resources.api_token.env_api_token,
 
     }
