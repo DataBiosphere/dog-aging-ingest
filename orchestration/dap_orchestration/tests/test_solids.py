@@ -209,7 +209,7 @@ def test_copy_outfiles_to_terra(base_solid_config, mode):
         dap_orchestration.solids.copy_outfiles_to_terra,
         mode_def=mode,
         run_config=dataflow_config,
-        input_values={"surveyTypesWithTsvDir": FanInResultsWithTsvDir(
+        input_values={"survey_types_with_path": FanInResultsWithTsvDir(
             [DapSurveyType("sample")], "gs://fakepath/tsv_output")}
     )
 
