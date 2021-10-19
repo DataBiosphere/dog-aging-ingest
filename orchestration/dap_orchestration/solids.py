@@ -3,7 +3,7 @@ from typing import Union
 
 from google.cloud.storage.client import Client
 from google.cloud.storage.blob import Blob
-from dagster import Bool, Failure, String, solid, configured, InputDefinition, Nothing
+from dagster import Bool, Failure, String, solid, configured, InputDefinition, Nothing, Noneable
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
 from dagster_utils.contrib.google import parse_gs_path
 from google.cloud.storage.blob import Blob
