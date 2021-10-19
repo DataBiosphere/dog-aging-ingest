@@ -35,7 +35,9 @@ class OkWrapper extends HttpWrapper {
           val response = chain.proceed(request)
 
           val t2 = System.nanoTime
-          logger.info(s"Received response for ${response.request.url} in ${(t2 - t1) / 1e6d} ms")
+          logger.info(
+            s"Received response for ${response.request.url} [timing=${(t2 - t1) / 1e6d} ms]"
+          )
 
           response
         }
