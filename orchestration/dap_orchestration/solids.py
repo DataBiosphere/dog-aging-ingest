@@ -1,5 +1,7 @@
 from typing import Any, Union
 
+from google.cloud.storage.client import Client
+from google.cloud.storage.blob import Blob
 from dagster import Bool, Failure, String, solid, configured, InputDefinition, Nothing
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
 from dagster_utils.contrib.google import parse_gs_path
@@ -10,6 +12,7 @@ from dap_orchestration.types import DapSurveyType, FanInResultsWithTsvDir
 extract_project = "dog-aging-hles-extraction"
 transform_project = "dog-aging-hles-transformation"
 class_prefix = "org.broadinstitute.monster.dap"
+terra_surveys = {"sample"}
 
 
 @solid(required_resource_keys={"slack_client"})
@@ -310,6 +313,23 @@ def write_outfiles_in_terra_format(config: dict[str, str]) -> dict[str, Union[st
     }
 
 
+def _copy_file(source_bucket_name: str, source_prefix: str, dest_bucket_name: str,
+               dest_prefix: str, storage_client: Client) -> Blob:
+    source_bucket = storage_client.get_bucket(source_bucket_name)
+    dest_bucket = storage_client.get_bucket(dest_bucket_name)
+
+    blob = source_bucket.get_blob(source_prefix)
+    if not blob.size:
+        raise Failure(f"Could not find {blob.name}")
+
+    new_blob = source_bucket.copy_blob(blob, dest_bucket, dest_prefix)
+    new_blob.acl.save(blob.acl)
+    if not new_blob.size:
+        raise Failure(f"ERROR uploading data files to {dest_bucket_name}/{dest_prefix}.")
+
+    return new_blob
+
+
 @solid(
     required_resource_keys={"refresh_directory", "gcs"},
     config_schema={
@@ -318,37 +338,47 @@ def write_outfiles_in_terra_format(config: dict[str, str]) -> dict[str, Union[st
 )
 def copy_outfiles_to_terra(
     context: AbstractComputeExecutionContext,
-    surveyTypesWithTsvDir: FanInResultsWithTsvDir
+    survey_types_with_path: FanInResultsWithTsvDir
 ) -> None:
     """
     This solid will copy the tsvs created from write_outfiles to the provided GCS bucket. The script
-    will check that the file exists before uploading it and will error if it does not exist.
+    will check that the file exists before uploading it and will error if it does not exist. This only copies those
+    surveys that are allow-listed in the terra_surveys constant.
 
     NOTE: The fan_in_results param allows to introduce a fan-in dependency from the upstream write_outfiles
     solid and is used to iterate through TSV uploads for the surveys being refreshed.
-    # todo: handle having to upload with a different name as well? - sample.tsv + sample_MMDDYYYY.tsv
     """
-    for survey in surveyTypesWithTsvDir.fan_in_results:
+    for survey in survey_types_with_path.fan_in_results:
+        if survey not in terra_surveys:
+            context.log.info(f"Skipping copy survey to terra [survey_type={survey}]")
+            continue
+
         storage_client = context.resources.gcs
-        tsv_dir = f"{surveyTypesWithTsvDir.tsv_dir}/tsv_output"
-        upload_dir = context.solid_config["destination_gcs_path"]
+        tsv_dir = f"{survey_types_with_path.tsv_dir}/tsv_output"
+        full_dest_path = context.solid_config["destination_gcs_path"]
 
-        tsvBucketWithPrefix = parse_gs_path(tsv_dir)
-        destBucketWithPrefix = parse_gs_path(upload_dir)
+        source_bucket_with_prefix = parse_gs_path(tsv_dir)
+        dest_bucket_with_prefix = parse_gs_path(full_dest_path)
 
-        outfilePrefix = f"{tsvBucketWithPrefix.prefix}/{survey}.tsv"
-        destOutfilePrefix = f"{destBucketWithPrefix.prefix}/{survey}.tsv"
+        context.log.info(f"Uploading {survey} data files to {full_dest_path}")
+        source_prefix = f"{source_bucket_with_prefix.prefix}/{survey}.tsv"
+        dest_prefix = f"{dest_bucket_with_prefix.prefix}/{survey}.tsv"
+        new_blob = _copy_file(
+            source_bucket_name=source_bucket_with_prefix.bucket,
+            source_prefix=source_prefix,
+            dest_bucket_name=dest_bucket_with_prefix.bucket,
+            dest_prefix=dest_prefix,
+            storage_client=storage_client
+        )
+        context.log.info(f"{new_blob.name} successfully uploaded ({new_blob.size} bytes).")
 
-        source_bucket = storage_client.get_bucket(tsvBucketWithPrefix.bucket)
-        dest_bucket = storage_client.get_bucket(destBucketWithPrefix.bucket)
-
-        blob = source_bucket.get_blob(outfilePrefix)
-        if not blob.size:
-            raise Failure(f"Error; No {survey} files found in {tsv_dir}")
-
-        context.log.info(f"Uploading {survey} data files to {upload_dir}")
-        new_blob = source_bucket.copy_blob(blob, dest_bucket, destOutfilePrefix)
-        new_blob.acl.save(blob.acl)
-        if not new_blob.size:
-            raise Failure(f"ERROR uploading {survey} data files to {upload_dir}.")
+        date_suffix = datetime.now().strftime("%m%d%Y")
+        dest_dated_prefix = f"{dest_bucket_with_prefix.prefix}/{survey}_{date_suffix}.tsv"
+        new_blob = _copy_file(
+            source_bucket_name=source_bucket_with_prefix.bucket,
+            source_prefix=source_prefix,
+            dest_bucket_name=dest_bucket_with_prefix.bucket,
+            dest_prefix=dest_dated_prefix,
+            storage_client=storage_client
+        )
         context.log.info(f"{new_blob.name} successfully uploaded ({new_blob.size} bytes).")
