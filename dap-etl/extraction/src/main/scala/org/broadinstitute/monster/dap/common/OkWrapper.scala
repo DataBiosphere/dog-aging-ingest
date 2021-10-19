@@ -27,6 +27,19 @@ class OkWrapper extends HttpWrapper {
           logger.info(s)
         }
       }).setLevel(Level.HEADERS))
+      .addInterceptor(new Interceptor() {
+
+        override def intercept(chain: Interceptor.Chain): Response = {
+          val request = chain.request()
+          val t1 = System.nanoTime
+          val response = chain.proceed(request)
+
+          val t2 = System.nanoTime
+          logger.info(s"Received response for ${response.request.url} in ${(t2 - t1) / 1e6d} ms")
+
+          response
+        }
+      })
       .build()
 
   def makeRequest(request: Request): Future[Msg] = {
