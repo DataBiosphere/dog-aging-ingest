@@ -26,5 +26,5 @@ def repositories() -> list[PipelineDefinition]:
             "gcs": google_storage_client,
             "slack_client": console_slack_client
         },
-        executor_def=in_process_executor)
+            executor_def=in_process_executor)
     ]
