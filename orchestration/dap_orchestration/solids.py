@@ -1,11 +1,13 @@
-from typing import Any, Union
+from datetime import datetime
+from typing import Union
 
 from google.cloud.storage.client import Client
 from google.cloud.storage.blob import Blob
-from dagster import Bool, Failure, String, solid, configured, InputDefinition, Nothing
+from dagster import Bool, Failure, String, solid, configured, InputDefinition, Nothing, Noneable
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
 from dagster_utils.contrib.google import parse_gs_path
-from datetime import datetime
+from google.cloud.storage.blob import Blob
+from google.cloud.storage.client import Client
 
 from dap_orchestration.types import DapSurveyType, FanInResultsWithTsvDir
 
@@ -13,30 +15,6 @@ extract_project = "dog-aging-hles-extraction"
 transform_project = "dog-aging-hles-transformation"
 class_prefix = "org.broadinstitute.monster.dap"
 terra_surveys = {"sample"}
-
-
-@solid(required_resource_keys={"slack_client"})
-def send_pipeline_start_notification(context: AbstractComputeExecutionContext) -> None:
-    message = [
-        "Dog Aging Pipeline starting",
-        f"Name = {context.pipeline_def.name}",
-        f"Run ID = {context.run_id}"
-    ]
-    context.resources.slack_client.send_message("\n".join(message))
-
-
-@solid(
-    required_resource_keys={"slack_client"},
-    input_defs=[InputDefinition("ignore1"), InputDefinition("ignore2")]
-)
-def send_pipeline_finish_notification(
-        context: AbstractComputeExecutionContext, ignore1: Any, ignore2: Any) -> None:
-    message = [
-        "Dog Aging Pipeline finished",
-        f"Name = {context.pipeline_def.name}"
-        f"Run ID = {context.run_id}"
-    ]
-    context.resources.slack_client.send_message("\n".join(message))
 
 
 def check_date_format(input_date: str) -> String:
@@ -53,6 +31,7 @@ def check_date_format(input_date: str) -> String:
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
+        "start_time": Noneable(String),
         "output_prefix": String,
         "target_class": String,
         "scala_project": String,
@@ -72,6 +51,9 @@ def base_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyT
         "apiToken": context.resources.api_token.base_api_token,
     }
 
+    if context.solid_config["start_time"]:
+        arg_dict["startTime"] = check_date_format(context.solid_config["start_time"])
+
     context.resources.extract_beam_runner.run(arg_dict,
                                               target_class=context.solid_config["target_class"],
                                               scala_project=context.solid_config["scala_project"],
@@ -88,6 +70,7 @@ def _build_extract_config(config: dict[str, str], output_prefix: str,
         "pull_data_dictionaries": config["pull_data_dictionaries"],
         "output_prefix": output_prefix,
         "end_time": config["end_time"],
+        "start_time": config["start_time"],
         "target_class": target_class,
         "scala_project": scala_project,
         "dap_survey_type": dap_survey_type
@@ -98,7 +81,8 @@ def _build_extract_config(config: dict[str, str], output_prefix: str,
     base_extract_records,
     config_schema={
         "pull_data_dictionaries": Bool,
-        "end_time": String
+        "end_time": String,
+        "start_time": Noneable(String)
     }
 )
 def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
@@ -116,6 +100,7 @@ def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
+        "start_time": Noneable(String)
     }
 )
 def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
@@ -133,6 +118,7 @@ def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
+        "start_time": Noneable(String)
     },
     input_defs=[InputDefinition("ignore", Nothing)]
 )
@@ -142,8 +128,10 @@ def env_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyTy
         "outputPrefix": f"{context.resources.refresh_directory}/raw",
         "endTime": check_date_format(context.solid_config["end_time"]),
         "apiToken": context.resources.api_token.env_api_token,
-
     }
+    if context.solid_config["start_time"]:
+        arg_dict["startTime"] = check_date_format(context.solid_config["start_time"])
+
     context.resources.extract_beam_runner.run(arg_dict,
                                               target_class=f"{class_prefix}.environment.EnvironmentExtractionPipeline",
                                               scala_project=extract_project,
@@ -156,7 +144,8 @@ def env_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyTy
     base_extract_records,
     config_schema={
         "pull_data_dictionaries": Bool,
-        "end_time": String
+        "end_time": String,
+        "start_time": Noneable(String)
     }
 )
 def sample_extract_records(config: dict[str, str]) -> dict[str, str]:
@@ -174,6 +163,7 @@ def sample_extract_records(config: dict[str, str]) -> dict[str, str]:
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
+        "start_time": Noneable(String)
     }
 )
 def eols_extract_records(config: dict[str, str]) -> dict[str, str]:
