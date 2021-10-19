@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Any, Optional
 
 from dagster import file_relative_path, PipelineRunStatus, PipelineRun
 from dagster.utils import load_yaml_from_globs
@@ -15,7 +16,7 @@ def config_path(relative_path: str) -> str:
     return path
 
 
-def _slack_config() -> dict[str, object]:
+def _slack_config() -> Any:
     return load_yaml_from_globs(config_path("resources/live_slack_client/global.yaml"))
 
 
@@ -23,7 +24,7 @@ def _slack_channel() -> str:
     return str(_slack_config()["channel"])
 
 
-def _slack_token() -> str:
+def _slack_token() -> Optional[str]:
     return os.getenv(_slack_config()["token"]["env"])
 
 
@@ -36,16 +37,16 @@ def build_pipeline_failure_sensor() -> pipeline_failure_sensor:
 
 
 @run_status_sensor(pipeline_run_status=PipelineRunStatus.STARTED)
-def slack_on_pipeline_start(context: RunStatusSensorContext):
+def slack_on_pipeline_start(context: RunStatusSensorContext) -> None:
     _slack_on_pipeline_status(context.pipeline_run, PipelineRunStatus.STARTED)
 
 
 @run_status_sensor(pipeline_run_status=PipelineRunStatus.SUCCESS)
-def slack_on_pipeline_success(context: RunStatusSensorContext):
+def slack_on_pipeline_success(context: RunStatusSensorContext) -> None:
     _slack_on_pipeline_status(context.pipeline_run, PipelineRunStatus.SUCCESS)
 
 
-def _slack_on_pipeline_status(pipeline_run: PipelineRun, status: PipelineRunStatus):
+def _slack_on_pipeline_status(pipeline_run: PipelineRun, status: PipelineRunStatus) -> None:
     slack_token = _slack_token()
     channel = _slack_channel()
 
