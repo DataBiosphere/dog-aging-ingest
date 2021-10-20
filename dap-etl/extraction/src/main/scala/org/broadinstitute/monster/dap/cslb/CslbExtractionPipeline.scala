@@ -69,7 +69,7 @@ object CslbExtractionPipeline extends ScioApp[Args] {
       extractionArmsGenerator,
       fieldList,
       subdir,
-      100,
+      1000,
       RedCapClient.apply(_: List[String], wrapper)
     )
 

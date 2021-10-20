@@ -15,7 +15,6 @@ import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
 object ExtractionPipelineBuilder {
-
   val MaxConcurrentRequests = 4
 }
 
