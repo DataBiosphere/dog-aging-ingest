@@ -391,6 +391,9 @@ def clear_dir(output_prefix: str, gcs: Client) -> int:
         # todo support local deletions
         return 0
 
+    if output_prefix.endswith("/"):
+        raise Failure("Output dir must not end with '/'")
+
     bucket_with_prefix = parse_gs_path(output_prefix)
     blobs = gcs.list_blobs(bucket_with_prefix.bucket, prefix=f"{bucket_with_prefix.prefix}/")
     deletions_count = 0
