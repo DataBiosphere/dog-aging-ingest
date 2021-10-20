@@ -63,7 +63,7 @@ object HLESExtractionPipeline extends ScioApp[Args] {
       (_, _) => List(arm),
       fieldList,
       subdir,
-      100,
+      1000,
       RedCapClient.apply(_: List[String], wrapper)
     )
 

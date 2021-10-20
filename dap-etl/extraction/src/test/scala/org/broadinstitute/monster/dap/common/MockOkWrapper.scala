@@ -23,13 +23,40 @@ class MockOkWrapper(
   }
 
   // Checks that form bodies have the same number of values and that the values are identical.
-  // This functions assumes that form fields are ordered deterministically, which may not be true.
   def formBodiesMatch(firstBody: FormBody, secondBody: FormBody): Boolean = {
+    // the ordering of records in a request is non-deterministic, so we convert the non-record fields to a map
+    // then extract the record IDs to sets and compare
+    val firstMap: Map[String, String] = Range(0, firstBody.size)
+      .filter(index => !firstBody.name(index).contains("record"))
+      .map(index => {
+        secondBody.name(index) -> secondBody.value(index)
+      })
+      .toMap
+
+    val secondMap: Map[String, String] = Range(0, secondBody.size)
+      .filter(index => !secondBody.name(index).contains("record"))
+      .map(index => {
+        secondBody.name(index) -> secondBody.value(index)
+      })
+      .toMap
+
+    val firstRecordsSet: Set[String] = Range(0, firstBody.size)
+      .filter(index => firstBody.name(index).contains("record"))
+      .map(index => {
+        firstBody.value(index)
+      })
+      .toSet
+
+    val secondRecordsSet: Set[String] = Range(0, secondBody.size)
+      .filter(index => secondBody.name(index).contains("record"))
+      .map(index => {
+        secondBody.value(index)
+      })
+      .toSet
+
     firstBody.size == secondBody.size &&
-    Range(0, firstBody.size).forall(index => {
-      firstBody.name(index).equals(secondBody.name(index)) &&
-        firstBody.value(index).equals(secondBody.value(index))
-    })
+    firstMap == secondMap &&
+    firstRecordsSet == secondRecordsSet
   }
 
   def makeRequest(request: Request): Future[Msg] = {
