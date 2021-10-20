@@ -91,6 +91,7 @@ class ExtractionPipelineBuilder(
           kv.getValue.fold(throw _, _.arr.map(_.read[String]("value")))
         }
       }
+      .distinct
 
     idsToExtract.count.map(cnt => logger.info(s"Will pull ${cnt} records"))
 
