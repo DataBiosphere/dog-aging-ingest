@@ -15,6 +15,7 @@ class OkWrapper extends HttpWrapper {
   /** Timeout to use for all requests to production RedCap. */
   private val timeout = Duration.ofSeconds(300)
   private val logger = LoggerFactory.getLogger(getClass)
+  private val MAX_RETRIES = 3
 
   /** Construct a client instance backed by the production RedCap instance. */
   def client =
@@ -45,7 +46,7 @@ class OkWrapper extends HttpWrapper {
         val request = chain.request()
         var response = chain.proceed(request)
         var tryCount = 0
-        while (!response.isSuccessful && tryCount < 3) {
+        while (!response.isSuccessful && tryCount < MAX_RETRIES) {
           logger.warn(s"Unsuccessful response, retrying [url=${request.url()}, code=${response.code()}, try=${tryCount}]")
           tryCount += 1
           response = chain.proceed(request)
