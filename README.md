@@ -168,7 +168,7 @@ parse a proto-schema provided by DAP into usable code for ingest in the form of 
 
 
 #### Creating Outfiles 
-The DAP ingest's long term roadmap includes a TDR<->Workspace integration. Until that is integration is live...
+The DAP ingest's long term roadmap includes a TDR<->Workspace integration.
 Until that integration is live, we've written a [script](./hack/convert-output-to-tsv.py) to convert
 the outputs of our transformation pipeline into workspace-compatible TSVs. 
 The script takes two positional arguments:
@@ -181,10 +181,6 @@ There are additional arguments to that script to add some flexibility to the too
 * Call Format:
     * `python convert-output-to-tsv.py {transform GS path} {tsv outfile local path} -d`
     * `python convert-output-to-tsv.py gs://example-bucket/weekly_refresh/20210525/transform /Users/DATA/DAP/tsv -d`
-
-#### Validation
-We have a set of validation tests that we run to QA new TSVs. These validation tests are used to look for specific data
-issues that were discovered in creating the curated 2020 refresh in coordination with the DAP team.
 
 ## Refreshing Data
 ### Running the pipelines on GCS
