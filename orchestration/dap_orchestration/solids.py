@@ -325,7 +325,6 @@ def _copy_file(source_bucket_name: str, source_prefix: str, dest_bucket_name: st
         raise Failure(f"Could not find {blob.name}")
 
     new_blob = source_bucket.copy_blob(blob, dest_bucket, dest_prefix)
-    new_blob.acl.save(blob.acl)
     if not new_blob.size:
         raise Failure(f"ERROR uploading data files to {dest_bucket_name}/{dest_prefix}.")
 
