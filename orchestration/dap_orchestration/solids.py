@@ -1,44 +1,74 @@
+from datetime import datetime
 from typing import Union
 
-from dagster import Bool, Failure, String, solid, configured, InputDefinition, Any, Tuple, OutputDefinition
+from dagster import Bool, Failure, String, solid, configured, InputDefinition, Nothing, Noneable
 from dagster.core.execution.context.compute import AbstractComputeExecutionContext
-from dagster_utils.contrib.google import gs_path_from_bucket_prefix, parse_gs_path, path_has_any_data
+from dagster_utils.contrib.google import parse_gs_path
+from google.cloud.storage.blob import Blob
+from google.cloud.storage.client import Client
+
 from dap_orchestration.types import DapSurveyType, FanInResultsWithTsvDir
 
 extract_project = "dog-aging-hles-extraction"
 transform_project = "dog-aging-hles-transformation"
 class_prefix = "org.broadinstitute.monster.dap"
+terra_surveys = {"sample"}
+
+
+def check_date_format(input_date: str) -> String:
+    format = "%Y-%m-%dT%H:%M:%S%z"
+    try:
+        datetime.strptime(input_date, format)
+        return input_date
+    except ValueError:
+        raise Failure(f"{input_date} should be in the following format: '{format}'")
 
 
 @solid(
-    required_resource_keys={"extract_beam_runner", "refresh_directory", "api_token"},
+    required_resource_keys={"extract_beam_runner", "refresh_directory", "api_token", "gcs"},
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
+        "start_time": Noneable(String),
         "output_prefix": String,
         "target_class": String,
         "scala_project": String,
         "dap_survey_type": String
-    }
+    },
+    input_defs=[InputDefinition("ignore", Nothing)]
 )
 def base_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyType:
     """
     This solid will take in the arguments provided in context and run the sbt extraction code
     for the predefined pipeline (HLES, CSLB, ENVIRONMENT, Sample, EOLS) using the specified runner.
     """
+    output_prefix = f"{context.resources.refresh_directory}/{context.solid_config['output_prefix']}"
+
+    # clear out the dataflow output subdirectory so we don't run the risk of the outputs from two runs being
+    # ingested
+    survey_type = context.solid_config['dap_survey_type']
+    dir_to_clear = f"{output_prefix}/{survey_type}"
+    context.log.info(f"Clearing output directory [path={dir_to_clear}]")
+    clear_dir(dir_to_clear, context.resources.gcs)
+
     arg_dict = {
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
-        "outputPrefix": f"{context.resources.refresh_directory}/{context.solid_config['output_prefix']}",
-        "endTime": context.solid_config["end_time"],
+        "outputPrefix": output_prefix,
+        "endTime": check_date_format(context.solid_config["end_time"]),
         "apiToken": context.resources.api_token.base_api_token,
     }
 
-    context.resources.extract_beam_runner.run(arg_dict,
-                                              target_class=context.solid_config["target_class"],
-                                              scala_project=context.solid_config["scala_project"],
-                                              command=[
-                                                  f"/app/bin/{context.solid_config['dap_survey_type']}-extraction-pipeline"]
-                                              )
+    if context.solid_config["start_time"]:
+        arg_dict["startTime"] = check_date_format(context.solid_config["start_time"])
+
+    context.resources.extract_beam_runner.run(
+        arg_dict,
+        target_class=context.solid_config["target_class"],
+        scala_project=context.solid_config["scala_project"],
+        command=[
+            f"/app/bin/{survey_type}-extraction-pipeline"
+        ]
+    )
 
     return DapSurveyType(context.solid_config["dap_survey_type"])
 
@@ -49,6 +79,7 @@ def _build_extract_config(config: dict[str, str], output_prefix: str,
         "pull_data_dictionaries": config["pull_data_dictionaries"],
         "output_prefix": output_prefix,
         "end_time": config["end_time"],
+        "start_time": config["start_time"],
         "target_class": target_class,
         "scala_project": scala_project,
         "dap_survey_type": dap_survey_type
@@ -59,7 +90,8 @@ def _build_extract_config(config: dict[str, str], output_prefix: str,
     base_extract_records,
     config_schema={
         "pull_data_dictionaries": Bool,
-        "end_time": String
+        "end_time": String,
+        "start_time": Noneable(String)
     }
 )
 def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
@@ -77,6 +109,7 @@ def hles_extract_records(config: dict[str, str]) -> dict[str, str]:
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
+        "start_time": Noneable(String)
     }
 )
 def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
@@ -90,20 +123,32 @@ def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
 
 
 @solid(
-    required_resource_keys={"extract_beam_runner", "refresh_directory", "api_token"},
+    required_resource_keys={"extract_beam_runner", "refresh_directory", "api_token", "gcs"},
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
-    }
+        "start_time": Noneable(String)
+    },
+    input_defs=[InputDefinition("ignore", Nothing)]
 )
 def env_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyType:
+    output_prefix = f"{context.resources.refresh_directory}/raw"
+
+    # clear out the dataflow output subdirectory so we don't run the risk of the outputs from two runs being
+    # ingested
+    dir_to_clear = f"{output_prefix}/environment"
+    context.log.info(f"Clearing output directory [path={dir_to_clear}]")
+    clear_dir(dir_to_clear, context.resources.gcs)
+
     arg_dict = {
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
-        "outputPrefix": f"{context.resources.refresh_directory}/raw",
-        "endTime": context.solid_config["end_time"],
+        "outputPrefix": output_prefix,
+        "endTime": check_date_format(context.solid_config["end_time"]),
         "apiToken": context.resources.api_token.env_api_token,
-
     }
+    if context.solid_config["start_time"]:
+        arg_dict["startTime"] = check_date_format(context.solid_config["start_time"])
+
     context.resources.extract_beam_runner.run(arg_dict,
                                               target_class=f"{class_prefix}.environment.EnvironmentExtractionPipeline",
                                               scala_project=extract_project,
@@ -116,7 +161,8 @@ def env_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyTy
     base_extract_records,
     config_schema={
         "pull_data_dictionaries": Bool,
-        "end_time": String
+        "end_time": String,
+        "start_time": Noneable(String)
     }
 )
 def sample_extract_records(config: dict[str, str]) -> dict[str, str]:
@@ -134,6 +180,7 @@ def sample_extract_records(config: dict[str, str]) -> dict[str, str]:
     config_schema={
         "pull_data_dictionaries": Bool,
         "end_time": String,
+        "start_time": Noneable(String)
     }
 )
 def eols_extract_records(config: dict[str, str]) -> dict[str, str]:
@@ -147,7 +194,7 @@ def eols_extract_records(config: dict[str, str]) -> dict[str, str]:
 
 
 @solid(
-    required_resource_keys={"transform_beam_runner", "refresh_directory"},
+    required_resource_keys={"transform_beam_runner", "refresh_directory", "gcs"},
     config_schema={
         "output_prefix": String,
         "target_class": String,
@@ -160,15 +207,24 @@ def transform_records(context: AbstractComputeExecutionContext, dap_survey_type:
     This solid will take in the arguments provided in context and run the sbt transformation code
     for the predefined pipeline (HLES, CSLB, or ENVIORONMENT) using the specified runner.
     """
+    output_prefix = f'{context.resources.refresh_directory}/{context.solid_config["output_prefix"]}'
+
+    # clear out the dataflow output subdirectory so we don't run the risk of the outputs from two runs being
+    # ingested
+    dir_to_clear = f"{output_prefix}/{dap_survey_type}"
+    context.log.info(f"Clearing output directory [path={dir_to_clear}]")
+    clear_dir(dir_to_clear, context.resources.gcs)
+
     arg_dict = {
         "inputPrefix": f'{context.resources.refresh_directory}/raw/{dap_survey_type}',
-        "outputPrefix": f'{context.resources.refresh_directory}/{context.solid_config["output_prefix"]}',
+        "outputPrefix": output_prefix
     }
-    context.resources.transform_beam_runner.run(arg_dict,
-                                                target_class=context.solid_config["target_class"],
-                                                scala_project=context.solid_config["scala_project"],
-                                                command=[f"/app/bin/{dap_survey_type}-transformation-pipeline"]
-                                                )
+    context.resources.transform_beam_runner.run(
+        arg_dict,
+        target_class=context.solid_config["target_class"],
+        scala_project=context.solid_config["scala_project"],
+        command=[f"/app/bin/{dap_survey_type}-transformation-pipeline"]
+    )
 
     return dap_survey_type
 
@@ -266,11 +322,27 @@ def write_outfiles_in_tsv_format(config: dict[str, str]) -> dict[str, Union[str,
 
 @configured(write_outfiles, config_schema={"output_dir": str})
 def write_outfiles_in_terra_format(config: dict[str, str]) -> dict[str, Union[str, bool]]:
-
     return {
         "output_dir": config["output_dir"],
         "output_in_firecloud_format": True
     }
+
+
+def _copy_file(source_bucket_name: str, source_prefix: str, dest_bucket_name: str,
+               dest_prefix: str, storage_client: Client) -> Blob:
+    source_bucket = storage_client.get_bucket(source_bucket_name)
+    dest_bucket = storage_client.get_bucket(dest_bucket_name)
+
+    blob = source_bucket.get_blob(source_prefix)
+    if not blob.size:
+        raise Failure(f"Could not find {blob.name}")
+
+    new_blob = source_bucket.copy_blob(blob, dest_bucket, dest_prefix)
+    new_blob.acl.save(blob.acl)
+    if not new_blob.size:
+        raise Failure(f"ERROR uploading data files to {dest_bucket_name}/{dest_prefix}.")
+
+    return new_blob
 
 
 @solid(
@@ -280,38 +352,65 @@ def write_outfiles_in_terra_format(config: dict[str, str]) -> dict[str, Union[st
     }
 )
 def copy_outfiles_to_terra(
-    context: AbstractComputeExecutionContext,
-    surveyTypesWithTsvDir: FanInResultsWithTsvDir
+        context: AbstractComputeExecutionContext,
+        survey_types_with_path: FanInResultsWithTsvDir
 ) -> None:
     """
     This solid will copy the tsvs created from write_outfiles to the provided GCS bucket. The script
-    will check that the file exists before uploading it and will error if it does not exist.
+    will check that the file exists before uploading it and will error if it does not exist. This only copies those
+    surveys that are allow-listed in the terra_surveys constant.
 
     NOTE: The fan_in_results param allows to introduce a fan-in dependency from the upstream write_outfiles
     solid and is used to iterate through TSV uploads for the surveys being refreshed.
-    # todo: handle having to upload with a different name as well? - sample.tsv + sample_MMDDYYYY.tsv
     """
-    for survey in surveyTypesWithTsvDir.fan_in_results:
+    for survey in survey_types_with_path.fan_in_results:
+        if survey not in terra_surveys:
+            context.log.info(f"Skipping copy survey to terra [survey_type={survey}]")
+            continue
+
         storage_client = context.resources.gcs
-        tsv_dir = f"{surveyTypesWithTsvDir.tsv_dir}/tsv_output"
-        upload_dir = context.solid_config["destination_gcs_path"]
+        tsv_dir = f"{survey_types_with_path.tsv_dir}/tsv_output"
+        full_dest_path = context.solid_config["destination_gcs_path"]
 
-        tsvBucketWithPrefix = parse_gs_path(tsv_dir)
-        destBucketWithPrefix = parse_gs_path(upload_dir)
+        source_bucket_with_prefix = parse_gs_path(tsv_dir)
+        dest_bucket_with_prefix = parse_gs_path(full_dest_path)
 
-        outfilePrefix = f"{tsvBucketWithPrefix.prefix}/{survey}.tsv"
-        destOutfilePrefix = f"{destBucketWithPrefix.prefix}/{survey}.tsv"
-
-        source_bucket = storage_client.get_bucket(tsvBucketWithPrefix.bucket)
-        dest_bucket = storage_client.get_bucket(destBucketWithPrefix.bucket)
-
-        blob = source_bucket.get_blob(outfilePrefix)
-        if not blob.size:
-            raise Failure(f"Error; No {survey} files found in {tsv_dir}")
-
-        context.log.info(f"Uploading {survey} data files to {upload_dir}")
-        new_blob = source_bucket.copy_blob(blob, dest_bucket, destOutfilePrefix)
-        new_blob.acl.save(blob.acl)
-        if not new_blob.size:
-            raise Failure(f"ERROR uploading {survey} data files to {upload_dir}.")
+        context.log.info(f"Uploading {survey} data files to {full_dest_path}")
+        source_prefix = f"{source_bucket_with_prefix.prefix}/{survey}.tsv"
+        dest_prefix = f"{dest_bucket_with_prefix.prefix}/{survey}.tsv"
+        new_blob = _copy_file(
+            source_bucket_name=source_bucket_with_prefix.bucket,
+            source_prefix=source_prefix,
+            dest_bucket_name=dest_bucket_with_prefix.bucket,
+            dest_prefix=dest_prefix,
+            storage_client=storage_client
+        )
         context.log.info(f"{new_blob.name} successfully uploaded ({new_blob.size} bytes).")
+
+        date_suffix = datetime.now().strftime("%m%d%Y")
+        dest_dated_prefix = f"{dest_bucket_with_prefix.prefix}/{survey}_{date_suffix}.tsv"
+        new_blob = _copy_file(
+            source_bucket_name=source_bucket_with_prefix.bucket,
+            source_prefix=source_prefix,
+            dest_bucket_name=dest_bucket_with_prefix.bucket,
+            dest_prefix=dest_dated_prefix,
+            storage_client=storage_client
+        )
+        context.log.info(f"{new_blob.name} successfully uploaded ({new_blob.size} bytes).")
+
+
+def clear_dir(output_prefix: str, gcs: Client) -> int:
+    if not output_prefix.startswith("gs://"):
+        # todo support local deletions
+        return 0
+
+    if output_prefix.endswith("/"):
+        raise Failure("Output dir must not end with '/'")
+
+    bucket_with_prefix = parse_gs_path(output_prefix)
+    blobs = gcs.list_blobs(bucket_with_prefix.bucket, prefix=f"{bucket_with_prefix.prefix}/")
+    deletions_count = 0
+    for blob in blobs:
+        blob.delete()
+        deletions_count += 1
+    return deletions_count

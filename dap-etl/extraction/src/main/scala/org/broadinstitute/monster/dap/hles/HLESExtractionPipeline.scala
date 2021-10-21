@@ -31,12 +31,7 @@ object HLESExtractionPipeline extends ScioApp[Args] {
   )
 
   def extractionFiltersGenerator(args: Args): List[FilterDirective] = {
-    val completionFilters: List[FilterDirective] = forms
-      .filterNot(_ == "study_status") // For some reason, study_status is never marked as completed.
-      // Magic marker for "completed".
-      .map(form => FilterDirective(s"${form}_complete", FilterOps.==, "2"))
     val standardDirectives: List[FilterDirective] = List(
-      FilterDirective("co_consent", FilterOps.==, "1"),
       FilterDirective("st_dap_pack_count", FilterOps.>, "0"),
       FilterDirective(
         "st_dap_pack_date",
@@ -51,7 +46,7 @@ object HLESExtractionPipeline extends ScioApp[Args] {
         )
         .getOrElse(List())
 
-    completionFilters ++ standardDirectives ++ endFilter
+    standardDirectives ++ endFilter
   }
 
   val subdir = "hles"
@@ -68,7 +63,7 @@ object HLESExtractionPipeline extends ScioApp[Args] {
       (_, _) => List(arm),
       fieldList,
       subdir,
-      100,
+      1000,
       RedCapClient.apply(_: List[String], wrapper)
     )
 

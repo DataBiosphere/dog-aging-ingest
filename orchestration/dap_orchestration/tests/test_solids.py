@@ -1,5 +1,5 @@
 import pytest
-from dagster import ModeDefinition, execute_solid, SolidExecutionResult, ResourceDefinition
+from dagster import ModeDefinition, execute_solid, Failure, SolidExecutionResult, ResourceDefinition
 from dagster_utils.resources.beam.noop_beam_runner import noop_beam_runner
 from dagster_utils.resources.google_storage import mock_storage_client
 
@@ -41,6 +41,14 @@ def extract_config():
 
 
 @pytest.fixture
+def invalid_extract_config():
+    return {
+        "pull_data_dictionaries": False,
+        "end_time": "2020-05-19T23:59:59",
+    }
+
+
+@pytest.fixture
 def outfiles_config():
     return {
         "output_dir": "/example/local_beam_runner/bar",
@@ -77,6 +85,23 @@ def test_hles_extract(extract_config, base_solid_config, mode):
     )
 
     assert result.success
+
+
+def test_invalid_date(invalid_extract_config, base_solid_config, mode):
+    hles_extract_config = {
+        "solids": {
+            "hles_extract_records": {
+                "config": invalid_extract_config
+            }
+        }
+    }
+    dataflow_config = {**base_solid_config, **hles_extract_config}
+    with pytest.raises(Failure, match="should be in the following format"):
+        execute_solid(
+            dap_orchestration.solids.hles_extract_records,
+            mode_def=mode,
+            run_config=dataflow_config
+        )
 
 
 def test_cslb_extract(extract_config, base_solid_config, mode):
@@ -184,7 +209,7 @@ def test_copy_outfiles_to_terra(base_solid_config, mode):
         dap_orchestration.solids.copy_outfiles_to_terra,
         mode_def=mode,
         run_config=dataflow_config,
-        input_values={"surveyTypesWithTsvDir": FanInResultsWithTsvDir(
+        input_values={"survey_types_with_path": FanInResultsWithTsvDir(
             [DapSurveyType("sample")], "gs://fakepath/tsv_output")}
     )
 

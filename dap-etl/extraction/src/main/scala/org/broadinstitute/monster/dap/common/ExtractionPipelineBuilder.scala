@@ -15,7 +15,6 @@ import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
 object ExtractionPipelineBuilder {
-
   val MaxConcurrentRequests = 4
 }
 
@@ -91,6 +90,7 @@ class ExtractionPipelineBuilder(
           kv.getValue.fold(throw _, _.arr.map(_.read[String]("value")))
         }
       }
+      .distinct
 
     idsToExtract.count.map(cnt => logger.info(s"Will pull ${cnt} records"))
 

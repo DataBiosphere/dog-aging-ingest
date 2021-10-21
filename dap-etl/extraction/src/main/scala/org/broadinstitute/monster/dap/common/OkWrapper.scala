@@ -27,11 +27,26 @@ class OkWrapper extends HttpWrapper {
           logger.info(s)
         }
       }).setLevel(Level.HEADERS))
-      .addInterceptor((chain: Interceptor.Chain) => {
+      .addInterceptor(new Interceptor() {
+
+        override def intercept(chain: Interceptor.Chain): Response = {
+          val request = chain.request()
+          val t1 = System.nanoTime
+          val response = chain.proceed(request)
+
+          val t2 = System.nanoTime
+          logger.info(
+            s"Received response for ${response.request.url} [timing=${(t2 - t1) / 1e6d} ms]"
+          )
+
+          response
+        }
+      }).addInterceptor((chain: Interceptor.Chain) => {
         val request = chain.request()
         var response = chain.proceed(request)
         var tryCount = 0
         while (!response.isSuccessful && tryCount < 3) {
+          logger.warn(s"Unsuccessful response, retrying [url=${request.url()}, code=${response.code()}, try=${tryCount}]")
           tryCount += 1
           response = chain.proceed(request)
         }
