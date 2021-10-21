@@ -43,8 +43,13 @@ def base_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyT
     for the predefined pipeline (HLES, CSLB, ENVIRONMENT, Sample, EOLS) using the specified runner.
     """
     output_prefix = f"{context.resources.refresh_directory}/{context.solid_config['output_prefix']}"
-    context.log.info(f"Clearing output directory [path={output_prefix}]")
-    clear_dir(output_prefix, context.resources.gcs)
+
+    # clear out the dataflow output subdirectory so we don't run the risk of the outputs from two runs being
+    # ingested
+    survey_type = context.solid_config['dap_survey_type']
+    dir_to_clear = f"{output_prefix}/{survey_type}"
+    context.log.info(f"Clearing output directory [path={dir_to_clear}]")
+    clear_dir(dir_to_clear, context.resources.gcs)
 
     arg_dict = {
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
@@ -61,7 +66,7 @@ def base_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyT
         target_class=context.solid_config["target_class"],
         scala_project=context.solid_config["scala_project"],
         command=[
-            f"/app/bin/{context.solid_config['dap_survey_type']}-extraction-pipeline"
+            f"/app/bin/{survey_type}-extraction-pipeline"
         ]
     )
 
@@ -128,8 +133,12 @@ def cslb_extract_records(config: dict[str, str]) -> dict[str, str]:
 )
 def env_extract_records(context: AbstractComputeExecutionContext) -> DapSurveyType:
     output_prefix = f"{context.resources.refresh_directory}/raw"
-    context.log.info(f"Clearing output directory [path={output_prefix}]")
-    clear_dir(output_prefix, context.resources.gcs)
+
+    # clear out the dataflow output subdirectory so we don't run the risk of the outputs from two runs being
+    # ingested
+    dir_to_clear = f"{output_prefix}/environment"
+    context.log.info(f"Clearing output directory [path={dir_to_clear}]")
+    clear_dir(dir_to_clear, context.resources.gcs)
 
     arg_dict = {
         "pullDataDictionaries": "true" if context.solid_config["pull_data_dictionaries"] else "false",
@@ -199,8 +208,12 @@ def transform_records(context: AbstractComputeExecutionContext, dap_survey_type:
     for the predefined pipeline (HLES, CSLB, or ENVIORONMENT) using the specified runner.
     """
     output_prefix = f'{context.resources.refresh_directory}/{context.solid_config["output_prefix"]}'
-    context.log.info(f"Clearing output directory [path={output_prefix}]")
-    clear_dir(output_prefix, context.resources.gcs)
+
+    # clear out the dataflow output subdirectory so we don't run the risk of the outputs from two runs being
+    # ingested
+    dir_to_clear = f"{output_prefix}/{dap_survey_type}"
+    context.log.info(f"Clearing output directory [path={dir_to_clear}]")
+    clear_dir(dir_to_clear, context.resources.gcs)
 
     arg_dict = {
         "inputPrefix": f'{context.resources.refresh_directory}/raw/{dap_survey_type}',
