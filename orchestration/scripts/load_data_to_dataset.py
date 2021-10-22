@@ -1,3 +1,9 @@
+"""
+Utility that will load data from a DAP refresh GS path to a TDR dataset. This script will remove any existing rows
+in the dataset and upload the data to simulate an upsert semantic. Additionally, this script is capable of creating
+a snapshot from a dataset.
+"""
+
 import argparse
 import sys
 from datetime import datetime
