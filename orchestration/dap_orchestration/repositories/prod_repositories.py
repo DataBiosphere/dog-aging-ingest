@@ -29,9 +29,8 @@ def build_refresh_data_all_job(name: str) -> PipelineDefinition:
     )
 
 
-# TODO run once a week
 @schedule(
-    cron_schedule="0 4 * * *",
+    cron_schedule="0 4 * * 1",
     job=build_refresh_data_all_job("weekly_data_refresh"),
     execution_timezone="US/Eastern"
 )
