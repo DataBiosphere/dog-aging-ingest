@@ -9,7 +9,9 @@ from dagster_utils.contrib.google import default_google_access_token
 from data_repo_client import ApiClient, Configuration, RepositoryApi, DatasetModel, DataDeletionRequest, ApiException, \
     SnapshotRequestModel, SnapshotRequestContentsModel, PolicyMemberRequest
 
-TABLES = {"cslb", "environment", "eols", "hles_cancer_condition", "hles_dog", "hles_health_condition", "hles_owner", "sample"}
+TABLES = {"cslb", "environment", "eols", "hles_cancer_condition", "hles_dog", "hles_health_condition", "hles_owner",
+          "sample"}
+
 
 def _build_base_api_client() -> ApiClient:
     # create API client
@@ -70,7 +72,12 @@ def _find_outdated_rows(dataset: DatasetModel, table_name: str, extraction_path:
         print(response)
         sys.exit(1)
 
-def _load_new_rows(dataset: DatasetModel, table_name: str, load_path: str, load_tag: str, data_repo_client: RepositoryApi):
+
+def _load_new_rows(
+    dataset: DatasetModel,
+        table_name: str,
+    load_path: str, load_tag: str,
+        data_repo_client: RepositoryApi):
     payload = {
         "format": "json",
         "ignore_unknown_values": False,
@@ -121,10 +128,13 @@ def run(gs_path: str, dataset_id: str):
     dataset: DatasetModel = data_repo_client.retrieve_dataset(id=dataset_id)
 
     for table in TABLES:
-        _find_outdated_rows(dataset, table, f"gs://broad-dsp-monster-dap-prod-temp-storage/tdr_loads/{load_tag}/soft_deletes", data_repo_client)
+        _find_outdated_rows(dataset, table,
+                            f"gs://broad-dsp-monster-dap-prod-temp-storage/tdr_loads/{load_tag}/soft_deletes",
+                            data_repo_client)
         _load_new_rows(dataset, table, f"{gs_path}/transform", load_tag, data_repo_client)
 
     _snapshot_data(dataset, load_tag, data_repo_client)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
