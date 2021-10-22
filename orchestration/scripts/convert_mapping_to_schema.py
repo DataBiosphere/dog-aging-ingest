@@ -80,18 +80,18 @@ def render_schema_fragment(fragment: str, fields: list[JadeColumn], table_name: 
 
 def render_general_fragment(general_fragment, table_fragments: Iterable[str], table_name: str):
     dog_id_field = {
-      "name": "dog_id",
-      "datatype": "integer",
-      "type": "primary_key",
-      "links": [
-        {
-          "table_name": "hles_dog",
-          "column_name": "dog_id"
-        }
-      ]
+        "name": "dog_id",
+        "datatype": "integer",
+        "type": "primary_key",
+        "links": [
+            {
+                "table_name": "hles_dog",
+                "column_name": "dog_id"
+            }
+        ]
     }
     schema = render_schema_fragment(TDR_FRAGMENT_GENERAL, general_fragment, table_name)
-    schema["columns"].insert(0,dog_id_field)
+    schema["columns"].insert(0, dog_id_field)
     schema["table_fragments"] = list(table_fragments)
 
     return schema
@@ -105,7 +105,9 @@ def render_schemas(fragments: dict[str, list[JadeColumn]], table_name: str, outp
         with open(f"{output_path}/{table_name}_{fragment}.fragment.json", "w") as f:
             f.write(rendered_json)
 
-    general_schema = render_general_fragment(general_fragment, [f"{table_name}_{key}" for key in fragments.keys()], table_name)
+    general_schema = render_general_fragment(
+        general_fragment, [
+            f"{table_name}_{key}" for key in fragments.keys()], table_name)
     with open(f"{output_path}/{table_name}.table.json", "w") as f:
         f.write(json.dumps(general_schema, indent=4))
 
