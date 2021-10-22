@@ -2,34 +2,46 @@ import argparse
 import sys
 from datetime import datetime
 
-from google.cloud.bigquery import Client
-
 from dagster_utils.contrib.data_repo.jobs import poll_job, JobFailureException
 from dagster_utils.contrib.google import default_google_access_token
-from data_repo_client import ApiClient, Configuration, RepositoryApi, DatasetModel, DataDeletionRequest, ApiException, \
+from data_repo_client import ApiClient, Configuration, RepositoryApi, DatasetModel, DataDeletionRequest, \
     SnapshotRequestModel, SnapshotRequestContentsModel, PolicyMemberRequest
+from google.cloud.bigquery import Client
 
-TABLES = {"cslb", "environment", "eols", "hles_cancer_condition", "hles_dog", "hles_health_condition", "hles_owner",
-          "sample"}
+TABLES = {
+    "cslb",
+    "environment",
+    "eols",
+    "hles_cancer_condition",
+    "hles_dog",
+    "hles_health_condition",
+    "hles_owner",
+    "sample"
+}
 
 
-def _build_base_api_client() -> ApiClient:
+def _get_api_client() -> RepositoryApi:
     # create API client
     config = Configuration(host="https://data.terra.bio")
     config.access_token = default_google_access_token()
     client = ApiClient(configuration=config)
     client.client_side_validation = False
 
-    return client
+    return RepositoryApi(api_client=client)
 
 
-def _get_api_client() -> RepositoryApi:
-    return RepositoryApi(api_client=_build_base_api_client())
-
-
-def _find_outdated_rows(dataset: DatasetModel, table_name: str, extraction_path: str, data_repo_client: RepositoryApi):
+def _remove_outdated_rows(dataset: DatasetModel, table_name: str,
+                          extraction_path: str, data_repo_client: RepositoryApi):
     out_path = f"{extraction_path}/{table_name}/*"
     client = Client()
+    cnt_query = f"""
+    SELECT COUNT(*) as cnt FROM `{dataset.data_project}.datarepo_{dataset.name}.{table_name}`
+    """
+    cnt_result = client.query(cnt_query).result()
+    if not any([row['cnt'] > 0 for row in cnt_result]):
+        print(f"No rows to soft delete for {table_name}")
+        return
+
     query = f"""
      EXPORT DATA OPTIONS(
         uri='{out_path}',
@@ -40,10 +52,7 @@ def _find_outdated_rows(dataset: DatasetModel, table_name: str, extraction_path:
     """
 
     print(f"Pulling rows for {table_name} to {out_path}")
-    result = client.query(query).result()
-    if result.total_rows == 0:
-        print(f"No rows to soft delete for {table_name}")
-        return
+    client.query(query).result()
 
     print(f"Submitting soft delete for {table_name}")
     response = data_repo_client.apply_dataset_data_deletion(
@@ -75,9 +84,10 @@ def _find_outdated_rows(dataset: DatasetModel, table_name: str, extraction_path:
 
 def _load_new_rows(
     dataset: DatasetModel,
-        table_name: str,
+    table_name: str,
     load_path: str, load_tag: str,
-        data_repo_client: RepositoryApi):
+    data_repo_client: RepositoryApi
+):
     payload = {
         "format": "json",
         "ignore_unknown_values": False,
@@ -96,7 +106,7 @@ def _load_new_rows(
     poll_job(response.id, 300, 2, data_repo_client)
 
 
-def _snapshot_data(dataset: DatasetModel, load_tag: str, data_repo_client: RepositoryApi):
+def _create_snapshot(dataset: DatasetModel, load_tag: str, data_repo_client: RepositoryApi) -> str:
     snapshot_request = SnapshotRequestModel(
         name=load_tag,
         profile_id=dataset.default_profile_id,
@@ -121,25 +131,59 @@ def _snapshot_data(dataset: DatasetModel, load_tag: str, data_repo_client: Repos
     data_repo_client.add_snapshot_policy_member(id=snapshot_id, policy_name="steward", policy_member=payload)
     print("Snapshot complete")
 
+    return snapshot_id
 
-def run(gs_path: str, dataset_id: str):
+
+def _validate_gs_path(path: str):
+    if not path.startswith("gs://"):
+        print(f"Path must be a gs:// path: {path}")
+        sys.exit(1)
+
+    if path.endswith("/"):
+        print(f"Path must not end with '/': {path}")
+        sys.exit(1)
+
+
+def load(args: argparse.Namespace):
+    data_load_path = args.data_load_path
+    temp_storage_path = args.temp_storage_path
+    dataset_id = args.dataset_id
+
+    _validate_gs_path(data_load_path)
+    _validate_gs_path(temp_storage_path)
+
     data_repo_client = _get_api_client()
     load_tag = datetime.now().strftime(f"dap_%Y%m%d_%H%M%S")
     dataset: DatasetModel = data_repo_client.retrieve_dataset(id=dataset_id)
 
     for table in TABLES:
-        _find_outdated_rows(dataset, table,
-                            f"gs://broad-dsp-monster-dap-prod-temp-storage/tdr_loads/{load_tag}/soft_deletes",
-                            data_repo_client)
-        _load_new_rows(dataset, table, f"{gs_path}/transform", load_tag, data_repo_client)
+        soft_deletes_path = f"{temp_storage_path}/{load_tag}/soft_deletes"
+        _remove_outdated_rows(dataset, table, soft_deletes_path, data_repo_client)
+        _load_new_rows(dataset, table, f"{data_load_path}/transform", load_tag, data_repo_client)
 
-    _snapshot_data(dataset, load_tag, data_repo_client)
+
+def snapshot(args):
+    data_repo_client = _get_api_client()
+    dataset_id = args.dataset_id
+    load_tag = datetime.now().strftime(f"dap_%Y%m%d_%H%M%S")
+    dataset: DatasetModel = data_repo_client.retrieve_dataset(id=dataset_id)
+
+    _create_snapshot(dataset, load_tag, data_repo_client)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-g", "--gs-path", required=True)
-    parser.add_argument("-d", "--dataset-id", required=True)
+    subparsers = parser.add_subparsers()
+
+    load_args = subparsers.add_parser("load")
+    load_args.add_argument("-g", "--data-load-path", required=True)
+    load_args.add_argument("-d", "--dataset-id", required=True)
+    load_args.add_argument("-t", "--temp-storage-path", required=True)
+    load_args.set_defaults(func=load)
+
+    snapshot_args = subparsers.add_parser("snapshot")
+    snapshot_args.add_argument("-d", "--dataset-id", required=True)
+    snapshot_args.set_defaults(func=snapshot)
 
     args = parser.parse_args()
-    run(args.gs_path, args.dataset_id)
+    args.func(args)
