@@ -79,14 +79,18 @@ class PrimaryKeyGenerator:
             except TypeError:
                 log.warning(f"Error, 'hs_condition_is_congenital' is not populated in {self.table_name}")
             return '-'.join(
-                [str(component) for component in [row.get('dog_id'), row.get('hs_condition'), congenital_flag]])
+                [str(component) for component in [row.get('dog_id'), row.get('hs_condition_type'), row.get('hs_condition'), congenital_flag]])
         # environment: read + copy dog_id and address fields to concatenate for generated uuid
         elif self.table_name == "environment":
             primary_key_fields = ['dog_id', 'address_1_or_2', 'address_month', 'address_year']
             return '-'.join([str(row.get(field)) for field in primary_key_fields])
-        # all other tables: store the original PK to the new column, removing the original column
+        # cslb: read + copy dog_id and cslb_date to concatenate for generated uuid
+        elif self.table_name == "cslb":
+            primary_key_fields = ['dog_id', 'cslb_date']
+            return '-'.join([str(row.get(field)) for field in primary_key_fields])
+        # all other tables: return the original PK to be duplicated to the new column
         else:
-            return row.pop(self.pk_name)
+            return str(row.get(self.pk_name))
 
 
 def _open_output_location(output_location: str, gcs: GCSFileSystem) -> Union[Any, io.TextIOWrapper]:
@@ -140,7 +144,7 @@ def convert_to_tsv(input_dir: str, output_dir: str, firecloud: bool,
         # pop out the PK, will be splitting this set out later
         column_set.discard(entity_name)
         # logic to move the actual PK columns to beginning of file (where we have generated one)
-        if firecloud and table_name in {"hles_health_condition", "environment"}:
+        if firecloud:
             column_set.discard(primary_key_gen.pk_name)
             sorted_column_set = [entity_name] + [primary_key_gen.pk_name] + sorted(list(column_set))
         else:
