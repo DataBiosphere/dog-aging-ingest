@@ -144,7 +144,8 @@ def convert_to_tsv(input_dir: str, output_dir: str, firecloud: bool,
         # pop out the PK, will be splitting this set out later
         column_set.discard(entity_name)
         # logic to move the actual PK columns to beginning of file (where we have generated one)
-        if firecloud:
+        # sample is excluded here because sample_id is the primary key and is distinct from dog_id
+        if firecloud and table_name not in {"sample"}:
             column_set.discard(primary_key_gen.pk_name)
             sorted_column_set = [entity_name] + [primary_key_gen.pk_name] + sorted(list(column_set))
         else:
