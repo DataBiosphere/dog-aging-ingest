@@ -88,6 +88,9 @@ class PrimaryKeyGenerator:
         elif self.table_name == "cslb":
             primary_key_fields = ['dog_id', 'cslb_date']
             return '-'.join([str(row.get(field)) for field in primary_key_fields])
+        # sample_id would match the entity primary key, popping the original column here to prevent duplicate column
+        elif self.table_name in {"hles_owner", "sample"}:
+            return row.pop(self.pk_name)
         # all other tables: return the original PK to be duplicated to the new column
         else:
             return str(row.get(self.pk_name))
@@ -144,12 +147,15 @@ def convert_to_tsv(input_dir: str, output_dir: str, firecloud: bool,
         # pop out the PK, will be splitting this set out later
         column_set.discard(entity_name)
         # logic to move the actual PK columns to beginning of file (where we have generated one)
-        # sample is excluded here because sample_id is the primary key and is distinct from dog_id
-        if firecloud and table_name not in {"sample"}:
+        if firecloud and table_name in {"hles_health_condition", "environment", "cslb"}:
             column_set.discard(primary_key_gen.pk_name)
             sorted_column_set = [entity_name] + [primary_key_gen.pk_name] + sorted(list(column_set))
         else:
-            sorted_column_set = [entity_name] + sorted(list(column_set))
+            if "dog_id" in column_set:
+                column_set.discard("dog_id")
+                sorted_column_set = [entity_name] + ["dog_id"] + sorted(list(column_set))
+            else:
+                sorted_column_set = [entity_name] + sorted(list(column_set))
 
         # provide some stats
         col_count = len(sorted_column_set)
