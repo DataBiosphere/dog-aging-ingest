@@ -50,31 +50,36 @@ def weekly_data_refresh(context: ScheduleEvaluationContext) -> dict[str, object]
             "sample_extract_records": {
                 "config": {
                     "pull_data_dictionaries": False,
-                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
+                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time,
+                    "start_time": "2020-01-01T00:00:00-05:00"
                 }
             },
             "cslb_extract_records": {
                 "config": {
                     "pull_data_dictionaries": False,
-                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
+                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time,
+                    "start_time": "2020-01-01T00:00:00-05:00"
                 }
             },
             "env_extract_records": {
                 "config": {
                     "pull_data_dictionaries": False,
-                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
+                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time,
+                    "start_time": "2020-01-01T00:00:00-05:00"
                 }
             },
             "eols_extract_records": {
                 "config": {
                     "pull_data_dictionaries": False,
-                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
+                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time,
+                    "start_time": "2020-01-01T00:00:00-05:00"
                 }
             },
             "hles_extract_records": {
                 "config": {
                     "pull_data_dictionaries": False,
-                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time
+                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time,
+                    "start_time": "2020-01-01T00:00:00-05:00"
                 }
             },
             "write_outfiles_in_terra_format": {
