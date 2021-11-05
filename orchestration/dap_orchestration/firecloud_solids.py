@@ -1,4 +1,5 @@
 from dagster import solid, String, Failure
+from dagster.core.execution.context.compute import AbstractComputeExecutionContext
 from dagster_utils.contrib.google import parse_gs_path
 from more_itertools import chunked
 from firecloud import api as fapi
@@ -13,7 +14,7 @@ LINES_PER_CHUNK = 2000
         "destination_workspace": String,
         "destination_project": String
     })
-def upload_to_firecloud(context):
+def upload_to_firecloud(context: AbstractComputeExecutionContext) -> None:
     gcs = context.resources.gcs
     tsv_path = context.solid_config["tsv_path"]
     destination_project = context.solid_config["destination_project"]
