@@ -16,6 +16,7 @@ dagit = "^0.12.15"
 graphql-ws = "<0.4.0"
 dagster-slack = "^0.12.14"
 google-cloud-bigquery = "^2.4.0"
+firecloud = "0.16.31"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.5"
