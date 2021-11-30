@@ -24,7 +24,7 @@ lazy val `dog-aging-hles-extraction` = project
   .settings(
     libraryDependencies += "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
     libraryDependencies += "com.squareup.okhttp3" % "logging-interceptor" % okhttpVersion,
-    libraryDependencies += "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion,
+    libraryDependencies += "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % Test,
     libraryDependencies += "com.bettercloud" % "vault-java-driver" % vaultDriverVersion % IntegrationTest,
     IntegrationTest / parallelExecution := false
   )
