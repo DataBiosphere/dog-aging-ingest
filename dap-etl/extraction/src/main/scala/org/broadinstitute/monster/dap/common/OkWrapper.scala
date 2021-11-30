@@ -11,11 +11,14 @@ import java.io.IOException
 import java.time.Duration
 import scala.concurrent.{Future, Promise}
 
+object OkWrapper {
+  val MAX_RETRIES = 3
+}
+
 class OkWrapper extends HttpWrapper {
   /** Timeout to use for all requests to production RedCap. */
   private val timeout = Duration.ofSeconds(300)
   private val logger = LoggerFactory.getLogger(getClass)
-  private val MAX_RETRIES = 3
 
   /** Construct a client instance backed by the production RedCap instance. */
   def client =
@@ -44,11 +47,12 @@ class OkWrapper extends HttpWrapper {
         val request = chain.request()
         var response = chain.proceed(request)
         var tryCount = 0
-        while (!response.isSuccessful && tryCount < MAX_RETRIES) {
+        while (!response.isSuccessful && tryCount < OkWrapper.MAX_RETRIES) {
           logger.warn(
             s"Unsuccessful response, retrying [url=${request.url()}, code=${response.code()}, try=${tryCount}]"
           )
           tryCount += 1
+          response.close()
           response = chain.proceed(request)
         }
         response
@@ -60,21 +64,25 @@ class OkWrapper extends HttpWrapper {
     client
       .newCall(request)
       .enqueue(new Callback {
-        override def onFailure(call: Call, e: IOException): Unit =
+        override def onFailure(call: Call, e: IOException): Unit = {
           p.failure(e)
+        }
+
         override def onResponse(call: Call, response: Response): Unit = {
           if (!response.isSuccessful) {
-            throw new Exception(
-              s"Non-successful HTTP error code received [response.code=${response.code()}]"
+            p.failure(
+              new Exception(
+                s"Non-successful HTTP error code received [response.code=${response.code()}]"
+              )
             )
-          }
-
-          val responseBodyString = response.body().string()
-          val maybeResult =
-            JsonParser.parseEncodedJsonReturningFailure(responseBodyString)
-          maybeResult match {
-            case Right(result) => p.success(result)
-            case Left(err)     => p.failure(err)
+          } else {
+            val responseBodyString = response.body().string()
+            val maybeResult =
+              JsonParser.parseEncodedJsonReturningFailure(responseBodyString)
+            maybeResult match {
+              case Right(result) => p.success(result)
+              case Left(err)     => p.failure(err)
+            }
           }
         }
       })
