@@ -71,7 +71,7 @@ class OkWrapper extends HttpWrapper {
         override def onResponse(call: Call, response: Response): Unit = {
           if (!response.isSuccessful) {
             p.failure(
-              new Exception(
+              new IOException(
                 s"Non-successful HTTP error code received [response.code=${response.code()}]"
               )
             )

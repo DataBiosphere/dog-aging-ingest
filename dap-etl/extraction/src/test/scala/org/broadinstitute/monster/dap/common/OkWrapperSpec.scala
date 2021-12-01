@@ -6,6 +6,8 @@ import org.broadinstitute.monster.dap.common.OkWrapper.MAX_RETRIES
 import org.scalatest.flatspec.FixtureAsyncFlatSpec
 import upack.Int64
 
+import java.io.IOException
+
 class OkWrapperSpec extends FixtureAsyncFlatSpec {
 
   behavior of "OkWrapper"
@@ -31,7 +33,7 @@ class OkWrapperSpec extends FixtureAsyncFlatSpec {
       server.enqueue(new MockResponse().setResponseCode(500).setBody("error"))
     }
 
-    recoverToSucceededIf[Exception] {
+    recoverToSucceededIf[IOException] {
       okWrapper.makeRequest(request)
     }
   }
