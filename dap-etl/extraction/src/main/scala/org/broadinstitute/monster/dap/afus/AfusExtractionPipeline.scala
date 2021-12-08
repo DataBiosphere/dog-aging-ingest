@@ -19,15 +19,13 @@ object AfusExtractionPipeline extends ScioApp[Args] {
     "study_status"
   )
 
-  // todo: check if any form is complete of all afus surveys - then pull?
   def extractionFiltersGenerator(args: Args): List[FilterDirective] = {
     // make sure we are only collecting completed survey forms
-    // todo: filter for followup_owner_contact_complete
     val completionFilters: List[FilterDirective] = forms
       .map(form => FilterDirective(s"${form}_complete", FilterOps.==, "2"))
-    // todo: any other filters?
+    // FORM = followup_status
     val standardDirectives: List[FilterDirective] = List(
-      FilterDirective("eol_willing_to_complete", FilterOps.==, "1")
+      FilterDirective("fu_is_completed", FilterOps.==, "1")
     )
     // todo: what date field should we filter on?
     val dateFilters: List[FilterDirective] = {

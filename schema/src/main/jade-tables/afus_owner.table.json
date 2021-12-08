@@ -1,0 +1,100 @@
+{
+  "name": "afus_owner",
+  "columns": [
+    {
+      "name": "owner_id",
+      "datatype": "integer",
+      "type": "primary_key",
+      "links": [
+        {
+          "table_name": "hles_owner",
+          "column_name": "owner_id"
+        }
+      ]
+    },
+    {
+      "name": "afus_oc_household_person_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_household_adult_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_household_child_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_primary_address_change",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_oc_primary_address_change_date",
+      "datatype": "date"
+    },
+    {
+      "name": "afus_oc_primary_residence_ownership",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_primary_residence_ownership_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_primary_residence_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_primary_residence_census_division",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_primary_residence_time_percentage",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_secondary_residence",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_secondary_address_change",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_oc_secondary_residence_change_date",
+      "datatype": "date"
+    },
+    {
+      "name": "afus_oc_secondary_residence_ownership",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_secondary_residence_ownership_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_oc_secondary_residence_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_secondary_residence_time_percentage",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_od_age_range_years",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_od_max_education",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_od_max_education_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_od_annual_income_range_usd",
+      "datatype": "integer"
+    }
+  ]
+}
