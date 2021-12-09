@@ -27,7 +27,7 @@ class AfusExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
       pullDataDictionaries = false
     )
 
-  val expectedStudyIds = List("some_study_id", "some_other_id")
+  val expectedStudyIds = List("some_owner_id", "some_other_id")
 
   val arms = AfusExtractionPipeline.extractionArmsGenerator(testArgs.startTime, testArgs.endTime)
 
@@ -35,7 +35,7 @@ class AfusExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
     testArgs.apiToken,
     arms,
     GetRecords(
-      fields = List("study_id"),
+      fields = List("st_owner_id"),
       filters = AfusExtractionPipeline.extractionFiltersGenerator(testArgs)
     )
   )
@@ -54,12 +54,12 @@ class AfusExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
     Map(
       studyIdsRequest -> RedcapMsgGenerator.toRedcapFormat(expectedStudyIds.map { i =>
         Map(
-          "study_id" -> i.toString
+          "st_owner_id" -> i.toString
         )
       }),
       followUpRecords -> RedcapMsgGenerator.toRedcapFormat(expectedStudyIds.map { _ =>
         Map(
-          "followup_owner_contact_complete" -> "2"
+          "fu_is_completed" -> "1"
         )
       })
     )

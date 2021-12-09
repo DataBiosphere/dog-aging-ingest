@@ -12,17 +12,15 @@ class AfusExtractionFailException() extends Exception
 object AfusExtractionPipeline extends ScioApp[Args] {
 
   // january 1, 2018 - we ignore any records before this by default (though there shouldn't be any)
-  val AfusEpoch = OffsetDateTime.of(2021, 9, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
+  val AfusEpoch = OffsetDateTime.of(2019, 1, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
 
   val forms = List(
+    "followup_status",
     "followup_owner_contact",
     "study_status"
   )
 
   def extractionFiltersGenerator(args: Args): List[FilterDirective] = {
-    // make sure we are only collecting completed survey forms
-    val completionFilters: List[FilterDirective] = forms
-      .map(form => FilterDirective(s"${form}_complete", FilterOps.==, "2"))
     // FORM = followup_status
     val standardDirectives: List[FilterDirective] = List(
       FilterDirective("fu_is_completed", FilterOps.==, "1")
@@ -32,25 +30,32 @@ object AfusExtractionPipeline extends ScioApp[Args] {
       args.startTime
         .map(start =>
           List(
-            FilterDirective("k1_rtn_tracking_date", FilterOps.>, RedCapClient.redcapFormatDate(start))
+            FilterDirective(
+              "fu_complete_date",
+              FilterOps.>,
+              RedCapClient.redcapFormatDate(start)
+            )
           )
         )
         .getOrElse(List()) ++
         args.endTime
           .map(end =>
             List(
-              FilterDirective("k1_rtn_tracking_date", FilterOps.<, RedCapClient.redcapFormatDate(end))
+              FilterDirective(
+                "fu_complete_date",
+                FilterOps.<,
+                RedCapClient.redcapFormatDate(end)
+              )
             )
           )
           .getOrElse(List())
     }
     // todo: check on date filters
-    completionFilters ++ standardDirectives ++ dateFilters
+    standardDirectives ++ dateFilters
   }
 
-  val subdir = "sample";
-  val arm = "baseline_arm_1"
-  val fieldList = List("k1_tube_serial", "k1_rtn_tracking_date")
+  val subdir = "afus";
+  val fieldList = List("fu_is_completed", "fu_complete_date", "st_owner_id")
 
   // get list of individual dates, then get the set of years and return a list of distinct years
   def getYearList(start: OffsetDateTime, end: OffsetDateTime): List[Int] = {
