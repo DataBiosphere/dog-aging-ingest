@@ -77,6 +77,10 @@ class ExtractionPipelineBuilder(
           arm = arms
         )
       )
+
+    print("DEBUGGING ExtractionPipelineBuilder: initRequests")
+    print(initRequests)
+
     val idsToExtract: SCollection[String] = ctx
     // massaging data to get back an SCollection[]
       .parallelize(initRequests)

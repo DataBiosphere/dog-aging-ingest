@@ -41,15 +41,15 @@
       "datatype": "string"
     },
     {
-      "name": "afus_primary_residence_state",
+      "name": "afus_oc_primary_residence_state",
       "datatype": "string"
     },
     {
-      "name": "afus_primary_residence_census_division",
+      "name": "afus_oc_primary_residence_census_division",
       "datatype": "integer"
     },
     {
-      "name": "afus_primary_residence_time_percentage",
+      "name": "afus_oc_primary_residence_time_percentage",
       "datatype": "integer"
     },
     {
@@ -77,7 +77,7 @@
       "datatype": "string"
     },
     {
-      "name": "afus_secondary_residence_time_percentage",
+      "name": "afus_oc_secondary_residence_time_percentage",
       "datatype": "integer"
     },
     {

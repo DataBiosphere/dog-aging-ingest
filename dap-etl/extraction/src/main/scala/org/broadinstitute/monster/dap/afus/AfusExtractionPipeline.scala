@@ -11,10 +11,11 @@ class AfusExtractionFailException() extends Exception
 
 object AfusExtractionPipeline extends ScioApp[Args] {
 
-  // january 1, 2018 - we ignore any records before this by default (though there shouldn't be any)
-  val AfusEpoch = OffsetDateTime.of(2019, 1, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
+  //todo update this: January 1, 2021 - we ignore any records before this by default (though there shouldn't be any)
+  val AfusEpoch = OffsetDateTime.of(2021, 1, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
 
   val forms = List(
+    "recruitment_fields",
     "followup_status",
     "followup_owner_contact",
     "study_status"
@@ -50,12 +51,13 @@ object AfusExtractionPipeline extends ScioApp[Args] {
           )
           .getOrElse(List())
     }
+
     // todo: check on date filters
     standardDirectives ++ dateFilters
   }
 
   val subdir = "afus";
-  val fieldList = List("fu_is_completed", "fu_complete_date", "st_owner_id")
+  val fieldList = List("fu_is_completed", "st_owner_id")
 
   // get list of individual dates, then get the set of years and return a list of distinct years
   def getYearList(start: OffsetDateTime, end: OffsetDateTime): List[Int] = {
@@ -77,20 +79,23 @@ object AfusExtractionPipeline extends ScioApp[Args] {
     val endDate = endTime.getOrElse(OffsetDateTime.now())
     // afus has one arm per year ("fup_{sequence}_arm_1")
     val yearList = getYearList(startDate, endDate)
-    val yearSeqList = List.range(1, yearList.length)
+    val yearSeqList = List.range(1, yearList.length + 1)
     yearSeqList.map { seq =>
       s"fup_${seq}_arm_1"
     }
   }
+  // todo make sure the arms generator includes baseline_arm_1
+  val arms = "fup_1_arm_1, baseline_arm_1"
 
   def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
       forms,
       extractionFiltersGenerator,
-      extractionArmsGenerator,
+      //extractionArmsGenerator,
+      (_, _) => List(arms),
       fieldList,
       subdir,
-      100,
+      250,
       RedCapClient.apply(_: List[String], wrapper)
     )
 
