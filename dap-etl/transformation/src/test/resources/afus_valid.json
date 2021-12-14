@@ -1,0 +1,22 @@
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"st_owner_id","value":"12345"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_people_household","value":"3"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_adults_household","value":"2"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_children_household","value":"1"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address_change","value":"1"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address1_change_date","value":"2021-05-20"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address1_own","value":"2"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address1_own_other","value":"Other occupancy"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address1_state","value":"OH"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address1_division","value":"3"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address1_pct","value":"4"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address2_yn","value":"1"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address2_change","value":"1"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address2_change_date","value":"2021-10-20"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address2_own","value":"3"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address2_own_other","value":"Live rent-free"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_address2_state","value":"NJ"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_2nd_address_pct","value":"2"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_od_age","value":"3"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_od_education","value":"8"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_od_education_other","value":"TCNJ ALUM"}
+{"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_od_income","value":"5"}
