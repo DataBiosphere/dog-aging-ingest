@@ -26,7 +26,6 @@ object AfusExtractionPipeline extends ScioApp[Args] {
     val standardDirectives: List[FilterDirective] = List(
       FilterDirective("fu_is_completed", FilterOps.==, "1")
     )
-    // todo: what date field should we filter on?
     val dateFilters: List[FilterDirective] = {
       args.startTime
         .map(start =>
@@ -52,7 +51,6 @@ object AfusExtractionPipeline extends ScioApp[Args] {
           .getOrElse(List())
     }
 
-    // todo: check on date filters
     standardDirectives ++ dateFilters
   }
 
@@ -73,7 +71,7 @@ object AfusExtractionPipeline extends ScioApp[Args] {
     startTime: Option[OffsetDateTime],
     endTime: Option[OffsetDateTime]
   ): List[String] = {
-    // use first year of cslb if startTime was not provided
+    // use first year of afus if startTime was not provided
     val startDate = startTime.getOrElse(AfusEpoch)
     // use current date if endTime was not provided
     val endDate = endTime.getOrElse(OffsetDateTime.now())
@@ -82,20 +80,17 @@ object AfusExtractionPipeline extends ScioApp[Args] {
     val yearSeqList = List.range(1, yearList.length + 1)
     yearSeqList.map { seq =>
       s"fup_${seq}_arm_1"
-    }
+    } ++ List("baseline_arm_1")
   }
-  // todo make sure the arms generator includes baseline_arm_1
-  val arms = "fup_1_arm_1, baseline_arm_1"
 
   def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
       forms,
       extractionFiltersGenerator,
-      //extractionArmsGenerator,
-      (_, _) => List(arms),
+      extractionArmsGenerator,
       fieldList,
       subdir,
-      250,
+      10,
       RedCapClient.apply(_: List[String], wrapper)
     )
 
