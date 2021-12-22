@@ -15,7 +15,6 @@ object AfusOwnerTransformations {
         try {
           Some(
             AfusOwner(
-              // todo: update transformation code with AFUS logic
               ownerId = owner_id.toLong,
               afusOcHouseholdPersonCount = rawRecord.getOptionalNumber("fu_oc_people_household"),
               afusOcHouseholdAdultCount = rawRecord.getOptionalNumber("fu_oc_adults_household"),
