@@ -18,7 +18,8 @@ object AfusExtractionPipeline extends ScioApp[Args] {
     "recruitment_fields",
     "followup_status",
     "followup_owner_contact",
-    "study_status"
+    "study_status",
+    "followup_owner_demographics"
   )
 
   def extractionFiltersGenerator(args: Args): List[FilterDirective] = {

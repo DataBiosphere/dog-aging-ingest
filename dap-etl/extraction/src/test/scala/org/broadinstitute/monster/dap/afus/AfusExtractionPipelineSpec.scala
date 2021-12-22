@@ -25,17 +25,6 @@ class AfusExtractionPipelineSpec extends AnyFlatSpec with Matchers {
     afusArms shouldBe List("fup_1_arm_1", "fup_2_arm_1", "baseline_arm_1")
   }
 
-  it should "create a list of arms inclusive of the last date in the range (endTime)" in {
-    val startTime =
-      OffsetDateTime.of(2021, 11, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
-    val endTime =
-      OffsetDateTime.of(2023, 11, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
-
-    val afusArms = AfusExtractionPipeline.extractionArmsGenerator(Some(startTime), Some(endTime))
-
-    afusArms shouldBe List("fup_1_arm_1", "fup_2_arm_1", "fup_3_arm_1", "baseline_arm_1")
-  }
-
   it should "fail when startTime is after endTime" in {
     val startTime =
       OffsetDateTime.of(2022, 3, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
