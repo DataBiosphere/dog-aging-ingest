@@ -19,7 +19,15 @@ object AfusExtractionPipeline extends ScioApp[Args] {
     "followup_status",
     "followup_owner_contact",
     "study_status",
-    "followup_owner_demographics"
+    "followup_owner_demographics",
+    "followup_physical_activity",
+    "followup_environment",
+    "followup_behavior",
+    "followup_diet",
+    "followup_meds_and_preventives",
+    "followup_canine_eating_behavior_dora",
+    "followup_dogowner_relationship_survey_mdors",
+    "followup_health_status"
   )
 
   def extractionFiltersGenerator(args: Args): List[FilterDirective] = {

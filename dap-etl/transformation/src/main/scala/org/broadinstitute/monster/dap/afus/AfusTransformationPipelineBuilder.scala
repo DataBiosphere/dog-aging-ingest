@@ -3,7 +3,7 @@ package org.broadinstitute.monster.dap.afus
 import com.spotify.scio.ScioContext
 import com.spotify.scio.values.SCollection
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
-import org.broadinstitute.monster.dap.common.{Args, RawRecord, TransformationHelper}
+import org.broadinstitute.monster.dap.common._
 import org.slf4j.{Logger, LoggerFactory}
 
 object AfusTransformationPipelineBuilder extends PipelineBuilder[Args] {
@@ -22,8 +22,11 @@ object AfusTransformationPipelineBuilder extends PipelineBuilder[Args] {
 
     val owners =
       rawRecords.transform("Map AFUS Owners")(_.flatMap(AfusOwnerTransformations.mapAfusOwnerData))
+    val dogs =
+      rawRecords.transform("Map AFUS Dogs")(_.flatMap(AfusDogTransformations.mapAfusDog))
 
     StorageIO.writeJsonLists(owners, "AFUS Owners", s"${args.outputPrefix}/afus_owner")
+    StorageIO.writeJsonLists(dogs, "AFUS Dogs", s"${args.outputPrefix}/afus_dog")
     ()
   }
 

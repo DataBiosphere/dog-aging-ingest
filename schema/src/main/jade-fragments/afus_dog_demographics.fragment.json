@@ -1,0 +1,117 @@
+{
+  "name": "afus_dog_demographics",
+  "columns": [
+    {
+      "name": "afus_dd_dog_weight_lbs",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_dd_insurance_yn",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_insurance_company",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_insurance_company_other",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_activities_companion_animal",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_obedience",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_show",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_breeding",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_agility",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_hunting",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_working",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_field_trials",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_search_and_rescue",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_service",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_assistance_or_therapy",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_service_seeing_eye",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_hearing_or_signal",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_wheelchair_service",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_other_medical_service",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_other_health_assistance",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_therapy",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_emotional_support",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_other_medical_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_service_other_health_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_service_other_service_description",
+      "datatype": "string"
+    }
+  ]
+}
