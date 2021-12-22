@@ -25,6 +25,15 @@ class CslbExtractionPipelineSpec extends AnyFlatSpec with Matchers {
     cslbArms shouldBe List("annual_2020_arm_1", "annual_2021_arm_1", "annual_2022_arm_1")
   }
 
+  it should "use current date as the endTime when none is provided" in {
+    val startTime =
+      OffsetDateTime.of(2020, 3, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
+
+    val cslbArms = CslbExtractionPipeline.extractionArmsGenerator(Some(startTime), None)
+
+    cslbArms shouldBe List("annual_2020_arm_1", "annual_2021_arm_1")
+  }
+
   it should "create a list of arms inclusive of the last date in the range (endTime)" in {
     val startTime =
       OffsetDateTime.of(2020, 3, 1, 0, 0, 0, 0, ZoneOffset.ofHours(-5))
