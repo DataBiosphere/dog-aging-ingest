@@ -7,7 +7,7 @@ import org.broadinstitute.monster.dogaging.jadeschema.table.AfusOwner
 object AfusOwnerTransformations {
 
   def mapAfusOwnerData(rawRecord: RawRecord): Option[AfusOwner] = {
-    rawRecord.getOptional("st_owner_id") match {
+    rawRecord.getOptionalNumber("st_owner_id") match {
       case None =>
         MissingOwnerIdError(s"Record has less than 1 value for field st_owner_id").log
         None
@@ -15,7 +15,7 @@ object AfusOwnerTransformations {
         try {
           Some(
             AfusOwner(
-              ownerId = owner_id.toLong,
+              ownerId = owner_id,
               afusOcHouseholdPersonCount = rawRecord.getOptionalNumber("fu_oc_people_household"),
               afusOcHouseholdAdultCount = rawRecord.getOptionalNumber("fu_oc_adults_household"),
               afusOcHouseholdChildCount = rawRecord.getOptionalNumber("fu_oc_children_household"),
