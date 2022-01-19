@@ -99,7 +99,7 @@ object AfusExtractionPipeline extends ScioApp[Args] {
       extractionArmsGenerator,
       fieldList,
       subdir,
-      10,
+      1,
       RedCapClient.apply(_: List[String], wrapper)
     )
 

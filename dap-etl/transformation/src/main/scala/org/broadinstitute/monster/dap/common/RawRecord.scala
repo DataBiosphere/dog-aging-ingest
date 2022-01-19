@@ -2,7 +2,6 @@ package org.broadinstitute.monster.dap.common
 
 import org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipelineBuilder.logger
 import org.broadinstitute.monster.dap.common.RawRecord.DAPDateTimeFormatter
-import org.broadinstitute.monster.dap.hles.TruncatedDecimalError
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -114,6 +113,18 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
           } else {
             throw e
           }
+        }
+      }
+    })
+
+  /** Get the singleton value for an attribute in this record, parsed as a Double. */
+  def getOptionalFloat(field: String, permittedValues: Set[Long] = Set()): Option[Double] =
+    getOptional(field, permittedValues.map(_.toString)).map(value => {
+      try {
+        value.toDouble
+      } catch {
+        case e: NumberFormatException => {
+          throw e
         }
       }
     })

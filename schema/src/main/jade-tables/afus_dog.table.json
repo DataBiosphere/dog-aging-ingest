@@ -12,7 +12,7 @@
       "type": "required",
       "links": [
         {
-          "table_name": "hles_owner",
+          "table_name": "afus_owner",
           "column_name": "owner_id"
         }
       ]
@@ -36,6 +36,13 @@
   ],
   "table_fragments": [
     "afus_dog_demographics",
-    "afus_dog_residences"
+    "afus_dog_physical_activity",
+    "afus_dog_environment",
+    "afus_dog_behavior",
+    "afus_dog_diet",
+    "afus_dog_meds_preventatives",
+    "afus_dog_dora",
+    "afus_dog_mdors",
+    "afus_dog_health_status"
   ]
 }

@@ -14,11 +14,13 @@ class AfusTransformationPipelineTest extends PipelineSpec with Matchers {
     val lines =
       Source.fromResource("afus_valid.json").getLines().toSeq
     val expected_afus_owner = Source.fromResource("afus_valid_owner.json").getLines().toSeq
+    val expected_afus_dog = Source.fromResource("afus_valid_dog.json").getLines().toSeq
 
     JobTest[AfusTransformationPipeline.type]
       .args("--inputPrefix=in", "--outputPrefix=out")
       .input(TextIO("in/records/*.json"), lines)
       .output(TextIO("out/afus_owner"))(col => col should containInAnyOrder(expected_afus_owner))
+      .output(TextIO("out/afus_dog"))(col => col should containInAnyOrder(expected_afus_dog))
       .run()
   }
 
@@ -30,6 +32,7 @@ class AfusTransformationPipelineTest extends PipelineSpec with Matchers {
         .args("--inputPrefix=in", "--outputPrefix=out")
         .input(TextIO("in/records/*.json"), lines)
         .output(TextIO("out/afus_owner"))(col => col should beEmpty)
+        .output(TextIO("out/afus_dog"))(col => col should beEmpty)
         .run()
     }
   }
