@@ -28,6 +28,35 @@ object TransformationHelper extends PipelineCoders {
       }
   }
 
+  def readRecordsGroupByRecord(ctx: ScioContext, inputPrefix: String): SCollection[RawRecord] = {
+    val rawRecords = readJsonLists(ctx, inputPrefix)
+    val groupByPredicate = { record: Msg =>
+      record.read[String]("record")
+    }
+
+    rawRecords
+      .groupBy(groupByPredicate)
+      .map {
+        case (id: String, rawRecordValues) =>
+          val fields: Map[String, Array[String]] = rawRecordValues
+            .groupBy(_.read[String]("field_name"))
+            .map {
+              case (fieldName, rawValues) =>
+                (fieldName, rawValues.map(_.read[String]("value")).toArray.sorted)
+            }
+
+          val foo = rawRecordValues
+            .groupBy(_.read[String]("redcap_event_name"))
+            .map {
+              case (k, _) => k
+            }
+            .toArray
+            .sorted
+
+          RawRecord(id.toLong, fields + ("redcap_event_name" -> foo))
+      }
+  }
+
   private def readJsonLists(ctx: ScioContext, inputPrefix: String): SCollection[Msg] = {
     StorageIO
       .readJsonLists(

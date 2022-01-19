@@ -1,6 +1,7 @@
 {"record":"11111","redcap_event_name":"jan2020_arm_1","field_name":"study_id","value":"11111"}
 {"record":"11111","redcap_event_name":"jan2020_arm_1","field_name":"ss_id","value":"ss_id_11111_1"}
 {"record":"11111","redcap_event_name":"jan2020_arm_1","field_name":"ss_num_people_hh","value":"1"}
+{"record":"11111","redcap_event_name":"fup_arm_1","field_name":"fup_value_1","value":"1"}
 {"record":"11111","redcap_event_name":"feb2020_arm_1","field_name":"study_id","value":"11111"}
 {"record":"11111","redcap_event_name":"feb2020_arm_1","field_name":"ss_id","value":"ss_id_11111_2"}
 {"record":"11111","redcap_event_name":"feb2020_arm_1","field_name":"ss_num_people_hh","value":"2"}

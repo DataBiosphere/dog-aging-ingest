@@ -12,13 +12,28 @@ class TransformationHelperSpec extends PipelineSpec with Matchers {
     val opts: PipelineOptions = PipelineOptionsFactory.fromArgs("--runner=DirectRunner").create()
 
     runWithRealContext(opts) { sc =>
-      val records = TransformationHelper.readRecordsGroupByEventName(
+      val records = TransformationHelper.readRecordsGroupByRecord(
         sc,
         path
       )
-      records should haveSize(6)
-      val ids = records.map(record => record.id)
-      ids should containInAnyOrder(Seq(11111L, 11111L, 22222L, 22222L, 33333L, 33333L))
+
+      records should haveSize(3)
+      val ids = records.map { record =>
+        record.id
+      }
+
+      val redcapEventNames = records.map { record =>
+        record.getArray("redcap_event_name")
+      }
+      ids should containInAnyOrder(Seq(11111L, 22222L, 33333L))
+      redcapEventNames should containInAnyOrder(
+        Seq(
+          Array("feb2020_arm_1", "fup_arm_1", "jan2020_arm_1"),
+          Array("feb2020_arm_1", "jan2020_arm_1"),
+          Array("feb2020_arm_1", "jan2020_arm_1")
+        )
+      )
     }
   }
+
 }
