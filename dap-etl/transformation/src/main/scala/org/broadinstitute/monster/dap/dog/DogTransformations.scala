@@ -1,9 +1,8 @@
 package org.broadinstitute.monster.dap.dog
 
-import org.broadinstitute.monster.dap.common.RawRecord
-import org.broadinstitute.monster.dap.hles.{HLESurveyTransformationError, MissingOwnerIdError}
-import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
+import org.broadinstitute.monster.dap.common.{MissingOwnerIdError, RawRecord, TransformationError}
 import org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipelineBuilder.logger
+import org.broadinstitute.monster.dogaging.jadeschema.table.HlesDog
 
 object DogTransformations {
 
@@ -40,7 +39,7 @@ object DogTransformations {
             )
           )
         } catch {
-          case e: HLESurveyTransformationError =>
+          case e: TransformationError =>
             e.log
             None
         }
