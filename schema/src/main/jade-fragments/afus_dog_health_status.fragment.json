@@ -1,0 +1,265 @@
+{
+  "name": "afus_dog_health_status",
+  "columns": [
+    {
+      "name": "afus_hs_general_health",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_treatment_yn",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_infectious_disease",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_toxin_consumption",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_trauma",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_cancer",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_eye",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_ear",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_oral",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_skin",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_cardiac",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_respiratory",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_gastrointestinal",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_liver",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_kidney",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_reproductive",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_orthopedic",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_neurologic",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_endocrine",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_hematologic",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_immune",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_ongoing_condition_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_hs_new_condition_diagnosed_last_year",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_new_condition_diagnosed_last_three_months",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_chronic_condition_diagnosed_last_year",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_chronic_condition_changed_treated_last_three_months",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_recent_hospitalization_yn",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_recent_hospitalization_why_spay_neuter",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_recent_hospitalization_why_dentistry",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_recent_hospitalization_why_boarding",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_recent_hospitalization_why_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_recent_hospitalization_why_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_hs_new_condition_eye",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_ear",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_oral",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_skin",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_cardiac",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_respiratory",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_gastrointestinal",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_liver",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_kidney",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_reproductive",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_orthopedic",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_neurological",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_endocrine",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_hematologic",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_immune",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_infectious_disease",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_toxin_consumption",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_trauma",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_cancer",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_new_condition_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_hs_other_medical_info",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_hs_alternative_care_acupuncture",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_alternative_care_herbal_medicine",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_alternative_care_homeopathy",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_alternative_care_chiropractic",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_alternative_care_massage",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_alternative_care_rehabilitation_therapy",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_alternative_care_reiki",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_alternative_care_traditional_chinese_medicine",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_alternative_care_none",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_alternative_care_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_hs_alternative_care_other_description",
+      "datatype": "string"
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "name": "afus_dog_behavior",
+  "columns": [
+    {
+      "name": "afus_db_excitement_level_before_walk",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_excitement_level_before_car_ride",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_aggression_level_on_leash_unknown_human",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_aggression_level_toys_taken_away",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_aggression_level_approached_while_eating",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_aggression_level_delivery_workers_at_home",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_aggression_level_food_taken_away",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_aggression_level_on_leash_unknown_dog",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_aggression_level_unknown_human_near_yard",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_aggression_level_unknown_aggressive_dog",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_aggression_level_familiar_dog_while_eating",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_aggression_level_familiar_dog_while_playing",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_fear_level_unknown_human_away_from_home",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_fear_level_loud_noises",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_fear_level_unknown_human_touch",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_fear_level_unknown_objects_outside",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_fear_level_unknown_dogs",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_fear_level_unknown_situations",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_fear_level_unknown_aggressive_dog",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_fear_level_nails_clipped_at_home",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_fear_level_bathed_at_home",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_left_alone_restlessness_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_left_alone_barking_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_left_alone_scratching_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_attention_seeking_follows_humans_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_attention_seeking_sits_close_to_humans_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_training_obeys_sit_command_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_training_obeys_stay_command_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_training_distraction_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_chases_birds_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_chases_squirrels_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_escapes_home_or_property_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_chews_inappropriate_objects_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_pulls_leash_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_urinates_in_home_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_urinates_alone_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_defecates_alone_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_hyperactive_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_playful_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_energetic_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_chases_tail_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_db_barks_frequency",
+      "datatype": "integer"
+    }
+  ]
+}
