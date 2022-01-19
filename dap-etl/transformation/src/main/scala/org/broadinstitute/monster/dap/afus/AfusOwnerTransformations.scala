@@ -1,7 +1,7 @@
 package org.broadinstitute.monster.dap.afus
 
 import org.broadinstitute.monster.dap.afus.AfusTransformationPipelineBuilder.logger
-import org.broadinstitute.monster.dap.common.RawRecord
+import org.broadinstitute.monster.dap.common.{TransformationError, MissingOwnerIdError, RawRecord}
 import org.broadinstitute.monster.dogaging.jadeschema.table.AfusOwner
 
 object AfusOwnerTransformations {
@@ -48,7 +48,7 @@ object AfusOwnerTransformations {
             )
           )
         } catch {
-          case e: AFUSTransformationError =>
+          case e: TransformationError =>
             e.log
             None
         }

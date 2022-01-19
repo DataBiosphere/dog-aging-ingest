@@ -1,7 +1,6 @@
 package org.broadinstitute.monster.dap.dog
 
-import org.broadinstitute.monster.dap.common.RawRecord
-import org.broadinstitute.monster.dap.hles.MissingCalcFieldError
+import org.broadinstitute.monster.dap.common.{MissingCalcFieldError, RawRecord}
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.HlesDogDemographics
 import org.scalatest.OptionValues
 import org.scalatest.flatspec.AnyFlatSpec
