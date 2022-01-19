@@ -2,7 +2,6 @@ package org.broadinstitute.monster.dap.common
 
 import org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipelineBuilder.logger
 import org.broadinstitute.monster.dap.common.RawRecord.DAPDateTimeFormatter
-import org.broadinstitute.monster.dap.hles.TruncatedDecimalError
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
