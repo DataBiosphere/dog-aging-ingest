@@ -25,7 +25,10 @@ class SampleTransformationSpec extends AnyFlatSpec {
   }
 
   it should "raise when date is invalid" in {
-    val invalidDateRecord = RawRecord(id = 1, Map("k1_rtn_tracking_date" -> Array("2020-142-124")))
+    val invalidDateRecord = RawRecord(
+      id = 1,
+      Map("k1_rtn_tracking_date" -> Array("2020-142-124"), "k1_tube_serial" -> Array("12345"))
+    )
     assertThrows[DateTimeParseException] {
       SampleTransformations.mapSampleData(invalidDateRecord)
     }
@@ -48,8 +51,7 @@ class SampleTransformationSpec extends AnyFlatSpec {
 
   it should "raise when serial number is not provided" in {
     val invalidSerialRecord = RawRecord(id = 1, exampleSampleFields.-("k1_tube_serial"))
-    assertThrows[IllegalStateException] {
-      SampleTransformations.mapSampleData(invalidSerialRecord)
-    }
+    val output = SampleTransformations.mapSampleData(invalidSerialRecord)
+    output shouldBe None
   }
 }
