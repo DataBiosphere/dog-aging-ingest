@@ -159,7 +159,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence1_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence1_weeks",
@@ -167,7 +167,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence2_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence2_weeks",
@@ -175,7 +175,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence3_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence3_weeks",
@@ -183,7 +183,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence4_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence4_weeks",
@@ -191,7 +191,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence5_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence5_weeks",
@@ -199,7 +199,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence6_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence6_weeks",
@@ -207,7 +207,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence7_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence7_weeks",
@@ -215,7 +215,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence8_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence8_weeks",
@@ -223,7 +223,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence9_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence9_weeks",
@@ -231,7 +231,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence10_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence10_weeks",
@@ -239,7 +239,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence11_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence11_weeks",
@@ -247,7 +247,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence12_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence12_weeks",
@@ -255,7 +255,7 @@
     },
     {
       "name": "afus_dd_alternate_recent_residence13_state",
-      "datatype": "integer"
+      "datatype": "string"
     },
     {
       "name": "afus_dd_alternate_recent_residence13_weeks",
