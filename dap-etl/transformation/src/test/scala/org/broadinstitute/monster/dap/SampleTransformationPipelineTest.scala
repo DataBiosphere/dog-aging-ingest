@@ -28,4 +28,13 @@ class SampleTransformationPipelineTest extends PipelineSpec with Matchers {
       .output(TextIO("out/sample"))(col => col should beEmpty)
       .run()
   }
+
+  it should "not process a sample record without k1_tube_serial" in {
+    val lines = Source.fromResource("sample_missing_kit_id.json").getLines().toSeq
+    JobTest[SampleTransformationPipeline.type]
+      .args("--inputPrefix=in", "--outputPrefix=out")
+      .input(TextIO("in/records/*.json"), lines)
+      .output(TextIO("out/sample"))(col => col should beEmpty)
+      .run()
+  }
 }
