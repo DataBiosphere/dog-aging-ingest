@@ -19,7 +19,7 @@ class AfusOwnerTransformationSpec extends AnyFlatSpec {
     "fu_oc_address1_own" -> Array("2"),
     "fu_oc_address1_own_other" -> Array("Other occupancy "),
     "fu_oc_address1_state" -> Array("OH"),
-    "fu_oc_address1_division" -> Array("3"),
+    "fu_oc_address1_division" -> Array("Division 3: East North Central"),
     "fu_oc_address1_pct" -> Array("4"),
     "fu_oc_address2_yn" -> Array("1"),
     "fu_oc_address2_change" -> Array("1"),
