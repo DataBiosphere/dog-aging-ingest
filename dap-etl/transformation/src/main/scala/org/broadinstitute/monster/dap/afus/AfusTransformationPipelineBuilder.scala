@@ -3,7 +3,7 @@ package org.broadinstitute.monster.dap.afus
 import com.spotify.scio.ScioContext
 import com.spotify.scio.values.SCollection
 import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
-import org.broadinstitute.monster.dap.common._
+import org.broadinstitute.monster.dap.common.{Args, RawRecord, TransformationHelper}
 import org.slf4j.{Logger, LoggerFactory}
 
 object AfusTransformationPipelineBuilder extends PipelineBuilder[Args] {

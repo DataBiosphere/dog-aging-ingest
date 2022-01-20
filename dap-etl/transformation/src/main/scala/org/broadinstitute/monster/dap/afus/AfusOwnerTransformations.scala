@@ -1,7 +1,8 @@
 package org.broadinstitute.monster.dap.afus
 
 import org.broadinstitute.monster.dap.afus.AfusTransformationPipelineBuilder.logger
-import org.broadinstitute.monster.dap.common.{TransformationError, MissingOwnerIdError, RawRecord}
+import org.broadinstitute.monster.dap.common.OwnerTransformations.getCensusDivision
+import org.broadinstitute.monster.dap.common.{MissingOwnerIdError, RawRecord, TransformationError}
 import org.broadinstitute.monster.dogaging.jadeschema.table.AfusOwner
 
 object AfusOwnerTransformations {
@@ -27,7 +28,9 @@ object AfusOwnerTransformations {
                 rawRecord.getOptionalStripped("fu_oc_address1_own_other"),
               afusOcPrimaryResidenceState = rawRecord.getOptionalStripped("fu_oc_address1_state"),
               afusOcPrimaryResidenceCensusDivision =
-                rawRecord.getOptionalNumber("fu_oc_address1_division"),
+                rawRecord.getOptional("fu_oc_address1_division").flatMap {
+                  getCensusDivision(_)
+                },
               afusOcPrimaryResidenceTimePercentage =
                 rawRecord.getOptionalNumber("fu_oc_address1_pct"),
               afusOcSecondaryResidence = rawRecord.getOptionalNumber("fu_oc_address2_yn"),
