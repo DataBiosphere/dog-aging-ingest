@@ -4,13 +4,7 @@
     {
       "name": "owner_id",
       "datatype": "integer",
-      "type": "primary_key",
-      "links": [
-        {
-          "table_name": "hles_owner",
-          "column_name": "owner_id"
-        }
-      ]
+      "type": "primary_key"
     },
     {
       "name": "afus_oc_household_person_count",

@@ -2,7 +2,6 @@ package org.broadinstitute.monster.dap.common
 
 import org.broadinstitute.monster.dap.hles.HLESurveyTransformationPipelineBuilder.logger
 import org.broadinstitute.monster.dap.common.RawRecord.DAPDateTimeFormatter
-import org.broadinstitute.monster.dap.hles.TruncatedDecimalError
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -71,11 +70,14 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
 
   val sequencesToStrip = List("\r?\n", "\t")
 
+  // this function is removing carriage returns, tabs, and any whitespace at the beginning and end of a string
   def getOptionalStripped(field: String): Option[String] = {
     getOptional(field).map(fieldValue =>
-      sequencesToStrip.fold(fieldValue) { (processedFieldValue, sequence) =>
-        processedFieldValue.replaceAll(sequence, " ")
-      }
+      sequencesToStrip
+        .fold(fieldValue) { (processedFieldValue, sequence) =>
+          processedFieldValue.replaceAll(sequence, " ")
+        }
+        .trim
     )
   }
 

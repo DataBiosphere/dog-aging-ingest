@@ -56,7 +56,7 @@ class EolsTransformationsSpec extends AnyFlatSpec with Matchers with OptionValue
     mapped.eolToxinOtherDescription shouldBe Some("Other")
     mapped.eolOldAgeSecondary shouldBe Some(5L)
     mapped.eolOldAgeSecondaryOtherDescription shouldBe Some(
-      "General soreness and stiffness in the body "
+      "General soreness and stiffness in the body"
     )
     mapped.eolNotesDescription shouldBe Some("Notes on end of life")
     mapped.eolAddVemr shouldBe Some(true)

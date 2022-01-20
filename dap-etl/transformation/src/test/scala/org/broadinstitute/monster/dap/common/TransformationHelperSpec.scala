@@ -21,4 +21,19 @@ class TransformationHelperSpec extends PipelineSpec with Matchers {
       ids should containInAnyOrder(Seq(11111L, 11111L, 22222L, 22222L, 33333L, 33333L))
     }
   }
+
+  it should "map JSON to a raw record grouped by dog ID across multiple event names" in {
+    val path = this.getClass.getResource("transformation_helper").toString
+    val opts: PipelineOptions = PipelineOptionsFactory.fromArgs("--runner=DirectRunner").create()
+
+    runWithRealContext(opts) { sc =>
+      val records = TransformationHelper.readRecordsGroupByStudyId(
+        sc,
+        path
+      )
+      records should haveSize(3)
+      val ids = records.map(record => record.id)
+      ids should containInAnyOrder(Seq(11111L, 22222L, 33333L))
+    }
+  }
 }
