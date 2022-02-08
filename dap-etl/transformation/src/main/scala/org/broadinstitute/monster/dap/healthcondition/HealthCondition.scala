@@ -407,6 +407,7 @@ object HealthCondition extends LongEnum[HealthCondition] {
   case object SnakeBite extends HealthCondition(1815L, "Snakebite", Trauma, dx = Some("snake"))
   case object Tail extends HealthCondition(1816L, "Tail injury", Trauma, dx = Some("tail"))
   case object Nail extends HealthCondition(1817L, "Torn or broken toenail", Trauma, dx = Some("nail"))
+  case object HeatStroke extends HealthCondition(1818L, "Heatstroke", Trauma, dx = Some("heatstroke"))
   case object OtherTrauma extends HealthCondition(1898L, "Other trauma", Trauma, dx = Some("other"), isOther = true)
 
   // Immune conditions.
