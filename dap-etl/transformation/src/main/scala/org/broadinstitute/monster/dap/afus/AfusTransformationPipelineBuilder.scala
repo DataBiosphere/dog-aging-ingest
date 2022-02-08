@@ -6,6 +6,8 @@ import org.broadinstitute.monster.common.{PipelineBuilder, StorageIO}
 import org.broadinstitute.monster.dap.common.{Args, RawRecord, TransformationHelper}
 import org.slf4j.{Logger, LoggerFactory}
 
+import java.time.LocalDate
+
 object AfusTransformationPipelineBuilder extends PipelineBuilder[Args] {
   /**
     * Schedule all the steps for the Dog Aging transformation in the given pipeline context.
@@ -23,9 +25,7 @@ object AfusTransformationPipelineBuilder extends PipelineBuilder[Args] {
     //filter for form _completed flag
     //val filteredRecords = collectrawRecords.transform("Apply AFUS Filters")(_.flatMap(filterRecords))
     //val filteredRecords: SCollection[RawRecord] = rawRecords.transform("Apply AFUS Filters")(_.flatMap(filterRecords))
-    val filteredRecords = rawRecords.filter(
-      record => filterRecords(record)
-    )
+    val filteredRecords = rawRecords.filter(record => filterRecords(record))
 
     val owners =
       filteredRecords.transform("Map AFUS Owners")(
