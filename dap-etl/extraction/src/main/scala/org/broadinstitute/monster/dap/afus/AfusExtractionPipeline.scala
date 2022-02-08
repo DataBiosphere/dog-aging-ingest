@@ -20,6 +20,7 @@ object AfusExtractionPipeline extends ScioApp[Args] {
     "followup_owner_contact",
     "study_status",
     "followup_owner_demographics",
+    "followup_dog_demographics",
     "followup_physical_activity",
     "followup_environment",
     "followup_behavior",
@@ -27,13 +28,16 @@ object AfusExtractionPipeline extends ScioApp[Args] {
     "followup_meds_and_preventives",
     "followup_canine_eating_behavior_dora",
     "followup_dogowner_relationship_survey_mdors",
-    "followup_health_status"
+    "followup_health_status",
+    "followup_health_status_part_1",
+    "followup_health_status_part_2",
+    "followup_health_status_part_3"
   )
 
   def extractionFiltersGenerator(args: Args): List[FilterDirective] = {
     // FORM = followup_status
     val standardDirectives: List[FilterDirective] = List(
-      FilterDirective("fu_is_completed", FilterOps.==, "1")
+      FilterDirective("st_vip_or_staff", FilterOps.==, "0")
     )
     val dateFilters: List[FilterDirective] = {
       args.startTime
@@ -87,9 +91,16 @@ object AfusExtractionPipeline extends ScioApp[Args] {
     // afus has one arm per year ("fup_{sequence}_arm_1")
     val yearList = getYearList(startDate, endDate)
     val yearSeqList = List.range(1, yearList.length + 1)
-    yearSeqList.map { seq =>
-      s"fup_${seq}_arm_1"
-    } ++ List("baseline_arm_1")
+//    yearSeqList.map { seq =>
+//      s"fup_${seq}_arm_1"
+//    } ++ List("baseline_arm_1")
+    if (1 == 1) {
+      List("fup_1_arm_1", "baseline_arm_1")
+    } else {
+      yearSeqList.map { seq =>
+        s"fup_${seq}_arm_1"
+      } ++ List("baseline_arm_1")
+    }
   }
 
   def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =

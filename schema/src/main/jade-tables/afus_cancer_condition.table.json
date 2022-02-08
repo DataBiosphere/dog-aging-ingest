@@ -1,5 +1,5 @@
 {
-  "name": "afus_owner",
+  "name": "afus_cancer_condition",
   "columns": [
     {
       "name": "dog_id",
@@ -11,10 +11,6 @@
           "column_name": "dog_id"
         }
       ]
-    },
-    {
-      "name": "dog_id",
-      "datatype": "integer"
     },
     {
       "name": "afus_hs_new_initial_diagnosis_year",
@@ -178,7 +174,7 @@
     },
     {
       "name": "afus_hs_new_cancer_locations_other_description",
-      "datatype": "STRING"
+      "datatype": "string"
     },
     {
       "name": "afus_hs_new_cancer_types_adenoma",
@@ -326,7 +322,7 @@
     },
     {
       "name": "afus_hs_new_cancer_types_other_description",
-      "datatype": "STRING"
+      "datatype": "string"
     },
     {
       "name": "afus_hs_new_leukemia_types_acute",
@@ -346,7 +342,7 @@
     },
     {
       "name": "afus_hs_new_leukemia_types_other_description",
-      "datatype": "STRING"
+      "datatype": "string"
     },
     {
       "name": "afus_hs_new_lymphoma_lymphosarcoma_types_b_cell",
@@ -370,7 +366,7 @@
     },
     {
       "name": "afus_hs_new_lymphoma_lymphosarcoma_types_other_description",
-      "datatype": "STRING"
+      "datatype": "string"
     }
   ]
 }

@@ -13,6 +13,15 @@ object AfusOwnerTransformations {
         MissingOwnerIdError(s"Record has less than 1 value for field st_owner_id").log
         None
       case Some(owner_id) =>
+        val primaryAddressChange = rawRecord.getOptionalBoolean("fu_oc_address_change")
+        val primaryAddressOwnership =
+          if (primaryAddressChange.contains(true)) rawRecord.getOptionalNumber("fu_oc_address1_own")
+          else None
+        val secondaryAddressChange = rawRecord.getOptionalBoolean("fu_oc_address2_change")
+        val secondaryAddressOwnership =
+          if (secondaryAddressChange.contains(true))
+            rawRecord.getOptionalNumber("fu_oc_address2_own")
+          else None
         try {
           Some(
             AfusOwner(
@@ -20,29 +29,52 @@ object AfusOwnerTransformations {
               afusOcHouseholdPersonCount = rawRecord.getOptionalNumber("fu_oc_people_household"),
               afusOcHouseholdAdultCount = rawRecord.getOptionalNumber("fu_oc_adults_household"),
               afusOcHouseholdChildCount = rawRecord.getOptionalNumber("fu_oc_children_household"),
-              afusOcPrimaryAddressChange = rawRecord.getOptionalBoolean("fu_oc_address_change"),
-              afusOcPrimaryAddressChangeDate =
-                rawRecord.getOptionalDate("fu_oc_address1_change_date"),
-              afusOcPrimaryResidenceOwnership = rawRecord.getOptionalNumber("fu_oc_address1_own"),
+              // todo: rename to afus_oc_primary_residence_change... all fields?
+              afusOcPrimaryResidenceChange = primaryAddressChange,
+              // todo: rename to afus_oc_primary_residence_change_date
+              afusOcPrimaryResidenceChangeDate =
+                if (primaryAddressChange.contains(true))
+                  rawRecord.getOptionalDate("fu_oc_address1_change_date")
+                else None,
+              afusOcPrimaryResidenceOwnership = primaryAddressOwnership,
               afusOcPrimaryResidenceOwnershipOtherDescription =
-                rawRecord.getOptionalStripped("fu_oc_address1_own_other"),
-              afusOcPrimaryResidenceState = rawRecord.getOptionalStripped("fu_oc_address1_state"),
+                if (primaryAddressOwnership.contains(98))
+                  rawRecord.getOptionalStripped("fu_oc_address1_own_other")
+                else None,
+              afusOcPrimaryResidenceState =
+                if (primaryAddressChange.contains(true))
+                  rawRecord.getOptionalStripped("fu_oc_address1_state")
+                else None,
               afusOcPrimaryResidenceCensusDivision =
-                rawRecord.getOptional("fu_oc_address1_division").flatMap {
-                  getCensusDivision(_)
-                },
+                if (primaryAddressChange.contains(true))
+                  rawRecord.getOptional("fu_oc_address1_division").flatMap {
+                    getCensusDivision(_)
+                  }
+                else None,
               afusOcPrimaryResidenceTimePercentage =
-                rawRecord.getOptionalNumber("fu_oc_address1_pct"),
+                if (primaryAddressChange.contains(true))
+                  rawRecord.getOptionalNumber("fu_oc_address1_pct")
+                else None,
               afusOcSecondaryResidence = rawRecord.getOptionalNumber("fu_oc_address2_yn"),
-              afusOcSecondaryAddressChange = rawRecord.getOptionalBoolean("fu_oc_address2_change"),
+              // todo: rename to afus_oc_secondary_residence_change
+              afusOcSecondaryResidenceChange = secondaryAddressChange,
               afusOcSecondaryResidenceChangeDate =
-                rawRecord.getOptionalDate("fu_oc_address2_change_date"),
-              afusOcSecondaryResidenceOwnership = rawRecord.getOptionalNumber("fu_oc_address2_own"),
+                if (secondaryAddressChange.contains(true))
+                  rawRecord.getOptionalDate("fu_oc_address2_change_date")
+                else None,
+              afusOcSecondaryResidenceOwnership = secondaryAddressOwnership,
               afusOcSecondaryResidenceOwnershipOtherDescription =
-                rawRecord.getOptionalStripped("fu_oc_address2_own_other"),
-              afusOcSecondaryResidenceState = rawRecord.getOptionalStripped("fu_oc_address2_state"),
+                if (secondaryAddressOwnership.contains(98))
+                  rawRecord.getOptionalStripped("fu_oc_address2_own_other")
+                else None,
+              afusOcSecondaryResidenceState =
+                if (secondaryAddressChange.contains(true))
+                  rawRecord.getOptionalStripped("fu_oc_address2_state")
+                else None,
               afusOcSecondaryResidenceTimePercentage =
-                rawRecord.getOptionalNumber("fu_oc_2nd_address_pct"),
+                if (secondaryAddressChange.contains(true))
+                  rawRecord.getOptionalNumber("fu_oc_2nd_address_pct")
+                else None,
               afusOdAgeRangeYears = rawRecord.getOptionalNumber("fu_od_age"),
               afusOdMaxEducation = rawRecord.getOptionalNumber("fu_od_education"),
               afusOdMaxEducationOtherDescription =

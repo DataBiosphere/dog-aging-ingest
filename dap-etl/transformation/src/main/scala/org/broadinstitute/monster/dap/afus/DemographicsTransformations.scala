@@ -1,5 +1,6 @@
 package org.broadinstitute.monster.dap.afus
 
+import org.broadinstitute.monster.dap.common.OwnerTransformations.getCensusDivision
 import org.broadinstitute.monster.dap.common.RawRecord
 import org.broadinstitute.monster.dogaging.jadeschema.fragment.AfusDogDemographics
 
@@ -150,7 +151,9 @@ object DemographicsTransformations {
         else None,
       afusOcPrimaryResidenceCensusDivision =
         if (primaryAddressChange.contains(true))
-          rawRecord.getOptionalNumber("fu_oc_address1_division")
+          rawRecord.getOptional("fu_oc_address1_division").flatMap {
+            getCensusDivision(_)
+          }
         else None,
       afusOcPrimaryResidenceOwnership = primaryAddressOwnership,
       afusOcPrimaryResidenceOwnershipOtherDescription =

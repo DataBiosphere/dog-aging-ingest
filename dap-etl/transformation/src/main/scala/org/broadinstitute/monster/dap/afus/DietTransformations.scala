@@ -195,7 +195,7 @@ object DietTransformations {
       afusDfAppetite = rawRecord.getOptionalNumber("fu_df_app"),
       afusDfAppetiteChangeLastYear = appetiteChange.flatMap {
         case 99L => Some(99L)
-        case 0L  => Some(0L)
+        case 1L  => Some(0L)
         case _   => appetiteChangeHow
       },
       afusDfWeightChangeLastYear = weightChange.flatMap {

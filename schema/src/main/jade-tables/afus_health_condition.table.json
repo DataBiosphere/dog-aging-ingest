@@ -14,7 +14,8 @@
     },
     {
       "name": "afus_hs_new_condition_type",
-      "datatype": "integer"
+      "datatype": "integer",
+      "type": "required"
     },
     {
       "name": "afus_hs_new_condition",
@@ -22,7 +23,8 @@
     },
     {
       "name": "afus_hs_new_condition_is_congenital",
-      "datatype": "boolean"
+      "datatype": "boolean",
+      "type": "required"
     },
     {
       "name": "afus_hs_new_condition_diagnosis_year",
