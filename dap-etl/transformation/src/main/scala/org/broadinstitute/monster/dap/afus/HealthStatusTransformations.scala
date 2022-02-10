@@ -36,7 +36,7 @@ object HealthStatusTransformations {
         if (otherHospitalization.contains(true))
           rawRecord.getOptionalStripped("fu_hs_hosp_why_other")
         else None,
-      afusHsOtherMedicalInfo = rawRecord.getOptional("fu_hs_other_med_info")
+      afusHsOtherMedicalInfo = rawRecord.getOptionalStripped("fu_hs_other_med_info")
     )
   }
 

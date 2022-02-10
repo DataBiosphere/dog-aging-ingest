@@ -118,7 +118,7 @@
       "datatype": "boolean"
     },
     {
-      "name": "afus_df_secondary_diet_component_change_health_condition_specif",
+      "name": "afus_df_secondary_diet_component_change_condition_specific",
       "datatype": "boolean"
     },
     {

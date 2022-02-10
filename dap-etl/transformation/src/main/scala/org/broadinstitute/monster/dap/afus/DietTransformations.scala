@@ -77,7 +77,7 @@ object DietTransformations {
       afusDfSecondaryDietComponentChangeAllergyRelated = changeReasons.map(_.contains("1")),
       afusDfSecondaryDietComponentChangeDifferentLifeStage = changeReasons.map(_.contains("2")),
       afusDfSecondaryDietComponentChangeStopGrainFree = changeReasons.map(_.contains("3")),
-      afusDfSecondaryDietComponentChangeHealthConditionSpecif = changeReasons.map(_.contains("4")),
+      afusDfSecondaryDietComponentChangeConditionSpecific = changeReasons.map(_.contains("4")),
       afusDfSecondaryDietComponentChangeBrandChange = changeReasons.map(_.contains("5")),
       afusDfSecondaryDietComponentChangeNewFoodSameBrand = changeReasons.map(_.contains("6")),
       afusDfSecondaryDietComponentChangeOther = changeOther,
@@ -195,7 +195,7 @@ object DietTransformations {
       afusDfAppetite = rawRecord.getOptionalNumber("fu_df_app"),
       afusDfAppetiteChangeLastYear = appetiteChange.flatMap {
         case 99L => Some(99L)
-        case 1L  => Some(0L)
+        case 0L  => Some(0L)
         case _   => appetiteChangeHow
       },
       afusDfWeightChangeLastYear = weightChange.flatMap {

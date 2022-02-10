@@ -57,31 +57,43 @@ object AfusTransformationPipelineBuilder extends PipelineBuilder[Args] {
 
   def filterRecords(rawRecord: RawRecord): Boolean = {
     val afusDueDate = rawRecord.getOptionalDate("fu_due_date")
-    val afusFullyComplete = rawRecord.getRequiredBoolean("fu_is_completed")
-    val afusOwnerContactComplete = rawRecord.getRequiredBoolean("followup_owner_contact_complete")
-    val afusOwnerDemographicsComplete =
-      rawRecord.getRequiredBoolean("followup_owner_demographics_complete")
-    val afusDogDemographicsComplete =
-      rawRecord.getRequiredBoolean("followup_dog_demographics_complete")
-    val afusPhysicalActivityComplete =
-      rawRecord.getRequiredBoolean("followup_physical_activity_complete")
-    val afusEnvironmentComplete = rawRecord.getRequiredBoolean("followup_environment_complete")
-    val afusBehaviorComplete = rawRecord.getRequiredBoolean("followup_behavior_complete")
-    val afusDietComplete = rawRecord.getRequiredBoolean("followup_diet_complete")
-    val afusMedsAndPreventativesComplete =
-      rawRecord.getRequiredBoolean("followup_meds_and_preventives_complete")
-    val afusDoraComplete =
-      rawRecord.getRequiredBoolean("followup_canine_eating_behavior_dora_complete")
-    val afusMdorsComplete =
-      rawRecord.getRequiredBoolean("followup_dogowner_relationship_survey_mdors_complete")
-    val afusHealthStatusComplete = rawRecord.getRequiredBoolean("followup_health_status_complete")
-    afusDueDate match {
-      case Some(dueDate) =>
-        dueDate.isAfter(LocalDate.of(2021, 12, 31)) &&
-          afusOwnerContactComplete || afusFullyComplete || afusOwnerDemographicsComplete || afusDogDemographicsComplete || afusPhysicalActivityComplete || afusEnvironmentComplete || afusBehaviorComplete || afusDietComplete || afusMedsAndPreventativesComplete || afusDoraComplete || afusMdorsComplete || afusHealthStatusComplete
+    val afusFullyComplete = rawRecord.getOptionalBoolean("fu_is_completed")
+    val afusCompleteDate = rawRecord.getOptionalDate("fu_complete_date")
+    (afusFullyComplete, afusCompleteDate) match {
+      //([followup_status][fu_is_completed] = 1 AND [followup_status][fu_complete_date] <= 12/31/2021)
+      case (Some(fullyComplete), Some(completeDate)) =>
+        fullyComplete && completeDate.isBefore(LocalDate.of(2021, 12, 31))
       case _ =>
-        false
+        afusDueDate match {
+          //OR ([followup_status][fu_due_date] <= 12/31/2021 AND ([followup_owner_contact][[form]_complete] = 2 OR ...)
+          case Some(dueDate) =>
+            dueDate.isBefore(LocalDate.of(2021, 12, 31)) &&
+              (rawRecord.getOptionalNumber("followup_owner_contact_complete").contains(2)
+                || rawRecord.getOptionalNumber("followup_owner_demographics_complete").contains(2)
+                || rawRecord.getOptionalNumber("followup_dog_demographics_complete").contains(2)
+                || rawRecord.getOptionalNumber("followup_physical_activity_complete").contains(2)
+                || rawRecord.getOptionalNumber("followup_environment_complete").contains(2)
+                || rawRecord.getOptionalNumber("followup_behavior_complete").contains(2)
+                || rawRecord.getOptionalNumber("followup_diet_complete").contains(2)
+                || rawRecord.getOptionalNumber("followup_meds_and_preventives_complete").contains(2)
+                || rawRecord
+                  .getOptionalNumber("followup_canine_eating_behavior_dora_complete")
+                  .contains(2)
+                || rawRecord
+                  .getOptionalNumber("followup_dogowner_relationship_survey_mdors_complete")
+                  .contains(2)
+                || rawRecord.getOptionalNumber("followup_health_status_complete").contains(2))
+          case _ =>
+            false
+        }
     }
+//    afusDueDate match {
+//      case Some(dueDate) =>
+//        dueDate.isAfter(LocalDate.of(2021, 12, 31)) &&
+//          afusOwnerContactComplete || afusFullyComplete || afusOwnerDemographicsComplete || afusDogDemographicsComplete || afusPhysicalActivityComplete || afusEnvironmentComplete || afusBehaviorComplete || afusDietComplete || afusMedsAndPreventativesComplete || afusDoraComplete || afusMdorsComplete || afusHealthStatusComplete
+//      case _ =>
+//        false
+//    }
   }
 
   /** Read in records and group by study Id, with field name subgroups. */

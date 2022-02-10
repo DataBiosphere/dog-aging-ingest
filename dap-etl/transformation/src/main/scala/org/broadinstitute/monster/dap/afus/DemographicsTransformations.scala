@@ -176,56 +176,43 @@ object DemographicsTransformations {
         if (secondaryAddressChange.contains(true))
           rawRecord.getOptionalNumber("fu_oc_2nd_address_pct")
         else None,
-      afusDdAlternateRecentResidence1State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_01_st"),
+      afusDdAlternateRecentResidence1State = rawRecord.getOptional("fu_dd_2nd_residence_01_st"),
       afusDdAlternateRecentResidence1Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_01_time"),
-      afusDdAlternateRecentResidence2State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_02_st"),
+      afusDdAlternateRecentResidence2State = rawRecord.getOptional("fu_dd_2nd_residence_02_st"),
       afusDdAlternateRecentResidence2Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_02_time"),
-      afusDdAlternateRecentResidence3State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_03_st"),
+      afusDdAlternateRecentResidence3State = rawRecord.getOptional("fu_dd_2nd_residence_03_st"),
       afusDdAlternateRecentResidence3Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_03_time"),
-      afusDdAlternateRecentResidence4State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_04_st"),
+      afusDdAlternateRecentResidence4State = rawRecord.getOptional("fu_dd_2nd_residence_04_st"),
       afusDdAlternateRecentResidence4Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_04_time"),
-      afusDdAlternateRecentResidence5State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_05_st"),
+      afusDdAlternateRecentResidence5State = rawRecord.getOptional("fu_dd_2nd_residence_05_st"),
       afusDdAlternateRecentResidence5Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_05_time"),
-      afusDdAlternateRecentResidence6State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_06_st"),
+      afusDdAlternateRecentResidence6State = rawRecord.getOptional("fu_dd_2nd_residence_06_st"),
       afusDdAlternateRecentResidence6Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_06_time"),
-      afusDdAlternateRecentResidence7State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_07_st"),
+      afusDdAlternateRecentResidence7State = rawRecord.getOptional("fu_dd_2nd_residence_07_st"),
       afusDdAlternateRecentResidence7Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_07_time"),
-      afusDdAlternateRecentResidence8State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_08_st"),
+      afusDdAlternateRecentResidence8State = rawRecord.getOptional("fu_dd_2nd_residence_08_st"),
       afusDdAlternateRecentResidence8Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_08_time"),
-      afusDdAlternateRecentResidence9State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_09_st"),
+      afusDdAlternateRecentResidence9State = rawRecord.getOptional("fu_dd_2nd_residence_09_st"),
       afusDdAlternateRecentResidence9Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_09_time"),
-      afusDdAlternateRecentResidence10State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_10_st"),
+      afusDdAlternateRecentResidence10State = rawRecord.getOptional("fu_dd_2nd_residence_10_st"),
       afusDdAlternateRecentResidence10Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_10_time"),
-      afusDdAlternateRecentResidence11State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_11_st"),
+      afusDdAlternateRecentResidence11State = rawRecord.getOptional("fu_dd_2nd_residence_11_st"),
       afusDdAlternateRecentResidence11Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_11_time"),
-      afusDdAlternateRecentResidence12State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_12_st"),
+      afusDdAlternateRecentResidence12State = rawRecord.getOptional("fu_dd_2nd_residence_12_st"),
       afusDdAlternateRecentResidence12Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_12_time"),
-      afusDdAlternateRecentResidence13State =
-        rawRecord.getOptionalNumber("fu_dd_2nd_residence_13_st"),
+      afusDdAlternateRecentResidence13State = rawRecord.getOptional("fu_dd_2nd_residence_13_st"),
       afusDdAlternateRecentResidence13Weeks =
         rawRecord.getOptionalNumber("fu_dd_2nd_residence_13_time")
     )

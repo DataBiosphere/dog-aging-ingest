@@ -34,54 +34,63 @@ object MedsPreventativesTransformations {
 
   def mapGroom(rawRecord: RawRecord, dog: AfusDogMedsPreventatives): AfusDogMedsPreventatives = {
     dog.copy(
-      // mapProGroom
       afusMpProfessionalGrooming = rawRecord.getOptionalBoolean("fu_mp_gr_pro"),
       afusMpProfessionalGroomingFrequency = rawRecord.getOptionalNumber("fu_mp_gr_pro_freq"),
-      // mapHomeGroom
       afusMpHomeGrooming = rawRecord.getOptionalBoolean("fu_mp_gr_home"),
       afusMpHomeGroomingFrequency = rawRecord.getOptionalNumber("fu_mp_gr_home_freq")
     )
   }
 
   def mapFleaTick(rawRecord: RawRecord, dog: AfusDogMedsPreventatives): AfusDogMedsPreventatives = {
-    dog.copy(
-      // mapFleaTick
-      afusMpFleaAndTickTreatment = rawRecord.getOptionalBoolean("fu_mp_flea"),
-      afusMpFleaAndTickTreatmentFrequency = rawRecord.getOptionalNumber("fu_mp_flea_freq"),
-      afusMpFleaAndTickTreatmentTopical = rawRecord.getOptionalBoolean("fu_mp_flea_topical"),
-      afusMpFleaAndTickTreatmentCollar = rawRecord.getOptionalBoolean("fu_mp_flea_collar"),
-      afusMpFleaAndTickTreatmentOral = rawRecord.getOptionalBoolean("fu_mp_flea_oral"),
-      afusMpFleaAndTickTreatmentDip = rawRecord.getOptionalBoolean("fu_mp_flea_dip"),
-      afusMpFleaAndTickTreatmentInjectable = rawRecord.getOptionalBoolean("fu_mp_flea_injectable"),
-      afusMpFleaAndTickTreatmentEssentialOils =
-        rawRecord.getOptionalBoolean("fu_mp_flea_essential_oils"),
-      afusMpFleaAndTickTreatmentShampoo = rawRecord.getOptionalBoolean("fu_mp_flea_shampoo"),
-      afusMpFleaAndTickTreatmentEnvironmental =
-        rawRecord.getOptionalBoolean("fu_mp_flea_environmental"),
-      afusMpFleaAndTickTreatmentOther = rawRecord.getOptionalBoolean("fu_mp_flea_other_yn"),
-      afusMpFleaAndTickTreatmentOtherDescription =
-        rawRecord.getOptionalStripped("fu_mp_flea_other"),
-      afusMpFleaTopicalCollarBrand = rawRecord.getOptionalNumber("fu_mp_flea_topical_collar_brand"),
-      afusMpFleaOralBrand = rawRecord.getOptionalNumber("fu_mp_flea_oral_brand")
-    )
+    rawRecord.getOptionalBoolean("fu_mp_flea").fold(dog) { fleaTreatment =>
+      if (fleaTreatment) {
+        dog.copy(
+          afusMpFleaAndTickTreatment = Some(fleaTreatment),
+          afusMpFleaAndTickTreatmentFrequency = rawRecord.getOptionalNumber("fu_mp_flea_freq"),
+          afusMpFleaAndTickTreatmentTopical = rawRecord.getOptionalBoolean("fu_mp_flea_topical"),
+          afusMpFleaAndTickTreatmentCollar = rawRecord.getOptionalBoolean("fu_mp_flea_collar"),
+          afusMpFleaAndTickTreatmentOral = rawRecord.getOptionalBoolean("fu_mp_flea_oral"),
+          afusMpFleaAndTickTreatmentDip = rawRecord.getOptionalBoolean("fu_mp_flea_dip"),
+          afusMpFleaAndTickTreatmentInjectable =
+            rawRecord.getOptionalBoolean("fu_mp_flea_injectable"),
+          afusMpFleaAndTickTreatmentEssentialOils =
+            rawRecord.getOptionalBoolean("fu_mp_flea_essential_oils"),
+          afusMpFleaAndTickTreatmentShampoo = rawRecord.getOptionalBoolean("fu_mp_flea_shampoo"),
+          afusMpFleaAndTickTreatmentEnvironmental =
+            rawRecord.getOptionalBoolean("fu_mp_flea_environmental"),
+          afusMpFleaAndTickTreatmentOther = rawRecord.getOptionalBoolean("fu_mp_flea_other_yn"),
+          afusMpFleaAndTickTreatmentOtherDescription =
+            rawRecord.getOptionalStripped("fu_mp_flea_other"),
+          afusMpFleaTopicalCollarBrand =
+            rawRecord.getOptionalNumber("fu_mp_flea_topical_collar_brand"),
+          afusMpFleaOralBrand = rawRecord.getOptionalNumber("fu_mp_flea_oral_brand")
+        )
+      } else {
+        dog.copy(afusMpFleaAndTickTreatment = Some(fleaTreatment))
+      }
+    }
   }
 
   def mapHeartworm(
     rawRecord: RawRecord,
     dog: AfusDogMedsPreventatives
   ): AfusDogMedsPreventatives = {
-    dog.copy(
-      // mapHeartworm
-      afusMpHeartwormPreventative = rawRecord.getOptionalBoolean("fu_mp_hw"),
-      afusMpHeartwormPreventativeFrequency = rawRecord.getOptionalNumber("fu_mp_hw_freq"),
-      afusMpHeartwormPreventativeOralChewable = rawRecord.getOptionalBoolean("fu_mp_hw_tablet"),
-      afusMpHeartwormPreventativeOralSolution = rawRecord.getOptionalBoolean("fu_mp_hw_solution"),
-      afusMpHeartwormPreventativeTopical = rawRecord.getOptionalBoolean("fu_mp_hw_topical"),
-      afusMpHeartwormPreventativeInjectable = rawRecord.getOptionalBoolean("fu_mp_hw_injectable"),
-      afusMpHeartwormPreventativeOther = rawRecord.getOptionalBoolean("fu_mp_hw_other_yn"),
-      afusMpHeartwormPreventativeOtherDescription = rawRecord.getOptionalStripped("fu_mp_hw_other"),
-      afusMpHeartwormPreventativeBrand = rawRecord.getOptionalNumber("fu_mp_hw_brand")
-    )
+    rawRecord.getOptionalBoolean("fu_mp_hw").fold(dog) { heartwormTreatment =>
+      if (heartwormTreatment) {
+        dog.copy(
+          afusMpHeartwormPreventative = Some(heartwormTreatment),
+          afusMpHeartwormPreventativeFrequency = rawRecord.getOptionalNumber("fu_mp_hw_freq"),
+          afusMpHeartwormPreventativeOralChewable = rawRecord.getOptionalBoolean("fu_mp_hw_tablet"),
+          afusMpHeartwormPreventativeOralSolution = rawRecord.getOptionalBoolean("fu_mp_hw_solution"),
+          afusMpHeartwormPreventativeTopical = rawRecord.getOptionalBoolean("fu_mp_hw_topical"),
+          afusMpHeartwormPreventativeInjectable = rawRecord.getOptionalBoolean("fu_mp_hw_injectable"),
+          afusMpHeartwormPreventativeOther = rawRecord.getOptionalBoolean("fu_mp_hw_other_yn"),
+          afusMpHeartwormPreventativeOtherDescription =
+            rawRecord.getOptionalStripped("fu_mp_hw_other"),
+          afusMpHeartwormPreventativeBrand = rawRecord.getOptionalNumber("fu_mp_hw_brand")
+        )
+      } else { dog.copy(afusMpHeartwormPreventative = Some(heartwormTreatment)) }
+    }
   }
 
   def mapOtherMeds(

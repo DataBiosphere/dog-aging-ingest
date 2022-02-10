@@ -17,7 +17,11 @@ object AfusOwnerTransformations {
         val primaryAddressOwnership =
           if (primaryAddressChange.contains(true)) rawRecord.getOptionalNumber("fu_oc_address1_own")
           else None
-        val secondaryAddressChange = rawRecord.getOptionalBoolean("fu_oc_address2_change")
+        val secondaryAddress = rawRecord.getOptionalNumber("fu_oc_address2_yn")
+        val secondaryAddressChange =
+          if (secondaryAddress.getOrElse(0) != 0)
+            rawRecord.getOptionalBoolean("fu_oc_address2_change")
+          else None
         val secondaryAddressOwnership =
           if (secondaryAddressChange.contains(true))
             rawRecord.getOptionalNumber("fu_oc_address2_own")
@@ -29,9 +33,7 @@ object AfusOwnerTransformations {
               afusOcHouseholdPersonCount = rawRecord.getOptionalNumber("fu_oc_people_household"),
               afusOcHouseholdAdultCount = rawRecord.getOptionalNumber("fu_oc_adults_household"),
               afusOcHouseholdChildCount = rawRecord.getOptionalNumber("fu_oc_children_household"),
-              // todo: rename to afus_oc_primary_residence_change... all fields?
               afusOcPrimaryResidenceChange = primaryAddressChange,
-              // todo: rename to afus_oc_primary_residence_change_date
               afusOcPrimaryResidenceChangeDate =
                 if (primaryAddressChange.contains(true))
                   rawRecord.getOptionalDate("fu_oc_address1_change_date")
@@ -55,8 +57,7 @@ object AfusOwnerTransformations {
                 if (primaryAddressChange.contains(true))
                   rawRecord.getOptionalNumber("fu_oc_address1_pct")
                 else None,
-              afusOcSecondaryResidence = rawRecord.getOptionalNumber("fu_oc_address2_yn"),
-              // todo: rename to afus_oc_secondary_residence_change
+              afusOcSecondaryResidence = secondaryAddress,
               afusOcSecondaryResidenceChange = secondaryAddressChange,
               afusOcSecondaryResidenceChangeDate =
                 if (secondaryAddressChange.contains(true))
