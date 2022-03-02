@@ -28,11 +28,10 @@ object AfusDogTransformations {
               // todo: redcap_event_name is not available with the current grouping of records (see TransformationHelper)
               // todo: figure out how to do the correct grouping of records
               afusFollowupYear = redcapEventName match {
-                case Some(event) => Some(event.split("_")(1).toLong)
-                case None        => None
+                case Some(event) =>
+                  if (event != "baseline_arm_1") Some(event.split("_")(1).toLong) else None
+                case None => None
               },
-              //Some(redcapEvent.split("_")(1).filter(_.isDigit).toLong),
-              //Some(redcapEvent.split("_").redcapEventName(0).filter(_.isDigit)afus_dd_alternate_recent_residence_count
               afusDogDemographics = Some(DemographicsTransformations.mapDemographics(rawRecord)),
               afusDogPhysicalActivity =
                 Some(PhysicalActivityTransformations.mapPhysicalActivities(rawRecord)),
