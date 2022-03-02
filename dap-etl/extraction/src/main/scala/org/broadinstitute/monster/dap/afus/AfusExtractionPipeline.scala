@@ -23,9 +23,11 @@ object AfusExtractionPipeline extends ScioApp[Args] {
   )
 
   def extractionFiltersGenerator(args: Args): List[FilterDirective] = {
-    // FORM = followup_status
     val standardDirectives: List[FilterDirective] = List(
-      FilterDirective("fu_is_completed", FilterOps.==, "1")
+      // DAP Pack filters
+      FilterDirective("st_dap_pack_count", FilterOps.>, "0"),
+      FilterDirective("st_vip_or_staff", FilterOps.==, "0")
+    )
     )
     val dateFilters: List[FilterDirective] = {
       args.startTime
