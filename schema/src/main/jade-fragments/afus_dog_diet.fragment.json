@@ -50,7 +50,7 @@
       "datatype": "boolean"
     },
     {
-      "name": "afus_df_primary_diet_component_change_health_condition_specific",
+      "name": "afus_df_primary_diet_component_change_condition_specific",
       "datatype": "boolean"
     },
     {
@@ -290,7 +290,7 @@
       "datatype": "integer"
     },
     {
-      "name": "afus_df_daily_supplements_tumeric",
+      "name": "afus_df_daily_supplements_turmeric",
       "datatype": "integer"
     },
     {
@@ -398,7 +398,7 @@
       "datatype": "integer"
     },
     {
-      "name": "afus_df_infrequent_supplements_tumeric",
+      "name": "afus_df_infrequent_supplements_turmeric",
       "datatype": "integer"
     },
     {

@@ -7,6 +7,14 @@
       "type": "primary_key"
     },
     {
+      "name": "afus_calendar_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_followup_year",
+      "datatype": "integer"
+    },
+    {
       "name": "afus_oc_household_person_count",
       "datatype": "integer"
     },

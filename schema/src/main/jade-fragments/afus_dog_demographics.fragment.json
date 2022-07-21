@@ -303,7 +303,7 @@
     },
     {
       "name": "afus_dd_fns_sire_breed",
-      "datatype": "boolean"
+      "datatype": "integer"
     },
     {
       "name": "afus_dd_fns_litter_size",

@@ -41,28 +41,17 @@ object AfusExtractionPipeline extends ScioApp[Args] {
       FilterDirective("st_vip_or_staff", FilterOps.==, "0")
     )
     val dateFilters: List[FilterDirective] = {
-      args.startTime
-        .map(start =>
+      args.endTime
+        .map(end =>
           List(
             FilterDirective(
               "fu_complete_date",
-              FilterOps.>,
-              RedCapClient.redcapFormatDate(start)
+              FilterOps.<,
+              RedCapClient.redcapFormatDate(end)
             )
           )
         )
-        .getOrElse(List()) ++
-        args.endTime
-          .map(end =>
-            List(
-              FilterDirective(
-                "fu_complete_date",
-                FilterOps.<,
-                RedCapClient.redcapFormatDate(end)
-              )
-            )
-          )
-          .getOrElse(List())
+        .getOrElse(List())
     }
 
     standardDirectives ++ dateFilters

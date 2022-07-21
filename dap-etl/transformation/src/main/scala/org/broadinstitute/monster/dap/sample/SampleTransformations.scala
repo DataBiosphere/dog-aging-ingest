@@ -8,12 +8,13 @@ object SampleTransformations {
   def mapSampleData(rawRecord: RawRecord): Option[Sample] = {
     val dateCollected = rawRecord.getOptionalDateTime("k1_rtn_tracking_date")
     val kitId = rawRecord.getOptionalNumber("k1_tube_serial")
-    (dateCollected, kitId) match {
-      case (Some(dateCollected), Some(kitId)) =>
+    val cohort = rawRecord.getOptionalNumber("ce_enroll_stat")
+    (dateCollected, kitId, cohort) match {
+      case (Some(dateCollected), Some(kitId), Some(cohort)) =>
         Some(
           Sample(
             dogId = rawRecord.getRequired("study_id").toLong,
-            cohort = rawRecord.getRequired("ce_enroll_stat").toLong,
+            cohort = cohort,
             sampleId = kitId,
             sampleType = "saliva_DNA_lowcov",
             dateSwabArrivalLaboratory = dateCollected

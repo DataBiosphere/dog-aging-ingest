@@ -44,7 +44,7 @@ object DietTransformations {
       afusDfPrimaryDietComponentChangeAllergyRelated = changeReasons.map(_.contains("1")),
       afusDfPrimaryDietComponentChangeDifferentLifeStage = changeReasons.map(_.contains("2")),
       afusDfPrimaryDietComponentChangeStopGrainFree = changeReasons.map(_.contains("3")),
-      afusDfPrimaryDietComponentChangeHealthConditionSpecific = changeReasons.map(_.contains("4")),
+      afusDfPrimaryDietComponentChangeConditionSpecific = changeReasons.map(_.contains("4")),
       afusDfPrimaryDietComponentChangeBrandChange = changeReasons.map(_.contains("5")),
       afusDfPrimaryDietComponentChangeNewFoodSameBrand = changeReasons.map(_.contains("6")),
       afusDfPrimaryDietComponentChangeOther = changeOther,
@@ -131,7 +131,7 @@ object DietTransformations {
       afusDfDailySupplementsAntiox = rawRecord.getOptionalNumber("fu_df_s_antiox"),
       afusDfDailySupplementsCoenzymeQ10 = rawRecord.getOptionalNumber("fu_df_s_q10"),
       afusDfDailySupplementsCbd = rawRecord.getOptionalNumber("fu_df_s_cbd"),
-      afusDfDailySupplementsTumeric = rawRecord.getOptionalNumber("fu_df_s_tumeric"),
+      afusDfDailySupplementsTurmeric = rawRecord.getOptionalNumber("fu_df_s_tumeric"),
       afusDfDailySupplementsAnxiety = rawRecord.getOptionalNumber("fu_df_s_anxiety"),
       afusDfDailySupplementsOtherOils = rawRecord.getOptionalNumber("fu_df_s_oils_other"),
       afusDfDailySupplementsCranberry = rawRecord.getOptionalNumber("fu_df_s_cranberry"),
@@ -166,7 +166,7 @@ object DietTransformations {
       afusDfInfrequentSupplementsAntiox = rawRecord.getOptionalNumber("fu_df_s_antiox_ltd"),
       afusDfInfrequentSupplementsCoenzymeQ10 = rawRecord.getOptionalNumber("fu_df_s_q10_ltd"),
       afusDfInfrequentSupplementsCbd = rawRecord.getOptionalNumber("fu_df_s_cbd_ltd"),
-      afusDfInfrequentSupplementsTumeric = rawRecord.getOptionalNumber("fu_df_s_tumeric_ltd"),
+      afusDfInfrequentSupplementsTurmeric = rawRecord.getOptionalNumber("fu_df_s_tumeric_ltd"),
       afusDfInfrequentSupplementsAnxiety = rawRecord.getOptionalNumber("fu_df_s_anxiety_ltd"),
       afusDfInfrequentSupplementsOtherOils = rawRecord.getOptionalNumber("fu_df_s_oils_other_ltd"),
       afusDfInfrequentSupplementsCranberry = rawRecord.getOptionalNumber("fu_df_s_cranberry_ltd"),
@@ -195,7 +195,7 @@ object DietTransformations {
       afusDfAppetite = rawRecord.getOptionalNumber("fu_df_app"),
       afusDfAppetiteChangeLastYear = appetiteChange.flatMap {
         case 99L => Some(99L)
-        case 0L  => Some(0L)
+        case 1L  => Some(0L)
         case _   => appetiteChangeHow
       },
       afusDfWeightChangeLastYear = weightChange.flatMap {

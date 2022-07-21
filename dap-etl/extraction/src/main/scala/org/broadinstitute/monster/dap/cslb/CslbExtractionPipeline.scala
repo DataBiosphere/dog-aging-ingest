@@ -15,7 +15,8 @@ object CslbExtractionPipeline extends ScioApp[Args] {
 
   val forms = List(
     "recruitment_fields",
-    "canine_social_and_learned_behavior"
+    "canine_social_and_learned_behavior",
+    "study_status"
   )
 
   // Magic marker for "completed".
@@ -23,21 +24,13 @@ object CslbExtractionPipeline extends ScioApp[Args] {
   // mapping, as that conflicts with the CSLB data
   def extractionFiltersGenerator(args: Args): List[FilterDirective] = {
     val standardDirectives: List[FilterDirective] = List(
-      FilterDirective("canine_social_and_learned_behavior_complete", FilterOps.==, "2")
+      FilterDirective("canine_social_and_learned_behavior_complete", FilterOps.==, "2"),
+      FilterDirective("st_vip_or_staff", FilterOps.==, "0")
     )
     val dateFilters: List[FilterDirective] = {
-      List(
-      ) ++
-        args.startTime
-          .map(start =>
-            List(FilterDirective("cslb_date", FilterOps.>, RedCapClient.redcapFormatDate(start)))
-          )
-          .getOrElse(List()) ++
-        args.endTime
-          .map(end =>
-            List(FilterDirective("cslb_date", FilterOps.<, RedCapClient.redcapFormatDate(end)))
-          )
-          .getOrElse(List())
+      args.endTime
+        .map(end => List(FilterDirective("cslb_date", FilterOps.<, RedCapClient.redcapFormatDate(end))))
+        .getOrElse(List())
     }
     standardDirectives ++ dateFilters
   }
@@ -65,10 +58,10 @@ object CslbExtractionPipeline extends ScioApp[Args] {
     // cslb has one arm per year ("annual_{yyyy}_arm_1")
     getYearList(startDate, endDate).map { date =>
       s"annual_${date}_arm_1"
-    }
+    } ++ List("baseline_arm_1")
   }
 
-  val fieldList = List("co_consent")
+  val fieldList = List("co_consent", "st_vip_or_staff")
 
   def buildPipelineWithWrapper(wrapper: HttpWrapper): PipelineBuilder[Args] =
     new ExtractionPipelineBuilder(
@@ -77,7 +70,7 @@ object CslbExtractionPipeline extends ScioApp[Args] {
       extractionArmsGenerator,
       fieldList,
       subdir,
-      1000,
+      10,
       RedCapClient.apply(_: List[String], wrapper)
     )
 

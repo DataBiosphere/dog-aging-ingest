@@ -232,7 +232,7 @@ object DemographicsTransformations {
         rawRecord.getOptionalBoolean("fu_dd_fns_pregnancy_termination"),
       afusDdFnsCurrentlyPregnant = rawRecord.getOptionalBoolean("fu_dd_fns_currently_pregnant"),
       afusDdFnsLitterDate = rawRecord.getOptionalDate("fu_dd_fns_litter_date"),
-      afusDdFnsSireBreed = rawRecord.getOptionalBoolean("fu_dd_fns_sire_breed"),
+      afusDdFnsSireBreed = rawRecord.getOptionalNumber("fu_dd_fns_sire_breed"),
       afusDdFnsLitterSize = rawRecord.getOptionalNumber("fu_dd_fns_litter_size"),
       afusDdFnsLitterAllLive = rawRecord.getOptionalBoolean("fu_dd_fns_litter_all_alive_yn"),
       afusDdFnsLitterDeadCount = rawRecord.getOptionalNumber("fu_dd_fns_litter_number_dead"),

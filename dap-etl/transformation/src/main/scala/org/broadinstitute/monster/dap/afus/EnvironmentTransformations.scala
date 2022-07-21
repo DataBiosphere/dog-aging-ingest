@@ -240,7 +240,7 @@ object EnvironmentTransformations {
         afusDeDogpark = dogPark,
         afusDeDogparkDaysPerMonth = rawRecord.getOptionalNumber("fu_de_dogpark_freq"),
         afusDeDogparkTravelHow = dogparkTravel,
-        afusDeDogparkTravelMethodOtherDescription = if (dogparkTravel.equals(98)) {
+        afusDeDogparkTravelMethodOtherDescription = if (dogparkTravel.contains(98)) {
           rawRecord.getOptionalStripped("fu_de_dogpark_get_to_other")
         } else None,
         afusDeDogparkTravelTimeHours = rawRecord.getOptionalNumber("fu_de_dogpark_hr"),
@@ -261,7 +261,7 @@ object EnvironmentTransformations {
         afusDeRecreationalSpaces = dogRecSpaces,
         afusDeRecreationalSpacesDaysPerMonth = rawRecord.getOptionalNumber("fu_de_spaces_freq"),
         afusDeRecreationalSpacesTravelHow = dogRecSpacesTravel,
-        afusDeRecreationalSpacesTravelOtherDescription = if (dogRecSpacesTravel.equals(98)) {
+        afusDeRecreationalSpacesTravelOtherDescription = if (dogRecSpacesTravel.contains(98)) {
           rawRecord.getOptionalStripped("fu_de_spaces_get_to_other")
         } else None,
         afusDeRecreationalSpacesTravelTimeHours = rawRecord.getOptionalNumber("fu_de_spaces_hr"),
@@ -306,7 +306,7 @@ object EnvironmentTransformations {
         afusDeSitterOrDaycareFrequency = rawRecord.getOptionalNumber("fu_de_sitter_freq"),
         afusDeSitterOrDaycareTravelHow = dogSitterTravel,
         afusDeSitterOrDaycareTravelMethodOtherDescription = if (dogSitterTravel.contains(98)) {
-          rawRecord.getOptionalBoolean("fu_de_sitter_how_other")
+          rawRecord.getOptionalStripped("fu_de_sitter_how_other")
         } else None,
         afusDeSitterOrDaycareTravelTimeHours = rawRecord.getOptionalNumber("fu_de_sitter_hr"),
         afusDeSitterOrDaycareTravelTimeMinutes = rawRecord.getOptionalNumber("fu_de_sitter_min")

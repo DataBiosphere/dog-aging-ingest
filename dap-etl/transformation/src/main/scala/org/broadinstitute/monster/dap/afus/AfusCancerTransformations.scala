@@ -7,6 +7,8 @@ object AfusCancerTransformations {
 
   def mapCancerConditions(rawRecord: RawRecord): Option[AfusCancerCondition] = {
     if (rawRecord.getBoolean("fu_hs_dx_cancer_yn")) {
+      val completeDate = rawRecord.getOptionalDate("fu_complete_date")
+      val redcapEventName = rawRecord.getOptional("redcap_event_name")
 
       val cancerLocations = rawRecord.fields.get("fu_hs_dx_cancer_loc")
 
@@ -19,6 +21,15 @@ object AfusCancerTransformations {
       Some(
         AfusCancerCondition(
           dogId = rawRecord.getRequired("study_id").toLong,
+          afusCalendarYear = completeDate match {
+            case Some(date) => Some(date.getYear.toLong)
+            case None       => None
+          },
+          afusFollowupYear = redcapEventName match {
+            case Some(event) =>
+              if (event != "baseline_arm_1") Some(event.split("_")(1).toLong) else None
+            case None => None
+          },
           afusHsNewInitialDiagnosisYear = rawRecord.getOptionalNumber("fu_hs_dx_cancer_year"),
           afusHsNewInitialDiagnosisMonth = rawRecord.getOptionalNumber("fu_hs_dx_cancer_mo"),
           afusHsNewRequiredSurgeryOrHospitalization =

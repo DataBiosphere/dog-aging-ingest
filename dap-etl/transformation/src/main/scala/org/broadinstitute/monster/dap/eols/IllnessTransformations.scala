@@ -48,7 +48,7 @@ object IllnessTransformations {
       eolIllnessCancerProstate = cancerConditions.map(_.contains(26L)),
       eolIllnessCancerRectum = cancerConditions.map(_.contains(27L)),
       eolIllnessCancerSkinTrunkBodyHead = cancerConditions.map(_.contains(28L)),
-      eolIllnessCancerSkinLimbFood = cancerConditions.map(_.contains(29L)),
+      eolIllnessCancerSkinLimbFoot = cancerConditions.map(_.contains(29L)),
       eolIllnessCancerSpinalCord = cancerConditions.map(_.contains(30L)),
       eolIllnessCancerSpleen = cancerConditions.map(_.contains(31L)),
       eolIllnessCancerTesticle = cancerConditions.map(_.contains(32L)),

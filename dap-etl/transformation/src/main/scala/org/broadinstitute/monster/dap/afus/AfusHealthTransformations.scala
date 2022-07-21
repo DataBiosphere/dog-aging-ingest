@@ -160,9 +160,20 @@ object AfusHealthTransformations {
     conditionType: Long,
     condition: Option[Long],
     isCongenital: Boolean
-  ): AfusHealthCondition =
+  ): AfusHealthCondition = {
+    val completeDate = rawRecord.getOptionalDate("fu_complete_date")
+    val redcapEventName = rawRecord.getOptional("redcap_event_name")
     AfusHealthCondition(
       dogId = rawRecord.id,
+      afusCalendarYear = completeDate match {
+        case Some(date) => Some(date.getYear.toLong)
+        case None       => None
+      },
+      afusFollowupYear = redcapEventName match {
+        case Some(event) =>
+          if (event != "baseline_arm_1") Some(event.split("_")(1).toLong) else None
+        case None => None
+      },
       afusHsNewConditionType =
         conditionType, //rawRecord.getOptionalNumber("fu_hs_cg_*_yn OR fu_hs_dx_*_yn OR fu_hs_*_other"),
       afusHsNewCondition =
@@ -190,4 +201,5 @@ object AfusHealthTransformations {
       afusHsNewNeurologicalConditionVestibularDiseaseType =
         None //rawRecord.getOptional("fu_hs_dx_neuro_vd_type")
     )
+  }
 }

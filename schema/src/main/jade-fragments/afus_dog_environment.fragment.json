@@ -703,7 +703,7 @@
     },
     {
       "name": "afus_de_sitter_or_daycare_travel_method_other_description",
-      "datatype": "boolean"
+      "datatype": "string"
     },
     {
       "name": "afus_de_sitter_or_daycare_travel_time_hours",

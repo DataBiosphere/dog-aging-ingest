@@ -22,24 +22,16 @@ object SampleExtractionPipeline extends ScioApp[Args] {
   def extractionFiltersGenerator(args: Args): List[FilterDirective] = {
     val standardDirectives: List[FilterDirective] = List(
       // DAP Pack filters
-      FilterDirective("st_dap_pack_count", FilterOps.>, "0"),
-      FilterDirective("st_vip_or_staff", FilterOps.==, "0")
+      FilterDirective("st_dap_pack_count", FilterOps.>, "0")
     )
     val dateFilters: List[FilterDirective] = {
-      args.startTime
-        .map(start =>
+      args.endTime
+        .map(end =>
           List(
-            FilterDirective("k1_rtn_tracking_date", FilterOps.>, RedCapClient.redcapFormatDate(start))
+            FilterDirective("k1_rtn_tracking_date", FilterOps.<, RedCapClient.redcapFormatDate(end))
           )
         )
-        .getOrElse(List()) ++
-        args.endTime
-          .map(end =>
-            List(
-              FilterDirective("k1_rtn_tracking_date", FilterOps.<, RedCapClient.redcapFormatDate(end))
-            )
-          )
-          .getOrElse(List())
+        .getOrElse(List())
     }
     standardDirectives ++ dateFilters
   }

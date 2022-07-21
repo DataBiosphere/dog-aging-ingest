@@ -13,6 +13,8 @@ object AfusOwnerTransformations {
         MissingOwnerIdError(s"Record has less than 1 value for field st_owner_id").log
         None
       case Some(owner_id) =>
+        val completeDate = rawRecord.getOptionalDate("fu_complete_date")
+        val redcapEventName = rawRecord.getOptional("redcap_event_name")
         val primaryAddressChange = rawRecord.getOptionalBoolean("fu_oc_address_change")
         val primaryAddressOwnership =
           if (primaryAddressChange.contains(true)) rawRecord.getOptionalNumber("fu_oc_address1_own")
@@ -30,6 +32,15 @@ object AfusOwnerTransformations {
           Some(
             AfusOwner(
               ownerId = owner_id,
+              afusCalendarYear = completeDate match {
+                case Some(date) => Some(date.getYear.toLong)
+                case None       => None
+              },
+              afusFollowupYear = redcapEventName match {
+                case Some(event) =>
+                  if (event != "baseline_arm_1") Some(event.split("_")(1).toLong) else None
+                case None => None
+              },
               afusOcHouseholdPersonCount = rawRecord.getOptionalNumber("fu_oc_people_household"),
               afusOcHouseholdAdultCount = rawRecord.getOptionalNumber("fu_oc_adults_household"),
               afusOcHouseholdChildCount = rawRecord.getOptionalNumber("fu_oc_children_household"),

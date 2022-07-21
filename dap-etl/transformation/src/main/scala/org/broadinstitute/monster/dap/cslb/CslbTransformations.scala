@@ -1,18 +1,18 @@
 package org.broadinstitute.monster.dap.cslb
 
+import com.spotify.scio.ScioMetrics.counter
 import org.broadinstitute.monster.dap.common.RawRecord
 import org.broadinstitute.monster.dogaging.jadeschema.table.Cslb
-import com.spotify.scio.ScioMetrics.counter
 
 object CslbTransformations {
 
   def mapCslbData(rawRecord: RawRecord): Option[Cslb] = {
-    rawRecord.getOptionalDate("cslb_date") match {
-      case Some(cslbDate) =>
+    rawRecord.getOptionalNumber("canine_social_and_learned_behavior_complete") match {
+      case Some(2) =>
         Some(
           Cslb(
             dogId = rawRecord.getRequired("study_id").toLong,
-            cslbDate = cslbDate,
+            cslbDate = rawRecord.getOptionalDate("cslb_date"),
             cslbYear =
               rawRecord.getRequired("redcap_event_name").split("_")(1).filter(_.isDigit).toLong,
             cslbPace = rawRecord.getOptionalNumber("cslb_pace"),
@@ -33,7 +33,7 @@ object CslbTransformations {
           )
         )
       case _ => {
-        counter("cslb", "missing_cslb_date").inc()
+        counter("cslb", "baseline_record").inc()
         None
       }
     }

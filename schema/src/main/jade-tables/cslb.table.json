@@ -8,8 +8,7 @@
     },
     {
       "name": "cslb_date",
-      "datatype": "date",
-      "type": "primary_key"
+      "datatype": "date"
     },
     {
       "name": "cslb_year",

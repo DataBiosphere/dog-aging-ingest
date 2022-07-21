@@ -24,7 +24,7 @@ object NewConditionTransformations {
     val orthopedic = diagnosisType.map(_.contains("15"))
     val neurological = diagnosisType.map(_.contains("16"))
     val endocrine = diagnosisType.map(_.contains("17"))
-    val homatologic = diagnosisType.map(_.contains("18"))
+    val hematologic = diagnosisType.map(_.contains("18"))
     val immune = diagnosisType.map(_.contains("19"))
     val other = diagnosisType.map(_.contains("20"))
     EolsNewCondition(
@@ -46,7 +46,7 @@ object NewConditionTransformations {
       eolNewConditionOrthopedic = orthopedic,
       eolNewConditionNeurological = neurological,
       eolNewConditionEndocrine = endocrine,
-      eolNewConditionHomatologic = homatologic,
+      eolNewConditionHematologic = hematologic,
       eolNewConditionImmune = immune,
       eolNewConditionOther = other,
       eolNewConditionInfectiousDiseaseMonth =
@@ -158,12 +158,12 @@ object NewConditionTransformations {
         if (endocrine.contains(true)) rawRecord.getOptionalNumber("eol_dx_year17") else None,
       eolNewConditionEndocrineSpecify =
         if (endocrine.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify17") else None,
-      eolNewConditionHomatologicMonth =
-        if (homatologic.contains(true)) rawRecord.getOptionalNumber("eol_dx_month18") else None,
-      eolNewConditionHomatologicYear =
-        if (homatologic.contains(true)) rawRecord.getOptionalNumber("eol_dx_year18") else None,
-      eolNewConditionHomatologicSpecify =
-        if (homatologic.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify18") else None,
+      eolNewConditionHematologicMonth =
+        if (hematologic.contains(true)) rawRecord.getOptionalNumber("eol_dx_month18") else None,
+      eolNewConditionHematologicYear =
+        if (hematologic.contains(true)) rawRecord.getOptionalNumber("eol_dx_year18") else None,
+      eolNewConditionHematologicSpecify =
+        if (hematologic.contains(true)) rawRecord.getOptionalStripped("eol_dx_specify18") else None,
       eolNewConditionImmuneMonth =
         if (immune.contains(true)) rawRecord.getOptionalNumber("eol_dx_month19") else None,
       eolNewConditionImmuneYear =
