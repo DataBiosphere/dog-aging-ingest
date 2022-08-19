@@ -118,7 +118,7 @@ class CslbTransformationSpec extends AnyFlatSpec {
     output shouldBe
       Cslb(
         1234,
-        LocalDate.parse("2020-11-19"),
+        Some(LocalDate.parse("2020-11-19")),
         2020,
         None,
         None,
