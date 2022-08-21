@@ -19,14 +19,12 @@ object SampleExtractionPipeline extends ScioApp[Args] {
     "recruitment_fields"
   )
 
-  def extractionFiltersGenerator(args: Args): List[FilterDirective] =
-    args.startTime
-      .map(start =>
-        List(
-          FilterDirective("k1_rtn_tracking_date", FilterOps.>, RedCapClient.redcapFormatDate(start))
-        )
-      )
-      .getOrElse(List()) ++
+  def extractionFiltersGenerator(args: Args): List[FilterDirective] = {
+    val standardDirectives: List[FilterDirective] = List(
+      // DAP Pack filters
+      FilterDirective("st_dap_pack_count", FilterOps.>, "0")
+    )
+    val dateFilters: List[FilterDirective] = {
       args.endTime
         .map(end =>
           List(
@@ -34,6 +32,9 @@ object SampleExtractionPipeline extends ScioApp[Args] {
           )
         )
         .getOrElse(List())
+    }
+    standardDirectives ++ dateFilters
+  }
 
   val subdir = "sample";
   val arm = "baseline_arm_1"
