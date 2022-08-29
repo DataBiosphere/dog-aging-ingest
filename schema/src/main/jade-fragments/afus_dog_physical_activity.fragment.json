@@ -1,0 +1,365 @@
+{
+  "name": "afus_dog_physical_activity",
+  "columns": [
+    {
+      "name": "afus_pa_activity_level",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_avg_daily_active_hours",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_avg_daily_active_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_avg_intensity",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_moderate_weather_months_per_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_moderate_weather_daily_hours_outside",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_moderate_weather_concrete",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_moderate_weather_wood",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_moderate_weather_other_hard_surface",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_moderate_weather_grass_dirt",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_moderate_weather_gravel",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_moderate_weather_sand",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_moderate_weather_artificial_turf",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_moderate_weather_other_surface",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_moderate_weather_other_surface_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_pa_moderate_weather_sun_exposure_level",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_hot_weather_months_per_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_hot_weather_daily_hours_outside",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_hot_weather_concrete",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_hot_weather_wood",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_hot_weather_other_hard_surface",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_hot_weather_grass_dirt",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_hot_weather_gravel",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_hot_weather_sand",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_hot_weather_artificial_turf",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_hot_weather_other_surface",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_hot_weather_other_surface_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_pa_hot_weather_sun_exposure_level",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_cold_weather_months_per_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_cold_weather_daily_hours_outside",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_cold_weather_concrete",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_cold_weather_wood",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_cold_weather_other_hard_surface",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_cold_weather_grass_dirt",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_cold_weather_gravel",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_cold_weather_sand",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_cold_weather_artificial_turf",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_cold_weather_other_surface",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_cold_weather_other_surface_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_pa_cold_weather_sun_exposure_level",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_on_leash_off_leash_walk",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_avg_hours",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_avg_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_slow_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_average_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_brisk_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_jog_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_run_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_reasons_dog_relieve_itself",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_reasons_activity_and_enjoyment",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_reasons_exercise_for_dog",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_reasons_exercise_for_owner",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_reasons_training_obedience",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_reasons_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_on_leash_walk_reasons_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_avg_hours",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_avg_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_slow_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_average_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_brisk_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_jog_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_run_pace_pct",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_reasons_dog_relieve_itself",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_reasons_activity_and_enjoyment",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_reasons_exercise_for_dog",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_reasons_exercise_for_owner",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_reasons_training_obedience",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_reasons_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_reasons_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_in_enclosed_area",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_in_open_area",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_off_leash_walk_returns_when_called_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_physical_games_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_swim",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_swim_moderate_weather_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_swim_hot_weather_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_swim_cold_weather_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_swim_location_swimming_pool",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_swim_location_pond_lake",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_swim_location_river_stream_creek",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_swim_location_agricultural_ditch",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_swim_location_ocean",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_swim_location_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_pa_swim_locations_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_pa_other_aerobic_activity_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_other_aerobic_activity_avg_hours",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_other_aerobic_activity_avg_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_pa_other_aerobic_activity_avg_intensity",
+      "datatype": "integer"
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "name": "afus_dog_mdors",
+  "columns": [
+    {
+      "name": "afus_mdors_1_play_games",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_2_treats",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_3_kiss",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_4_dog_in_car",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_5_hug",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_6_relaxing_together",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_7_grooming_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_8_visiting_other_people",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_9_buy_presents",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_10_get_through_tough_times",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_11_dog_for_comfort",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_12_close_proximity",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_13_constant_companionship",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_14_there_for_me",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_15_reason_to_get_up",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_16_never_apart",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_17_constantly_attentive",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_18_share_secrets",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_19_trauma_of_death",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_20_care_is_chore",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_21_interferes_with_activities",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_22_more_trouble_than_its_worth",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_23_annoying_to_change_plans",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_24_stopped_enjoyable_activities",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_25_dont_like_ownership",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_26_makes_mess",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_27_costs_money",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_28_hard_to_care_for",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_subscale_dog_owner_interaction",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_subscale_perceived_emotional_closeness",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mdors_subscale_perceived_costs",
+      "datatype": "integer"
+    }
+  ]
+}

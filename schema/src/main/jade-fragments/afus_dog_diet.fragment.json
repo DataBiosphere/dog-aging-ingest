@@ -1,0 +1,473 @@
+{
+  "name": "afus_dog_diet",
+  "columns": [
+    {
+      "name": "afus_df_feedings_per_day",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_primary_diet_component",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_primary_diet_component_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_df_primary_diet_component_organic",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_primary_diet_component_grain_free",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_primary_diet_brand",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_primary_diet_brand_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_df_primary_diet_component_change_recent",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_primary_diet_component_change_months_ago",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_primary_diet_component_change_allergy_related",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_primary_diet_component_change_different_life_stage",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_primary_diet_component_change_stop_grain_free",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_primary_diet_component_change_condition_specific",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_primary_diet_component_change_brand_change",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_primary_diet_component_change_new_food_same_brand",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_primary_diet_component_change_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_primary_diet_component_change_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_used",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_secondary_diet_component",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_organic",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_grain_free",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_secondary_diet_brand",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_secondary_diet_brand_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_change_recent",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_change_months_ago",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_change_allergy_related",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_change_different_life_stage",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_change_stop_grain_free",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_change_condition_specific",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_change_brand_change",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_change_new_food_same_brand",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_change_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_secondary_diet_component_change_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_df_treats_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_treats_commercial_biscuits",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_rawhide",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_bones",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_table_meat",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_table_carbs",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_vegetables",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_homemade_protein",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_homemade_biscuits",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_pumpkin",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_peanut_butter",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_dental",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_fruit",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_dairy",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_meat_cooked",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_meat_raw",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_oil",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_jerky",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_eggs",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_treats_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_df_daily_supplements",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_df_daily_supplements_bone_meal",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_glucosamine",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_chondroitin",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_other_joint",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_omega3",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_non_oil_skin",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_vitamins",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_enzyme",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_probiotics",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_fiber",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_alkalinize",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_acidify",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_taurine",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_antiox",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_coenzyme_q10",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_cbd",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_turmeric",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_anxiety",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_other_oils",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_cranberry",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_immune",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_liver",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_anal",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_allergy",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_daily_supplements_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_df_infrequent_supplements",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_bone_meal",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_glucosamine",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_chondroitin",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_other_joint",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_omega3",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_non_oil_skin",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_vitamins",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_enzyme",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_probiotics",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_fiber",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_alkalinize",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_acidify",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_taurine",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_antiox",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_coenzyme_q10",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_cbd",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_turmeric",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_anxiety",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_other_oils",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_cranberry",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_immune",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_liver",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_anal",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_allergy",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_infrequent_supplements_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_df_diet_consistency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_diet_consistency_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_df_appetite",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_appetite_change_last_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_weight_change_last_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_malnourished_last_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_underweight_last_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_df_overweight_last_year",
+      "datatype": "integer"
+    }
+  ]
+}

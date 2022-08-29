@@ -42,7 +42,7 @@ class NewConditionTransformationsSpec extends AnyFlatSpec with Matchers with Opt
     newConditionDataMapped.eolNewConditionOrthopedic.value shouldBe (true)
     newConditionDataMapped.eolNewConditionOther.value shouldBe (true)
     newConditionDataMapped.eolNewConditionEndocrine.value shouldBe (false)
-    newConditionDataMapped.eolNewConditionHomatologic.value shouldBe (false)
+    newConditionDataMapped.eolNewConditionHematologic.value shouldBe (false)
 
     newConditionDataMapped.eolNewConditionInfectiousDiseaseMonth.value shouldBe 1L
     newConditionDataMapped.eolNewConditionInfectiousDiseaseYear.value shouldBe 2012L

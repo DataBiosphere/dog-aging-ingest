@@ -11,14 +11,25 @@ import scala.io.Source
 class AfusTransformationPipelineTest extends PipelineSpec with Matchers {
 
   it should "process a valid AFUS record" in {
+    // todo: provide valid test inputs and outputs for dog, health, and cancer tables
     val lines =
       Source.fromResource("afus_valid.json").getLines().toSeq
+    val expected_afus_dog = Source.fromResource("afus_valid_dog.json").getLines().toSeq
     val expected_afus_owner = Source.fromResource("afus_valid_owner.json").getLines().toSeq
+    val expected_afus_health = Source.fromResource("afus_valid_health.json").getLines().toSeq
+    val expected_afus_cancer = Source.fromResource("afus_valid_cancer.json").getLines().toSeq
 
     JobTest[AfusTransformationPipeline.type]
       .args("--inputPrefix=in", "--outputPrefix=out")
       .input(TextIO("in/records/*.json"), lines)
       .output(TextIO("out/afus_owner"))(col => col should containInAnyOrder(expected_afus_owner))
+      .output(TextIO("out/afus_dog"))(col => col should containInAnyOrder(expected_afus_dog))
+      .output(TextIO("out/afus_health_condition"))(col =>
+        col should containInAnyOrder(expected_afus_health)
+      )
+      .output(TextIO("out/afus_cancer_condition"))(col =>
+        col should containInAnyOrder(expected_afus_cancer)
+      )
       .run()
   }
 
@@ -30,6 +41,9 @@ class AfusTransformationPipelineTest extends PipelineSpec with Matchers {
         .args("--inputPrefix=in", "--outputPrefix=out")
         .input(TextIO("in/records/*.json"), lines)
         .output(TextIO("out/afus_owner"))(col => col should beEmpty)
+        .output(TextIO("out/afus_dog"))(col => col should beEmpty)
+        .output(TextIO("out/afus_health_condition"))(col => col should beEmpty)
+        .output(TextIO("out/afus_cancer_condition"))(col => col should beEmpty)
         .run()
     }
   }

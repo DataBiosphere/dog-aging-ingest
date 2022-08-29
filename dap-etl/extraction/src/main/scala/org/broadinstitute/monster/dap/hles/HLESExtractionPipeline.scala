@@ -33,11 +33,7 @@ object HLESExtractionPipeline extends ScioApp[Args] {
   def extractionFiltersGenerator(args: Args): List[FilterDirective] = {
     val standardDirectives: List[FilterDirective] = List(
       FilterDirective("st_dap_pack_count", FilterOps.>, "0"),
-      FilterDirective(
-        "st_dap_pack_date",
-        FilterOps.>,
-        RedCapClient.redcapFormatDate(args.startTime.getOrElse(HLESEpoch))
-      )
+      FilterDirective("st_vip_or_staff", FilterOps.==, "0")
     )
     val endFilter: List[FilterDirective] =
       args.endTime

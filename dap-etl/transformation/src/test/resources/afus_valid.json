@@ -1,4 +1,6 @@
 {"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"st_owner_id","value":"12345"}
+{"record":"45678","redcap_event_name":"baseline_arm_1","field_name":"st_dap_pack_count","value":"12345"}
+{"record":"45678","redcap_event_name":"baseline_arm_1","field_name":"st_vip_or_staff","value":"0"}
 {"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_people_household","value":"3"}
 {"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_adults_household","value":"2"}
 {"record":"45678","redcap_event_name":"fup_1_arm_1","field_name":"fu_oc_children_household","value":"1"}

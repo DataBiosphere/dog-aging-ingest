@@ -1,0 +1,48 @@
+{
+  "name": "afus_dog",
+  "columns": [
+    {
+      "name": "dog_id",
+      "datatype": "integer",
+      "type": "primary_key"
+    },
+    {
+      "name": "owner_id",
+      "datatype": "integer",
+      "type": "required",
+      "links": [
+        {
+          "table_name": "afus_owner",
+          "column_name": "owner_id"
+        }
+      ]
+    },
+    {
+      "name": "owner_is_vip_or_staff",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_complete_date",
+      "datatype": "date"
+    },
+    {
+      "name": "afus_calendar_year",
+      "datatype":  "integer"
+    },
+    {
+      "name": "afus_followup_year",
+      "datatype":  "integer"
+    }
+  ],
+  "table_fragments": [
+    "afus_dog_demographics",
+    "afus_dog_physical_activity",
+    "afus_dog_environment",
+    "afus_dog_behavior",
+    "afus_dog_diet",
+    "afus_dog_meds_preventatives",
+    "afus_dog_dora",
+    "afus_dog_mdors",
+    "afus_dog_health_status"
+  ]
+}

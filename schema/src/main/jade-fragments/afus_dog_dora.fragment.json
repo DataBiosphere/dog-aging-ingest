@@ -1,0 +1,189 @@
+{
+  "name": "afus_dog_dora",
+  "columns": [
+    {
+      "name": "afus_dora_1_excited_food",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_2_most_walks_off_leash",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_3_human_leftovers_in_bowl",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_4_waits_for_scraps",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_5_choosy_treats",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_6_waits_during_food_prep",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_7_turns_down_food",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_8_finishes_meal_quickly",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_9_inspects_unfamilar_foods",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_10_runs_around_alot",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_11_interested_eating_after_meal",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_12_slow_eater",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_13_eats_treats_quickly",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_14_human_food_during_meals",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_15_eat_anything",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_16_very_fit",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_17_human_food_often",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_18_upset_stomach_some_foods",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_19_should_lose_weight",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_20_most_walks_on_leash",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_21_restrict_exercise",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_22_diet_to_control_weight",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_23_hungry_all_time",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_24_walks_high_energy",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_25_careful_dogs_weight",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_26_sensitive_stomach",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_27_very_greedy",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_28_vet_often_for_health_problems",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_29_happy_dogs_weight",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_30_measure_dogs_food",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_31_regulate_exercise_for_weight",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_32_gets_lots_of_exercise",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_33_upset_stomach_often",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_34_no_human_food_during_meals",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_35_eat_non_food_objects",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dora_factor_food_responsiveness_satiety",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_dora_factor_lack_of_fussiness",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_dora_factor_interest_in_food",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_dora_factor_owner_perception",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_dora_factor_owner_intervention_control_weight",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_dora_factor_restriction_human_food",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_dora_factor_exercise_taken",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_dora_factor_signs_gi_disease",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_dora_factor_current_disease",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_dora_score_dog_food_motivation",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_dora_score_owner_management",
+      "datatype": "float"
+    }
+  ]
+}

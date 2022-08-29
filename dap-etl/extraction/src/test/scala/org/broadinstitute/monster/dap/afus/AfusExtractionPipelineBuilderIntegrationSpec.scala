@@ -35,7 +35,7 @@ class AfusExtractionPipelineBuilderIntegrationSpec extends PipelineBuilderSpec[A
     testArgs.apiToken,
     arms,
     GetRecords(
-      fields = List("st_owner_id"),
+      fields = List("study_id"),
       filters = AfusExtractionPipeline.extractionFiltersGenerator(testArgs)
     )
   )

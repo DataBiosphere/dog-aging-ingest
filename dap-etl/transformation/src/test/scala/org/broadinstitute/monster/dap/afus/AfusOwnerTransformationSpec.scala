@@ -16,7 +16,7 @@ class AfusOwnerTransformationSpec extends AnyFlatSpec {
     "fu_oc_children_household" -> Array("1"),
     "fu_oc_address_change" -> Array("1"),
     "fu_oc_address1_change_date" -> Array("2021-05-20"),
-    "fu_oc_address1_own" -> Array("2"),
+    "fu_oc_address1_own" -> Array("98"),
     "fu_oc_address1_own_other" -> Array("Other occupancy "),
     "fu_oc_address1_state" -> Array("OH"),
     "fu_oc_address1_division" -> Array("Division 3: East North Central"),
@@ -24,7 +24,7 @@ class AfusOwnerTransformationSpec extends AnyFlatSpec {
     "fu_oc_address2_yn" -> Array("1"),
     "fu_oc_address2_change" -> Array("1"),
     "fu_oc_address2_change_date" -> Array("2021-10-20"),
-    "fu_oc_address2_own" -> Array("3"),
+    "fu_oc_address2_own" -> Array("98"),
     "fu_oc_address2_own_other" -> Array("Live rent-free "),
     "fu_oc_address2_state" -> Array("NJ"),
     "fu_oc_2nd_address_pct" -> Array("2"),
@@ -42,17 +42,17 @@ class AfusOwnerTransformationSpec extends AnyFlatSpec {
     output.afusOcHouseholdPersonCount shouldBe Some(3)
     output.afusOcHouseholdAdultCount shouldBe Some(2)
     output.afusOcHouseholdChildCount shouldBe Some(1)
-    output.afusOcPrimaryAddressChange shouldBe Some(true)
-    output.afusOcPrimaryAddressChangeDate shouldBe Some(LocalDate.of(2021, 5, 20))
-    output.afusOcPrimaryResidenceOwnership shouldBe Some(2)
+    output.afusOcPrimaryResidenceChange shouldBe Some(true)
+    output.afusOcPrimaryResidenceChangeDate shouldBe Some(LocalDate.of(2021, 5, 20))
+    output.afusOcPrimaryResidenceOwnership shouldBe Some(98)
     output.afusOcPrimaryResidenceOwnershipOtherDescription shouldBe Some("Other occupancy")
     output.afusOcPrimaryResidenceState shouldBe Some("OH")
     output.afusOcPrimaryResidenceCensusDivision shouldBe Some(3)
     output.afusOcPrimaryResidenceTimePercentage shouldBe Some(4)
     output.afusOcSecondaryResidence shouldBe Some(1)
-    output.afusOcSecondaryAddressChange shouldBe Some(true)
+    output.afusOcSecondaryResidenceChange shouldBe Some(true)
     output.afusOcSecondaryResidenceChangeDate shouldBe Some(LocalDate.of(2021, 10, 20))
-    output.afusOcSecondaryResidenceOwnership shouldBe Some(3)
+    output.afusOcSecondaryResidenceOwnership shouldBe Some(98)
     output.afusOcSecondaryResidenceOwnershipOtherDescription shouldBe Some("Live rent-free")
     output.afusOcSecondaryResidenceState shouldBe Some("NJ")
     output.afusOcSecondaryResidenceTimePercentage shouldBe Some(2)

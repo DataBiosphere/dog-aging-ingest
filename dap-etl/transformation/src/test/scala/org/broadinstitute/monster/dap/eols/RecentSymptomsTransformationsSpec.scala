@@ -31,7 +31,7 @@ class RecentSymptomsTransformationsSpec extends AnyFlatSpec with Matchers with O
     // output of the example record's recent symptoms transformations
     recentSymptomsMapped.eolRecentSymptomLethargy shouldBe Some(true)
     recentSymptomsMapped.eolRecentSymptomWeight shouldBe Some(true)
-    recentSymptomsMapped.eolRecentSymptomSwolenAbdomen shouldBe Some(true)
+    recentSymptomsMapped.eolRecentSymptomSwollenAbdomen shouldBe Some(true)
     recentSymptomsMapped.eolRecentSymptomOther shouldBe Some(true)
     recentSymptomsMapped.eolRecentSymptomOtherDescription shouldBe
       Some("Other description")

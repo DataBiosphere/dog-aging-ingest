@@ -7,6 +7,14 @@
       "type": "primary_key"
     },
     {
+      "name": "afus_calendar_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_followup_year",
+      "datatype": "integer"
+    },
+    {
       "name": "afus_oc_household_person_count",
       "datatype": "integer"
     },
@@ -19,11 +27,11 @@
       "datatype": "integer"
     },
     {
-      "name": "afus_oc_primary_address_change",
+      "name": "afus_oc_primary_residence_change",
       "datatype": "boolean"
     },
     {
-      "name": "afus_oc_primary_address_change_date",
+      "name": "afus_oc_primary_residence_change_date",
       "datatype": "date"
     },
     {
@@ -51,7 +59,7 @@
       "datatype": "integer"
     },
     {
-      "name": "afus_oc_secondary_address_change",
+      "name": "afus_oc_secondary_residence_change",
       "datatype": "boolean"
     },
     {

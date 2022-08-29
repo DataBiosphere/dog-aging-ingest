@@ -29,23 +29,19 @@ object EolsExtractionPipeline extends ScioApp[Args] {
       .map(form => FilterDirective(s"${form}_complete", FilterOps.==, "2"))
     // EOLS consent
     val standardDirectives: List[FilterDirective] = List(
-      FilterDirective("eol_willing_to_complete", FilterOps.==, "1")
+      FilterDirective("eol_willing_to_complete", FilterOps.==, "1"),
+      // DAP Pack filters
+      FilterDirective("st_vip_or_staff", FilterOps.==, "0")
     )
-    val dateFilters: List[FilterDirective] =
-      args.startTime
-        .map(start =>
+    val dateFilters: List[FilterDirective] = {
+      args.endTime
+        .map(end =>
           List(
-            FilterDirective("eol_date_dog_died", FilterOps.>, RedCapClient.redcapFormatDate(start))
+            FilterDirective("eol_date_dog_died", FilterOps.<, RedCapClient.redcapFormatDate(end))
           )
         )
-        .getOrElse(List()) ++
-        args.endTime
-          .map(end =>
-            List(
-              FilterDirective("eol_date_dog_died", FilterOps.<, RedCapClient.redcapFormatDate(end))
-            )
-          )
-          .getOrElse(List())
+        .getOrElse(List())
+    }
 
     completionFilters ++ standardDirectives ++ dateFilters
   }

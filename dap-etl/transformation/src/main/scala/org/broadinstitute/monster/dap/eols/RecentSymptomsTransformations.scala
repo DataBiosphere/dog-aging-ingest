@@ -30,7 +30,7 @@ object RecentSymptomsTransformations {
       eolRecentSymptomIncontinence = recentSymptoms.map(_.contains(13L)),
       eolRecentSymptomSores = recentSymptoms.map(_.contains(14L)),
       eolRecentSymptomSeizures = recentSymptoms.map(_.contains(15L)),
-      eolRecentSymptomSwolenAbdomen = recentSymptoms.map(_.contains(16L)),
+      eolRecentSymptomSwollenAbdomen = recentSymptoms.map(_.contains(16L)),
       eolRecentSymptomOther = otherRecentSymptoms,
       eolRecentSymptomOtherDescription =
         if (otherRecentSymptoms.contains(true))

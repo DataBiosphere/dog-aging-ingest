@@ -1,0 +1,717 @@
+{
+  "name": "afus_dog_environment",
+  "columns": [
+    {
+      "name": "afus_de_primary_address_move_yn",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_primary_address_move_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_home_area_type",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_home_type",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_home_type_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_home_construction_decade",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_home_square_footage",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_primary_heat_fuel",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_primary_heat_fuel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_secondary_heat_fuel_used",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_secondary_heat_fuel",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_secondary_heat_fuel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_primary_stove_fuel",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_primary_stove_fuel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_secondary_stove_fuel_used",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_secondary_stove_fuel",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_secondary_stove_fuel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_water_source",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_water_source_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_water_filter_yn",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_pipe_type",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_pipe_type_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_central_air_conditioning_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_room_or_window_air_conditioning_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_central_heat_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_asbestos_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_radon_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_lead_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_mothball_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_incense_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_air_freshener_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_air_cleaner_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_hepa_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_wood_fireplace_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_gas_fireplace_present",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_second_hand_smoke_hours_per_day",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_wood_fireplace_lightings_per_week",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_gas_fireplace_lightings_per_week",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_floor_type_change",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_floor_types_wood",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_floor_frequency_on_wood",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_floor_types_carpet",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_floor_frequency_on_carpet",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_floor_types_concrete",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_floor_frequency_on_concrete",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_floor_types_tile",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_floor_frequency_on_tile",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_floor_types_linoleum",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_floor_frequency_on_linoleum",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_floor_types_laminate",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_floor_frequency_on_laminate",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_floor_types_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_floor_types_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_floor_frequency_on_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_stairs_in_home",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_stairs_avg_flights_per_day",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_toys",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_routine_toys_include_plastic",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_toys_include_stuffed_fabric",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_toys_include_unstuffed_fabric",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_toys_include_rubber",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_toys_include_metal",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_toys_include_animal_products",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_toys_include_latex",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_toys_include_rope",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_toys_include_tennis_balls",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_toys_include_sticks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_toys_include_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_toys_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_routine_toys_hours_per_day",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_nighttime_sleep_location",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_nighttime_sleep_location_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_nighttime_sleep_avg_hours",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_daytime_sleep_location_different",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_daytime_sleep_location",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_daytime_sleep_location_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_daytime_sleep_avg_hours",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_licks_chews_or_plays_with_non_toys",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_recent_toxins_or_hazards_ingested_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_recent_toxins_or_hazards_ingested_chocolate",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_recent_toxins_or_hazards_ingested_poison",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_recent_toxins_or_hazards_ingested_human_medication",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_recent_toxins_or_hazards_ingested_pet_medication",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_recent_toxins_or_hazards_ingested_garbage_or_food",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_recent_toxins_or_hazards_ingested_dead_animal",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_recent_toxins_or_hazards_ingested_toys",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_recent_toxins_or_hazards_ingested_clothing",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_recent_toxins_or_hazards_ingested_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_ingest_bad_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_ingest_bad_required_vet",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_other_present_animals",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_other_present_animals_dogs",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_other_present_animals_cats",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_other_present_animals_birds",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_other_present_animals_reptiles",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_other_present_animals_livestock",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_other_present_animals_horses",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_other_present_animals_rodents",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_other_present_animals_fish",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_other_present_animals_wildlife",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_other_present_animals_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_other_present_animals_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_other_present_animals_indoor_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_other_present_animals_outdoor_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_other_present_animals_interact_with_dog",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_routine_consistency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_hours_per_day_in_crate",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_hours_per_day_roaming_house",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_hours_per_day_in_garage",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_hours_per_day_in_outdoor_kennel",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_hours_per_day_in_yard",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_hours_per_day_roaming_outside",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_hours_per_day_chained_outside",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_hours_per_day_away_from_home",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_hours_per_day_with_other_animals",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_hours_per_day_with_adults",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_hours_per_day_with_teens",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_routine_hours_per_day_with_children",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_property_area",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_property_accessible",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_property_area_accessible",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_property_containment_type",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_property_containment_type_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_property_drinking_water_none",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_property_drinking_water_bowl",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_property_drinking_water_hose",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_property_drinking_water_puddles",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_property_drinking_water_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_property_drinking_water_unknown",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_property_drinking_water_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_property_weed_control",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_property_weed_control_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_property_pest_control",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_property_pest_control_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_eats_grass_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_eats_feces",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_eats_feces_own",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_eats_feces_other_dog",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_eats_feces_cat",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_eats_feces_horse",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_eats_feces_cattle",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_eats_feces_wildlife",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_eats_feces_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_eats_feces_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_dog_drinks_outdoor_water",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_dog_drinks_outdoor_water_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_traffic_noise_in_home_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_traffic_noise_in_property_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_neighborhood_has_sidewalks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_neighborhood_has_parks",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_dog_interacts_with_neighborhood_animals",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_dog_interacts_with_neighborhood_animals_with_owner",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_dog_interacts_with_neighborhood_humans",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_dog_interacts_with_neighborhood_humans_with_owner",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_dogpark",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_dogpark_days_per_month",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_dogpark_travel_how",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_dogpark_travel_method_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_dogpark_travel_time_hours",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_dogpark_travel_time_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_recreational_spaces",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_recreational_spaces_days_per_month",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_recreational_spaces_travel_how",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_recreational_spaces_travel_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_recreational_spaces_travel_time_hours",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_recreational_spaces_travel_time_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_work",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_work_days_per_month",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_work_travel_how",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_work_travel_method_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_work_travel_time_hours",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_work_travel_time_minutes",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_sitter_or_daycare",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_de_sitter_or_daycare_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_sitter_or_daycare_travel_how",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_sitter_or_daycare_travel_method_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_de_sitter_or_daycare_travel_time_hours",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_de_sitter_or_daycare_travel_time_minutes",
+      "datatype": "integer"
+    }
+  ]
+}

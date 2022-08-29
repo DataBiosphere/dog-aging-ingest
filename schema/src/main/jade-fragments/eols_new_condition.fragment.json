@@ -74,7 +74,7 @@
             "datatype": "boolean"
         },
         {
-            "name": "eol_new_condition_homatologic",
+            "name": "eol_new_condition_hematologic",
             "datatype": "boolean"
         },
         {
@@ -290,15 +290,15 @@
             "datatype": "string"
         },
         {
-            "name": "eol_new_condition_homatologic_month",
+            "name": "eol_new_condition_hematologic_month",
             "datatype": "integer"
         },
         {
-            "name": "eol_new_condition_homatologic_year",
+            "name": "eol_new_condition_hematologic_year",
             "datatype": "integer"
         },
         {
-            "name": "eol_new_condition_homatologic_specify",
+            "name": "eol_new_condition_hematologic_specify",
             "datatype": "string"
         },
         {
