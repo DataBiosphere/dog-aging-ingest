@@ -22,9 +22,10 @@ more-itertools = "^8.8.0"
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.5"
 flake8 = "^3.8.4"
-mypy = "^0.812"
+mypy = "^0.971"
 pre-commit = "^2.11.0"
 pytest = "^6.2.1"
+markupsafe = "2.0.1"
 
 [build-system]
 requires = ["poetry-core=^1.1.5"]
