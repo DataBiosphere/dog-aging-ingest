@@ -19,8 +19,7 @@
     },
     {
       "name": "cohort",
-      "datatype": "integer",
-      "type": "required"
+      "datatype": "integer"
     },
     {
       "name": "sample_type",
@@ -29,8 +28,7 @@
     },
     {
       "name": "date_swab_arrival_laboratory",
-      "datatype": "date",
-      "type": "required"
+      "datatype": "date"
     }
   ]
 }
