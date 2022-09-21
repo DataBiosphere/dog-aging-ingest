@@ -14,10 +14,10 @@ object SampleTransformations {
         Some(
           Sample(
             dogId = rawRecord.getRequired("study_id").toLong,
-            cohort = cohort,
+            cohort = Some(cohort),
             sampleId = kitId,
             sampleType = "saliva_DNA_lowcov",
-            dateSwabArrivalLaboratory = dateCollected
+            dateSwabArrivalLaboratory = Some(dateCollected)
           )
         )
       case _ =>
