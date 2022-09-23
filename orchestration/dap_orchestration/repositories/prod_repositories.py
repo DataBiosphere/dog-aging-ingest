@@ -5,7 +5,7 @@ from dagster_utils.resources.google_storage import google_storage_client
 from dagster_utils.resources.slack import live_slack_client
 
 from dap_orchestration.config import preconfigure_resource_for_mode
-from dap_orchestration.pipelines import refresh_data_all, firecloud
+from dap_orchestration.pipelines import refresh_data_all, refresh_samples, firecloud
 from dap_orchestration.repositories.common import build_pipeline_failure_sensor, slack_on_pipeline_start, \
     slack_on_pipeline_success
 from dap_orchestration.resources import refresh_directory, outfiles_writer, api_token
@@ -28,12 +28,28 @@ def build_refresh_data_all_job(name: str) -> PipelineDefinition:
         executor_def=in_process_executor
     )
 
+def build_refresh_samples_job(name: str) -> PipelineDefinition:
+    return refresh_samples.to_job(
+        name=name,
+        resource_defs={
+            "extract_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_extract"),
+            "transform_beam_runner": preconfigure_resource_for_mode(k8s_dataflow_beam_runner, "prod_transform"),
+            "refresh_directory": refresh_directory,
+            "outfiles_writer": outfiles_writer,
+            "api_token": preconfigure_resource_for_mode(api_token, "prod"),
+            "io_manager": preconfigure_resource_for_mode(gcs_pickle_io_manager, "prod"),
+            "gcs": google_storage_client,
+            "slack_client": preconfigure_resource_for_mode(live_slack_client, "prod")
+        },
+        # the default multiprocess_executor dispatches all DAP surveys concurrently, exceeding resource quotas
+        executor_def=in_process_executor
+    )
 
-@schedule(
-    cron_schedule="0 4 * * 1",
-    job=build_refresh_data_all_job("weekly_data_refresh"),
-    execution_timezone="US/Eastern"
-)
+# @schedule(
+#     cron_schedule="0 4 * * 1",
+#     job=build_refresh_data_all_job("weekly_data_refresh"),
+#     execution_timezone="US/Eastern"
+# )
 def weekly_data_refresh(context: ScheduleEvaluationContext) -> dict[str, object]:
     date = context.scheduled_execution_time
     tz = date.strftime("%z")
@@ -101,6 +117,50 @@ def weekly_data_refresh(context: ScheduleEvaluationContext) -> dict[str, object]
     }
 
 
+@schedule(
+    cron_schedule="0 4 * * 1",
+    job=build_refresh_samples_job("weekly_samples_refresh"),
+    execution_timezone="US/Eastern"
+)
+def weekly_samples_refresh(context: ScheduleEvaluationContext) -> dict[str, object]:
+    date = context.scheduled_execution_time
+    tz = date.strftime("%z")
+    offset_time = f"{tz[0:3]}:{tz[3:]}"
+    return {
+        "resources": {
+            "refresh_directory": {
+                "config": {
+                    "refresh_directory": f"gs://broad-dsp-monster-dap-prod-temp-storage/staging/{date.strftime('%Y%m%d')}"
+                }
+            }
+        },
+        "solids": {
+            "sample_extract_records": {
+                "config": {
+                    "pull_data_dictionaries": False,
+                    "end_time": date.strftime("%Y-%m-%dT%H:%M:%S") + offset_time,
+                    "start_time": "2020-01-01T00:00:00-05:00"
+                }
+            },
+            "write_outfiles_in_terra_format": {
+                "config": {
+                    "output_dir": f"gs://broad-dsp-monster-dap-prod-storage/weekly_refresh/{date.strftime('%Y%m%d')}/terra_output"
+                }
+            },
+            "write_outfiles_in_tsv_format": {
+                "config": {
+                    "output_dir": f"gs://broad-dsp-monster-dap-prod-storage/weekly_refresh/{date.strftime('%Y%m%d')}/default_output"
+                }
+            },
+            "copy_outfiles_to_terra": {
+                "config": {
+                    "destination_gcs_path": f"gs://fc-6f3f8275-c9b4-4dcf-b2de-70f8d74f0874/ref"
+                }
+            },
+        }
+    }
+
+
 @repository
 def repositories() -> list[PipelineDefinition]:
     return [
@@ -111,5 +171,6 @@ def repositories() -> list[PipelineDefinition]:
         slack_on_pipeline_success,
         build_pipeline_failure_sensor(),
         build_refresh_data_all_job("refresh_data_all"),
-        weekly_data_refresh
+        weekly_data_refresh,
+        weekly_samples_refresh
     ]
