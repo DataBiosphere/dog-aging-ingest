@@ -28,6 +28,7 @@ def build_refresh_data_all_job(name: str) -> PipelineDefinition:
         executor_def=in_process_executor
     )
 
+
 def build_refresh_samples_job(name: str) -> PipelineDefinition:
     return refresh_samples.to_job(
         name=name,
@@ -45,11 +46,12 @@ def build_refresh_samples_job(name: str) -> PipelineDefinition:
         executor_def=in_process_executor
     )
 
-# @schedule(
-#     cron_schedule="0 4 * * 1",
-#     job=build_refresh_data_all_job("weekly_data_refresh"),
-#     execution_timezone="US/Eastern"
-# )
+
+@schedule(
+    cron_schedule="0 4 * * 1",
+    job=build_refresh_data_all_job("weekly_data_refresh"),
+    execution_timezone="US/Eastern"
+)
 def weekly_data_refresh(context: ScheduleEvaluationContext) -> dict[str, object]:
     date = context.scheduled_execution_time
     tz = date.strftime("%z")
@@ -172,5 +174,6 @@ def repositories() -> list[PipelineDefinition]:
         build_pipeline_failure_sensor(),
         build_refresh_data_all_job("refresh_data_all"),
         weekly_data_refresh,
+        build_refresh_samples_job("refresh_samples"),
         weekly_samples_refresh
     ]
