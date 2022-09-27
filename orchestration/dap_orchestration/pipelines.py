@@ -21,5 +21,14 @@ def refresh_data_all() -> None:
 
 
 @graph
+def refresh_samples() -> None:
+    collected_outputs = [
+        sample_transform_records(sample_extract_records())
+    ]
+    write_outfiles_in_tsv_format(collected_outputs)
+    copy_outfiles_to_terra(write_outfiles_in_terra_format(collected_outputs))
+
+
+@graph
 def firecloud() -> None:
     upload_to_firecloud()
