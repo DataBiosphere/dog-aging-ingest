@@ -1,6 +1,6 @@
 # todo: hardcode this to be relative to the solid that’s configuring it by getting the dir from the configured solid
 working_dir: ../
-region: us-central1
+region: us-central1-b
 worker_machine_type: n1-standard-1
 autoscaling_algorithm: THROUGHPUT_BASED
 num_workers: 4
