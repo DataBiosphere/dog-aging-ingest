@@ -117,6 +117,18 @@ case class RawRecord(id: Long, fields: Map[String, Array[String]]) {
       }
     })
 
+  /** Get the singleton value for an attribute in this record, parsed as a Double. */
+  def getOptionalFloat(field: String, permittedValues: Set[Long] = Set()): Option[Double] =
+    getOptional(field, permittedValues.map(_.toString)).map(value => {
+      try {
+        value.toDouble
+      } catch {
+        case e: NumberFormatException => {
+          throw e
+        }
+      }
+    })
+
   /** Get the singleton value for an attribute in this record if one exists, parsed as a date. */
   def getOptionalDate(field: String): Option[LocalDate] =
     getOptional(field).map(LocalDate.parse(_, RawRecord.DateFormatter))

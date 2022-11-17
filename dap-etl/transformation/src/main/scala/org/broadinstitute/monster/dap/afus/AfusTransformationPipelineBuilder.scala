@@ -22,8 +22,11 @@ object AfusTransformationPipelineBuilder extends PipelineBuilder[Args] {
 
     val owners =
       rawRecords.transform("Map AFUS Owners")(_.flatMap(AfusOwnerTransformations.mapAfusOwnerData))
+    val dogs =
+      rawRecords.transform("Map AFUS Dogs")(_.flatMap(AfusDogTransformations.mapAfusDog))
 
     StorageIO.writeJsonLists(owners, "AFUS Owners", s"${args.outputPrefix}/afus_owner")
+    StorageIO.writeJsonLists(dogs, "AFUS Dogs", s"${args.outputPrefix}/afus_dog")
     ()
   }
 

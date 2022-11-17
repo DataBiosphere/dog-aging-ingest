@@ -1,0 +1,437 @@
+{
+  "name": "afus_dog_demographics",
+  "columns": [
+    {
+      "name": "afus_dd_dog_weight_lbs",
+      "datatype": "float"
+    },
+    {
+      "name": "afus_dd_insurance_yn",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_insurance_company",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_insurance_company_other",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_activities_companion_animal",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_obedience",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_show",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_breeding",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_agility",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_hunting",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_working",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_field_trials",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_search_and_rescue",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_service",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_assistance_or_therapy",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_other",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_activities_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_service_seeing_eye",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_hearing_or_signal",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_wheelchair_service",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_other_medical_service",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_other_health_assistance",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_therapy",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_emotional_support",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_service_other_medical_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_service_other_health_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_service_other_service_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_primary_residence_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_oc_primary_residence_census_division",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_primary_residence_ownership",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_primary_residence_ownership_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_oc_primary_residence_time_percentage",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_secondary_residence",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_secondary_residence_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_oc_secondary_residence_ownership",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_oc_secondary_residence_ownership_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_oc_secondary_residence_time_percentage",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence1_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence1_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence2_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence2_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence3_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence3_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence4_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence4_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence5_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence5_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence6_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence6_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence7_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence7_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence8_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence8_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence9_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence9_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence10_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence10_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence11_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence11_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence12_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence12_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence13_state",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_alternate_recent_residence13_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_fns_litter_yn",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_fns_heat_yn",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_fns_hormone_yn",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_fns_hormone_name_yn",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_fns_hormone_name",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_fns_hormone_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_fns_nonpregnant_breedings",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_fns_pregnancy_termination",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_fns_currently_pregnant",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_fns_litter_date",
+      "datatype": "date"
+    },
+    {
+      "name": "afus_dd_fns_sire_breed",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_fns_litter_size",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_fns_litter_all_live",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_fns_litter_dead_count",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_fns_litter_nurse_weeks",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_fns_litter_puppy_deformities",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_fns_litter_delivery_medical_intervention",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_fns_litter_delivery_surgical_intervention",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_fns_spay",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_fns_spay_month",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_fns_spay_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_fns_spay_reason",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_fns_spay_reason_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_fns_spay_during_heat",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_fns_spay_method",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_sired_yn",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_nbr_litters",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_dam_breed_litter1",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_dam_breed_litter2",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_dam_breed_litter3",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_dam_breed_litter4",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_dam_breed_litter5",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_dam_breed_litter6",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_dam_breed_litter7",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_dam_breed_litter8",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_dam_breed_litter9",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_dam_breed_litter10",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_neutered",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_dd_mnn_neuter_month",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_neuter_year",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_neuter_reason",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_dd_mnn_neuter_reason_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_dd_spayed_or_neutered",
+      "datatype": "integer"
+    }
+  ]
+}

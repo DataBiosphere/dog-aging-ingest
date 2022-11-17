@@ -1,0 +1,233 @@
+{
+  "name": "afus_dog_meds_preventatives",
+  "columns": [
+    {
+      "name": "afus_mp_dental_examination_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_dental_brushing_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_dental_treat_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_dental_food_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_dental_breath_freshener_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_dental_procedure_undergone",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_dental_cleaning",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_dental_extraction",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_professional_grooming",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_professional_grooming_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_home_grooming",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_home_grooming_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_flea_and_tick_treatment",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_flea_and_tick_treatment_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_flea_and_tick_treatment_topical",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_flea_and_tick_treatment_collar",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_flea_and_tick_treatment_oral",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_flea_and_tick_treatment_dip",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_flea_and_tick_treatment_injectable",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_flea_and_tick_treatment_essential_oils",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_flea_and_tick_treatment_shampoo",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_flea_and_tick_treatment_environmental",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_flea_and_tick_treatment_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_flea_and_tick_treatment_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_mp_flea_topical_collar_brand",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_flea_oral_brand",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_heartworm_preventative",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_heartworm_preventative_frequency",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_heartworm_preventative_oral_chewable",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_heartworm_preventative_oral_solution",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_heartworm_preventative_topical",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_heartworm_preventative_injectable",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_heartworm_preventative_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_heartworm_preventative_other_description",
+      "datatype": "string"
+    },
+    {
+      "name": "afus_mp_heartworm_preventative_brand",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_vaccine_rvv",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_vaccine_dcv",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_vaccine_lv",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_vaccine_kcv",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_vaccine_civ",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_vaccine_ldv",
+      "datatype": "integer"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_antibiotic_ointment",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_antihistamine",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_anti_inflammatory",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_ear_cleaner",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_enzymes",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_eye_lubricant",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_joint_supplement",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_upset_stomach",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_omega3",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_non_oil_skin",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_probiotic",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_acidify_supplement",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_alkalinize_supplement",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_vitamin",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_other",
+      "datatype": "boolean"
+    },
+    {
+      "name": "afus_mp_recent_non_prescription_meds_other_description",
+      "datatype": "string"
+    }
+  ]
+}
